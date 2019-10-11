@@ -34,5 +34,10 @@ public class PublicRestApiController {
         return this.userRepository.findAll();
     }
 
+    @GetMapping("admin/user")
+    public User user(){
+        return this.userRepository.findById(2).get();
+    }
+
 
 }
