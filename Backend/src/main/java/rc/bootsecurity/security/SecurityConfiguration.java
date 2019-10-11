@@ -70,11 +70,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                    // .usernameParameter("j_username")
                    // .passwordParameter("j_password")
                     .permitAll()
-                .and()
 
+                .and().requiresChannel().anyRequest().requiresSecure() // i do not know
+
+                .and()
                     // add jwt filters (1. authentication, 2. authorization)
                     .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager(),  this.userRepository))
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager()))
 
                     // configure access rules
                     .authorizeRequests()

@@ -16,7 +16,7 @@ public class UserPrincipalDetailsService implements UserDetailsService {
     }
 
 
-    // when user performs authentification this will be called
+    // when user performs authentication this will be called
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         User user = this.userRepository.findByUsername(s).orElseThrow(() -> new UsernameNotFoundException("not found " + s ));

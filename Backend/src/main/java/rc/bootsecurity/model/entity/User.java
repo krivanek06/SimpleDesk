@@ -1,16 +1,20 @@
 package rc.bootsecurity.model.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 @Entity
+@Data
+@Table(name = "tbl_users")
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Integer id;
 
     @Column(nullable = false)
     private String username;
@@ -18,57 +22,39 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    private int active;
+    @Column(name = "department_id")
+    private Integer departmentId;
 
-    private String roles = "";
+    @Column(name = "first_name")
+    private String firstName;
 
-    private String permissions = "";
+    @Column(name = "last_name")
+    private String lastName;
 
-    public User(String username, String password, String roles, String permissions){
-        this.username = username;
-        this.password = password;
-        this.roles = roles;
-        this.permissions = permissions;
-        this.active = 1;
-    }
+    @Column(name = "foto")
+    private String foto;
 
-    protected User(){}
+    @Column(name = "email")
+    private String email;
 
-    public long getId() {
-        return id;
-    }
+    @Column(name = "active")
+    private Boolean active;
 
-    public String getUsername() {
-        return username;
-    }
+    @Column(name = "date_creation")
+    private Timestamp dateCreation;
 
-    public String getPassword() {
-        return password;
-    }
+    @Column(name = "date_ending")
+    private Timestamp dateEnding;
 
-    public int getActive() {
-        return active;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "GroupManager")
+    private List<Group> groupsToManage;
 
-    public String getRoles() {
-        return roles;
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_user_groups",
+        joinColumns = { @JoinColumn(name = "user_id")},
+        inverseJoinColumns = { @JoinColumn(name = "group_id")})
+    private Set<Group> groups;
 
-    public String getPermissions() {
-        return permissions;
-    }
 
-    public List<String> getRoleList(){
-        if(this.roles.length() > 0){
-            return Arrays.asList(this.roles.split(","));
-        }
-        return new ArrayList<>();
-    }
 
-    public List<String> getPermissionList(){
-        if(this.permissions.length() > 0){
-            return Arrays.asList(this.permissions.split(","));
-        }
-        return new ArrayList<>();
-    }
 }
