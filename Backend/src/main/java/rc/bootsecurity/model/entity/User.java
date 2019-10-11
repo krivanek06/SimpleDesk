@@ -5,7 +5,6 @@ import lombok.Data;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -13,7 +12,7 @@ import java.util.Set;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
@@ -46,14 +45,16 @@ public class User {
     @Column(name = "date_ending")
     private Timestamp dateEnding;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "GroupManager")
+    // all groups where I am a manager
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager", cascade = CascadeType.ALL)
     private List<Group> groupsToManage;
 
+    // all groups where I am just a member
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_user_groups",
         joinColumns = { @JoinColumn(name = "user_id")},
         inverseJoinColumns = { @JoinColumn(name = "group_id")})
-    private Set<Group> groups;
+    private List<Group> groupsInvolved;
 
 
 
