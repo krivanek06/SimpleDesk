@@ -3,6 +3,8 @@ package rc.bootsecurity.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import rc.bootsecurity.model.entity.Group;
+import rc.bootsecurity.model.entity.task.Server;
+import rc.bootsecurity.model.entity.task.TaskType;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.model.entity.User;
@@ -17,9 +19,6 @@ import java.util.List;
 public class PublicRestApiController {
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private GroupRepository groupRepository;
 
     @Autowired
     private TestService testService;
@@ -44,7 +43,7 @@ public class PublicRestApiController {
 
     @GetMapping("admin/user")
     public User user(){
-        return this.testService.user();
+        return this.testService.getUserWithPrivileges();
     }
 
     @GetMapping("admin/group")
@@ -53,5 +52,14 @@ public class PublicRestApiController {
 
     }
 
+    @GetMapping("admin/server")
+    public Server getServer(){
+        return this.testService.getServer();
+    }
+
+    @GetMapping("admin/tasktypeall")
+    public List<TaskType> getTaskTypes(){
+        return this.testService.getTaskTypes();
+    }
 
 }

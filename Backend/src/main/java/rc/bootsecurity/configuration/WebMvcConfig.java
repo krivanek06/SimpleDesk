@@ -10,6 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import java.util.List;
 
+// helped to use fetch = FetchType.LAZY
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 

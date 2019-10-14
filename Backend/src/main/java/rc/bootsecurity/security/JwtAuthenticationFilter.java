@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.model.dto.LoginViewModel;
 
 import javax.servlet.FilterChain;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
+
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
@@ -61,18 +63,26 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Grab principal
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 
-        //User user = userRepository.findByUsername(principal.getUsername());
-        String[] authorities = principal.getAuthorities().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+        // load permissions
+        String[] userRoles = principal.getAuthorities().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+        String[] softwarePermissions = principal.getAuthoritiesSoftware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+        String[] hardwarePermissions = principal.getAuthoritiesHardware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+        String[] serverPermissions = principal.getAuthoritiesServer().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+
 
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withArrayClaim("list" , authorities)
+                .withArrayClaim("applicationPermissions" , userRoles)
+                .withArrayClaim("softwarePermissions" , softwarePermissions)
+                .withArrayClaim("hardwarePermissions", hardwarePermissions)
+                .withArrayClaim("serverPermissions", serverPermissions)
+                .withClaim("userPermissions", principal.getAuthoritiesUser())
+                .withClaim("otherPermissions" , principal.getAuthoritiesOther())
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 
-        // Add token in responser
-       // response.addHeader("Access-Control-Expose-Headers" , "Location" );
+        // Add token in response
         response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX +  token);
     }
 }

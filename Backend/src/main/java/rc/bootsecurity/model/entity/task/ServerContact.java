@@ -1,0 +1,30 @@
+package rc.bootsecurity.model.entity.task;
+
+import lombok.Data;
+
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "tbl_server_contacts")
+@Data
+// unidirectional mapping to server entity
+public class ServerContact {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(nullable=false)
+    private Integer id;
+
+    @Column(name = "contact_name")
+    private String name;
+
+    @Column(name = "contact_email")
+    private String email;
+
+    @Column(name = "contact_mobile")
+    private String mobile;
+
+    @Column(name = "active")
+    private Boolean active;
+
+}

@@ -1,10 +1,19 @@
 package rc.bootsecurity.model.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Data
@@ -45,8 +54,12 @@ public class User {
     @Column(name = "date_ending")
     private Timestamp dateEnding;
 
+    @Column(name = "is_admin")
+    private Boolean isAdmin;
+
     // all groups where I am a manager
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager", cascade = CascadeType.ALL)
+    //@OneToMany(fetch = FetchType.EAGER, mappedBy = "groupManager", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager")
     private List<Group> groupsToManage;
 
     // all groups where I am just a member

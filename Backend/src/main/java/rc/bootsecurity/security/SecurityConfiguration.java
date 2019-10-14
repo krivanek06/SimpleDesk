@@ -1,5 +1,6 @@
 package rc.bootsecurity.security;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -19,26 +20,16 @@ import rc.bootsecurity.repository.UserRepository;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+    @Autowired
     private UserPrincipalDetailsService userPrincipalDetailsService;
-    private UserRepository userRepository;
-    private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+    @Autowired
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;
+    @Autowired
     private AuthenticationFailureHandler authenticationFailureHandler;
+    @Autowired
     private CustomSuccessHandler authenticationSuccessHandler;
 
-    public SecurityConfiguration(UserPrincipalDetailsService userPrincipalDetailsService,
-                                 UserRepository userRepository,
-                                 JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint,
-                                 Http401UnauthorizedEntryPoint authenticationEntryPoint,
-                                 AuthenticationFailureHandler authenticationFailureHandler,
-                                 CustomSuccessHandler authenticationSuccessHandler) {
-        this.userPrincipalDetailsService = userPrincipalDetailsService;
-        this.userRepository = userRepository;
-        this.jwtAuthenticationEntryPoint = jwtAuthenticationEntryPoint;
-        this.authenticationEntryPoint = authenticationEntryPoint;
-        this.authenticationFailureHandler = authenticationFailureHandler;
-        this.authenticationSuccessHandler = authenticationSuccessHandler;
-    }
+
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {

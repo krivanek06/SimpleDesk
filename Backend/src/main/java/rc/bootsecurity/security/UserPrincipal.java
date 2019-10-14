@@ -1,19 +1,17 @@
 package rc.bootsecurity.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.service.UserService;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import rc.bootsecurity.model.enums.APPLICATION;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class UserPrincipal implements UserDetails {
-    @Autowired
-    private UserService userService;
+
+    // separate distinct applications to its type -> Software: {X , Y , etc.}
+    Map<String, Set<String>> taskPrivilegesHashMap = new HashMap<>();
 
     private User user;
 
@@ -23,24 +21,61 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        this.saveApplicationPrivilegeIds();
+
+
         List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // delete !!!!!!
 
-        // Extract list of permissions (name)
-      /*  this.userService.getPermissionList(this.user).forEach(p -> {
-            GrantedAuthority authority = new SimpleGrantedAuthority(p);
-            authorities.add(authority);
-        });
+        // if user has at least one privilege to see any application then he becames a solver
+        if(this.user.getGroupsInvolved().stream().anyMatch(x ->  Objects.nonNull(x.getTaskPrivilegesList()))){
+            authorities.add(new SimpleGrantedAuthority("ROLE_SOLVER"));
+        }
 
-        // Extract list of roles (ROLE_name)
-        this.userService.getRoleList(this.user).forEach(r -> {
-            GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + r);
-            authorities.add(authority);
-        });*/
-        authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-        authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
-        authorities.add(new SimpleGrantedAuthority("GROUP_IT"));
-        authorities.add(new SimpleGrantedAuthority("GROUP_Risk2"));
+        if(this.user.getIsAdmin()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
         return authorities;
+    }
+
+    private void saveApplicationPrivilegeIds(){
+        this.user.getGroupsInvolved().forEach(group -> group.getTaskPrivilegesList().forEach(
+                privilege -> {
+                        if(this.taskPrivilegesHashMap.containsKey(privilege.getTaskType().getName())) {
+                            this.taskPrivilegesHashMap.get(privilege.getTaskType().getName()).add(privilege.getApplicationName());
+                        }else {
+                            this.taskPrivilegesHashMap.put(privilege.getTaskType().getName(), new HashSet<>());
+                            this.taskPrivilegesHashMap.get(privilege.getTaskType().getName()).add(privilege.getApplicationName());
+                        }
+                }));
+
+    }
+
+    // check which software types I can see
+    public Collection<? extends GrantedAuthority> getAuthoritiesSoftware() {
+       return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.SOFTWARE.toString(), new HashSet<>()).stream()
+               .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    // check which hardware types I can see
+    public Collection<? extends GrantedAuthority> getAuthoritiesHardware() {
+        return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.HARDWARE.toString(), new HashSet<>()).stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    // check which server types I can see
+    public Collection<? extends GrantedAuthority> getAuthoritiesServer() {
+        return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.SERVER.toString(), new HashSet<>()).stream()
+                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+    }
+
+    public boolean getAuthoritiesUser(){
+        return this.taskPrivilegesHashMap.containsKey(APPLICATION.USER.toString());
+    }
+
+    public boolean getAuthoritiesOther(){
+        return this.taskPrivilegesHashMap.containsKey(APPLICATION.OTHER.toString());
     }
 
     @Override

@@ -52,7 +52,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             // parse the token and validate it
             String userName = decodedJWT.getSubject();
-            List<SimpleGrantedAuthority> rights = decodedJWT.getClaim("list").asList(SimpleGrantedAuthority.class);
+            List<SimpleGrantedAuthority> rights = decodedJWT.getClaim("applicationPermissions").asList(SimpleGrantedAuthority.class);
 
             // create spring auth token using username, pass, authorities/roles
             if (userName != null) {
