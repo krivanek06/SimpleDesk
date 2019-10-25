@@ -40,7 +40,7 @@ public class User {
     private String lastName;
 
     @Column(name = "foto")
-    private String foto;
+    private String photo;
 
     @Column(name = "email")
     private String email;

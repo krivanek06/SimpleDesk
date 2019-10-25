@@ -41,20 +41,11 @@ public class PublicRestApiController {
         return this.userRepository.findAll();
     }
 
-    @GetMapping("admin/user")
-    public User user(){
-        return this.testService.getUserWithPrivileges();
-    }
 
     @GetMapping("admin/group")
     public List<Group> group(){
         return this.testService.group();
 
-    }
-
-    @GetMapping("admin/server")
-    public Server getServer(){
-        return this.testService.getServer();
     }
 
     @GetMapping("admin/tasktypeall")

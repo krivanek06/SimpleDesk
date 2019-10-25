@@ -20,14 +20,14 @@ public class CORSFilter implements Filter {
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
-
-        response.setHeader("Access-Control-Allow-Origin", "https://localhost:4200");
+        // https://localhost:4200
+        response.setHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        response.setHeader("Access-Control-Allow-Methods", "HEAD, POST, PUT, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Methods", "HEAD, POST, PUT, GET, OPTIONS, DELETE, PATCH");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, X-Requested-With, Content-Type, Accept, " +
-                "Access-Control-Allow-Headers, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers");
-        response.setHeader("Access-Control-Expose-Headers", "Authorization , Origin");
+                "Access-Control-Allow-Headers, X-Requested-With, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
+        response.setHeader("Access-Control-Expose-Headers", "Authorization , UserObject");
 
         // bypass check
         if ("OPTIONS".equalsIgnoreCase(request.getMethod())) {

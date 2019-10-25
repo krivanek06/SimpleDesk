@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "ng serve --ssl --ssl-key 'C:\\Users\\Eduard\\Desktop\\projekty\\SimpleDesk\\SimpleDesk\\Backend\\src\\main\\keystore.key'  --ssl-cert 'C:\\Users\\Eduard\\Desktop\\projekty\\SimpleDesk\\SimpleDesk\\Backend\\src\\main\\keystore.crt'",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -22,11 +22,12 @@
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "angular-particle": "^1.0.4",
     "bootstrap": "^4.3.1",
+    "eslint": "^6.5.1",
     "jquery": "^3.4.1",
     "ngx-bootstrap": "^5.1.0",
     "popper.js": "^1.15.0",
     "rxjs": "~6.4.0",
-    "tslib": "^1.9.0",
+    "tslib": "^1.10.0",
     "zone.js": "~0.9.1"
   },
   "devDependencies": {

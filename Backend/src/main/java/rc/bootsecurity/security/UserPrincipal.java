@@ -3,6 +3,8 @@ package rc.bootsecurity.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import rc.bootsecurity.model.dto.UserDTOSimple;
+import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.enums.APPLICATION;
 import java.util.*;

@@ -13,8 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import rc.bootsecurity.repository.UserRepository;
+import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -24,12 +26,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     private UserPrincipalDetailsService userPrincipalDetailsService;
     @Autowired
     private Http401UnauthorizedEntryPoint authenticationEntryPoint;
-    @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
-    @Autowired
-    private CustomSuccessHandler authenticationSuccessHandler;
-
-
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
@@ -47,17 +43,11 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                //.and()
-                // handle an authorized attempts
-                //.exceptionHandling().authenticationEntryPoint((req, rsp, e) -> rsp.sendError(HttpServletResponse.SC_UNAUTHORIZED))
-                /*.exceptionHandling()
-                .accessDeniedHandler(accessDeniedHandler)*/
-                  //  .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
+                .and().exceptionHandling().accessDeniedPage("/login")
+
                 .and()
                     .formLogin()
                     .loginProcessingUrl("/login")
-                    .successHandler(authenticationSuccessHandler)
-                    .failureHandler(authenticationFailureHandler)
                    // .usernameParameter("j_username")
                    // .passwordParameter("j_password")
                     .permitAll()
@@ -72,6 +62,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     // configure access rules
                     .authorizeRequests()
                     .antMatchers( "/login").permitAll() // HttpMethod.POST,
+                    .antMatchers( "/PersonalDetails/*").permitAll()
                     .antMatchers("/api/public/management/*").hasRole("MANAGER")
                     .antMatchers("/api/public/admin/*").hasRole("ADMIN")
                     .anyRequest().authenticated();
@@ -90,5 +81,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /*@Bean
+    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("/succeslogin");
+        return successHandler;
+    }*/
 
 }

@@ -58,24 +58,7 @@ public class TestService {
      * and for each group add taskPrivilegesList ["software", 1],
      * this number 1 has to be then mapped as ID for Software entity
      */
-    // get authorities
-    public User getUserWithPrivileges(){
-        User user = this.userRepository.findById(2).get();
-        return user;
-    }
 
-
-    public User user(){
-        User user =  this.userRepository.findById(2).get();
-        user.setGroupsToManage(this.groupRepository.findAllByGroupManager(user));
-
-        return user;
-    }
-
-    public Server getServer(){
-        Server server = this.serverRepository.findById(2).get();
-        return server;
-    }
 
     public List<TaskType> getTaskTypes(){
         List<TaskType> list = new ArrayList<>();

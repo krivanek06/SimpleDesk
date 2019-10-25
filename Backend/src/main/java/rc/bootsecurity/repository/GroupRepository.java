@@ -11,9 +11,10 @@ import java.util.Set;
 
 @Repository
 public interface GroupRepository extends CrudRepository<Group, Integer > {
-    //List<Group> findAllByGroupManager(User groupManager);
-    List<Group> findAllByGroupManager(User groupManager);
+    Optional<List<Group>> findAllByGroupManager(User groupManager);
 
     Optional<List<Group>> findAllByUsersInGroup(List<User> users);
+
+
 
 }
