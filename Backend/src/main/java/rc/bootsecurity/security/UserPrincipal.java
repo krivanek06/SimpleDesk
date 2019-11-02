@@ -3,8 +3,6 @@ package rc.bootsecurity.security;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rc.bootsecurity.model.dto.UserDTOSimple;
-import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.enums.APPLICATION;
 import java.util.*;
@@ -30,7 +28,7 @@ public class UserPrincipal implements UserDetails {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // delete !!!!!!
 
         // if user has at least one privilege to see any application then he becames a solver
-        if(this.user.getGroupsInvolved().stream().anyMatch(x ->  Objects.nonNull(x.getTaskPrivilegesList()))){
+        if(this.user.getGroupsInvolved().stream().anyMatch(x ->  Objects.nonNull(x.getTicketPrivilegesList()))){
             authorities.add(new SimpleGrantedAuthority("ROLE_SOLVER"));
         }
 
@@ -42,7 +40,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     private void saveApplicationPrivilegeIds(){
-        this.user.getGroupsInvolved().forEach(group -> group.getTaskPrivilegesList().forEach(
+        this.user.getGroupsInvolved().forEach(group -> group.getTicketPrivilegesList().forEach(
                 privilege -> {
                         if(this.taskPrivilegesHashMap.containsKey(privilege.getTaskType().getName())) {
                             this.taskPrivilegesHashMap.get(privilege.getTaskType().getName()).add(privilege.getApplicationName());

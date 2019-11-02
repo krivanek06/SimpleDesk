@@ -7,23 +7,29 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "generate:svg-sprite": "svg2sprite ./src/assets/icons ./src/assets/sprites/sprite.svg --stripAttrs fill --stripAttrs stroke --stripAttrs id"
   },
   "private": true,
   "dependencies": {
     "@angular/animations": "~8.1.3",
+    "@angular/cdk": "~8.2.3",
     "@angular/common": "~8.1.3",
     "@angular/compiler": "~8.1.3",
     "@angular/core": "~8.1.3",
     "@angular/forms": "~8.1.3",
+    "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~8.1.3",
     "@angular/platform-browser-dynamic": "~8.1.3",
     "@angular/router": "~8.1.3",
     "@ng-bootstrap/ng-bootstrap": "^5.1.0",
     "angular-particle": "^1.0.4",
+    "angular-svg-icon": "^8.0.0",
     "bootstrap": "^4.3.1",
     "eslint": "^6.5.1",
+    "hammerjs": "^2.0.8",
     "jquery": "^3.4.1",
+    "ng-svg-icon-sprite": "^1.7.0",
     "ngx-bootstrap": "^5.1.0",
     "popper.js": "^1.15.0",
     "rxjs": "~6.4.0",
@@ -49,6 +55,7 @@
     "protractor": "~5.4.0",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.4.3"
+    "typescript": "~3.4.3",
+    "svg2sprite-cli": "2.0.0"
   }
 }

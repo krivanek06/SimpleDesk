@@ -4,7 +4,6 @@ import lombok.Data;
 import rc.bootsecurity.model.entity.Group;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * contains information which user has what rights to see tickets
@@ -15,7 +14,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "tbl_tasks_privileges")
-public class TaskPrivileges {
+public class TicketPrivileges {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable=false)
@@ -27,25 +26,10 @@ public class TaskPrivileges {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_type_id")
-    private TaskType taskType;
+    private TicketType taskType;
 
     @Column(name = "application_name")
     private String applicationName;
 
-
-  /*  @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "application_id")
-    @JoinFormula(referencedColumnName = "application_id",
-    value = "select ttp.application_id from tbl_tasks_privileges ttp " +
-            "where ttp.group_id = group and ttp.task_type_id = taskType and ttp.application_id = application_id ")
-    private Hardware hardware;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    //@JoinColumn(name = "application_id")
-    private Server server;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "application_id")
-    private Software software;*/
 
 }

@@ -16,7 +16,7 @@ import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 @RestController
 @RequestMapping("/PersonalDetails")
-public class SuccessLoginController{
+public class PersonalDetailsController {
     @Autowired
     private UserService userService;
 

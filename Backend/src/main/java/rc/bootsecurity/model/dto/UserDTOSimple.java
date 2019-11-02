@@ -26,4 +26,8 @@ public class UserDTOSimple {
 
     private String[] groupsToMange;
 
+    private String[] requestsToSubmit;
+
+    private String[] requestsToSolve;
+
 }

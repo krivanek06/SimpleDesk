@@ -21,10 +21,13 @@ body {
   }
 }
 #gtco-main-nav {
-  padding: 20px 0;
+ /* padding: 20px 0;
+
+ */
+ margin-top: 35px;
 }
 #gtco-main-nav .navbar-brand {
-  font-size: 36px;
+  font-size: 48px;
   font-family: "Lato-Black";
   text-transform: uppercase;
   background: -webkit-linear-gradient(left, #1d3ede, #01e6f8);
@@ -205,7 +208,7 @@ body {
 }
 
 .gtco-banner-area {
-  margin-top: 20px;
+  margin-top: 0px;
   min-height: 500px;
 }
 .gtco-banner-area h1 {
@@ -213,7 +216,7 @@ body {
   font-size: 48px;
   color: #000000;
   max-width: 500px;
-  margin-top: 70px;
+  margin-top: 30px;
 }
 .gtco-banner-area h1 span {
   font-family: "Lato-Medium";

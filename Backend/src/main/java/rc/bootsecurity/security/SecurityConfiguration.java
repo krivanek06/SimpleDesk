@@ -63,8 +63,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .authorizeRequests()
                     .antMatchers( "/login").permitAll() // HttpMethod.POST,
                     .antMatchers( "/PersonalDetails/*").permitAll()
-                    .antMatchers("/api/public/management/*").hasRole("MANAGER")
-                    .antMatchers("/api/public/admin/*").hasRole("ADMIN")
+                    //.antMatchers("/api/public/management/*").hasRole("MANAGER")
+                    .antMatchers("/api/public/*").permitAll()
                     .anyRequest().authenticated();
     }
 
@@ -82,11 +82,5 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 
-    /*@Bean
-    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
-        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-        successHandler.setTargetUrlParameter("/succeslogin");
-        return successHandler;
-    }*/
 
 }

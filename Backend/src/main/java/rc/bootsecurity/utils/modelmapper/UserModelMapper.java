@@ -11,6 +11,9 @@ import rc.bootsecurity.model.dto.UserDTOSimple;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Service
 public class UserModelMapper {
 
@@ -30,6 +33,18 @@ public class UserModelMapper {
         userDTOSimple.setPhoto(user.getPhoto());
         userDTOSimple.setDateCreation(user.getDateCreation());
         userDTOSimple.setDateEnding(user.getDateEnding());
+
+        // request to solve
+        Set<String> requestsToSolve = new HashSet<>();
+        user.getGroupsInvolved().forEach(group ->
+                group.getRequestTypesToSolve().forEach(requestType -> requestsToSolve.add(requestType.getName())));
+        userDTOSimple.setRequestsToSolve(requestsToSolve.toArray(String[]::new));
+
+        // request to submit
+        Set<String> requestsToSubmit = new HashSet<>();
+        user.getGroupsInvolved().forEach(group ->
+                group.getRequestTypesToSubmit().forEach(requestType -> requestsToSubmit.add(requestType.getName())));
+        userDTOSimple.setRequestsToSubmit(requestsToSubmit.toArray(String[]::new));
 
         return  userDTOSimple;
     }

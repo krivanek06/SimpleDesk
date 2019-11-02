@@ -70,5 +70,4 @@ public class User {
     private List<Group> groupsInvolved;
 
 
-
 }

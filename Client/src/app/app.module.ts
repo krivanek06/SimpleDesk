@@ -13,13 +13,23 @@ import { AuthenticationService } from './core/services/authentication/Authentica
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
 import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
 import { LogoutComponent } from './modules/login/logout/logout.component';
+import { NavigationBackgroundComponent } from './modules/navigation/navigation-background/navigation-background.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+// material
+import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
+import { AngularSvgIconModule } from 'angular-svg-icon';
+import { IconSpriteModule } from 'ng-svg-icon-sprite';
+
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
     LoginFormComponent,
     DashboardBackgroundComponent,
-    LogoutComponent
+    LogoutComponent,
+    NavigationBackgroundComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +39,16 @@ import { LogoutComponent } from './modules/login/logout/logout.component';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    AlertModule.forRoot()
+    IconSpriteModule,
+    AlertModule.forRoot(),
+    BrowserAnimationsModule,
+    BrowserModule,
+    BrowserAnimationsModule,
+    AngularSvgIconModule,
+    MatInputModule,
+    MatButtonModule,
+    MatSelectModule,
+    MatIconModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},

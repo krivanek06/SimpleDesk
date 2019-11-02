@@ -17,7 +17,7 @@ public class GroupService {
     GroupRepository groupRepository;
 
     public List<Group> getInvolvedGroupsForUser(User user){
-        return this.groupRepository.findAllByUsersInGroup(List.of(user)).orElseGet(ArrayList::new);
+        return this.groupRepository.findAllByUsersInGroup(user).orElseGet(ArrayList::new);
     }
 
     public List<Group> getGroupsToManageForUser(User user){

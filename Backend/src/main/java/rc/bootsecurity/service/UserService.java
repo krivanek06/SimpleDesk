@@ -3,14 +3,12 @@ package rc.bootsecurity.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.exception.UserNotFoundException;
 import rc.bootsecurity.model.dto.UserDTOSimple;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.task.TaskPrivileges;
-import rc.bootsecurity.repository.GroupRepository;
+import rc.bootsecurity.model.entity.task.TicketPrivileges;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.task.TaskPrivilegesRepository;
+import rc.bootsecurity.repository.task.TicketPrivilegesRepository;
 import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.*;
@@ -21,7 +19,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private TaskPrivilegesRepository taskPrivilegesRepository;
+    private TicketPrivilegesRepository taskPrivilegesRepository;
 
     @Autowired
     private UserModelMapper userModelMapper;
@@ -38,9 +36,9 @@ public class UserService {
     public void loadPrivilegesToUser(User user){
         List<Group> groups = this.groupService.getInvolvedGroupsForUser(user);
         groups.forEach(x -> {
-            List<TaskPrivileges> taskPrivilegesList = new ArrayList<>();
+            List<TicketPrivileges> taskPrivilegesList = new ArrayList<>();
             this.taskPrivilegesRepository.findAllByGroup(x).forEach(g -> taskPrivilegesList.add(g));
-            x.setTaskPrivilegesList(taskPrivilegesList);
+            x.setTicketPrivilegesList(taskPrivilegesList);
         });
         user.setGroupsInvolved(groups);
     }

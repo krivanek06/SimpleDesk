@@ -1,9 +1,7 @@
 package rc.bootsecurity.model.entity;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-import rc.bootsecurity.model.entity.task.TaskPrivileges;
+import rc.bootsecurity.model.entity.task.TicketPrivileges;
 
 import javax.persistence.*;
 import java.util.List;
@@ -30,8 +28,22 @@ public class Group {
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsInvolved")
     private Set<User> usersInGroup;
 
-    // one group has what privileges
+    // one group has what privileges to see tickets
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
-    private List<TaskPrivileges> taskPrivilegesList;
+    private List<TicketPrivileges> ticketPrivilegesList;
+
+    // which application can I group use
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_request_type_privileges_basic_user",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
+    private List<RequestType> requestTypesToSubmit;
+
+    // which application can I group use
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_request_type_privileges_solver",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
+    private List<RequestType> requestTypesToSolve;
 
 }
