@@ -6,9 +6,8 @@ import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserDTOSimple;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.task.TicketPrivileges;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.task.TicketPrivilegesRepository;
+import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.*;
@@ -19,7 +18,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    private TicketPrivilegesRepository taskPrivilegesRepository;
+    private TicketPrivilegesRepository ticketPrivilegesRepository;
 
     @Autowired
     private UserModelMapper userModelMapper;
@@ -32,14 +31,9 @@ public class UserService {
      * and for each group add taskPrivilegesList ["software", 1],
      * this number 1 has to be then mapped as ID for Software entity
      */
-    // get authorities
     public void loadPrivilegesToUser(User user){
         List<Group> groups = this.groupService.getInvolvedGroupsForUser(user);
-        groups.forEach(x -> {
-            List<TicketPrivileges> taskPrivilegesList = new ArrayList<>();
-            this.taskPrivilegesRepository.findAllByGroup(x).forEach(g -> taskPrivilegesList.add(g));
-            x.setTicketPrivilegesList(taskPrivilegesList);
-        });
+        groups.forEach(x -> x.setTicketPrivilegesList(new ArrayList<>(this.ticketPrivilegesRepository.findAllByGroup(x).orElse(new ArrayList<>()))));
         user.setGroupsInvolved(groups);
     }
 

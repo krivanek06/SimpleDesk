@@ -6,9 +6,7 @@ import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.GroupRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class GroupService {

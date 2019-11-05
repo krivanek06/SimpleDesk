@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import rc.bootsecurity.model.entity.request.Request;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -29,9 +30,6 @@ public class User {
 
     @Column(nullable = false)
     private String password;
-
-    @Column(name = "department_id")
-    private Integer departmentId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -57,17 +55,32 @@ public class User {
     @Column(name = "is_admin")
     private Boolean isAdmin;
 
-    // all groups where I am a manager
-    //@OneToMany(fetch = FetchType.EAGER, mappedBy = "groupManager", cascade = CascadeType.ALL)
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager")
     private List<Group> groupsToManage;
 
-    // all groups where I am just a member
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_user_groups",
-        joinColumns = { @JoinColumn(name = "user_id")},
-        inverseJoinColumns = { @JoinColumn(name = "group_id")})
+    /**
+     *  all groups where I am just a member
+     */
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "usersInGroup")
     private List<Group> groupsInvolved;
+    //-----------------------------------------------------------------
+
+
+    // requests - will be fetched by principal
+    /*@OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
+    private List<Request> requestsICreated;
+
+    @OneToMany(mappedBy = "assigned", fetch = FetchType.LAZY)
+    private List<Request> requestsIamAssignedTo;
+
+    @OneToMany(mappedBy = "solver", fetch = FetchType.LAZY)
+    private List<Request> requestsISolved;
+
+    @OneToMany(mappedBy = "closed", fetch = FetchType.LAZY)
+    private List<Request> requestsIClosed;*/
+
+    // -----------------------------------
 
 
 }

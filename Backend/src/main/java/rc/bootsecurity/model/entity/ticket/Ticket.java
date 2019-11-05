@@ -1,0 +1,27 @@
+package rc.bootsecurity.model.entity.ticket;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import rc.bootsecurity.model.entity.request.Request;
+
+import javax.persistence.*;
+
+@EqualsAndHashCode(callSuper = true)
+@Entity
+@Table(name = "tbl_tickets")
+@Data
+@PrimaryKeyJoinColumn(name="id")
+public class Ticket extends Request {
+    /**
+     * May contain software specific name, but also user's name or "other" type
+     */
+    @Column(name = "t_application_name")
+    private String ticketSubtypeName;
+
+    @Column(name = "t_request")
+    private String request;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "t_type_id")
+    private TicketType ticketType;
+}

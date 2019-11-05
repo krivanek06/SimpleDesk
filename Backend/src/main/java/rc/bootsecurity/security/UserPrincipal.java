@@ -4,7 +4,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.enums.APPLICATION;
+import rc.bootsecurity.model.enums.TICKET_TYPE;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -42,11 +42,11 @@ public class UserPrincipal implements UserDetails {
     private void saveApplicationPrivilegeIds(){
         this.user.getGroupsInvolved().forEach(group -> group.getTicketPrivilegesList().forEach(
                 privilege -> {
-                        if(this.taskPrivilegesHashMap.containsKey(privilege.getTaskType().getName())) {
-                            this.taskPrivilegesHashMap.get(privilege.getTaskType().getName()).add(privilege.getApplicationName());
+                        if(this.taskPrivilegesHashMap.containsKey(privilege.getTicketType().getName())) {
+                            this.taskPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
                         }else {
-                            this.taskPrivilegesHashMap.put(privilege.getTaskType().getName(), new HashSet<>());
-                            this.taskPrivilegesHashMap.get(privilege.getTaskType().getName()).add(privilege.getApplicationName());
+                            this.taskPrivilegesHashMap.put(privilege.getTicketType().getName(), new HashSet<>());
+                            this.taskPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
                         }
                 }));
 
@@ -54,28 +54,28 @@ public class UserPrincipal implements UserDetails {
 
     // check which software types I can see
     public Collection<? extends GrantedAuthority> getAuthoritiesSoftware() {
-       return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.SOFTWARE.toString(), new HashSet<>()).stream()
+       return this.taskPrivilegesHashMap.getOrDefault(TICKET_TYPE.SOFTWARE.toString(), new HashSet<>()).stream()
                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     // check which hardware types I can see
     public Collection<? extends GrantedAuthority> getAuthoritiesHardware() {
-        return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.HARDWARE.toString(), new HashSet<>()).stream()
+        return this.taskPrivilegesHashMap.getOrDefault(TICKET_TYPE.HARDWARE.toString(), new HashSet<>()).stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     // check which server types I can see
     public Collection<? extends GrantedAuthority> getAuthoritiesServer() {
-        return this.taskPrivilegesHashMap.getOrDefault(APPLICATION.SERVER.toString(), new HashSet<>()).stream()
+        return this.taskPrivilegesHashMap.getOrDefault(TICKET_TYPE.SERVER.toString(), new HashSet<>()).stream()
                 .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
     }
 
     public boolean getAuthoritiesUser(){
-        return this.taskPrivilegesHashMap.containsKey(APPLICATION.USER.toString());
+        return this.taskPrivilegesHashMap.containsKey(TICKET_TYPE.USER.toString());
     }
 
     public boolean getAuthoritiesOther(){
-        return this.taskPrivilegesHashMap.containsKey(APPLICATION.OTHER.toString());
+        return this.taskPrivilegesHashMap.containsKey(TICKET_TYPE.OTHER.toString());
     }
 
     @Override

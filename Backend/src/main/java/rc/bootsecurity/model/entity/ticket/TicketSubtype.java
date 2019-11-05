@@ -1,13 +1,14 @@
-package rc.bootsecurity.model.entity.task;
+package rc.bootsecurity.model.entity.ticket;
 
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 @Data
-abstract class Application {
+public abstract class TicketSubtype {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable=false)
@@ -21,4 +22,11 @@ abstract class Application {
 
     @Column(name = "active")
     private Boolean active;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "task_type_id")
+    private TicketType ticketType;
+
+
+
 }

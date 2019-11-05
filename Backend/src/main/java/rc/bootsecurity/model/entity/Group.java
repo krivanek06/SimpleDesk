@@ -1,7 +1,8 @@
 package rc.bootsecurity.model.entity;
 
 import lombok.Data;
-import rc.bootsecurity.model.entity.task.TicketPrivileges;
+import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 
 import javax.persistence.*;
 import java.util.List;
@@ -25,25 +26,29 @@ public class Group {
     @JoinColumn(name = "manager_id")
     private User groupManager;
 
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsInvolved")
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_user_groups",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "user_id")})
     private Set<User> usersInGroup;
 
-    // one group has what privileges to see tickets
+    /**
+     *  one group has what privileges to see tickets
+     */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
     private List<TicketPrivileges> ticketPrivilegesList;
 
-    // which application can I group use
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_privileges_basic_user",
-            joinColumns = { @JoinColumn(name = "group_id")},
-            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private List<RequestType> requestTypesToSubmit;
+    /**
+     * which application can I group use
+     */
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSubmitDifferentRequests")
+    private Set<RequestType> requestTypesToSubmit;
 
-    // which application can I group use
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_privileges_solver",
-            joinColumns = { @JoinColumn(name = "group_id")},
-            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private List<RequestType> requestTypesToSolve;
+    /**
+     * which application can I group use
+     */
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
+    private Set<RequestType> requestTypesToSolve;
 
 }

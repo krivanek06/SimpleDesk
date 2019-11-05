@@ -1,4 +1,4 @@
-package rc.bootsecurity.model.entity.task;
+package rc.bootsecurity.model.entity.ticket;
 
 import lombok.Data;
 import rc.bootsecurity.model.entity.Group;
@@ -13,7 +13,7 @@ import javax.persistence.*;
  */
 @Entity
 @Data
-@Table(name = "tbl_tasks_privileges")
+@Table(name = "tbl_ticket_privileges")
 public class TicketPrivileges {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,10 +26,12 @@ public class TicketPrivileges {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_type_id")
-    private TicketType taskType;
+    private TicketType ticketType;
 
+    /**
+     * May contains name of software from Software.class, but also be null it TicketType is "user" or "other"
+     */
     @Column(name = "application_name")
     private String applicationName;
-
 
 }

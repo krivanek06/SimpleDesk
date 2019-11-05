@@ -1,4 +1,4 @@
-package rc.bootsecurity.model.entity.task;
+package rc.bootsecurity.model.entity.ticket;
 
 import lombok.Data;
 
