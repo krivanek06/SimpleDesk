@@ -197,9 +197,6 @@ public class UserServiceTest {
         this.ticketTypeRepository.save(ticketTypeSoftware);
         this.ticketTypeRepository.save(ticketTypeHardware);
 
-        List<TicketType> findTicketType = new ArrayList<>();
-        this.ticketTypeRepository.findAll().forEach(findTicketType::add);
-
         // create software and hardware types
         TicketSubtype software1 = this.createSoftwareSubtype("Software1", ticketTypeSoftware);
         TicketSubtype software2 = this.createSoftwareSubtype("Software2", ticketTypeSoftware);
@@ -233,31 +230,40 @@ public class UserServiceTest {
         this.ticketRepository.save(ticket);
 
 
-
+        // test if user is save correctly
         assertThat(user1).isEqualTo(this.userRepository.findByUsername(user1.getUsername()).get());
 
+        // testing if groups are correctly save for user
         assertThat(this.userRepository.findAllByGroupsInvolved(group2)).containsOnly(user1, user3);
         assertThat(this.groupRepository.findAllByGroupManager(user1).get()).containsExactly(group1, group2);
         assertThat(this.groupRepository.findAllByUsersInGroup(user2).get()).containsOnly(group1 , group3);
 
+        // testing request types
         assertThat(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group2)).containsExactly(requestType1);
         assertThat(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group3)).containsExactly(requestType2);
         assertThat(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group1)).containsOnly(requestType1, requestType2);
 
+        // test all inserted ticket types
+        List<TicketType> findTicketType = new ArrayList<>();
+        this.ticketTypeRepository.findAll().forEach(findTicketType::add);
+        assertThat(findTicketType).containsExactly(ticketTypeSoftware, ticketTypeHardware);
+
+        // test ticket subtypes
+        assertThat(this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware)).containsExactly(software1, software2);
+        assertThat(this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware)).containsExactly(hardware1, hardware2);
+
+        // test user's privileges
         Set<Group> groupsForUser1 = new HashSet<>(this.groupRepository.findAllByUsersInGroup(user1).get());
         assertThat(groupsForUser1).containsOnly(group1, group2);
         assertThat(this.requestTypeRepository.findByGroupsToSubmitDifferentRequestsIn(groupsForUser1)).containsOnly(requestType1);
 
-        assertThat(findTicketType).containsExactly(ticketTypeSoftware, ticketTypeHardware);
-
-        assertThat(this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware)).containsExactly(software1, software2);
-        assertThat(this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware)).containsExactly(hardware1, hardware2);
-
+        // test group privileges
         assertThat(this.ticketPrivilegesRepository.findAllByGroup(group1).get()).containsExactly(ticketPrivilegesHardware1,
                 ticketPrivilegesHardware2,
                 ticketPrivilegesSoftware1,
                 ticketPrivilegesSoftware2);
 
+        // test tickets to specific user
         assertThat(this.ticketRepository.findAllByCreator(user1)).containsExactly(ticket);
 
     }
