@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Table(name = "tbl_ticket_privileges")
 public class TicketPrivileges {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
     private Integer id;
 

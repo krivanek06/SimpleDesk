@@ -15,7 +15,7 @@ import java.util.Set;
 @Data
 public class RequestType {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name = "name")
@@ -31,7 +31,7 @@ public class RequestType {
      * which group can what request submit
      */
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_privileges_basic_user",
+    @JoinTable(name = "tbl_request_type_to_submit",
             joinColumns = { @JoinColumn(name = "request_type_id")},
             inverseJoinColumns = { @JoinColumn(name = "group_id")})
     private Set<Group> groupsToSubmitDifferentRequests;
@@ -40,7 +40,7 @@ public class RequestType {
      * which group can what request solve
      */
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_privileges_solver",
+    @JoinTable(name = "tbl_request_type_to_solve",
             joinColumns = { @JoinColumn(name = "request_type_id")},
             inverseJoinColumns = { @JoinColumn(name = "group_id")})
     private Set<Group> groupsToSolveDifferentRequests;

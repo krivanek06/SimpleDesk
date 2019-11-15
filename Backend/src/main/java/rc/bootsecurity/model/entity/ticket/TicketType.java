@@ -11,7 +11,7 @@ import java.util.List;
 @Data
 public class TicketType{
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
     private Integer id;
 

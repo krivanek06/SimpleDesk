@@ -7,7 +7,11 @@ import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import rc.bootsecurity.model.entity.document.Document;
+import rc.bootsecurity.model.entity.document.DocumentsToUsers;
+import rc.bootsecurity.model.entity.reminder.Reminder;
 import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.entity.workingDay.WorkingDay;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -46,10 +50,10 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "date_creation")
+    @Column(name = "timestamp_creation")
     private Timestamp dateCreation;
 
-    @Column(name = "date_ending")
+    @Column(name = "timestamp_ending")
     private Timestamp dateEnding;
 
     @Column(name = "is_admin")
@@ -64,6 +68,37 @@ public class User {
      */
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "usersInGroup")
     private List<Group> groupsInvolved;
+
+    /**
+     * get requests which I am watching
+     */
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
+    @OrderBy(value = "id ASC")
+    private Set<Request> watchedRequests;
+
+    /**
+     * Documents which are shared with me
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<DocumentsToUsers> documents;
+
+    /**
+     * Reminders which user created
+     */
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<Reminder> myReminders;
+
+    /**
+     * reminders which are shared with me
+     */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usersToViewReminder")
+    @OrderBy(value = "id ASC")
+    private Set<Reminder> remindersSharedWithMe;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<WorkingDay> workingDays;
+
+
     //-----------------------------------------------------------------
 
 

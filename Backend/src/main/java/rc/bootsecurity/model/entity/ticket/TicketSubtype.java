@@ -1,6 +1,8 @@
 package rc.bootsecurity.model.entity.ticket;
 
 import lombok.Data;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,8 +12,15 @@ import java.util.List;
 @Data
 public abstract class TicketSubtype {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(nullable=false)
+    @GeneratedValue(strategy = GenerationType.TABLE)
+   /*@TableGenerator(
+            name="ticket_subtype",
+            table="GENERATOR_TABLE",
+            pkColumnName = "key",
+            valueColumnName = "next",
+            pkColumnValue="ticket_subtype",
+            allocationSize=300
+    )*/
     private Integer id;
 
     @Column(name = "name")

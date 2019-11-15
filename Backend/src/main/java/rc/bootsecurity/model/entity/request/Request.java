@@ -11,6 +11,7 @@ import rc.bootsecurity.model.entity.document.Document;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Set;
 
 
 /*@JsonTypeInfo(
@@ -24,28 +25,28 @@ import java.util.List;
 //@MappedSuperclass
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
-@Table(name = "tbl_request")
+@Table(name = "tbl_requests")
 @Getter
 @Setter
 @ToString
 public abstract class Request {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable=false)
     private Integer id;
 
-    @Column(name = "date_creation")
-    private Timestamp dateCreation;
+    @Column(name = "timestamp_creation")
+    private Timestamp timestampCreation;
 
-    @Column(name = "date_accepted")
-    private Timestamp dateAccepted;
+    @Column(name = "timestamp_accepted")
+    private Timestamp timestampAccepted;
 
-    @Column(name = "date_solved")
-    private Timestamp dateSolved;
+    @Column(name = "timestamp_solved")
+    private Timestamp timestampSolved;
 
-    @Column(name = "date_closed")
-    private Timestamp dateClosed;
+    @Column(name = "timestamp_closed")
+    private Timestamp timestampClosed;
 
     @Column(name = "subject")
     private String subject;
@@ -53,8 +54,8 @@ public abstract class Request {
     @Column(name = "solution")
     private String solution;
 
-    @Column(name = "commenting")
-    private Boolean commenting;
+    @Column(name = "allow_commenting")
+    private Boolean allowCommenting;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "priority_id")
@@ -68,7 +69,9 @@ public abstract class Request {
     @JoinColumn(name = "type_id")
     private RequestType requestType;
 
-
+    /**
+     * which documents are shared with this request
+     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_document_to_requests",
             joinColumns = { @JoinColumn(name = "request_id")},
@@ -85,13 +88,38 @@ public abstract class Request {
     private User assigned;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "solver_uid")
+    @JoinColumn(name = "solved_uid")
     private User solver;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_uid")
     private User closed;
     // -------------------------
+
+    /**
+     * comments to request
+     */
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private List<RequestComment> requestComments;
+
+    /**
+     * solver changes which occurred
+     */
+    @OneToMany(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private List<RequestChangedSolver> requestChangedSolvers;
+
+    /**
+     * get users who watch this request
+     */
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_request_watched_by_user",
+            joinColumns = { @JoinColumn(name = "request_id")},
+            inverseJoinColumns = { @JoinColumn(name = "user_id")})
+    @OrderBy("id ASC")
+    private Set<User> userWhoWatchThisRequest;
+
 
 
 

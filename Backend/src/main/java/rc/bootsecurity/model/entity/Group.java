@@ -1,6 +1,9 @@
 package rc.bootsecurity.model.entity;
 
 import lombok.Data;
+import rc.bootsecurity.model.entity.finance.FinanceType;
+import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.request.RequestType;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 
@@ -46,9 +49,15 @@ public class Group {
     private Set<RequestType> requestTypesToSubmit;
 
     /**
-     * which application can I group use
+     * which application can a group use
      */
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
     private Set<RequestType> requestTypesToSolve;
+
+    /**
+     * which finance types can a group submit
+     */
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groupsToSubmitSpecificFinanceType")
+    private Set<FinanceType> financeTypes;
 
 }

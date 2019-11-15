@@ -10,8 +10,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tbl_tickets")
 @Data
-@PrimaryKeyJoinColumn(name="id")
+@PrimaryKeyJoinColumn(name="request_id")
 public class Ticket extends Request {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
     /**
      * May contain software specific name, but also user's name or "other" type
      */
