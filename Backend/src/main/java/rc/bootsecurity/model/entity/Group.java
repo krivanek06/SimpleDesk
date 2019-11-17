@@ -1,5 +1,6 @@
 package rc.bootsecurity.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.request.Request;
@@ -29,7 +30,9 @@ public class Group {
     @JoinColumn(name = "manager_id")
     private User groupManager;
 
-
+    /**
+     * users who are part of this group
+     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_user_groups",
             joinColumns = { @JoinColumn(name = "group_id")},
@@ -37,21 +40,31 @@ public class Group {
     private Set<User> usersInGroup;
 
     /**
-     *  one group has what privileges to see tickets
+     *  one group has what privileges to solve tickets
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
     private List<TicketPrivileges> ticketPrivilegesList;
 
     /**
-     * which application can I group use
+     * which application can a group use
      */
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSubmitDifferentRequests")
+    /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSubmitDifferentRequests")
+    private Set<RequestType> requestTypesToSubmit;*/
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_request_type_to_submit",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
     private Set<RequestType> requestTypesToSubmit;
 
     /**
-     * which application can a group use
+     * which application can a group solve
      */
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
+    /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
+    private Set<RequestType> requestTypesToSolve;*/
+    @ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
+    @JoinTable(name = "tbl_request_type_to_solve",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
     private Set<RequestType> requestTypesToSolve;
 
     /**

@@ -28,9 +28,9 @@ public class UserPrincipal implements UserDetails {
         authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN")); // delete !!!!!!
 
         // if user has at least one privilege to see any application then he becames a solver
-        if(this.user.getGroupsInvolved().stream().anyMatch(x ->  Objects.nonNull(x.getTicketPrivilegesList()))){
+       /* if(this.user.getGroupsInvolved().stream().anyMatch(x ->  Objects.nonNull(x.getTicketPrivilegesList()))){
             authorities.add(new SimpleGrantedAuthority("ROLE_SOLVER"));
-        }
+        }*/
 
         if(this.user.getIsAdmin()){
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
@@ -40,7 +40,7 @@ public class UserPrincipal implements UserDetails {
     }
 
     private void saveApplicationPrivilegeIds(){
-        this.user.getGroupsInvolved().forEach(group -> group.getTicketPrivilegesList().forEach(
+       /* this.user.getGroupsInvolved().forEach(group -> group.getTicketPrivilegesList().forEach(
                 privilege -> {
                         if(this.taskPrivilegesHashMap.containsKey(privilege.getTicketType().getName())) {
                             this.taskPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
@@ -48,7 +48,7 @@ public class UserPrincipal implements UserDetails {
                             this.taskPrivilegesHashMap.put(privilege.getTicketType().getName(), new HashSet<>());
                             this.taskPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
                         }
-                }));
+                }));*/
 
     }
 

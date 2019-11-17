@@ -6,5 +6,5 @@ import rc.bootsecurity.model.entity.request.RequestPriority;
 
 @Repository
 public interface RequestPriorityRepository extends CrudRepository<RequestPriority, Integer> {
-
+    RequestPriority findByName(String name);
 }

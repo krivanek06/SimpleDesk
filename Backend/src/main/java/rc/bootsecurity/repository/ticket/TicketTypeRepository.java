@@ -7,5 +7,5 @@ import rc.bootsecurity.model.entity.ticket.TicketType;
 
 @Repository
 public interface TicketTypeRepository extends CrudRepository<TicketType, Integer> {
-
+    TicketType findByName(String name);
 }

@@ -1,15 +1,18 @@
 package rc.bootsecurity.model.entity.ticket;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import rc.bootsecurity.model.entity.Group;
 
 import javax.persistence.*;
 
 /**
- * contains information which user has what rights to see tickets
+ * contains information which user has what rights to solve tickets
  * based on task_privileges.
- * i.e. group 2 want to see X element in ticket(1) then -> [2,1,X].
- * application_id gets if from tables: hardware, software, servers
+ * i.e. group 2 want to solve X element in ticket(1) then -> [2,1,X].
+ * application_id gets if from tables: hardware, software, servers, but may be empty
+ * if option is "OTHER" , or "USER"
  */
 @Entity
 @Data
@@ -24,7 +27,7 @@ public class TicketPrivileges {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_type_id")
     private TicketType ticketType;
 

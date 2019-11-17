@@ -1,5 +1,6 @@
 package rc.bootsecurity.model.entity.ticket;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.Generated;
 import org.hibernate.annotations.GenerationTime;
@@ -32,7 +33,7 @@ public abstract class TicketSubtype {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_type_id")
     private TicketType ticketType;
 

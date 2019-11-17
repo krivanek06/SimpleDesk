@@ -11,8 +11,8 @@ import rc.bootsecurity.service.UserService;
 
 @Service
 public class UserPrincipalDetailsService implements UserDetailsService {
-    @Autowired
-    private UserService userService;
+   // @Autowired
+  //  private UserService userService;
     @Autowired
     private UserRepository userRepository;
 
@@ -21,7 +21,7 @@ public class UserPrincipalDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         // load user
         User user = this.userRepository.findByUsername(s).orElseThrow(() -> new UsernameNotFoundException("Not found " + s ));
-        this.userService.loadPrivilegesToUser(user);
+    //    this.userService.loadPrivilegesToUser(user);
 
         UserPrincipal userPrincipal = new UserPrincipal(user);
         return userPrincipal;

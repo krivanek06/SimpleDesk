@@ -1,5 +1,7 @@
 package rc.bootsecurity.model.entity.ticket;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,7 +27,8 @@ public class TicketType{
     private Boolean active;
 
     /**
-     * specific task type appears in what groups
+     * specific task type appears in what groups - may be required for statistics
+     * if I want to see whether software is contained in which groups
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
     private List<TicketPrivileges> taskTypeList;
@@ -37,11 +40,11 @@ public class TicketType{
     private List<Ticket> tickets;
 
 
-    /**
-     *  what subtype - software, hardware, server
-     */
+    /*
+     *  what subtype I am a child of - software, hardware, server - probably not needed
+     *
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
-    private List<TicketSubtype> applications;
+    private List<TicketSubtype> ticketSubtypes;*/
 
 
 

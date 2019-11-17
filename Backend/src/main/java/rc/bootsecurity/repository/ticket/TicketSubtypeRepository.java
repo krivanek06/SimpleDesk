@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface TicketSubtypeRepository extends CrudRepository<TicketSubtype, Integer> {
     List<TicketSubtype> findAllByTicketType(TicketType ticketType);
+    TicketSubtype findByName(String name);
 }
