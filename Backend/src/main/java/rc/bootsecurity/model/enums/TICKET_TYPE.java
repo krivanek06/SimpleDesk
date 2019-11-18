@@ -4,8 +4,8 @@ public enum TICKET_TYPE {
     SOFTWARE("Software"),
     HARDWARE("Hardware"),
     SERVER("Server"),
-    USER("Užívateľ"),
-    OTHER("Iné");
+    USER("užívateľ"),
+    OTHER("Ine");
 
     private final String text;
 

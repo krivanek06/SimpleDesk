@@ -4,11 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.report.ReportAccess;
-import rc.bootsecurity.model.entity.report.ReportAccessStored;
-import rc.bootsecurity.model.entity.report.ReportRefresh;
-import rc.bootsecurity.model.entity.report.ReportType;
+import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.entity.request.RequestPosition;
+import rc.bootsecurity.model.entity.request.RequestPriority;
 import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.enums.REQUEST_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.report.*;
@@ -21,10 +21,7 @@ import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.test.creator.Creator;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -104,13 +101,50 @@ public class Inserter {
         Group group6 = Creator.createGroup("TESTGROUP6" , user2, new HashSet<>(Arrays.asList(user1,user2,user3)));
         Group group7 = Creator.createGroup("TESTGROUP7" , user2, new HashSet<>(Arrays.asList(user1,user2)));
 
-        this.groupRepository.saveAll(List.of(group1,group2,group3,group4,group5,group6,group7));
+        /*Group group1 = Creator.createGroup("TESTGROUP1" , user1, new HashSet<>());
+        Group group2 = Creator.createGroup("TESTGROUP2" , user1, new HashSet<>());
+        Group group3 = Creator.createGroup("TESTGROUP3" , user1, new HashSet<>());
+        Group group4 = Creator.createGroup("TESTGROUP4" , user1, new HashSet<>());
+
+        Group group5 = Creator.createGroup("TESTGROUP5" , user2, new HashSet<>());
+        Group group6 = Creator.createGroup("TESTGROUP6" , user2, new HashSet<>());
+        Group group7 = Creator.createGroup("TESTGROUP7" , user2, new HashSet<>());*/
+
+        this.groupRepository.saveAll(Arrays.asList(group1,group2,group3,group4,group5,group6,group7));
+
+        /*user1.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1,group2,group3,group4,group5,group6,group7)));
+        user2.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1,group2,group3,group4,group5,group6,group7)));
+        user3.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1,group2,group3,group5,group6)));
+        user4.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1,group2,group3,group5)));
+        user5.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user6.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user7.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user8.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user9.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user10.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user11.setGroupsInvolved(new ArrayList<>(Arrays.asList(group1)));
+        user12.setGroupsInvolved(new ArrayList<>(Arrays.asList(group5)));
+        this.userRepository.saveAll(new ArrayList<>(Arrays.asList(user1,user2,user3,user4,user5,user6,user7,user8,user9,user10,user11,user12)));*/
+    }
+
+    public void insertRequestTypes(){
+        RequestPosition requestPosition1 = Creator.createRequestPosition("Position1");
+        RequestPosition requestPosition2 = Creator.createRequestPosition("Position2");
+        this.requestPositionRepository.saveAll(List.of(requestPosition1, requestPosition2));
+
+        RequestPriority requestPriority1 = Creator.createRequestPriority("Priority1");
+        RequestPriority requestPriority2 = Creator.createRequestPriority("Priority2");
+        this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2));
+
+        RequestType requestType1 = Creator.createRequestType("Ticket");
+        RequestType requestType2 = Creator.createRequestType("Report");
+        RequestType requestType3 = Creator.createRequestType("Finance");
+        this.requestTypeRepository.saveAll(List.of(requestType1,requestType2, requestType3));
     }
 
 
-    public void insertRequestTypes(){
-        this.requestPositionRepository.saveAll(List.of(Creator.createRequestPosition("Position1"), Creator.createRequestPosition("Position2")));
-        this.requestPriorityRepository.saveAll(List.of(Creator.createRequestPriority("Priority1"), Creator.createRequestPriority("Priority2")));
+    public void insertRequestTypesPrivilegesForGroups(){
+        insertRequestTypes();
 
         Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
         Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
@@ -118,10 +152,10 @@ public class Inserter {
         Group group4 = this.groupRepository.findByGroupName("TESTGROUP4");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        RequestType requestType1 = Creator.createRequestType("Ticket"); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
-        RequestType requestType2 = Creator.createRequestType("Report"); // Set.of(group1), Set.of(group1,group2,group3)
-        RequestType requestType3 = Creator.createRequestType("Finance"); // Set.of(group1), Set.of(group2,group3)
-        this.requestTypeRepository.saveAll(List.of(requestType1,requestType2, requestType3));
+        RequestType requestType1 = this.requestTypeRepository.findByName(REQUEST_TYPE.TICKET.toString()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
+        RequestType requestType2 = this.requestTypeRepository.findByName(REQUEST_TYPE.REPORT.toString()); // Set.of(group1), Set.of(group1,group2,group3)
+        RequestType requestType3 = this.requestTypeRepository.findByName(REQUEST_TYPE.FINANCE.toString()); // Set.of(group1), Set.of(group2,group3)
+
 
         group1.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1, requestType2)));
         group1.setRequestTypesToSolve(new HashSet<>(Arrays.asList(requestType1, requestType2,requestType3)));
@@ -134,35 +168,4 @@ public class Inserter {
     }
 
 
-    /**
-     * create request type and options for all request type
-     */
-    public void insertReportForUser(){
-
-        // create ticket types  - software and hardware types
-
-
-        // ---------------------------------------------------------------------------------
-
-       // this.requestTypeRepository.save(requestTypeReport);
-
-        ReportType reportType1 = Creator.createReportType("reportType1");
-        ReportType reportType2 = Creator.createReportType("reportType2");
-        this.reportTypeRepository.saveAll(List.of(reportType1, reportType2));
-
-        ReportRefresh reportRefresh1 = Creator.createReportRefresh("reportRefresh1");
-        ReportRefresh reportRefresh2 = Creator.createReportRefresh("reportRefresh2");
-        this.reportRefreshRepository.saveAll(List.of(reportRefresh1, reportRefresh2));
-
-        ReportAccess reportAccess1 = Creator.createReportAccess("reportAccess1");
-        ReportAccess reportAccess2 = Creator.createReportAccess("reportAccess2");
-        this.reportAccessRepository.saveAll(List.of(reportAccess1, reportAccess2));
-
-        ReportAccessStored reportAccessStored1 = Creator.createReportAccessStored("Path1", reportAccess1);
-        ReportAccessStored reportAccessStored2 = Creator.createReportAccessStored("Path2", reportAccess1);
-        ReportAccessStored reportAccessStored3 = Creator.createReportAccessStored("Path3", reportAccess2);
-        ReportAccessStored reportAccessStored4 = Creator.createReportAccessStored("Path4", reportAccess2);
-
-
-    }
 }

@@ -33,20 +33,12 @@ public class RequestType {
     /**
      * which group can what request submit
      */
-   /* @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_to_submit",
-            joinColumns = { @JoinColumn(name = "request_type_id")},
-            inverseJoinColumns = { @JoinColumn(name = "group_id")})*/
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSubmit")
     private Set<Group> groupsToSubmitDifferentRequests;
 
     /**
      * which group can what request solve
      */
-    /*@ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
-    @JoinTable(name = "tbl_request_type_to_solve",
-            joinColumns = { @JoinColumn(name = "request_type_id")},
-            inverseJoinColumns = { @JoinColumn(name = "group_id")})*/
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSolve")
     private Set<Group> groupsToSolveDifferentRequests;
 

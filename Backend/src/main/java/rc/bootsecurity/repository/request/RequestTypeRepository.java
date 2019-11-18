@@ -16,15 +16,17 @@ import java.util.Set;
 
 @Repository
 public interface RequestTypeRepository extends JpaRepository<RequestType, Integer> {
-    Optional<Set<RequestType>> findAllByGroupsToSolveDifferentRequests(Group group);
-    Optional<Set<RequestType>> findAllByGroupsToSolveDifferentRequests(Set<Group> group);
+    Optional<List<RequestType>> findAllByGroupsToSolveDifferentRequests(Group group);
+    Optional<List<RequestType>> findAllByGroupsToSolveDifferentRequests(Set<Group> group);
 
-    Optional<Set<RequestType>> findAllByGroupsToSubmitDifferentRequests(Group group);
-    Optional<Set<RequestType>> findAllByGroupsToSubmitDifferentRequestsIn(Set<Group> group);
+    Optional<List<RequestType>> findAllByGroupsToSubmitDifferentRequests(Group group);
+    Optional<List<RequestType>> findAllByGroupsToSubmitDifferentRequestsIn(Set<Group> group);
 
     @Query("Select r From RequestType r where r.name = :name ")
     RequestType selectByName(@Param("name") String name);
 
     RequestType findRequestTypesByName(String name);
-    RequestType findAllByName(String name);
+    RequestType findByName(String name);
+    List<RequestType> findAllByNameIn(List<String> names);
+    List<RequestType> findAllByNameIn(Set<String> names);
 }

@@ -6,9 +6,7 @@ import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.Finance;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.report.*;
-import rc.bootsecurity.model.entity.request.RequestPosition;
-import rc.bootsecurity.model.entity.request.RequestPriority;
-import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
 
 import java.sql.Timestamp;
@@ -91,6 +89,21 @@ public class Creator {
 
         return requestType;
     }
+    public static RequestComment createRequestComment(Request request, User user, String comment) {
+        RequestComment requestComment = new RequestComment();
+        requestComment.setRequest(request);
+        requestComment.setUser(user);
+        requestComment.setComment(comment);
+        return requestComment;
+    }
+
+    public static RequestLog createRequestLog(String log, User user, Request request){
+        RequestLog requestLog = new RequestLog();
+        requestLog.setLog(log);
+        requestLog.setRequest(request);
+        requestLog.setUser(user);
+        return requestLog;
+    }
 
     // ************** END REQUEST **********************
 
@@ -118,6 +131,14 @@ public class Creator {
         hardware.setTicketType(ticketType);
 
         return hardware;
+    }
+
+    public static TicketSubtype createServerSubtype(String name, TicketType ticketType){
+        TicketSubtype server = new Server();
+        server.setName(name);
+        server.setTicketType(ticketType);
+
+        return server;
     }
 
     public static Ticket createTicket(TicketType ticketType, RequestPriority requestPriority, RequestPosition requestPosition, User user){
@@ -163,8 +184,7 @@ public class Creator {
     }
 
     public static Report createReport(User creator, RequestPriority requestPriority, RequestPosition requestPosition,
-                                      RequestType requestType, ReportRefresh reportRefresh, ReportType reportType,
-                                      List<ReportAccessStored> reportAccessStoredList){
+                                      RequestType requestType, ReportRefresh reportRefresh, ReportType reportType){
         Report report = new Report();
         report.setCreator(creator);
         report.setRequestPriority(requestPriority);
@@ -181,7 +201,6 @@ public class Creator {
         report.setDeadline(new Timestamp(System.currentTimeMillis()));
         report.setReportRefresh(reportRefresh);
         report.setReportType(reportType);
-        report.setReportAccessStoredList(reportAccessStoredList);
 
         return report;
     }

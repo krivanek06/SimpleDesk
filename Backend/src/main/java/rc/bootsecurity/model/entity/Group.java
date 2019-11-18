@@ -26,6 +26,9 @@ public class Group {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "description")
+    private String description;
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "manager_id")
     private User groupManager;
@@ -70,7 +73,10 @@ public class Group {
     /**
      * which finance types can a group submit
      */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "groupsToSubmitSpecificFinanceType")
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "tbl_finance_type_privileges",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "finance_type_id")})
     private Set<FinanceType> financeTypes;
 
 }

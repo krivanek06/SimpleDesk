@@ -20,4 +20,5 @@ public interface GroupRepository extends CrudRepository<Group, Integer > {
 
     Optional<List<Group>> findAllByRequestTypesToSolve(RequestType requestType);
     Optional<List<Group>> findAllByRequestTypesToSubmit(RequestType requestType);
+
 }

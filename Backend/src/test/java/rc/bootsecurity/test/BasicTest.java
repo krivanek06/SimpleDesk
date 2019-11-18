@@ -10,27 +10,26 @@ import org.springframework.test.context.junit4.SpringRunner;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.request.Request;
-import rc.bootsecurity.model.entity.request.RequestPosition;
-import rc.bootsecurity.model.entity.request.RequestPriority;
-import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.report.ReportAccess;
+import rc.bootsecurity.model.entity.report.ReportRefresh;
+import rc.bootsecurity.model.entity.report.ReportType;
+import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.request.RequestPositionRepository;
-import rc.bootsecurity.repository.request.RequestPriorityRepository;
-import rc.bootsecurity.repository.request.RequestRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.report.*;
+import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
+import rc.bootsecurity.service.RequestService;
 import rc.bootsecurity.service.UserService;
+import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.inserter.Inserter;
-import rc.bootsecurity.test.inserter.InserterTickets;
+import rc.bootsecurity.test.inserter.InserterRequests;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,7 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @AutoConfigureEmbeddedDatabase
 @ComponentScan(basePackages = {"rc.bootsecurity.*"})
-public class TicketTest {
+public class BasicTest {
     @Autowired
     private UserRepository userRepository;
 
@@ -74,16 +73,77 @@ public class TicketTest {
     private Inserter inserter;
 
     @Autowired
-    private InserterTickets inserterTickets;
+    private InserterRequests inserterTickets;
 
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RequestCommentRepository requestCommentRepository;
+
+    @Autowired
+    private RequestService requestService;
+
+    @Autowired
+    private ReportAccessRepository reportAccessRepository;
+    @Autowired
+    private ReportTypeRepository reportTypeRepository;
+    @Autowired
+    private ReportRefreshRepository reportRefreshRepository;
+    @Autowired
+    private ReportAccessStoredRepository reportAccessStoredRepository;
+    @Autowired
+    private ReportRepository reportRepository;
+    @Autowired
+    private InserterRequests inserterRequests;
+
+
+    @Test
+    public void testUsersInGroups(){
+        inserter.insertUsersWithGroups();
+
+        User user1 = this.userRepository.findByUsername("user1").get();
+        User user2 = this.userRepository.findByUsername("user2").get();
+        User user3 = this.userRepository.findByUsername("user3").get();
+        User user4 = this.userRepository.findByUsername("user4").get();
+        User user12 = this.userRepository.findByUsername("user12").get();
+
+        Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
+        Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
+        Group group3 = this.groupRepository.findByGroupName("TESTGROUP3");
+        Group group4 = this.groupRepository.findByGroupName("TESTGROUP4");
+        Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
+        Group group6 = this.groupRepository.findByGroupName("TESTGROUP6");
+        Group group7 = this.groupRepository.findByGroupName("TESTGROUP7");
+
+        assertThat(this.groupRepository.findAllByUsersInGroup(user1)).containsExactlyInAnyOrder(group1,group2,group3,group4,group5,group6,group7);
+        assertThat(this.groupRepository.findAllByUsersInGroup(user3)).containsExactlyInAnyOrder(group1,group2,group3,group5,group6);
+
+        assertThat(this.groupRepository.findAllByGroupManager(user3)).isEmpty();
+        assertThat(this.groupRepository.findAllByGroupManager(user1).get()).containsOnly(group1,group2,group3,group4);
+        assertThat(this.groupRepository.findAllByGroupManager(user2).get()).containsOnly(group5,group6,group7);
+
+        assertThat(this.userRepository.findAllByGroupsInvolved(group4)).containsOnly(user1,user2);
+        assertThat(this.userRepository.findAllByGroupsInvolved(group6)).containsOnly(user1,user2,user3);
+        assertThat(this.userRepository.findAllByGroupsInvolved(group3)).containsExactlyInAnyOrder(user1,user2,user3,user4);
+
+        // remove from group
+        group3.getUsersInGroup().remove(user4);
+        this.groupRepository.save(group3);
+        assertThat(this.userRepository.findAllByGroupsInvolved(group3)).containsExactlyInAnyOrder(user1,user2,user3);
+
+        // add to group
+        group3.getUsersInGroup().add(user4);
+        this.groupRepository.save(group3);
+        assertThat(this.userRepository.findAllByGroupsInvolved(group3)).containsExactlyInAnyOrder(user1,user2,user3,user4);
+
+
+    }
 
     @Test
     public void testRequestTypeAndGroupPrivileges(){
         inserter.insertUsersWithGroups();
-        inserter.insertRequestTypes();
+        inserter.insertRequestTypesPrivilegesForGroups();
 
         Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
         Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
@@ -92,7 +152,7 @@ public class TicketTest {
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
         RequestType requestTypeTicket = this.requestTypeRepository.selectByName("Ticket");
-        RequestType requestTypeReport = this.requestTypeRepository.findAllByName("Report");
+        RequestType requestTypeReport = this.requestTypeRepository.findByName("Report");
         List<Group> requestTypeTicketSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(requestTypeTicket).get();
         List<Group> requestTypeTicketSolveGroups = this.groupRepository.findAllByRequestTypesToSolve(requestTypeTicket).get();
         List<Group> requestTypeReportSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(requestTypeReport).get();
@@ -115,7 +175,7 @@ public class TicketTest {
     @Test
     public void testTicketTypes(){
         inserter.insertUsersWithGroups();
-        inserter.insertRequestTypes();
+        inserter.insertRequestTypesPrivilegesForGroups();
         inserterTickets.insertRequestTickets();
 
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
@@ -144,7 +204,7 @@ public class TicketTest {
     @Test
     public void testInsertingTicketsForUsers(){
         inserter.insertUsersWithGroups();
-        inserter.insertRequestTypes();
+        inserter.insertRequestTypesPrivilegesForGroups();
         inserterTickets.insertRequestTickets();
         inserterTickets.insertTicketsForUsers();
 
@@ -214,13 +274,11 @@ public class TicketTest {
         assertThat(this.requestRepository.findAllByCreator(user1).size()).isEqualTo(4);
     }
 
-    /**
-     * 1. co ak som v IT a REPORT a obaja vidia vsetky reporty, budem mat duplicity ?
-     */
+
     @Test
     public void testUserPrivilegesToRequestsAndTickets() {
         inserter.insertUsersWithGroups();
-        inserter.insertRequestTypes();
+        inserter.insertRequestTypesPrivilegesForGroups();
         inserterTickets.insertRequestTickets();
         inserterTickets.insertTicketsForUsers();
         inserterTickets.insertPrivilegesForSolvers();
@@ -276,4 +334,84 @@ public class TicketTest {
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
         assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeHardware.getName())).isNullOrEmpty();
     }
+
+    @Test
+    public void testSolvingTicketsChangingSolverAndCommenting(){
+        inserter.insertUsersWithGroups();
+        inserter.insertRequestTypesPrivilegesForGroups();
+        inserterTickets.insertRequestTickets();
+        inserterTickets.insertTicketsForUsers();
+        inserterTickets.insertPrivilegesForSolvers();
+
+        User user1 = this.userRepository.findByUsername("user1").get();
+        User user12 = this.userRepository.findByUsername("user12").get();
+
+       // Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
+        Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
+
+        List<Group> groupsForUser12 = this.groupRepository.findAllByUsersInGroup(user12);
+        assertThat(groupsForUser12).containsExactlyInAnyOrder(group5);
+
+        RequestPosition requestPosition1 = this.requestPositionRepository.findByName("Position1");
+        RequestPosition requestPosition2 = this.requestPositionRepository.findByName("Position2");
+        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName("Priority2");
+
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
+        Ticket ticket1 = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2).get(0);
+
+        assertThat(ticket1.getTicketType()).isEqualTo(ticketTypeSoftware);
+        ticket1.setSolver(user12);
+        ticket1.setRequestPosition(requestPosition1);
+        this.requestRepository.save(ticket1);
+        assertThat(this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition1)).contains(ticket1);
+
+        ticket1.setRequestPosition(requestPosition2);
+        this.requestRepository.save(ticket1);
+        List<Ticket> tickets = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2);
+        assertThat(tickets).contains(ticket1);
+        assertThat(tickets.size()).isEqualTo(2);
+
+        // add comments -> hardware
+        Request hardwareRequest = this.requestRepository.findAllByCreatorAndRequestPositionAndRequestPriority(
+                user1, requestPosition2, requestPriority2).get(0);
+        RequestComment comment1 = Creator.createRequestComment(hardwareRequest, user1, "COMMENT1");
+        RequestComment comment2 = Creator.createRequestComment(hardwareRequest, user12, "COMMENT2");
+        RequestComment comment3 = Creator.createRequestComment(hardwareRequest, user1, "COMMENT3");
+        this.requestCommentRepository.save(comment1);
+        this.requestCommentRepository.save(comment2);
+        this.requestCommentRepository.save(comment3);
+
+        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByDateAsc(hardwareRequest);
+        assertThat(savedComments).containsSequence(comment1, comment2,comment3);
+        assertThat(savedComments).containsExactly(comment1, comment2, comment3);
+
+        this.requestCommentRepository.delete(comment2);
+        savedComments = this.requestCommentRepository.findAllByRequestOrderByDateAsc(hardwareRequest);
+        assertThat(savedComments).containsSequence(comment1, comment3);
+        assertThat(savedComments).containsExactly(comment1,  comment3);
+        this.requestService.logChangedPriority(hardwareRequest, user12, "pozicia", requestPosition1.getName(), requestPosition2.getName());
+        assertThat(this.requestService.getLogsForRequest(hardwareRequest).size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testReportTypes(){
+        inserter.insertUsersWithGroups();
+        inserter.insertRequestTypesPrivilegesForGroups();
+        inserterRequests.insertRequestReports();
+
+        ReportType reportType3 = this.reportTypeRepository.findByName("REPORT_TYPE_3");
+        assertThat(reportType3).isNotNull();
+        assertThat(reportType3.getName()).isEqualToIgnoringCase("REPORT_TYPE_3");
+
+        ReportRefresh reportRefresh3 = this.reportRefreshRepository.findByName("REPORT_REFRESH_3");
+        assertThat(reportRefresh3).isNotNull();
+        assertThat(reportRefresh3.getName()).isEqualToIgnoringCase("REPORT_REFRESH_3");
+
+        ReportAccess reportAccess1 = this.reportAccessRepository.findByName("REPORT_ACCESS_1");
+        assertThat(reportAccess1).isNotNull();
+        assertThat(reportAccess1.getName()).isEqualToIgnoringCase("REPORT_ACCESS_1");
+    }
+
+
+
 }

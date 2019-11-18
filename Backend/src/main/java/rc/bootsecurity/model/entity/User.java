@@ -59,6 +59,8 @@ public class User {
     @Column(name = "is_admin")
     private Boolean isAdmin;
 
+    public String getFullName(){ return getFirstName() + " " + getLastName(); }
+
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager")
     private List<Group> groupsToManage;
@@ -95,8 +97,8 @@ public class User {
     @OrderBy(value = "id ASC")
     private Set<Reminder> remindersSharedWithMe;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    private List<WorkingDay> workingDays;
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    //private List<WorkingDay> workingDays;
 
 
     //-----------------------------------------------------------------

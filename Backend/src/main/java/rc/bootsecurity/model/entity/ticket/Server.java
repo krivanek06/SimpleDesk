@@ -12,8 +12,6 @@ import java.util.List;
 @Data
 public class Server extends TicketSubtype {
 
-    // unidirectional
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinColumn(name = "server_id")
-    private List<ServerContact> serverContactList;
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "server")
+    //private List<ServerContact> serverContactList;
 }

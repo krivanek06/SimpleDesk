@@ -30,14 +30,14 @@ public class TicketType{
      * specific task type appears in what groups - may be required for statistics
      * if I want to see whether software is contained in which groups
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
-    private List<TicketPrivileges> taskTypeList;
+  //  @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
+  //  private List<TicketPrivileges> taskTypeList;
 
     /**
      * what tickets exists on specific ticket type - hw, sw, etc.
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
-    private List<Ticket> tickets;
+   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "ticketType")
+   // private List<Ticket> tickets;
 
 
     /*

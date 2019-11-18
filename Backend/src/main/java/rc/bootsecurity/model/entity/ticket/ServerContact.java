@@ -27,4 +27,8 @@ public class ServerContact {
     @Column(name = "active")
     private Boolean active;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "server_id")
+    private Server server;
+
 }

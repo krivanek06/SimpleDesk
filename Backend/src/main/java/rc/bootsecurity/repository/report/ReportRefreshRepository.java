@@ -6,4 +6,5 @@ import rc.bootsecurity.model.entity.report.ReportRefresh;
 
 @Repository
 public interface ReportRefreshRepository extends CrudRepository<ReportRefresh, Integer> {
+    ReportRefresh findByName(String name);
 }

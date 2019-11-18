@@ -42,11 +42,8 @@ public class GroupService {
      * 3. requests which a group can submit
      */
     public void setGroupPrivilegeInformation(Group group){
-        Optional<Set<RequestType>> requestsToSolve = this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group);
-
-        group.setRequestTypesToSolve(new HashSet<>(requestsToSolve.orElse(new HashSet<>())));
-
-        group.setRequestTypesToSubmit(new HashSet<>(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new HashSet<>())));
+        group.setRequestTypesToSolve(new HashSet<>(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group).orElse(new ArrayList<>())));
+        group.setRequestTypesToSubmit(new HashSet<>(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new ArrayList<>())));
         group.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>()));
     }
 

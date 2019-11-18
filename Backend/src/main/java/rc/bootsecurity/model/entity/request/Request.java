@@ -39,12 +39,6 @@ public abstract class Request {
     @Column(name = "timestamp_creation")
     private Timestamp timestampCreation;
 
-    @Column(name = "timestamp_accepted")
-    private Timestamp timestampAccepted;
-
-    @Column(name = "timestamp_solved")
-    private Timestamp timestampSolved;
-
     @Column(name = "timestamp_closed")
     private Timestamp timestampClosed;
 
@@ -99,16 +93,15 @@ public abstract class Request {
     /**
      * comments to request
      */
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id")
-    private List<RequestComment> requestComments;
+    //@OneToMany(fetch = FetchType.LAZY)
+    //private List<RequestComment> requestComments;
 
     /**
      * solver changes which occurred
      */
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "request_id")
-    private List<RequestChangedSolver> requestChangedSolvers;
+  //  @OneToMany(fetch = FetchType.LAZY)
+  //  @JoinColumn(name = "request_id")
+  //  private List<RequestChangedSolver> requestChangedSolvers;
 
     /**
      * get users who watch this request

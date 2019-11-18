@@ -18,13 +18,13 @@ public class FinanceType {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "financeType")
-    private List<Finance> financeList;
+   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "financeType")
+   // private List<Finance> financeList;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_finance_type_privileges",
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "financeTypes")
+   /* @JoinTable(name = "tbl_finance_type_privileges",
             joinColumns = { @JoinColumn(name = "finance_type_id")},
-            inverseJoinColumns = { @JoinColumn(name = "group_id")})
+            inverseJoinColumns = { @JoinColumn(name = "group_id")})*/
     private Set<Group> groupsToSubmitSpecificFinanceType;
 }
 

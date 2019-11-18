@@ -16,6 +16,6 @@ public class ReportRefresh {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "reportRefresh")
-    private List<Report> reports;
+   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "reportRefresh")
+  //  private List<Report> reports;
 }

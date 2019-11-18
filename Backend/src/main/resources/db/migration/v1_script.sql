@@ -61,14 +61,14 @@ create table tbl_users(
   timestamp_ending TIMESTAMP default NULL,
   is_admin boolean not null default False
 );
-DROP TABLE IF EXISTS tbl_request_changed_solver CASCADE;
+/*DROP TABLE IF EXISTS tbl_request_changed_solver CASCADE;
 create table tbl_request_changed_solver(
    id serial primary key,
    request_id Integer NOT NULL,
    user_id_from Integer NOT NULL,
    user_id_to Integer NOT NULL,
    timestamp TIMESTAMP default current_timestamp
-);
+);*/
 DROP TABLE IF EXISTS tbl_request_comments CASCADE;
 create table tbl_request_comments(
    id serial primary key,
@@ -82,8 +82,6 @@ DROP TABLE IF EXISTS tbl_requests CASCADE;
 create table tbl_requests(
    id serial primary key,
    timestamp_creation TIMESTAMP default current_timestamp,
-   timestamp_accepted TIMESTAMP,
-   timestamp_solved TIMESTAMP,
    timestamp_closed TIMESTAMP,
    priority_id Integer NOT NULL,
    creator_uid Integer NOT NULL,
@@ -93,7 +91,7 @@ create table tbl_requests(
    subject varchar NOT NULL,
    solution varchar,
    allow_commenting boolean default True,
-   position_id Integer default 1,
+   position_id Integer,
    type_id Integer NOT NULL
 );
 
@@ -219,7 +217,7 @@ create table tbl_groups(
   id serial primary key,
   name varchar(255) NOT NULL unique,
   email varchar(255) unique,
-  description text,
+  description varchar,
   manager_id integer
 );
 DROP TABLE IF EXISTS tbl_user_groups CASCADE;
@@ -293,11 +291,23 @@ create table tbl_finance_type_privileges(
 );
 
 -- watch group just 1 layer, not nested
+DROP TABLE IF EXISTS tbl_group_activity_watched_by_user CASCADE;
 create table tbl_group_activity_watched_by_user(
   id serial primary key,
   group_id integer not null,
   user_id Integer not null
 );
+DROP TABLE IF EXISTS tbl_request_logs CASCADE;
+create table tbl_request_logs(
+  id serial primary key,
+  request_id integer not null,
+  user_id integer not null,
+  log varchar not null,
+  timestamp TIMESTAMP default current_timestamp
+);
+
+ALTER TABLE tbl_request_logs ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
+ALTER TABLE tbl_request_logs ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
@@ -313,9 +323,9 @@ ALTER TABLE tbl_shared_reminders ADD FOREIGN KEY (user_id) REFERENCES tbl_users(
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (document_id) REFERENCES tbl_documents(id);
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 
-ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
-ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_from) REFERENCES tbl_users(id);
-ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_to) REFERENCES tbl_users(id);
+--ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
+--ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_from) REFERENCES tbl_users(id);
+--ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_to) REFERENCES tbl_users(id);
 
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);

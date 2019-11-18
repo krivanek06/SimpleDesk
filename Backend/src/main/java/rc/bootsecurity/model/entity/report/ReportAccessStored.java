@@ -1,6 +1,7 @@
 package rc.bootsecurity.model.entity.report;
 
 import lombok.Data;
+import org.hibernate.engine.profile.Fetch;
 
 import javax.persistence.*;
 
@@ -13,13 +14,21 @@ public class ReportAccessStored {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    /**
+     * correct path, lets say for SFTP
+     */
     @Column(name = "path")
     private String path;
 
     /**
-     * correct path, lets say for SFTP
+     * SFTP, Email, etc.
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "access_id")
     private ReportAccess reportAccess;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "report_id")
+    private Report report;
+
 }

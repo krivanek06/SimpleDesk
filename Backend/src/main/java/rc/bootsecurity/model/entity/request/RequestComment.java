@@ -36,6 +36,10 @@ public class RequestComment {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id")
+    private Request request;
+
     /**
      * if isPrivate is false I have to load all groups which is this comment shared
      */

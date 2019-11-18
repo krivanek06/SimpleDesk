@@ -27,12 +27,12 @@ public class TicketPrivileges {
     @JoinColumn(name = "group_id")
     private Group group;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_type_id")
     private TicketType ticketType;
 
     /**
-     * May contains name of software from Software.class, but also be null it TicketType is "user" or "other"
+     * May contains name of software from Software.class, but also be null if TicketType is "user" or "other"
      */
     @Column(name = "application_name")
     private String applicationName;

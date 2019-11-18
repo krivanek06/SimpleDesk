@@ -53,8 +53,8 @@ public class Report extends Request {
     /**
      * all access for reports - SFTP, email, etc.
      */
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_id")
-    private List<ReportAccessStored> reportAccessStoredList;
+    //@OneToMany(fetch = FetchType.LAZY)
+   // @JoinColumn(name = "report_id")
+   // private List<ReportAccessStored> reportAccessStoredList;
 
 }

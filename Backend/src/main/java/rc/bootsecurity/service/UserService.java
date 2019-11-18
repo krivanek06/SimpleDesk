@@ -3,10 +3,12 @@ package rc.bootsecurity.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.model.dto.RequestContainerDTO;
 import rc.bootsecurity.model.dto.UserDTOSimple;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestType;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -59,6 +61,7 @@ public class UserService {
         return userPrivilegeDTO;
     }
 
+    // helper method to fetch distinct ticket privileges
     private Map<String, Set<String>> getTicketPrivileges(List<Group> groups){
         Map<String, Set<String>> ticketPrivilegesHashMap = new HashMap<>();
         groups.forEach(group -> group.getTicketPrivilegesList().forEach(privilege -> {
@@ -73,7 +76,7 @@ public class UserService {
     }
 
 
-    private User loadUser(String name){
+    public User loadUser(String name){
         return this.userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
     }
 
