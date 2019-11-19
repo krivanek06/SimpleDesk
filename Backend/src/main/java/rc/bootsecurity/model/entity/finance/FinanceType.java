@@ -1,6 +1,7 @@
 package rc.bootsecurity.model.entity.finance;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.Group;
 
 import javax.persistence.*;
@@ -20,7 +21,7 @@ public class FinanceType {
 
    // @OneToMany(fetch = FetchType.LAZY, mappedBy = "financeType")
    // private List<Finance> financeList;
-
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "financeTypes")
    /* @JoinTable(name = "tbl_finance_type_privileges",
             joinColumns = { @JoinColumn(name = "finance_type_id")},

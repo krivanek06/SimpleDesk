@@ -15,6 +15,8 @@ import rc.bootsecurity.model.entity.report.ReportRefresh;
 import rc.bootsecurity.model.entity.report.ReportType;
 import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
+import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.report.*;
@@ -151,8 +153,8 @@ public class BasicTest {
         Group group4 = this.groupRepository.findByGroupName("TESTGROUP4");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        RequestType requestTypeTicket = this.requestTypeRepository.selectByName("Ticket");
-        RequestType requestTypeReport = this.requestTypeRepository.findByName("Report");
+        RequestType requestTypeTicket = this.requestTypeRepository.selectByName(REQUEST_TYPE.TICKET.name());
+        RequestType requestTypeReport = this.requestTypeRepository.findByName(REQUEST_TYPE.REPORT.name());
         List<Group> requestTypeTicketSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(requestTypeTicket).get();
         List<Group> requestTypeTicketSolveGroups = this.groupRepository.findAllByRequestTypesToSolve(requestTypeTicket).get();
         List<Group> requestTypeReportSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(requestTypeReport).get();
@@ -178,8 +180,8 @@ public class BasicTest {
         inserter.insertRequestTypesPrivilegesForGroups();
         inserterTickets.insertRequestTickets();
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName("Hardware");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
 
         assertThat(ticketTypeSoftware).isNotNull();
         assertThat(ticketTypeHardware).isNotNull();
@@ -217,8 +219,8 @@ public class BasicTest {
         RequestPosition requestPosition1 = this.requestPositionRepository.findByName("Position1");
         RequestPosition requestPosition2 = this.requestPositionRepository.findByName("Position2");
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName("Hardware");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
 
 
         List<Ticket> user1Tickets =
@@ -291,12 +293,12 @@ public class BasicTest {
         Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        RequestType ticket = this.requestTypeRepository.findRequestTypesByName("Ticket");
-        RequestType report = this.requestTypeRepository.findRequestTypesByName("Report");
-        RequestType finance = this.requestTypeRepository.findRequestTypesByName("Finance");
+        RequestType ticket = this.requestTypeRepository.findRequestTypesByName(REQUEST_TYPE.TICKET.name());
+        RequestType report = this.requestTypeRepository.findRequestTypesByName(REQUEST_TYPE.REPORT.name());
+        RequestType finance = this.requestTypeRepository.findRequestTypesByName(REQUEST_TYPE.FINANCE.name());
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName("Hardware");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
         List<TicketSubtype> ticketSubtypeSoftware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware);
         List<TicketSubtype> ticketSubtypesHardware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware);
 
@@ -315,8 +317,10 @@ public class BasicTest {
 
         UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(user1);
 
-        assertThat(userPrivilegeDTO.getSolveRequests()).containsExactlyInAnyOrder("Ticket","Report","Finance");
-        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder("Ticket","Report","Finance");
+        assertThat(userPrivilegeDTO.getSolveRequests())
+                .containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name(),REQUEST_TYPE.FINANCE.name());
+        assertThat(userPrivilegeDTO.getSubmitRequests())
+                .containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name(),REQUEST_TYPE.FINANCE.name());
         assertThat(userPrivilegeDTO.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName(), ticketTypeHardware.getName());
         assertThat(userPrivilegeDTO.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
@@ -326,7 +330,7 @@ public class BasicTest {
 
         UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12);
 
-        assertThat(userPrivilegeDTO5.getSolveRequests()).containsExactlyInAnyOrder("Ticket");
+        assertThat(userPrivilegeDTO5.getSolveRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO5.getSubmitRequests().size()).isEqualTo(0);
         assertThat(userPrivilegeDTO5.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName());
         assertThat(userPrivilegeDTO5.getSolveTickets()).doesNotContainKeys(ticketTypeHardware.getName());
@@ -356,7 +360,7 @@ public class BasicTest {
         RequestPosition requestPosition2 = this.requestPositionRepository.findByName("Position2");
         RequestPriority requestPriority2 = this.requestPriorityRepository.findByName("Priority2");
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
         Ticket ticket1 = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2).get(0);
 
         assertThat(ticket1.getTicketType()).isEqualTo(ticketTypeSoftware);

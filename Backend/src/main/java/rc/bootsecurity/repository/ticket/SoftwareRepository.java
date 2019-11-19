@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface SoftwareRepository extends CrudRepository<Software, Integer> {
-    List<Software> findAllByIdIn(Set<Integer> ids);
+    Software findByName(String name);
 }

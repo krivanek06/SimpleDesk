@@ -102,7 +102,9 @@ public class RequestPrivilegeService {
         if(checkIfGroupCanSubmitRequestType(group , REQUEST_TYPE.FINANCE.toString())){
             throw new PrivilegeException("Request type 'Finance' not set for user, can't give him rights for Finance types.");
         }
-        group.setFinanceTypes(new HashSet<>(Collections.singletonList(this.financeTypeRepository.findByName(financeTypeName))));
+        group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(group).orElse(new ArrayList<>())));
+        group.getFinanceTypes().add(this.financeTypeRepository.findByName(financeTypeName));
+
         this.groupRepository.save(group);
     }
 }

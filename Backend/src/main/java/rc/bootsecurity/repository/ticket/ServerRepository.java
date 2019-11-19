@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface ServerRepository extends CrudRepository<Server, Integer> {
-    List<Server> findAllByIdIn(Set<Integer> ids);
+    Server findByName(String name);
 }

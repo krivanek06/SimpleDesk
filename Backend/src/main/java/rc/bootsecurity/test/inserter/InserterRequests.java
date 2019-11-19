@@ -99,11 +99,11 @@ public class InserterRequests {
 
 
     public void insertRequestTickets(){
-        TicketType ticketTypeSoftware = Creator.createTicketType(TICKET_TYPE.SOFTWARE.toString());
-        TicketType ticketTypeHardware = Creator.createTicketType(TICKET_TYPE.HARDWARE.toString());
-        TicketType ticketTypeServer = Creator.createTicketType(TICKET_TYPE.SERVER.toString());
-        TicketType ticketTypeUser = Creator.createTicketType(TICKET_TYPE.USER.toString());
-        TicketType ticketTypeOther = Creator.createTicketType(TICKET_TYPE.OTHER.toString());
+        TicketType ticketTypeSoftware = Creator.createTicketType(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = Creator.createTicketType(TICKET_TYPE.HARDWARE.name());
+        TicketType ticketTypeServer = Creator.createTicketType(TICKET_TYPE.SERVER.name());
+        TicketType ticketTypeUser = Creator.createTicketType(TICKET_TYPE.USER.name());
+        TicketType ticketTypeOther = Creator.createTicketType(TICKET_TYPE.OTHER.name());
         this.ticketTypeRepository.saveAll(List.of(ticketTypeSoftware, ticketTypeHardware,ticketTypeServer,ticketTypeUser,ticketTypeOther));
 
         List<TicketSubtype> software = List.of(Creator.createSoftwareSubtype(NAMES.SOFTWARE_1, ticketTypeSoftware),
@@ -132,8 +132,8 @@ public class InserterRequests {
         RequestPosition requestPosition1 = this.requestPositionRepository.findByName(NAMES.POSITION_1);
         RequestPosition requestPosition2 = this.requestPositionRepository.findByName(NAMES.POSITION_2);
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName("Hardware");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
 
         Ticket ticket1 = Creator.createTicket(ticketTypeSoftware,requestPriority1,requestPosition1, user1);
         Ticket ticket2 = Creator.createTicket(ticketTypeSoftware,requestPriority2,requestPosition1, user1);
@@ -157,8 +157,8 @@ public class InserterRequests {
         Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName("Software");
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName("Hardware");
+        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
+        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
 
         List<TicketSubtype> ticketSubtypeSoftware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware);
         List<TicketSubtype> ticketSubtypesHardware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware);

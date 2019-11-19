@@ -2,6 +2,7 @@ package rc.bootsecurity.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
@@ -29,13 +30,14 @@ public class Group {
     @Column(name = "description")
     private String description;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "manager_id")
     private User groupManager;
 
     /**
      * users who are part of this group
      */
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_user_groups",
             joinColumns = { @JoinColumn(name = "group_id")},
@@ -45,6 +47,7 @@ public class Group {
     /**
      *  one group has what privileges to solve tickets
      */
+    @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
     private List<TicketPrivileges> ticketPrivilegesList;
 
@@ -53,6 +56,7 @@ public class Group {
      */
     /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSubmitDifferentRequests")
     private Set<RequestType> requestTypesToSubmit;*/
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_request_type_to_submit",
             joinColumns = { @JoinColumn(name = "group_id")},
@@ -64,6 +68,7 @@ public class Group {
      */
     /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
     private Set<RequestType> requestTypesToSolve;*/
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
     @JoinTable(name = "tbl_request_type_to_solve",
             joinColumns = { @JoinColumn(name = "group_id")},
@@ -73,6 +78,7 @@ public class Group {
     /**
      * which finance types can a group submit
      */
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_finance_type_privileges",
             joinColumns = { @JoinColumn(name = "group_id")},

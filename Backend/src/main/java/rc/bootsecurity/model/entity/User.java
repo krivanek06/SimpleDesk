@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import rc.bootsecurity.model.entity.document.Document;
@@ -41,7 +42,7 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "foto")
+    @Column(name = "photo")
     private String photo;
 
     @Column(name = "email")
@@ -50,7 +51,7 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "timestamp_creation")
+    @Column(name = "timestamp_creation") //  columnDefinition = "current_timestamp"
     private Timestamp dateCreation;
 
     @Column(name = "timestamp_ending")

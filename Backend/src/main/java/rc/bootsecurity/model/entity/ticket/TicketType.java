@@ -20,6 +20,7 @@ public class TicketType{
     @Column(name = "name")
     private String name;
 
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "sequence")
     private Integer sequence;
 

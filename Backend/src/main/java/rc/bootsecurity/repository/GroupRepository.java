@@ -4,6 +4,8 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.model.entity.finance.Finance;
+import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.request.RequestType;
 
 import java.util.List;
@@ -20,5 +22,6 @@ public interface GroupRepository extends CrudRepository<Group, Integer > {
 
     Optional<List<Group>> findAllByRequestTypesToSolve(RequestType requestType);
     Optional<List<Group>> findAllByRequestTypesToSubmit(RequestType requestType);
+    Optional<List<Group>> findAllByFinanceTypes(FinanceType financeType);
 
 }

@@ -1,6 +1,7 @@
 package rc.bootsecurity.model.entity.request;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.*;
 import rc.bootsecurity.model.entity.Group;
 
@@ -27,18 +28,21 @@ public class RequestType {
     @Column(name = "active")
     private Boolean active;
 
+    @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestType")
     private List<Request> requests;
 
     /**
      * which group can what request submit
      */
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSubmit")
     private Set<Group> groupsToSubmitDifferentRequests;
 
     /**
      * which group can what request solve
      */
+    @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSolve")
     private Set<Group> groupsToSolveDifferentRequests;
 

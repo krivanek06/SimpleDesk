@@ -136,9 +136,9 @@ public class Inserter {
         RequestPriority requestPriority2 = Creator.createRequestPriority("Priority2");
         this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2));
 
-        RequestType requestType1 = Creator.createRequestType("Ticket");
-        RequestType requestType2 = Creator.createRequestType("Report");
-        RequestType requestType3 = Creator.createRequestType("Finance");
+        RequestType requestType1 = Creator.createRequestType(REQUEST_TYPE.TICKET.name());
+        RequestType requestType2 = Creator.createRequestType(REQUEST_TYPE.REPORT.name());
+        RequestType requestType3 = Creator.createRequestType(REQUEST_TYPE.FINANCE.name());
         this.requestTypeRepository.saveAll(List.of(requestType1,requestType2, requestType3));
     }
 
@@ -152,9 +152,9 @@ public class Inserter {
         Group group4 = this.groupRepository.findByGroupName("TESTGROUP4");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        RequestType requestType1 = this.requestTypeRepository.findByName(REQUEST_TYPE.TICKET.toString()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
-        RequestType requestType2 = this.requestTypeRepository.findByName(REQUEST_TYPE.REPORT.toString()); // Set.of(group1), Set.of(group1,group2,group3)
-        RequestType requestType3 = this.requestTypeRepository.findByName(REQUEST_TYPE.FINANCE.toString()); // Set.of(group1), Set.of(group2,group3)
+        RequestType requestType1 = this.requestTypeRepository.findByName(REQUEST_TYPE.TICKET.name()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
+        RequestType requestType2 = this.requestTypeRepository.findByName(REQUEST_TYPE.REPORT.name()); // Set.of(group1), Set.of(group1,group2,group3)
+        RequestType requestType3 = this.requestTypeRepository.findByName(REQUEST_TYPE.FINANCE.name()); // Set.of(group1), Set.of(group2,group3)
 
 
         group1.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1, requestType2)));

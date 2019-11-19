@@ -1,10 +1,13 @@
 package rc.bootsecurity;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
 
-@SpringBootApplication
+/*@SpringBootApplication
 public class BootSecurityApplication {
 
     public static void main(String[] args) {
@@ -13,4 +16,21 @@ public class BootSecurityApplication {
 
 
 
+}*/
+
+
+@SpringBootApplication
+public class BootSecurityApplication implements CommandLineRunner {
+
+    @Autowired
+    private InserterRequestsSimulation inserterRequestsSimulation;
+
+    public static void main(String[] args) {
+        SpringApplication.run(BootSecurityApplication.class, args);
+    }
+
+    @Override
+    public void run(String... args) {
+      //  this.inserterRequestsSimulation.mainInserter();
+    }
 }

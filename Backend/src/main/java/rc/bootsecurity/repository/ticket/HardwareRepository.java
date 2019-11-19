@@ -9,5 +9,5 @@ import java.util.Set;
 
 @Repository
 public interface HardwareRepository extends CrudRepository<Hardware, Integer> {
-    List<Hardware> findAllByIdIn(Set<Integer> ids);
+    Hardware findByName(String name);
 }

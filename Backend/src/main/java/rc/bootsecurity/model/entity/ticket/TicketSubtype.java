@@ -33,7 +33,7 @@ public abstract class TicketSubtype {
     @Column(name = "active")
     private Boolean active;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "task_type_id")
     private TicketType ticketType;
 

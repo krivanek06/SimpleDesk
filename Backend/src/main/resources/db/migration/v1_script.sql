@@ -50,25 +50,18 @@ create table tbl_document_to_users(
 DROP TABLE IF EXISTS tbl_users CASCADE;
 create table tbl_users(
   id serial primary key,
-  username varchar(10) unique NOT NULL,
-  password varchar(20) NOT NULL,
-  first_name varchar(20) NOT NULL,
-  last_name varchar(20) NOT NULL,
-  foto varchar NOT NULL default 'user.png',
+  username varchar(255) unique NOT NULL,
+  password varchar(255) NOT NULL,
+  first_name varchar(255) NOT NULL,
+  last_name varchar(255) NOT NULL,
+  photo varchar default 'user.png',
   email varchar unique NOT NULL,
   active boolean default True,
   timestamp_creation TIMESTAMP default current_timestamp,
   timestamp_ending TIMESTAMP default NULL,
-  is_admin boolean not null default False
+  is_admin boolean default False
 );
-/*DROP TABLE IF EXISTS tbl_request_changed_solver CASCADE;
-create table tbl_request_changed_solver(
-   id serial primary key,
-   request_id Integer NOT NULL,
-   user_id_from Integer NOT NULL,
-   user_id_to Integer NOT NULL,
-   timestamp TIMESTAMP default current_timestamp
-);*/
+
 DROP TABLE IF EXISTS tbl_request_comments CASCADE;
 create table tbl_request_comments(
    id serial primary key,
@@ -149,7 +142,7 @@ create table tbl_hardwares(
   id serial primary key,
   task_type_id integer not null,
   name varchar not null ,
-  sequence serial,
+  sequence integer,
   active boolean default True
 );
 DROP TABLE IF EXISTS tbl_servers CASCADE;
@@ -157,7 +150,7 @@ create table tbl_servers(
   id serial primary key,
   task_type_id integer not null,
   name varchar  not null ,
-  sequence serial,
+  sequence integer,
   active boolean default True
 );
 DROP TABLE IF EXISTS tbl_server_contacts CASCADE;
@@ -181,16 +174,16 @@ create table tbl_tickets(
 DROP TABLE IF EXISTS tbl_ticket_types CASCADE;
 create table tbl_ticket_types(
  id serial primary key,
- name varchar(255) NOT NULL,
- sequence serial NOT NULL,
+ name varchar NOT NULL,
+ sequence integer,
  active boolean default True
 );
 DROP TABLE IF EXISTS tbl_softwares CASCADE;
 create table tbl_softwares(
   id serial primary key,
   task_type_id integer not null,
-  name varchar(255) NOT NULL,
-  sequence serial NOT NULL,
+  name varchar NOT NULL,
+  sequence integer,
   active boolean default True
 );
 
@@ -287,7 +280,8 @@ DROP TABLE IF EXISTS tbl_finance_type_privileges CASCADE;
 create table tbl_finance_type_privileges(
   id serial primary key,
   finance_type_id int not null,
-  group_id int not null
+  group_id int not null,
+  unique (finance_type_id, group_id)
 );
 
 -- watch group just 1 layer, not nested

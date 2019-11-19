@@ -123,50 +123,50 @@ public class InserterRequestsSimulation {
 
     private void insertRequestPrivileges(){
         this.requestPrivilegeService.insertRequestTypeForGroupToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
-                Arrays.asList(REQUEST_TYPE.TICKET.toString(),REQUEST_TYPE.REPORT.toString()));
+                Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSolve(NAMES.TEST_GROUP_SOLVER_1,
-                Arrays.asList(REQUEST_TYPE.TICKET.toString(), REQUEST_TYPE.REPORT.toString(), REQUEST_TYPE.FINANCE.toString()));
+                Arrays.asList(REQUEST_TYPE.TICKET.name(), REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSolve(NAMES.TEST_GROUP_SOLVER_2,
-                Arrays.asList(REQUEST_TYPE.REPORT.toString(), REQUEST_TYPE.FINANCE.toString()));
+                Arrays.asList(REQUEST_TYPE.REPORT.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSolve(NAMES.TEST_GROUP_SOLVER_3,
-                Arrays.asList(REQUEST_TYPE.TICKET.toString(),REQUEST_TYPE.REPORT.toString(), REQUEST_TYPE.FINANCE.toString()));
+                Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSubmit(NAMES.TEST_GROUP_NORMAL_1,
-                Arrays.asList(REQUEST_TYPE.TICKET.toString(),REQUEST_TYPE.REPORT.toString()));
+                Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSubmit(NAMES.TEST_GROUP_NORMAL_2,
-                Arrays.asList(REQUEST_TYPE.FINANCE.toString()));
+                Arrays.asList(REQUEST_TYPE.FINANCE.name()));
 
         this.requestPrivilegeService.insertRequestTypeForGroupToSubmit(NAMES.TEST_GROUP_NORMAL_3,
-                Arrays.asList(REQUEST_TYPE.FINANCE.toString()));
+                Arrays.asList(REQUEST_TYPE.FINANCE.name()));
         // group 8 -> no request type to solver -> should throw error
     }
 
     private void insertTicketPrivilegesForGroupsToSolve(){
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_2));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_2));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SERVER.toString(), Optional.of(NAMES.SERVER_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.USER.toString(), Optional.empty());
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.OTHER.toString(), Optional.empty());
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_2));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_2));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.SERVER.name(), Optional.of(NAMES.SERVER_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.USER.name(), Optional.empty());
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_1, TICKET_TYPE.OTHER.name(), Optional.empty());
 
 
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_2));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_3));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.toString(), Optional.of(NAMES.SOFTWARE_4));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_2));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_3));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.toString(), Optional.of(NAMES.HARDWARE_4));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SERVER.toString(), Optional.of(NAMES.SERVER_1));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SERVER.toString(), Optional.of(NAMES.SERVER_2));
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.USER.toString(), Optional.empty());
-        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.OTHER.toString(), Optional.empty());
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_2));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_3));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SOFTWARE.name(), Optional.of(NAMES.SOFTWARE_4));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_2));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_3));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.HARDWARE.name(), Optional.of(NAMES.HARDWARE_4));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SERVER.name(), Optional.of(NAMES.SERVER_1));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.SERVER.name(), Optional.of(NAMES.SERVER_2));
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.USER.name(), Optional.empty());
+        this.requestPrivilegeService.insertTicketTypeToSolve(NAMES.TEST_GROUP_SOLVER_3, TICKET_TYPE.OTHER.name(), Optional.empty());
     }
 
     private void insertFinanceTypePrivilegesForGroupsToSubmit(){

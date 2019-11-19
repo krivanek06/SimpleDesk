@@ -6,10 +6,12 @@ import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Repository
 public interface FinanceTypeRepository extends CrudRepository<FinanceType, Integer> {
-    List<FinanceType> findAllByGroupsToSubmitSpecificFinanceType(Set<Group> groups);
+    //List<FinanceType> findAllByGroupsToSubmitSpecificFinanceType(Set<Group> groups);
     FinanceType findByName(String name);
+    Optional<List<FinanceType>> findAllByGroupsToSubmitSpecificFinanceType(Group group);
 }
