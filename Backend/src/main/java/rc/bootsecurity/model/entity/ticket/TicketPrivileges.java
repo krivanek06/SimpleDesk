@@ -28,7 +28,7 @@ public class TicketPrivileges {
     private Group group;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "task_type_id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
     /**

@@ -97,11 +97,11 @@ public class InserterRequestsSimulation {
 
         // group1 -> can submit all tickets and reports
         Group group1 = Creator.createGroup(NAMES.TEST_GROUP_BASIC_GROUP , admin, new HashSet<>(Arrays.asList(admin,user2,user3,user4,user5,user6,user7,user8,user9,user10)));
-        // groups2 -> can solve some tickets -> SW1, SW2, HW1, HW2, Server, User, Other
+        // groups2 -> can solve some tickets -> SW1, SW2, HW1, HW2, Server, User, Other ,  FINANCE
         Group group2 = Creator.createGroup(NAMES.TEST_GROUP_SOLVER_1 , user2, new HashSet<>(Arrays.asList(user2,user3)));
-        // group3 -> can solve reports and finance
+        // group3 -> can solve reports
         Group group3 = Creator.createGroup(NAMES.TEST_GROUP_SOLVER_2 , user2, new HashSet<>(Arrays.asList(user2,user4)));
-        // group4 -> can solve all tickets -> SW1, SW2, SW3, SW4, HW1, HW2, HW3, HW4, Server, User, Other
+        // group4 -> can solve all tickets -> SW1, SW2, SW3, SW4, HW1, HW2, HW3, HW4, Server, User, Other,  FINANCE
         Group group4 = Creator.createGroup(NAMES.TEST_GROUP_SOLVER_3 , user2, new HashSet<>(Arrays.asList(user2,user5)));
         // group5 -> submit all tickets and reports -> manager user6
         Group group5 = Creator.createGroup(NAMES.TEST_GROUP_NORMAL_1 , user6, new HashSet<>(Arrays.asList(user7,user8,user9,user10)));

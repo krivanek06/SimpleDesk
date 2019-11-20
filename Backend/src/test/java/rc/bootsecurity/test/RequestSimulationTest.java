@@ -245,6 +245,14 @@ public class RequestSimulationTest {
 
     @Test
     public void testPrivilegesForUsers(){
+        User user2 = this.userRepository.findByUsername("user2").get();
+        User user3 = this.userRepository.findByUsername("user3").get();
+        User user4 = this.userRepository.findByUsername("user4").get();
+        User user5 = this.userRepository.findByUsername("user5").get();
+        User user6 = this.userRepository.findByUsername("user6").get();
+        User user9 = this.userRepository.findByUsername("user9").get();
+        User user10 = this.userRepository.findByUsername("user10").get();
+
 
     }
 

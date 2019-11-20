@@ -140,7 +140,7 @@ create table tbl_request_priorities(
 DROP TABLE IF EXISTS tbl_hardwares CASCADE;
 create table tbl_hardwares(
   id serial primary key,
-  task_type_id integer not null,
+  ticket_type_id integer not null,
   name varchar not null ,
   sequence integer,
   active boolean default True
@@ -148,7 +148,7 @@ create table tbl_hardwares(
 DROP TABLE IF EXISTS tbl_servers CASCADE;
 create table tbl_servers(
   id serial primary key,
-  task_type_id integer not null,
+  ticket_type_id integer not null,
   name varchar  not null ,
   sequence integer,
   active boolean default True
@@ -181,7 +181,7 @@ create table tbl_ticket_types(
 DROP TABLE IF EXISTS tbl_softwares CASCADE;
 create table tbl_softwares(
   id serial primary key,
-  task_type_id integer not null,
+  ticket_type_id integer not null,
   name varchar NOT NULL,
   sequence integer,
   active boolean default True
@@ -191,9 +191,9 @@ DROP TABLE IF EXISTS tbl_ticket_privileges CASCADE;
 create table tbl_ticket_privileges(
    id serial primary key,
    group_id integer not null,
-   task_type_id integer not null,
+   ticket_type_id integer not null,
    application_name varchar(255),
-   unique(group_id , task_type_id , application_name)
+   unique(group_id , ticket_type_id , application_name)
 );
 
 
@@ -349,7 +349,7 @@ ALTER TABLE tbl_working_days ADD FOREIGN KEY (working_day_type_id) REFERENCES tb
 ALTER TABLE tbl_user_groups ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_user_groups ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
 
-ALTER TABLE tbl_ticket_privileges ADD FOREIGN KEY (task_type_id) REFERENCES tbl_ticket_types(id);
+ALTER TABLE tbl_ticket_privileges ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket_types(id);
 ALTER TABLE tbl_ticket_privileges ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
 
 ALTER TABLE tbl_tickets ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
@@ -357,9 +357,9 @@ ALTER TABLE tbl_tickets ADD FOREIGN KEY (t_type_id) REFERENCES tbl_ticket_types(
 
 ALTER TABLE tbl_server_contacts ADD FOREIGN KEY (server_id) REFERENCES tbl_servers(id);
 
-ALTER TABLE tbl_servers ADD FOREIGN KEY (task_type_id) REFERENCES tbl_ticket_types(id);
-ALTER TABLE tbl_softwares ADD FOREIGN KEY (task_type_id) REFERENCES tbl_ticket_types(id);
-ALTER TABLE tbl_hardwares ADD FOREIGN KEY (task_type_id) REFERENCES tbl_ticket_types(id);
+ALTER TABLE tbl_servers ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket_types(id);
+ALTER TABLE tbl_softwares ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket_types(id);
+ALTER TABLE tbl_hardwares ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket_types(id);
 
 ALTER TABLE tbl_groups add  FOREIGN KEY (manager_id) REFERENCES tbl_users(id);
 
@@ -384,3 +384,46 @@ alter table tbl_finances add foreign key(finance_type_id) references tbl_finance
 
 create table hibernate_sequences (sequence_name varchar(255) not null, next_val int8, primary key (sequence_name));
 insert into hibernate_sequences(sequence_name, next_val) values ('default',0);
+
+
+
+
+
+
+-- helping functions
+
+CREATE FUNCTION get_json_privileges_for_user(user_id integer)
+    RETURNS json AS
+    $$
+    select json_build_object(
+    'ticketTypeToSolve' ,
+    (select jsonb_agg(ticket_priv) from
+    (select  json_build_object(tbl_ticket_types.name, jsonb_agg(distinct tbl_ticket_privileges.application_name)) as ticket_priv
+    from (
+     select id as uid from tbl_users users where id = user_id ) as t_user
+     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
+     inner join tbl_ticket_privileges on tbl_ticket_privileges.group_id = tug.group_id
+     left join tbl_ticket_types on tbl_ticket_types.id = tbl_ticket_privileges.ticket_type_id
+    group by tbl_ticket_types.name) as tbl) ,
+
+    'requestTypeToSubmit' ,
+    (select jsonb_agg(distinct tbl_request_types.name) from (
+    select id as uid from tbl_users users where id = user_id ) as t_user
+    inner join tbl_user_groups as tug on tug.user_id = t_user.uid
+    inner join tbl_request_type_to_submit on tbl_request_type_to_submit.group_id = tug.group_id
+    left join tbl_request_types on tbl_request_types.id = tbl_request_type_to_submit.request_type_id),
+
+    'requestTypeToSolve',
+    (select jsonb_agg(distinct tbl_request_types.name) from (
+    select id as uid from tbl_users users where id = user_id ) as t_user
+    inner join tbl_user_groups as tug on tug.user_id = t_user.uid
+    inner join tbl_request_type_to_solve on tbl_request_type_to_solve.group_id = tug.group_id
+    left join tbl_request_types on tbl_request_types.id = tbl_request_type_to_solve.request_type_id),
+
+    'FinanceTypeToSubmit',
+    (select jsonb_agg(distinct tbl_finance_types.name) from (
+    select id as uid from tbl_users users where id = user_id ) as t_user
+    inner join tbl_user_groups as tug on tug.user_id = t_user.uid
+    inner join tbl_finance_type_privileges on tbl_finance_type_privileges.group_id = tug.group_id
+    left join tbl_finance_types on tbl_finance_types.id = tbl_finance_type_privileges.finance_type_id));
+$$ LANGUAGE sql;

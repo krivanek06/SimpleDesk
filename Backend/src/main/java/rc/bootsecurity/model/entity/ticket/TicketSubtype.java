@@ -34,7 +34,7 @@ public abstract class TicketSubtype {
     private Boolean active;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "task_type_id")
+    @JoinColumn(name = "ticket_type_id")
     private TicketType ticketType;
 
 
