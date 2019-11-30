@@ -165,9 +165,9 @@ public class RequestSimulationTest {
         User user12 = Creator.createUser("firstname12" , "lastname12", "user12" , "fakemail11@gmail.com" , "123456");
         this.userRepository.save(user12);
 
-        this.groupService.addUserIntoGroupsAndSave(this.userModelMapper.getUserDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
+        this.groupService.addUserIntoGroupsAndSave(this.userService.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
         assertThat(this.groupRepository.findByGroupName(NAMES.TEST_GROUP_ERROR).getUsersInGroup()).containsExactlyInAnyOrder(user11, user12);
-        this.groupService.removeUserFromGroupsAndSave(this.userModelMapper.getUserDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
+        this.groupService.removeUserFromGroupsAndSave(this.userService.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
         assertThat(this.groupRepository.findByGroupName(NAMES.TEST_GROUP_ERROR).getUsersInGroup()).containsExactlyInAnyOrder(user11);
     }
 
@@ -232,6 +232,7 @@ public class RequestSimulationTest {
         Group groupNormal1 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_NORMAL_1);
         Group groupNormal2 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_NORMAL_2);
         Group groupNormal3 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_NORMAL_3);
+        Group groupError = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_ERROR);
 
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
@@ -353,10 +354,91 @@ public class RequestSimulationTest {
         assertThat(groupDTO.getTicketPrivilegesList()).doesNotContain(privilegeDTO2);
         this.requestPrivilegeService.modifyTicketTypeToSolve(groupDTO);
         groupNormal3 = this.groupRepository.findByGroupName(groupDTO.getName());
-        //nejde mi spravit delete na TicketPrivilege
+
         List<TicketPrivileges> privileges2 = this.ticketPrivilegesRepository.findAllByGroup(groupNormal3).orElse(new ArrayList<>());
         assertThat(privileges2.stream().map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
                 .containsExactlyInAnyOrder(privilegeDTO1.getApplicationName(), privilegeDTO3.getApplicationName());
+
+        /**
+         * delete and add - requestToSubmit, requestToSolve, FinanceTypeToSubmit
+         */
+        GroupDTO groupDTOError = this.groupService.convertGroupToDTO(groupError);
+        groupDTOError.setRequestTypesToSubmit(new ArrayList<>(Arrays.asList(REQUEST_TYPE.FINANCE.name())));
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupError).get()
+                .stream().map(RequestType::getName)).containsExactlyInAnyOrder(REQUEST_TYPE.FINANCE.name());
+
+        groupDTOError.getRequestTypesToSubmit().add(REQUEST_TYPE.REPORT.name());
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupError).get()
+                .stream().map(RequestType::getName)).containsExactlyInAnyOrder(REQUEST_TYPE.FINANCE.name(), REQUEST_TYPE.REPORT.name());
+
+        groupDTOError.getRequestTypesToSubmit().remove(REQUEST_TYPE.REPORT.name());
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupError).get()
+                .stream().map(RequestType::getName)).containsExactlyInAnyOrder(REQUEST_TYPE.FINANCE.name());
+
+        groupDTOError.setFinanceTypes(new ArrayList<>(Arrays.asList(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2)));
+        this.requestPrivilegeService.modifyFinanceTypeToSubmit(groupDTOError);
+        assertThat(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(groupError).get().stream()
+                .map(FinanceType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2);
+
+        groupDTOError.getFinanceTypes().add(NAMES.FINANCE_TYPE_3);
+        this.requestPrivilegeService.modifyFinanceTypeToSubmit(groupDTOError);
+        assertThat(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(groupError).get().stream()
+                .map(FinanceType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2,NAMES.FINANCE_TYPE_3);
+
+        groupDTOError.getFinanceTypes().remove(NAMES.FINANCE_TYPE_3);
+        this.requestPrivilegeService.modifyFinanceTypeToSubmit(groupDTOError);
+        assertThat(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(groupError).get().stream()
+                .map(FinanceType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2);
+
+        groupDTOError.setRequestTypesToSolve(new ArrayList<>(Arrays.asList(REQUEST_TYPE.TICKET.name())));
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(groupError).get().stream()
+                .map(RequestType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name());
+
+        groupDTOError.getRequestTypesToSolve().add(REQUEST_TYPE.REPORT.name());
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(groupError).get().stream()
+                .map(RequestType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name());
+
+        groupDTOError.getRequestTypesToSolve().remove(REQUEST_TYPE.REPORT.name());
+        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(groupDTOError);
+        assertThat(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(groupError).get().stream()
+                .map(RequestType::getName).collect(Collectors.toList())).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name());
+
+        TicketPrivilegeDTO ticketPrivilegeDTO1 = Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_1);
+        TicketPrivilegeDTO ticketPrivilegeDTO2 = Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_2);
+
+        groupDTOError.setTicketPrivilegesList(new ArrayList<>(Arrays.asList(ticketPrivilegeDTO1)));
+        this.requestPrivilegeService.modifyTicketTypeToSolve(groupDTOError);
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().stream()
+                .map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
+                .containsExactlyInAnyOrder(ticketPrivilegeDTO1.getApplicationName());
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().size()).isEqualTo(1);
+
+        groupDTOError.getTicketPrivilegesList().add(ticketPrivilegeDTO1);
+        this.requestPrivilegeService.modifyTicketTypeToSolve(groupDTOError);
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().stream()
+                .map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
+                .containsExactlyInAnyOrder(ticketPrivilegeDTO1.getApplicationName());
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().size()).isEqualTo(1);
+
+        groupDTOError.getTicketPrivilegesList().add(ticketPrivilegeDTO2);
+        this.requestPrivilegeService.modifyTicketTypeToSolve(groupDTOError);
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().stream()
+                .map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
+                .containsExactlyInAnyOrder(ticketPrivilegeDTO1.getApplicationName(), ticketPrivilegeDTO2.getApplicationName());
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().size()).isEqualTo(2);
+
+        groupDTOError.getTicketPrivilegesList().remove(ticketPrivilegeDTO2);
+        this.requestPrivilegeService.modifyTicketTypeToSolve(groupDTOError);
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().stream()
+                .map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
+                .containsExactlyInAnyOrder(ticketPrivilegeDTO1.getApplicationName());
+        assertThat(this.ticketPrivilegesRepository.findAllByGroup(groupError).get().size()).isEqualTo(1);
+
 
     }
 
@@ -488,8 +570,8 @@ public class RequestSimulationTest {
         this.requestCommentService.saveOrUpdateComment(requestComment2);
         assertThat(requestComment2.getTimestamp()).isNotNull();
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4)).containsExactlyInAnyOrder(requestComment1, requestComment2);
-
-
+        this.requestCommentRepository.delete(requestComment2);
+        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4)).containsExactlyInAnyOrder(requestComment1);
     }
 
 

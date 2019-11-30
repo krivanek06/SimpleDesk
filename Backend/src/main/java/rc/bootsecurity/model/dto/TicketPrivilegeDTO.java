@@ -10,6 +10,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 public class TicketPrivilegeDTO {
+    @EqualsAndHashCode.Exclude
     private Integer id;
     /**
      * software, hardware, user, server, other
