@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
+import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
@@ -15,6 +16,8 @@ import rc.bootsecurity.model.entity.report.ReportRefresh;
 import rc.bootsecurity.model.entity.report.ReportType;
 import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
+import rc.bootsecurity.model.enums.REQUEST_POSITION;
+import rc.bootsecurity.model.enums.REQUEST_PRIORITY;
 import rc.bootsecurity.model.enums.REQUEST_TYPE;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
@@ -25,7 +28,9 @@ import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
-import rc.bootsecurity.service.RequestService;
+import rc.bootsecurity.service.GroupService;
+import rc.bootsecurity.service.request.RequestPrivilegeService;
+import rc.bootsecurity.service.request.RequestService;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.inserter.Inserter;
@@ -98,6 +103,9 @@ public class BasicTest {
     private ReportRepository reportRepository;
     @Autowired
     private InserterRequests inserterRequests;
+    @Autowired
+    private GroupService groupService;
+
 
 
     @Test
@@ -139,7 +147,6 @@ public class BasicTest {
         this.groupRepository.save(group3);
         assertThat(this.userRepository.findAllByGroupsInvolved(group3)).containsExactlyInAnyOrder(user1,user2,user3,user4);
 
-
     }
 
     @Test
@@ -168,7 +175,7 @@ public class BasicTest {
         assertThat(requestTypeReportSubmitGroups).doesNotContain(group4);
         assertThat(requestTypeReportSolveGroups).containsExactlyInAnyOrder(group1);
 
-        assertThat(this.requestPriorityRepository.findByName("Priority1")).isNotNull();
+        assertThat(this.requestPriorityRepository.findByName(REQUEST_PRIORITY.SMALL.name())).isNotNull();
         assertThat(this.requestPositionRepository.findAll()).isNotNull();
 
 
@@ -214,10 +221,10 @@ public class BasicTest {
         User user1 = this.userRepository.findByUsername("user1").get();
         User user2 = this.userRepository.findByUsername("user2").get();
 
-        RequestPriority requestPriority1 = this.requestPriorityRepository.findByName("Priority1");
-        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName("Priority2");
-        RequestPosition requestPosition1 = this.requestPositionRepository.findByName("Position1");
-        RequestPosition requestPosition2 = this.requestPositionRepository.findByName("Position2");
+        RequestPriority requestPriority1 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.SMALL.name());
+        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
+        RequestPosition requestPosition1 = this.requestPositionRepository.findByName(REQUEST_POSITION.CREATED.name());
+        RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.CLOSED.name());
 
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());
@@ -240,7 +247,7 @@ public class BasicTest {
         assertThat(user2Tickets.size()).isEqualTo(2);
 
         Ticket ticket1 =  user1Tickets.get(0);
-        assertThat(ticket1.getRequest()).isEqualTo("EMPTY");
+        assertThat(ticket1.getProblem()).isEqualTo("EMPTY");
         assertThat(ticket1.getTicketSubtypeName()).isEqualTo("EMPTY");
         assertThat(ticket1.getTicketType()).isEqualTo(ticketTypeSoftware);
         assertThat(ticket1.getTicketType()).isNotEqualTo(ticketTypeHardware);
@@ -264,13 +271,13 @@ public class BasicTest {
         assertThat(ticketsForTicketTypeSoftwareRP2.size()).isEqualTo(2);
         assertThat(ticketsForTicketTypeSoftwareRP1priority2.size()).isEqualTo(2);
 
-        ticket1.setRequest("TESTREQUEST");
-        ticket1.setSubject("TESTSUBJECT");
+        ticket1.setProblem("TESTREQUEST");
+        ticket1.setName("TESTSUBJECT");
         this.requestRepository.save(ticket1);
-        Ticket ticket2 = (Ticket) this.requestRepository.findAllBySubjectStartingWith("TESTS").get().get(0);
+        Ticket ticket2 = (Ticket) this.requestRepository.findAllByNameStartingWithOrderByIdAsc("TESTS").get().get(0);
 
         assertThat(ticket1).isEqualTo(ticket2);
-        assertThat(ticket1.getRequest()).isEqualTo(ticket2.getRequest());
+        assertThat(ticket1.getProblem()).isEqualTo(ticket2.getProblem());
 
         this.requestRepository.delete(ticket1);
         assertThat(this.requestRepository.findAllByCreator(user1).size()).isEqualTo(4);
@@ -356,9 +363,9 @@ public class BasicTest {
         List<Group> groupsForUser12 = this.groupRepository.findAllByUsersInGroup(user12);
         assertThat(groupsForUser12).containsExactlyInAnyOrder(group5);
 
-        RequestPosition requestPosition1 = this.requestPositionRepository.findByName("Position1");
-        RequestPosition requestPosition2 = this.requestPositionRepository.findByName("Position2");
-        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName("Priority2");
+        RequestPosition requestPosition1 = this.requestPositionRepository.findByName(REQUEST_POSITION.CREATED.name());
+        RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.CLOSED.name());
+        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
 
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
         Ticket ticket1 = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2).get(0);
@@ -385,16 +392,15 @@ public class BasicTest {
         this.requestCommentRepository.save(comment2);
         this.requestCommentRepository.save(comment3);
 
-        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByDateAsc(hardwareRequest);
+        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest);
         assertThat(savedComments).containsSequence(comment1, comment2,comment3);
         assertThat(savedComments).containsExactly(comment1, comment2, comment3);
 
         this.requestCommentRepository.delete(comment2);
-        savedComments = this.requestCommentRepository.findAllByRequestOrderByDateAsc(hardwareRequest);
+        savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest);
         assertThat(savedComments).containsSequence(comment1, comment3);
         assertThat(savedComments).containsExactly(comment1,  comment3);
-        this.requestService.logChangedPriority(hardwareRequest, user12, "pozicia", requestPosition1.getName(), requestPosition2.getName());
-        assertThat(this.requestService.getLogsForRequest(hardwareRequest).size()).isEqualTo(1);
+
     }
 
     @Test

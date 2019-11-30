@@ -14,6 +14,8 @@ import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.model.entity.ticket.TicketSubtype;
 import rc.bootsecurity.model.entity.ticket.TicketType;
+import rc.bootsecurity.model.enums.REQUEST_POSITION;
+import rc.bootsecurity.model.enums.REQUEST_PRIORITY;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -127,10 +129,10 @@ public class InserterRequests {
     public void insertTicketsForUsers(){
         User user1 = this.userRepository.findByUsername("user1").get();
         User user2 = this.userRepository.findByUsername("user2").get();
-        RequestPriority requestPriority1 = this.requestPriorityRepository.findByName(NAMES.PRIORITY_1);
-        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(NAMES.PRIORITY_2);
-        RequestPosition requestPosition1 = this.requestPositionRepository.findByName(NAMES.POSITION_1);
-        RequestPosition requestPosition2 = this.requestPositionRepository.findByName(NAMES.POSITION_2);
+        RequestPriority requestPriority1 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.SMALL.name());
+        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
+        RequestPosition requestPosition1 = this.requestPositionRepository.findByName(REQUEST_POSITION.CREATED.name());
+        RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.CLOSED.name());
 
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.SOFTWARE.name());
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.HARDWARE.name());

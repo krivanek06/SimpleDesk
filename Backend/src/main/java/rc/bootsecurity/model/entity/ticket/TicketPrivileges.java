@@ -1,7 +1,6 @@
 package rc.bootsecurity.model.entity.ticket;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import rc.bootsecurity.model.entity.Group;
 
@@ -20,10 +19,9 @@ import javax.persistence.*;
 public class TicketPrivileges {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable=false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "group_id")
     private Group group;
 

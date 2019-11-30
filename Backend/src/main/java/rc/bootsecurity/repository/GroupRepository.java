@@ -17,7 +17,7 @@ public interface GroupRepository extends CrudRepository<Group, Integer > {
     Optional<List<Group>> findAllByGroupManager(User groupManager);
 
     List<Group> findAllByUsersInGroup(User users);
-
+    List<Group> findAllByGroupNameIn(List<String> groupsNames);
     Group findByGroupName(String name);
 
     Optional<List<Group>> findAllByRequestTypesToSolve(RequestType requestType);

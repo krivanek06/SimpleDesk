@@ -1,6 +1,6 @@
 package rc.bootsecurity.model.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.finance.FinanceType;
@@ -48,7 +48,7 @@ public class Group {
      *  one group has what privileges to solve tickets
      */
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group") // orphanRemoval=true, cascade = CascadeType.PERSIST
     private List<TicketPrivileges> ticketPrivilegesList;
 
     /**

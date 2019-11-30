@@ -8,6 +8,8 @@ import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestPosition;
 import rc.bootsecurity.model.entity.request.RequestPriority;
 import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.enums.REQUEST_POSITION;
+import rc.bootsecurity.model.enums.REQUEST_PRIORITY;
 import rc.bootsecurity.model.enums.REQUEST_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -20,6 +22,7 @@ import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.test.creator.Creator;
+import rc.bootsecurity.test.creator.NAMES;
 
 import java.util.*;
 
@@ -64,13 +67,6 @@ public class Inserter {
     @Autowired
     private ReportTypeRepository reportTypeRepository;
 
-    /*private static final Inserter instance = new Inserter();
-
-    private Inserter(){}
-
-    public static Inserter getInstance(){
-        return instance;
-    }*/
 
     /**
      * create some users and add them into groups
@@ -128,13 +124,15 @@ public class Inserter {
     }
 
     public void insertRequestTypes(){
-        RequestPosition requestPosition1 = Creator.createRequestPosition("Position1");
-        RequestPosition requestPosition2 = Creator.createRequestPosition("Position2");
-        this.requestPositionRepository.saveAll(List.of(requestPosition1, requestPosition2));
+        RequestPosition requestPosition1 = Creator.createRequestPosition(REQUEST_POSITION.CREATED.name());
+        RequestPosition requestPosition2 = Creator.createRequestPosition(REQUEST_POSITION.CLOSED.name());
+        RequestPosition requestPosition3 = Creator.createRequestPosition(REQUEST_POSITION.IN_PROGRESS.name());
+        this.requestPositionRepository.saveAll(List.of(requestPosition1, requestPosition2,requestPosition3));
 
-        RequestPriority requestPriority1 = Creator.createRequestPriority("Priority1");
-        RequestPriority requestPriority2 = Creator.createRequestPriority("Priority2");
-        this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2));
+        RequestPriority requestPriority1 = Creator.createRequestPriority(REQUEST_PRIORITY.SMALL.name());
+        RequestPriority requestPriority2 = Creator.createRequestPriority(REQUEST_PRIORITY.MEDIUM.name());
+        RequestPriority requestPriority3 = Creator.createRequestPriority(REQUEST_PRIORITY.LARGE.name());
+        this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2, requestPriority3));
 
         RequestType requestType1 = Creator.createRequestType(REQUEST_TYPE.TICKET.name());
         RequestType requestType2 = Creator.createRequestType(REQUEST_TYPE.REPORT.name());

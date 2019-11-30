@@ -7,18 +7,15 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
 
-/*@SpringBootApplication
+@SpringBootApplication
 public class BootSecurityApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BootSecurityApplication.class, args);
     }
+}
 
-
-
-}*/
-
-
+/*
 @SpringBootApplication
 public class BootSecurityApplication implements CommandLineRunner {
 
@@ -31,6 +28,7 @@ public class BootSecurityApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-      //  this.inserterRequestsSimulation.mainInserter();
+        this.inserterRequestsSimulation.mainInserter();
     }
 }
+*/

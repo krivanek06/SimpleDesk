@@ -1,6 +1,13 @@
 package rc.bootsecurity.test.creator;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import rc.bootsecurity.model.dto.GroupDTO;
+import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
+import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.dto.request.FinanceDTO;
+import rc.bootsecurity.model.dto.request.ReportDTO;
+import rc.bootsecurity.model.dto.request.RequestCommentDTO;
+import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.Finance;
@@ -8,8 +15,11 @@ import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.report.*;
 import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
+import rc.bootsecurity.model.enums.REQUEST_TYPE;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -24,7 +34,7 @@ public class Creator {
 
     public static Finance createFinance(String subject, RequestPriority requestPriority, RequestPosition requestPosition, User user){
         Finance finance = new Finance();
-        finance.setSubject(subject);
+        finance.setName(subject);
         finance.setRequestPriority(requestPriority);
         finance.setRequestPosition(requestPosition);
         finance.setCreator(user);
@@ -143,8 +153,8 @@ public class Creator {
 
     public static Ticket createTicket(TicketType ticketType, RequestPriority requestPriority, RequestPosition requestPosition, User user){
         Ticket ticket = new Ticket();
-        ticket.setSubject("EMPTY");
-        ticket.setRequest("EMPTY");
+        ticket.setName("EMPTY");
+        ticket.setProblem("EMPTY");
         ticket.setTicketType(ticketType);
         ticket.setTicketSubtypeName("EMPTY");
         ticket.setRequestPriority(requestPriority);
@@ -153,6 +163,8 @@ public class Creator {
 
         return ticket;
     }
+
+
 
     // ************** END TICKET **********************
 
@@ -183,21 +195,33 @@ public class Creator {
         return reportAccessStored;
     }
 
-    public static Report createReport(User creator, RequestPriority requestPriority, RequestPosition requestPosition,
-                                      RequestType requestType, ReportRefresh reportRefresh, ReportType reportType){
-        Report report = new Report();
+
+    // ************** END REPORT **********************
+    public static FinanceDTO createFinanceDTO(String creator, String requestPriority, String financeType){
+        FinanceDTO financeDTO = new FinanceDTO();
+        financeDTO.setCreator(creator);
+        financeDTO.setRequestPriority(requestPriority);
+        financeDTO.setRequestType(REQUEST_TYPE.FINANCE.name());
+        financeDTO.setName("FINANCE_NAME");
+        financeDTO.setFinanceType(financeType);
+
+
+        return financeDTO;
+    }
+
+    public static ReportDTO createReportDTO(String creator, String requestPriority, String reportType, String reportRefresh){
+        ReportDTO report = new ReportDTO();
         report.setCreator(creator);
         report.setRequestPriority(requestPriority);
-        report.setRequestPosition(requestPosition);
-        report.setRequestType(requestType);
-        report.setSubject("EMPTY");
+        report.setRequestType(REQUEST_TYPE.REPORT.name());
+        report.setName("REPORT_NAME");
 
-        report.setOwner("EMPTY");
-        report.setPurpose("EMPTY");
-        report.setCriteria("EMPTY");
-        report.setVisibleData("EMPTY");
-        report.setOtherInformation("EMPTY");
-        report.setAccessBy("EMPTY");
+        report.setOwner("OWNER");
+        report.setPurpose("PURPOSE");
+        report.setCriteria("CRITERIA");
+        report.setVisibleData("VISIBLE_DATA");
+        report.setOtherInformation("OTHER_INFORMATION");
+        report.setAccessBy("ACCESS_BY");
         report.setDeadline(new Timestamp(System.currentTimeMillis()));
         report.setReportRefresh(reportRefresh);
         report.setReportType(reportType);
@@ -205,7 +229,82 @@ public class Creator {
         return report;
     }
 
-    // ************** END REPORT **********************
+    public static TicketDTO createTicketDTO(String user , String requestPriority , String ticketType, String ticketSubtypeName ){
+        TicketDTO ticketDTO = new TicketDTO();
+        ticketDTO.setName("TICKET_NAME");
+        ticketDTO.setProblem("TICKET_PROBLEM");
+        ticketDTO.setTicketType(ticketType);
+        ticketDTO.setRequestPriority(requestPriority);
+        ticketDTO.setCreator(user);
+        ticketDTO.setTicketSubtypeName(ticketSubtypeName);
+        ticketDTO.setRequestType(REQUEST_TYPE.TICKET.name());
+        return ticketDTO;
+    }
+
+    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, String username, Boolean isPrivate){
+        RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
+        requestCommentDTO.setComment("COMMENT");
+        requestCommentDTO.setRequestId(requestId);
+        requestCommentDTO.setCreatorUserName(username);
+        requestCommentDTO.setIsPrivate(isPrivate);
+        return requestCommentDTO;
+    }
+
+    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, String username,String comment, Boolean isPrivate){
+        RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
+        requestCommentDTO.setComment(comment);
+        requestCommentDTO.setRequestId(requestId);
+        requestCommentDTO.setCreatorUserName(username);
+        requestCommentDTO.setIsPrivate(isPrivate);
+        return requestCommentDTO;
+    }
+
+    public static UserSimpleDTO createUserSimpleDTO(User user){
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
+        userSimpleDTO.setFirstName(user.getFirstName());
+        userSimpleDTO.setLastName(user.getLastName());
+        return userSimpleDTO;
+    }
+
+    public static TicketPrivilegeDTO createTicketPrivilegeDTO(String ticketType, String application){
+        TicketPrivilegeDTO ticketPrivilegeDTO = new TicketPrivilegeDTO();
+        ticketPrivilegeDTO.setTicketType(ticketType);
+        ticketPrivilegeDTO.setApplicationName(application);
+        return ticketPrivilegeDTO;
+    }
+
+    public static GroupDTO createGroupDTOWithTicketPrivileges(String name, List<TicketPrivilegeDTO> ticketPrivilegeDTOs){
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setName(name);
+        groupDTO.setTicketPrivilegesList(ticketPrivilegeDTOs);
+
+        return groupDTO;
+    }
+
+    public static GroupDTO createGroupDTOWithRequestPrivilegesToSubmit(String name, List<String> requestNames){
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setName(name);
+        groupDTO.setRequestTypesToSubmit(requestNames);
+
+        return groupDTO;
+    }
+
+    public static GroupDTO createGroupDTOWithRequestPrivilegesToSolve(String name, List<String> requestNames){
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setName(name);
+        groupDTO.setRequestTypesToSolve(requestNames);
+
+        return groupDTO;
+    }
+
+
+    public static GroupDTO createGroupDTOWithFinanceType(String name, List<String> financeType){
+        GroupDTO groupDTO = new GroupDTO();
+        groupDTO.setName(name);
+        groupDTO.setFinanceTypes(financeType);
+
+        return groupDTO;
+    }
 
 
 }

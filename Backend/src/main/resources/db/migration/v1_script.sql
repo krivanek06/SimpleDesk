@@ -392,7 +392,7 @@ insert into hibernate_sequences(sequence_name, next_val) values ('default',0);
 
 -- helping functions
 
-CREATE FUNCTION get_json_privileges_for_user(user_id integer)
+CREATE FUNCTION get_all_privileges_for_user_json(user_id integer)
     RETURNS json AS
     $$
     select json_build_object(

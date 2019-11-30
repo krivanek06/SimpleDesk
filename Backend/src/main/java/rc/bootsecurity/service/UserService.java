@@ -1,14 +1,16 @@
 package rc.bootsecurity.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.RequestContainerDTO;
-import rc.bootsecurity.model.dto.UserDTOSimple;
+import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.UserPrivileges;
+import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestType;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -40,6 +42,21 @@ public class UserService {
 
 
 
+    public UserPrivileges getPrivilegesForUser2(String name){
+        User user = this.userRepository.findByUsername(name).get();
+        JsonNode userPrivileges = this.userRepository.findPrivilegesForUser(user.getId());
+        //create ObjectMapper instance
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        //convert json file to map
+       // Map<?, ?> map = objectMapper.readValue(userPrivileges, Map.class);
+        return null;
+    }
+
+
+    /**
+     * DELETE !!
+     */
     public UserPrivilegeDTO getPrivilegesForUser(User user){
         UserPrivilegeDTO userPrivilegeDTO = new UserPrivilegeDTO();
         List<Group> groupInvolved = this.groupRepository.findAllByUsersInGroup(user);
@@ -61,7 +78,9 @@ public class UserService {
         return userPrivilegeDTO;
     }
 
-    // helper method to fetch distinct ticket privileges
+    /**
+     * DELETE !!
+     */
     private Map<String, Set<String>> getTicketPrivileges(List<Group> groups){
         Map<String, Set<String>> ticketPrivilegesHashMap = new HashMap<>();
         groups.forEach(group -> group.getTicketPrivilegesList().forEach(privilege -> {
@@ -80,13 +99,25 @@ public class UserService {
         return this.userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
     }
 
-    public UserDTOSimple getUserDTOSimple(String name){
+    /**
+     * DELETE !!
+     */
+    public UserDTO getUserDTOSimple(String name){
         User user = this.loadUser(name);
 
         user.setGroupsToManage(this.groupService.getGroupsToManageForUser(user));
         user.setGroupsInvolved(this.groupService.getInvolvedGroupsForUser(user));
 
-        return this.userModelMapper.getUserDTOSimple(user);
+        return this.userModelMapper.getUserDTO(user);
+    }
+
+    public UserSimpleDTO convertUserToSimpleDTO(User user){
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
+        userSimpleDTO.setId(user.getId());
+        userSimpleDTO.setFirstName(user.getFirstName());
+        userSimpleDTO.setLastName(user.getLastName());
+
+        return userSimpleDTO;
     }
 
 

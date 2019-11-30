@@ -1,5 +1,6 @@
 package rc.bootsecurity.repository.ticket;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import rc.bootsecurity.model.entity.Group;
@@ -14,4 +15,7 @@ public interface TicketPrivilegesRepository extends CrudRepository<TicketPrivile
     Optional<List<TicketPrivileges>> findAllByGroup(Group group);
     Optional<List<TicketPrivileges>> findAllByTicketType(TicketType ticketType);
     Optional<List<TicketPrivileges>> findAllByApplicationName(String name);
+
+    @Modifying
+    void deleteByIdIn(List<Integer> id);
 }

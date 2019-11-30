@@ -23,12 +23,6 @@ public class NAMES {
     public static final String SERVER_1 = "Server1";
     public static final String SERVER_2 = "Server2";
 
-    public static final String PRIORITY_1 = "Priority1";
-    public static final String PRIORITY_2 = "Priority2";
-
-    public static final String POSITION_1 = "Position1";
-    public static final String POSITION_2 = "Position2";
-
     public static final String REPORT_ACCESS_1 = "REPORT_ACCESS_1";
     public static final String REPORT_ACCESS_2 = "REPORT_ACCESS_2";
     public static final String REPORT_ACCESS_3 = "REPORT_ACCESS_3";
@@ -46,6 +40,12 @@ public class NAMES {
     public static final String FINANCE_TYPE_3 = "FINANCE_TYPE_3";
     public static final String FINANCE_TYPE_4 = "FINANCE_TYPE_4";
     public static final String FINANCE_TYPE_5 = "FINANCE_TYPE_5";
+
+    public static final String PERSON_1 = "PERSON_1";
+    public static final String PERSON_2 = "PERSON_2";
+
+    public static final String OTHER_1 = "OTHER_1";
+    public static final String OTHER_2 = "OTHER_2";
 
 
 }

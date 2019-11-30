@@ -8,11 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.model.dto.LoginViewModel;
-import rc.bootsecurity.model.dto.UserDTOSimple;
-import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -20,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 
 import static com.auth0.jwt.algorithms.Algorithm.HMAC512;

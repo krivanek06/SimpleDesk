@@ -13,5 +13,6 @@ import java.util.Set;
 public interface FinanceTypeRepository extends CrudRepository<FinanceType, Integer> {
     //List<FinanceType> findAllByGroupsToSubmitSpecificFinanceType(Set<Group> groups);
     FinanceType findByName(String name);
+    List<FinanceType> findAllByNameIn(List<String> names);
     Optional<List<FinanceType>> findAllByGroupsToSubmitSpecificFinanceType(Group group);
 }

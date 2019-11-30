@@ -6,7 +6,9 @@ import java.sql.Date;
 import java.sql.Timestamp;
 
 @Data
-public class UserDTOSimple {
+public class UserDTO {
+    private Integer id;
+
     private String username;
 
     private String firstName;

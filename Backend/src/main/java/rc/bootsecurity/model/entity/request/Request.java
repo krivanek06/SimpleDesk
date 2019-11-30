@@ -1,10 +1,8 @@
 package rc.bootsecurity.model.entity.request;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.hibernate.annotations.Fetch;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.document.Document;
 
@@ -14,15 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 
-/*@JsonTypeInfo(
-  use = JsonTypeInfo.Id.NAME,
-  include = JsonTypeInfo.As.PROPERTY, property = "type"
-)
-@JsonSubTypes({
-    @JsonSubTypes.Type(value = Coke.class, name = "coke"),
-    @JsonSubTypes.Type(value = Sprite.class, name = "sprite")
-})*/
-//@MappedSuperclass
+
 @Inheritance(strategy=InheritanceType.JOINED)
 @Entity
 @Table(name = "tbl_requests")
@@ -43,7 +33,7 @@ public abstract class Request {
     private Timestamp timestampClosed;
 
     @Column(name = "subject")
-    private String subject;
+    private String name;
 
     @Column(name = "solution")
     private String solution;
@@ -63,9 +53,6 @@ public abstract class Request {
     @JoinColumn(name = "type_id")
     private RequestType requestType;
 
-    /**
-     * which documents are shared with this request
-     */
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_document_to_requests",
             joinColumns = { @JoinColumn(name = "request_id")},
@@ -93,15 +80,8 @@ public abstract class Request {
     /**
      * comments to request
      */
-    //@OneToMany(fetch = FetchType.LAZY)
-    //private List<RequestComment> requestComments;
-
-    /**
-     * solver changes which occurred
-     */
-  //  @OneToMany(fetch = FetchType.LAZY)
-  //  @JoinColumn(name = "request_id")
-  //  private List<RequestChangedSolver> requestChangedSolvers;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
+    private List<RequestComment> requestComments;
 
     /**
      * get users who watch this request

@@ -1,50 +1,39 @@
-package rc.bootsecurity.service;
+package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.RequestContainerDTO;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
-import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
-import rc.bootsecurity.model.entity.request.RequestType;
-import rc.bootsecurity.model.entity.ticket.Ticket;
-import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
-import rc.bootsecurity.model.entity.ticket.TicketType;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
-import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.request.RequestLogRepository;
-import rc.bootsecurity.repository.request.RequestRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.test.creator.Creator;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class RequestService {
     @Autowired
-    private RequestRepository requestRepository;
+    protected RequestRepository requestRepository;
     @Autowired
-    private UserRepository userRepository;
+    protected UserRepository userRepository;
     @Autowired
-    private GroupRepository groupRepository;
+    protected GroupRepository groupRepository;
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    protected RequestTypeRepository requestTypeRepository;
     @Autowired
-    private TicketTypeRepository ticketTypeRepository;
+    protected TicketTypeRepository ticketTypeRepository;
     @Autowired
-    private TicketRepository ticketRepository;
+    protected TicketRepository ticketRepository;
     @Autowired
-    private RequestLogRepository requestLogRepository;
+    protected RequestLogRepository requestLogRepository;
+    @Autowired
+    protected RequestPriorityRepository requestPriorityRepository;
+    @Autowired
+    protected RequestPositionRepository requestPositionRepository;
 
 
     public List<RequestLog> getLogsForRequest(Request request){
@@ -58,15 +47,12 @@ public class RequestService {
      * @param oldState what value was present in that column
      * @param newState what value will be present in that column
      */
-    public void logChangedPriority(Request request, User user, String changingObject, String oldState, String newState){
+    protected void logRequestModification(Request request, User user, String changingObject, String oldState, String newState){
         String log =  "Stav " + changingObject + " sa zmenil z " + oldState + " na " + newState + ". "+ "Požiadavka bola inicializovaná uživateľom : " + user.getFullName();
         this.requestLogRepository.save(Creator.createRequestLog(log, user, request));
     }
 
-    /**
-     * @return container of all requests which will be displayed on dashboard
-     */
-    public RequestContainerDTO getAllOpenRequests(String username, UserPrivilegeDTO userPrivilegeDTO){
+    /*public RequestContainerDTO getAllOpenRequests(String username, UserPrivilegeDTO userPrivilegeDTO){
         RequestContainerDTO requestContainerDTO = new RequestContainerDTO();
         User currentlyLoggedInUser = this.userRepository.findByUsername(username).get();
 
@@ -93,9 +79,7 @@ public class RequestService {
                 })
             );
         }
-        /**
-         * requests which are open, I am not a creator, but I have privilege to see them
-         */
+
         if(!userPrivilegeDTO.getSolveRequests().isEmpty()) {
             List<RequestType> requestTypesAllowedToSolve = this.requestTypeRepository.findAllByNameIn(userPrivilegeDTO.getSolveRequests());
 
@@ -125,6 +109,6 @@ public class RequestService {
         requestContainerDTO.setRequestSendByMyTeam(requestSendByMyTeam);
 
         return requestContainerDTO;
-    }
+    }*/
 
 }

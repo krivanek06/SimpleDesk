@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface RequestCommentRepository extends CrudRepository<RequestComment, Integer> {
-    List<RequestComment> findAllByRequestOrderByDateAsc(Request request);
+    List<RequestComment> findAllByRequestOrderByTimestampAsc(Request request);
 }

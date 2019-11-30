@@ -23,7 +23,7 @@ public class Ticket extends Request {
     private String ticketSubtypeName;
 
     @Column(name = "t_request")
-    private String request;
+    private String problem;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "t_type_id")
