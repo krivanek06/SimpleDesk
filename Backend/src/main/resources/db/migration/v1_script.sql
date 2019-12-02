@@ -391,9 +391,8 @@ insert into hibernate_sequences(sequence_name, next_val) values ('default',0);
 
 
 -- helping functions
-
 CREATE FUNCTION get_all_privileges_for_user_json(user_id integer)
-    RETURNS json AS
+    RETURNS varchar AS
     $$
     select json_build_object(
     'ticketTypeToSolve' ,
@@ -425,5 +424,5 @@ CREATE FUNCTION get_all_privileges_for_user_json(user_id integer)
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
     inner join tbl_finance_type_privileges on tbl_finance_type_privileges.group_id = tug.group_id
-    left join tbl_finance_types on tbl_finance_types.id = tbl_finance_type_privileges.finance_type_id));
+    left join tbl_finance_types on tbl_finance_types.id = tbl_finance_type_privileges.finance_type_id))::varchar;
 $$ LANGUAGE sql;

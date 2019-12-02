@@ -13,9 +13,9 @@ public class PersonalDetailsController {
     private UserService userService;
 
 
-    @GetMapping("/basicInformation")
+  /*  @GetMapping("/basicInformation")
     public UserDTO basicInformation(@RequestParam(value = "name", required = false) String name){
         return this.userService.getUserDTOSimple(name);
-    }
+    }*/
 
 }

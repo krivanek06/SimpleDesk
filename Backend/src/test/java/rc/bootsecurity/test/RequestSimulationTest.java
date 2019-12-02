@@ -11,6 +11,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.model.dto.UserDTO;
+import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.RequestCommentDTO;
 import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.Group;
@@ -640,7 +641,57 @@ public class RequestSimulationTest {
         User user6 = this.userRepository.findByUsername("user6").get();
         User user9 = this.userRepository.findByUsername("user9").get();
         User user10 = this.userRepository.findByUsername("user10").get();
-        this.userService.getPrivilegesForUser2("user2");
+        User user12 = this.userRepository.findByUsername("user12").get();
+
+        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user2));
+
+        assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSolveRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.FINANCE.name(),
+                REQUEST_TYPE.TICKET.name(), REQUEST_TYPE.REPORT.name());
+        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.TICKET.name());
+        assertThat(userPrivilegeDTO.getSolveTickets().keySet()).containsExactlyInAnyOrder(TICKET_TYPE.SOFTWARE.name(),
+                TICKET_TYPE.HARDWARE.name(), TICKET_TYPE.USER.name(), TICKET_TYPE.SERVER.name(), TICKET_TYPE.OTHER.name());
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SERVER)).containsExactlyInAnyOrder(NAMES.SERVER_1, NAMES.SERVER_2);
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SOFTWARE)).containsExactlyInAnyOrder(NAMES.SOFTWARE_1,
+                NAMES.SOFTWARE_2, NAMES.SOFTWARE_3, NAMES.SOFTWARE_4);
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.HARDWARE)).containsExactlyInAnyOrder(NAMES.HARDWARE_1,
+                NAMES.HARDWARE_2, NAMES.HARDWARE_3, NAMES.HARDWARE_4);
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SOFTWARE).size()).isEqualTo(4);
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.HARDWARE).size()).isEqualTo(4);
+        assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SERVER).size()).isEqualTo(2);
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
+
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user4));
+        assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSolveRequests()).containsExactlyInAnyOrder( REQUEST_TYPE.REPORT.name());
+        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.TICKET.name());
+        assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
+
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user10));
+        assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),
+                REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name());
+        assertThat(userPrivilegeDTO.getSolveRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,
+                NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3);
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
+
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user6));
+        assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),
+                REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name());
+        assertThat(userPrivilegeDTO.getSolveRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,
+                NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3, NAMES.FINANCE_TYPE_4, NAMES.FINANCE_TYPE_5);
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
+
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user12));
+        assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSolveRequests()).isNull();
+        assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
 
     }
 

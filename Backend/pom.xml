@@ -115,7 +115,17 @@
             <version>6.0.0</version>
             <scope>test</scope>
         </dependency>
-
+        <!-- to support json fetching from database
+        <dependency>
+            <groupId>com.vladmihalcea</groupId>
+            <artifactId>hibernate-types-52</artifactId>
+            <version>2.7.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20190722</version>
+        </dependency>
         <!-- used for lazy fetch > https://medium.com/@prateekvarshney/spring-data-getting-that-lazy-fetch-to-work-913c5825e44e
         <dependency>
             <groupId>com.google.code.gson</groupId>

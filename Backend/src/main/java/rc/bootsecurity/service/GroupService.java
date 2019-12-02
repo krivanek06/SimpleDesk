@@ -45,17 +45,6 @@ public class GroupService {
         return this.groupRepository.findAllByGroupManager(user).orElseGet(ArrayList::new);
     }
 
-    /**
-     * set privileges for specific group
-     * 1. ticket privileges
-     * 2. requests which a group can solve
-     * 3. requests which a group can submit
-     */
-    public void setGroupPrivilegeInformation(Group group){
-        group.setRequestTypesToSolve(new HashSet<>(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group).orElse(new ArrayList<>())));
-        group.setRequestTypesToSubmit(new HashSet<>(this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new ArrayList<>())));
-        group.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>()));
-    }
 
     public void addUserIntoGroupsAndSave(UserSimpleDTO userDTO, List<String> groupNames){
         List<Group> groups = this.groupRepository.findAllByGroupNameIn(groupNames);

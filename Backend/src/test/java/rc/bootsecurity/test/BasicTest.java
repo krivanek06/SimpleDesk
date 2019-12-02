@@ -322,7 +322,7 @@ public class BasicTest {
         assertThat(this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group1).get()).containsExactlyInAnyOrder(ticket,report,finance);
          //   assertThat(group5.getUsersInGroup()).isEmpty();
 
-        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(user1);
+        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user1));
 
         assertThat(userPrivilegeDTO.getSolveRequests())
                 .containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name(),REQUEST_TYPE.FINANCE.name());
@@ -333,9 +333,9 @@ public class BasicTest {
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
         assertThat(userPrivilegeDTO.getSolveTickets().get(ticketTypeHardware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypesHardware.get(0).getName(), ticketSubtypesHardware.get(1).getName());
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-
-        UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12);
+        UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user12));
 
         assertThat(userPrivilegeDTO5.getSolveRequests()).containsExactlyInAnyOrder(REQUEST_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO5.getSubmitRequests().size()).isEqualTo(0);
@@ -344,6 +344,7 @@ public class BasicTest {
         assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
         assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeHardware.getName())).isNullOrEmpty();
+        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
     }
 
     @Test

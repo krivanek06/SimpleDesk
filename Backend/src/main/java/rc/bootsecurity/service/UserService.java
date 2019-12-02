@@ -1,13 +1,13 @@
 package rc.bootsecurity.service;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
-import rc.bootsecurity.model.dto.UserPrivileges;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
@@ -16,8 +16,10 @@ import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.RequestTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
+import rc.bootsecurity.utils.modelmapper.JsonStringParser;
 import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,60 +40,14 @@ public class UserService {
     private GroupRepository groupRepository;
     @Autowired
     private RequestTypeRepository requestTypeRepository;
+    @Autowired
+    private JsonStringParser jsonStringParser;
 
 
 
-
-    public UserPrivileges getPrivilegesForUser2(String name){
-        User user = this.userRepository.findByUsername(name).get();
-        JsonNode userPrivileges = this.userRepository.findPrivilegesForUser(user.getId());
-        //create ObjectMapper instance
-        ObjectMapper objectMapper = new ObjectMapper();
-
-        //convert json file to map
-       // Map<?, ?> map = objectMapper.readValue(userPrivileges, Map.class);
-        return null;
-    }
-
-
-    /**
-     * DELETE !!
-     */
-    public UserPrivilegeDTO getPrivilegesForUser(User user){
-        UserPrivilegeDTO userPrivilegeDTO = new UserPrivilegeDTO();
-        List<Group> groupInvolved = this.groupRepository.findAllByUsersInGroup(user);
-        groupInvolved.forEach(group -> this.groupService.setGroupPrivilegeInformation(group));
-
-        // distinct requests name to solve
-        userPrivilegeDTO.setSolveRequests(groupInvolved.stream().flatMap(group -> group.getRequestTypesToSolve()
-                .stream().map(RequestType::getName)).collect(Collectors.toSet()));
-
-        // distinct requests name to submit
-        userPrivilegeDTO.setSubmitRequests(groupInvolved.stream().flatMap(group -> group.getRequestTypesToSubmit()
-                .stream().map(RequestType::getName)).collect(Collectors.toSet()));
-
-        // distinct ticket types
-        userPrivilegeDTO.setSolveTickets(this.getTicketPrivileges(groupInvolved));
-
-        // distinct finance types to submit - DOTO !!!!!!
-
-        return userPrivilegeDTO;
-    }
-
-    /**
-     * DELETE !!
-     */
-    private Map<String, Set<String>> getTicketPrivileges(List<Group> groups){
-        Map<String, Set<String>> ticketPrivilegesHashMap = new HashMap<>();
-        groups.forEach(group -> group.getTicketPrivilegesList().forEach(privilege -> {
-            if(ticketPrivilegesHashMap.containsKey(privilege.getTicketType().getName())) {
-                ticketPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
-            }else {
-                ticketPrivilegesHashMap.put(privilege.getTicketType().getName(), new HashSet<>());
-                ticketPrivilegesHashMap.get(privilege.getTicketType().getName()).add(privilege.getApplicationName());
-            }
-        }));
-        return ticketPrivilegesHashMap;
+    public UserPrivilegeDTO getPrivilegesForUser(UserSimpleDTO userSimpleDTO){
+        return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(
+                this.userRepository.findPrivilegesForUser(userSimpleDTO.getId()));
     }
 
 
@@ -99,17 +55,6 @@ public class UserService {
         return this.userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
     }
 
-    /**
-     * DELETE !!
-     */
-    public UserDTO getUserDTOSimple(String name){
-        User user = this.loadUser(name);
-
-        user.setGroupsToManage(this.groupService.getGroupsToManageForUser(user));
-        user.setGroupsInvolved(this.groupService.getInvolvedGroupsForUser(user));
-
-        return this.userModelMapper.getUserDTO(user);
-    }
 
     public UserSimpleDTO convertUserToSimpleDTO(User user){
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO();

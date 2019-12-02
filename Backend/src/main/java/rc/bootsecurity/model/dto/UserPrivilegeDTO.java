@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@Getter
-@Setter
-@ToString
+
 /**
  * container for all >
  *  - request types which I can submit - Ticket, Report, Finance
@@ -17,15 +17,20 @@ import java.util.Set;
  *  - request types which I can solve
  *  - Ticket types and its subtypes which I can solve
  */
+@Getter
+@Setter
+@ToString
 public class UserPrivilegeDTO {
+    private boolean isSolver;
+
     // GUI
-    private Set<String> submitRequests;
-    private Set<String> submitFinanceRequests;
+    private List<String> submitRequests;
+    private List<String> submitFinanceRequests;
 
     // JWT
     // ticket, reports
-    private Set<String> solveRequests;
+    private List<String> solveRequests;
     // software -> sw1, sw2 ... hardware -> hw1, hw2
-    private Map<String, Set<String>> solveTickets;
+    private Map<String, List<String>> solveTickets;
 
 }
