@@ -317,10 +317,6 @@ ALTER TABLE tbl_shared_reminders ADD FOREIGN KEY (user_id) REFERENCES tbl_users(
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (document_id) REFERENCES tbl_documents(id);
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 
---ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
---ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_from) REFERENCES tbl_users(id);
---ALTER TABLE tbl_request_changed_solver ADD FOREIGN KEY (user_id_to) REFERENCES tbl_users(id);
-
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 
@@ -391,15 +387,18 @@ insert into hibernate_sequences(sequence_name, next_val) values ('default',0);
 
 
 -- helping functions
-CREATE FUNCTION get_all_privileges_for_user_json(user_id integer)
+
+
+-- get all privileges for user what he can submit or solve
+CREATE FUNCTION get_all_privileges_for_user_varchar(user_id integer)
     RETURNS varchar AS
     $$
     select json_build_object(
     'ticketTypeToSolve' ,
     (select jsonb_agg(ticket_priv) from
-    (select  json_build_object(tbl_ticket_types.name, jsonb_agg(distinct tbl_ticket_privileges.application_name)) as ticket_priv
-    from (
-     select id as uid from tbl_users users where id = user_id ) as t_user
+        (select  json_build_object(tbl_ticket_types.name,
+            jsonb_agg(distinct tbl_ticket_privileges.application_name)) as ticket_priv
+    from (select id as uid from tbl_users users where id = user_id ) as t_user
      inner join tbl_user_groups as tug on tug.user_id = t_user.uid
      inner join tbl_ticket_privileges on tbl_ticket_privileges.group_id = tug.group_id
      left join tbl_ticket_types on tbl_ticket_types.id = tbl_ticket_privileges.ticket_type_id
@@ -425,4 +424,118 @@ CREATE FUNCTION get_all_privileges_for_user_json(user_id integer)
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
     inner join tbl_finance_type_privileges on tbl_finance_type_privileges.group_id = tug.group_id
     left join tbl_finance_types on tbl_finance_types.id = tbl_finance_type_privileges.finance_type_id))::varchar;
+$$ LANGUAGE sql;
+
+
+
+-- get all open requests on dashboard page
+drop function if exists get_requests_on_dashboard_for_user_varchar(integer);
+CREATE FUNCTION get_requests_on_dashboard_for_user_varchar(input_user_id integer)
+RETURNS varchar AS $$
+select json_build_object(
+-- my open requests
+'my_open_requests', (
+select json_agg( json_build_object(
+    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as my_open_requests
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    where r.creator_uid = input_user_id and closed_uid is null
+    order by id asc)
+as t ),
+
+-- assigned on me and still open
+'assigned_on_me', (
+select json_agg( json_build_object(
+    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned, 'creation' , creation) ) as assigned_on_me
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    where r.assigned_uid = input_user_id and closed_uid is null
+    order by id asc)
+as t ),
+
+-- watched requests does not matter if open or closed
+'watched_requests', (
+select json_agg( json_build_object(
+    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as watched_requests
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    left join tbl_request_watched_by_user rw on rw.request_id = r.id
+    where rw.user_id = input_user_id
+    order by id asc)
+as t),
+
+-- open requests sent by members of my team
+'sent_by_my_team', (
+select json_agg( json_build_object(
+'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) ) as sent_by_my_team
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_users creator on creator.id  = r.creator_uid
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    where r.creator_uid in (select distinct user_id from  tbl_user_groups where user_id != input_user_id and group_id in
+    (select id from  tbl_groups where manager_id = input_user_id
+    union select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = input_user_id))
+    and closed_uid is null
+    order by id asc)
+as t),
+
+-- open requests assigned by members of my team
+'assigned_on_my_team', (
+select json_agg( json_build_object(
+'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) ) as assigned_on_my_team
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_users creator on creator.id  = r.creator_uid
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    where r.assigned_uid in (select distinct user_id from  tbl_user_groups where user_id != input_user_id and group_id in
+    (select id from  tbl_groups where manager_id = input_user_id
+    union select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = input_user_id))
+    and r.closed_uid is null
+    order by id asc)
+as t),
+
+-- open requests assigned by members of my team
+'all_open_requests', (
+    select json_agg( json_build_object(
+    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) )
+    as all_open_requests
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    from tbl_requests r
+    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_users creator on creator.id  = r.creator_uid
+    left join tbl_users assigned on assigned.id = r.assigned_uid
+    left join tbl_tickets on  tbl_tickets.request_id = r.id
+    left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+    where r.closed_uid is null and (
+    -- get privileges if I can solve reports or tickets
+        (rt.name != 'TICKET' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
+        from get_all_privileges_for_user_varchar(input_user_id)) )
+    OR
+    -- get privileges on ticket types
+        (rt.name = 'TICKET' AND (select case
+        when  tbl_ticket_types.name = 'USER' or tbl_ticket_types.name = 'OTHER' then (
+        select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+        like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(input_user_id))
+        else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+        like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(input_user_id))
+        end as contain
+    )  ) -- remove those which appear in another table
+    ) and  (r.assigned_uid is null or
+        r.assigned_uid not in (select distinct user_id from  tbl_user_groups where group_id in
+        (select id from  tbl_groups where manager_id = input_user_id)))
+        and r.creator_uid not in (select distinct user_id from  tbl_user_groups where user_id != input_user_id and group_id in
+        (select id from  tbl_groups where manager_id = input_user_id))
+order by id asc ) as t
+))::varchar;
 $$ LANGUAGE sql;

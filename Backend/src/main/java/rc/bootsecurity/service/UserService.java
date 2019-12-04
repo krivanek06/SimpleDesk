@@ -1,8 +1,6 @@
 package rc.bootsecurity.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.json.JSONArray;
-import org.json.JSONObject;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -42,7 +40,6 @@ public class UserService {
     private RequestTypeRepository requestTypeRepository;
     @Autowired
     private JsonStringParser jsonStringParser;
-
 
 
     public UserPrivilegeDTO getPrivilegesForUser(UserSimpleDTO userSimpleDTO){

@@ -64,12 +64,14 @@ public class User {
 
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "groupManager")
+    @EqualsAndHashCode.Exclude
     private List<Group> groupsToManage;
 
     /**
      *  all groups where I am just a member
      */
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "usersInGroup")
+    @EqualsAndHashCode.Exclude
     private List<Group> groupsInvolved;
 
     /**
@@ -77,18 +79,21 @@ public class User {
      */
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
     @OrderBy(value = "id ASC")
+    @EqualsAndHashCode.Exclude
     private Set<Request> watchedRequests;
 
     /**
      * Documents which are shared with me
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @EqualsAndHashCode.Exclude
     private List<DocumentsToUsers> documents;
 
     /**
      * Reminders which user created
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @EqualsAndHashCode.Exclude
     private List<Reminder> myReminders;
 
     /**
@@ -96,6 +101,7 @@ public class User {
      */
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usersToViewReminder")
     @OrderBy(value = "id ASC")
+    @EqualsAndHashCode.Exclude
     private Set<Reminder> remindersSharedWithMe;
 
     //@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")

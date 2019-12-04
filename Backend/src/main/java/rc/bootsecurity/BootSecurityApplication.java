@@ -5,11 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
 
+//@EnableJpaRepositories("rc.bootsecurity.repository.*")
+//@EntityScan("rc.bootsecurity.*")
+/*
 @SpringBootApplication
 public class BootSecurityApplication {
 
@@ -17,8 +23,8 @@ public class BootSecurityApplication {
         SpringApplication.run(BootSecurityApplication.class, args);
     }
 }
+*/
 
-/*
 @SpringBootApplication
 public class BootSecurityApplication implements CommandLineRunner {
 
@@ -35,7 +41,7 @@ public class BootSecurityApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        //this.inserterRequestsSimulation.mainInserter();
+      //  this.inserterRequestsSimulation.mainInserter();
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
         userSimpleDTO.setId(2);
         userSimpleDTO.setFirstName("user2");
@@ -43,4 +49,3 @@ public class BootSecurityApplication implements CommandLineRunner {
         this.userService.getPrivilegesForUser(userSimpleDTO);
     }
 }
-*/

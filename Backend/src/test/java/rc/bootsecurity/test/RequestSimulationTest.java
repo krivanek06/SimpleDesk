@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -61,7 +63,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 @AutoConfigureEmbeddedDatabase
+@EnableAutoConfiguration
 @ComponentScan(basePackages = {"rc.bootsecurity.*"})
+@EntityScan("rc.bootsecurity.*")
 public class RequestSimulationTest {
     @Autowired
     private UserRepository userRepository;
@@ -641,7 +645,7 @@ public class RequestSimulationTest {
         User user6 = this.userRepository.findByUsername("user6").get();
         User user9 = this.userRepository.findByUsername("user9").get();
         User user10 = this.userRepository.findByUsername("user10").get();
-        User user12 = this.userRepository.findByUsername("user12").get();
+        User user11 = this.userRepository.findByUsername("user11").get();
 
         UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user2));
 
@@ -686,7 +690,7 @@ public class RequestSimulationTest {
                 NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3, NAMES.FINANCE_TYPE_4, NAMES.FINANCE_TYPE_5);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
 
-        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user12));
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user11));
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.getSubmitRequests()).isNull();
         assertThat(userPrivilegeDTO.getSolveRequests()).isNull();

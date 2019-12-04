@@ -1,5 +1,6 @@
 package rc.bootsecurity.model.entity.request;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -54,6 +55,7 @@ public abstract class Request {
     private RequestType requestType;
 
     @ManyToMany(fetch = FetchType.LAZY)
+    @EqualsAndHashCode.Exclude
     @JoinTable(name = "tbl_document_to_requests",
             joinColumns = { @JoinColumn(name = "request_id")},
             inverseJoinColumns = { @JoinColumn(name = "document_id")})
@@ -81,6 +83,7 @@ public abstract class Request {
      * comments to request
      */
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
+    @EqualsAndHashCode.Exclude
     private List<RequestComment> requestComments;
 
     /**
@@ -91,6 +94,7 @@ public abstract class Request {
             joinColumns = { @JoinColumn(name = "request_id")},
             inverseJoinColumns = { @JoinColumn(name = "user_id")})
     @OrderBy("id ASC")
+    @EqualsAndHashCode.Exclude
     private Set<User> userWhoWatchThisRequest;
 
 
