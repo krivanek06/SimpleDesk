@@ -12,7 +12,6 @@ import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.service.UserService;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.stream.Collectors;
 
@@ -22,7 +21,7 @@ public class RequestConverterService {
     private UserService userService;
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
-        requestDTO.setRequestType(request.getRequestType().getName());
+        requestDTO.setRequestType(request.getModuleType().getName());
         requestDTO.setCreator(request.getCreator().getFullName());
         requestDTO.setAssigned(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
         requestDTO.setSolver(request.getSolver() != null ? request.getSolver().getFullName() : null);

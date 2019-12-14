@@ -24,7 +24,7 @@ import rc.bootsecurity.repository.finance.FinanceTypeRepository;
 import rc.bootsecurity.repository.report.*;
 import rc.bootsecurity.repository.request.RequestPositionRepository;
 import rc.bootsecurity.repository.request.RequestPriorityRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
@@ -42,7 +42,7 @@ public class InserterRequests {
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
     @Autowired

@@ -4,9 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
 
 import java.sql.Timestamp;
 import java.util.List;

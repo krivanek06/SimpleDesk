@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 
 import java.io.IOException;
@@ -39,8 +38,8 @@ public class JsonStringParser {
 
         userPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
 
-        if(!userPrivileges.isNull("requestTypeToSolve")) {
-            userPrivilegeDTO.setSolveRequests(userPrivileges.getJSONArray("requestTypeToSolve")
+        if(!userPrivileges.isNull("moduleTypesToManage")) {
+            userPrivilegeDTO.setManageModules(userPrivileges.getJSONArray("moduleTypesToManage")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
         if(!userPrivileges.isNull("requestTypeToSubmit")) {
@@ -52,7 +51,7 @@ public class JsonStringParser {
             userPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("FinanceTypeToSubmit")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
-        userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getSolveRequests() == null));
+        userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getManageModules() == null));
         return userPrivilegeDTO;
     }
 }

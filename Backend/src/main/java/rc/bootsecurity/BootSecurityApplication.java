@@ -15,7 +15,7 @@ import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
 
 //@EnableJpaRepositories("rc.bootsecurity.repository.*")
 //@EntityScan("rc.bootsecurity.*")
-/*
+
 @SpringBootApplication
 public class BootSecurityApplication {
 
@@ -23,8 +23,8 @@ public class BootSecurityApplication {
         SpringApplication.run(BootSecurityApplication.class, args);
     }
 }
-*/
 
+/*
 @SpringBootApplication
 public class BootSecurityApplication implements CommandLineRunner {
 
@@ -49,3 +49,4 @@ public class BootSecurityApplication implements CommandLineRunner {
         this.userService.getPrivilegesForUser(userSimpleDTO);
     }
 }
+*/

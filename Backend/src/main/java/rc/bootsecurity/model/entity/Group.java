@@ -1,12 +1,8 @@
 package rc.bootsecurity.model.entity;
 
-import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.finance.FinanceType;
-import rc.bootsecurity.model.entity.request.Request;
-import rc.bootsecurity.model.entity.request.RequestComment;
-import rc.bootsecurity.model.entity.request.RequestType;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 
 import javax.persistence.*;
@@ -61,19 +57,17 @@ public class Group {
     @JoinTable(name = "tbl_request_type_to_submit",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private Set<RequestType> requestTypesToSubmit;
+    private Set<ModuleType> requestTypesToSubmit;
 
     /**
      * which application can a group solve
      */
-    /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSolveDifferentRequests")
-    private Set<RequestType> requestTypesToSolve;*/
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
-    @JoinTable(name = "tbl_request_type_to_solve",
+    @JoinTable(name = "tbl_module_type_to_manage",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private Set<RequestType> requestTypesToSolve;
+    private Set<ModuleType> moduleTypesToManage;
 
     /**
      * which finance types can a group submit

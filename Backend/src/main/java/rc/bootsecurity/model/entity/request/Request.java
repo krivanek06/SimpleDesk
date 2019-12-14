@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.document.Document;
 
@@ -52,7 +53,7 @@ public abstract class Request {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "type_id")
-    private RequestType requestType;
+    private ModuleType moduleType;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude

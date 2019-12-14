@@ -6,8 +6,7 @@ import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestPosition;
 import rc.bootsecurity.model.entity.request.RequestPriority;
-import rc.bootsecurity.model.entity.request.RequestType;
-import rc.bootsecurity.model.entity.ticket.Ticket;
+import rc.bootsecurity.model.entity.ModuleType;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +20,13 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findAllByCreatorAndRequestPosition(User user, RequestPosition requestPosition);
     List<Request> findAllByCreatorAndRequestPositionAndRequestPriority(User user, RequestPosition requestPosition, RequestPriority requestPriority);
     List<Request> findAllByCreatorAndRequestPriority(User user, RequestPriority requestPriority);
-    List<Request> findAllByCreatorAndRequestType(User user, RequestType requestType);
-    List<Request> findAllByRequestType(RequestType requestType);
+    List<Request> findAllByCreatorAndModuleType(User user, ModuleType moduleType);
+    List<Request> findAllByModuleType(ModuleType moduleType);
     // displayed on Dashboard
     List<Request> findAllByCreatorAndClosedIsNull(User user); // open requests by user
     List<Request> findAllByAssignedAndClosedIsNull(User user); // assigned on user
     List<Request> findAllByUserWhoWatchThisRequestContainsOrderByIdAsc(User user); // watched by user, may be even closed request
-    Optional<List<Request>> findAllByRequestTypeAndClosedIsNull(RequestType requestType);
+    Optional<List<Request>> findAllByModuleTypeAndClosedIsNull(ModuleType moduleType);
 
     Optional<List<Request>> findAllByNameStartingWithOrderByIdAsc(String subject);
 

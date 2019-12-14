@@ -3,18 +3,16 @@ package rc.bootsecurity.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.GroupDTO;
-import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.FinanceType;
-import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.service.request.RequestConverterService;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,7 +27,7 @@ public class GroupService {
     @Autowired
     private TicketPrivilegesRepository ticketPrivilegesRepository;
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -72,10 +70,10 @@ public class GroupService {
                 .map(user -> this.userService.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : null);
         groupDTO.setFinanceTypes(group.getFinanceTypes() != null ? group.getFinanceTypes().stream()
                 .map(FinanceType::getName).collect(Collectors.toList()) : null);
-        groupDTO.setRequestTypesToSolve(group.getRequestTypesToSolve() != null ? group.getRequestTypesToSolve().stream()
-                .map(RequestType::getName).collect(Collectors.toList()) : null);
+        groupDTO.setModuleTypeToManage(group.getModuleTypesToManage() != null ? group.getModuleTypesToManage().stream()
+                .map(ModuleType::getName).collect(Collectors.toList()) : null);
         groupDTO.setRequestTypesToSubmit(group.getRequestTypesToSubmit() != null ? group.getRequestTypesToSubmit().stream()
-                .map(RequestType::getName).collect(Collectors.toList()) : null);
+                .map(ModuleType::getName).collect(Collectors.toList()) : null);
         groupDTO.setTicketPrivilegesList(group.getTicketPrivilegesList() != null ? group.getTicketPrivilegesList().stream()
                 .map(ticketPrivileges -> this.requestConverterService.convertTicketPrivilegeToDTO(ticketPrivileges)).collect(Collectors.toList()) : null);
 

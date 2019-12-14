@@ -12,14 +12,14 @@ import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.enums.REQUEST_PRIORITY;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.report.*;
 import rc.bootsecurity.repository.request.RequestPositionRepository;
 import rc.bootsecurity.repository.request.RequestPriorityRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
@@ -46,7 +46,7 @@ public class InserterRequestsSimulation {
     private GroupRepository groupRepository;
 
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
 
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
@@ -144,25 +144,25 @@ public class InserterRequestsSimulation {
 
     private void insertRequestPrivileges(){
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.TICKET.name(), REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name()))));
+        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.REPORT.name()))));
+        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.REPORT.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name(), REQUEST_TYPE.FINANCE.name()))));
+        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_1,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.TICKET.name(),REQUEST_TYPE.REPORT.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_2,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.FINANCE.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_3,
-                new ArrayList<>(Arrays.asList(REQUEST_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.FINANCE.name()))));
         // group 8 -> no request type to solver -> should throw error
     }
 

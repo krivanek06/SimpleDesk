@@ -2,20 +2,17 @@ package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.exception.PrivilegeException;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
-import rc.bootsecurity.model.dto.request.RequestCommentDTO;
 import rc.bootsecurity.model.entity.Group;
-import rc.bootsecurity.model.entity.request.RequestComment;
-import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.finance.FinanceTypeRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 
@@ -25,7 +22,7 @@ import java.util.stream.Collectors;
 @Service
 public class RequestPrivilegeService {
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     private GroupRepository groupRepository;
     @Autowired
@@ -48,13 +45,13 @@ public class RequestPrivilegeService {
     }
 
     public Boolean checkIfGroupCanSolveRequestType(Group group, String requestType){
-        Optional<List<RequestType>> requestTypesToSolve = this.requestTypeRepository.findAllByGroupsToSolveDifferentRequests(group);
+        Optional<List<ModuleType>> requestTypesToSolve = this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group);
         return requestTypesToSolve.isPresent() && requestTypesToSolve.get().stream()
                 .anyMatch(requestTypes -> requestTypes.getName().equalsIgnoreCase(requestType));
     }
 
     public Boolean checkIfGroupCanSubmitRequestType(Group group, String requestType){
-        Optional<List<RequestType>> requestTypesToSubmit = this.requestTypeRepository.findAllByGroupsToSubmitDifferentRequests(group);
+        Optional<List<ModuleType>> requestTypesToSubmit = this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(group);
         return requestTypesToSubmit.isPresent() &&  requestTypesToSubmit.get().stream()
                 .anyMatch(requestTypes -> requestTypes.getName().equalsIgnoreCase(requestType));
     }
@@ -62,15 +59,15 @@ public class RequestPrivilegeService {
 
     public void modifyRequestTypeForGroupToSubmit(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setRequestTypesToSubmit(new HashSet<>(this.requestTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSubmit())));
+        group.setRequestTypesToSubmit(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSubmit())));
 
         this.groupRepository.save(group);
     }
 
 
-    public void modifyRequestTypeForGroupToSolve(GroupDTO groupDTO){
+    public void modifyModuleTypeForGroupToManage(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setRequestTypesToSolve(new HashSet<>(this.requestTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSolve())));
+        group.setModuleTypesToManage(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getModuleTypeToManage())));
 
         this.groupRepository.save(group);
     }
@@ -83,7 +80,7 @@ public class RequestPrivilegeService {
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
 
         // if no Request Type Ticket has been set for the group, throw error
-        if(!checkIfGroupCanSolveRequestType(group , REQUEST_TYPE.TICKET.toString()))
+        if(!checkIfGroupCanSolveRequestType(group , MODULE_TYPE.TICKET.toString()))
             throw new PrivilegeException("Request type 'Ticket' not set for solver, can't give him rights for subtickets. ");
 
         // current Ticket privileges for Group
@@ -113,7 +110,7 @@ public class RequestPrivilegeService {
     public void modifyFinanceTypeToSubmit(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
 
-        if(!checkIfGroupCanSubmitRequestType(group , REQUEST_TYPE.FINANCE.toString())){
+        if(!checkIfGroupCanSubmitRequestType(group , MODULE_TYPE.FINANCE.toString())){
             throw new PrivilegeException("Request type 'Finance' not set for user, can't give him rights for Finance types.");
         }
         group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByNameIn(groupDTO.getFinanceTypes())));

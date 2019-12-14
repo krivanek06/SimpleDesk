@@ -9,17 +9,16 @@ import rc.bootsecurity.model.dto.request.ReportDTO;
 import rc.bootsecurity.model.dto.request.RequestCommentDTO;
 import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.Group;
+import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.Finance;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.report.*;
 import rc.bootsecurity.model.entity.request.*;
 import rc.bootsecurity.model.entity.ticket.*;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -91,13 +90,13 @@ public class Creator {
         return requestPriority;
     }
     // , Set<Group> groupToSolve, Set<Group> groupToSubmit
-    public static RequestType createRequestType(String name){
-        RequestType requestType = new RequestType();
-        requestType.setName(name);
+    public static ModuleType createRequestType(String name){
+        ModuleType moduleType = new ModuleType();
+        moduleType.setName(name);
        // requestType.setGroupsToSolveDifferentRequests(groupToSolve);
        // requestType.setGroupsToSubmitDifferentRequests(groupToSubmit);
 
-        return requestType;
+        return moduleType;
     }
     public static RequestComment createRequestComment(Request request, User user, String comment) {
         RequestComment requestComment = new RequestComment();
@@ -201,7 +200,7 @@ public class Creator {
         FinanceDTO financeDTO = new FinanceDTO();
         financeDTO.setCreator(creator);
         financeDTO.setRequestPriority(requestPriority);
-        financeDTO.setRequestType(REQUEST_TYPE.FINANCE.name());
+        financeDTO.setRequestType(MODULE_TYPE.FINANCE.name());
         financeDTO.setName("FINANCE_NAME");
         financeDTO.setFinanceType(financeType);
 
@@ -213,7 +212,7 @@ public class Creator {
         ReportDTO report = new ReportDTO();
         report.setCreator(creator);
         report.setRequestPriority(requestPriority);
-        report.setRequestType(REQUEST_TYPE.REPORT.name());
+        report.setRequestType(MODULE_TYPE.REPORT.name());
         report.setName("REPORT_NAME");
 
         report.setOwner("OWNER");
@@ -237,7 +236,7 @@ public class Creator {
         ticketDTO.setRequestPriority(requestPriority);
         ticketDTO.setCreator(user);
         ticketDTO.setTicketSubtypeName(ticketSubtypeName);
-        ticketDTO.setRequestType(REQUEST_TYPE.TICKET.name());
+        ticketDTO.setRequestType(MODULE_TYPE.TICKET.name());
         return ticketDTO;
     }
 
@@ -292,7 +291,7 @@ public class Creator {
     public static GroupDTO createGroupDTOWithRequestPrivilegesToSolve(String name, List<String> requestNames){
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName(name);
-        groupDTO.setRequestTypesToSolve(requestNames);
+        groupDTO.setModuleTypeToManage(requestNames);
 
         return groupDTO;
     }

@@ -6,6 +6,7 @@ import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
 import rc.bootsecurity.repository.GroupRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.repository.ticket.TicketRepository;
@@ -23,7 +24,7 @@ public class RequestService {
     @Autowired
     protected GroupRepository groupRepository;
     @Autowired
-    protected RequestTypeRepository requestTypeRepository;
+    protected ModuleTypeRepository moduleTypeRepository;
     @Autowired
     protected TicketTypeRepository ticketTypeRepository;
     @Autowired

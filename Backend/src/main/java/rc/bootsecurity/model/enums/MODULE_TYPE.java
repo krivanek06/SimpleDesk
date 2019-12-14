@@ -1,6 +1,6 @@
 package rc.bootsecurity.model.enums;
 
-public enum REQUEST_TYPE {
+public enum MODULE_TYPE {
     TICKET("Ticket"),
     REPORT("Report"),
     FINANCE("Finance");
@@ -8,7 +8,7 @@ public enum REQUEST_TYPE {
     private final String text;
 
 
-    REQUEST_TYPE(final String text) {
+    MODULE_TYPE(final String text) {
         this.text = text;
     }
 

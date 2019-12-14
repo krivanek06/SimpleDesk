@@ -28,8 +28,8 @@ public class UserPrivilegeDTO {
     private List<String> submitFinanceRequests;
 
     // JWT
-    // ticket, reports
-    private List<String> solveRequests;
+    // ticket, reports , privileges, documents
+    private List<String> manageModules;
     // software -> sw1, sw2 ... hardware -> hw1, hw2
     private Map<String, List<String>> solveTickets;
 

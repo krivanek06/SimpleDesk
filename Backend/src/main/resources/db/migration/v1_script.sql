@@ -197,8 +197,8 @@ create table tbl_ticket_privileges(
 );
 
 
-DROP TABLE IF EXISTS tbl_request_types CASCADE;
-create table tbl_request_types(
+DROP TABLE IF EXISTS tbl_module_type CASCADE;
+create table tbl_module_type(
   id serial primary key,
   name varchar(255) NOT NULL unique,
   active boolean default True
@@ -242,8 +242,9 @@ create table tbl_request_watched_by_user(
   request_id Integer NOT NULL
 );
 
-DROP TABLE IF EXISTS tbl_request_type_to_solve CASCADE;
-create table tbl_request_type_to_solve(
+DROP TABLE IF EXISTS tbl_module_type_to_manage CASCADE;
+create table tbl_module_type_to_manage
+(
    id serial primary key,
    group_id int ,
    request_type_id int
@@ -333,7 +334,7 @@ ALTER TABLE tbl_requests ADD FOREIGN KEY (assigned_uid) REFERENCES tbl_users(id)
 ALTER TABLE tbl_requests ADD FOREIGN KEY (solved_uid) REFERENCES tbl_users(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (closed_uid) REFERENCES tbl_users(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (position_id) REFERENCES tbl_request_positions(id);
-ALTER TABLE tbl_requests ADD FOREIGN KEY (type_id) REFERENCES tbl_request_types(id);
+ALTER TABLE tbl_requests ADD FOREIGN KEY (type_id) REFERENCES tbl_module_type(id);
 
 ALTER TABLE tbl_request_watched_by_user ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_request_watched_by_user ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
@@ -359,11 +360,11 @@ ALTER TABLE tbl_hardwares ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket
 
 ALTER TABLE tbl_groups add  FOREIGN KEY (manager_id) REFERENCES tbl_users(id);
 
-ALTER TABLE tbl_request_type_to_solve ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
-ALTER TABLE tbl_request_type_to_solve ADD FOREIGN KEY (request_type_id) REFERENCES tbl_request_types(id);
+ALTER TABLE tbl_module_type_to_manage ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
+ALTER TABLE tbl_module_type_to_manage ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
 
 ALTER TABLE tbl_request_type_to_submit ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
-ALTER TABLE tbl_request_type_to_submit ADD FOREIGN KEY (request_type_id) REFERENCES tbl_request_types(id);
+ALTER TABLE tbl_request_type_to_submit ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
 
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (request_comment_id) REFERENCES tbl_request_comments(id);
@@ -405,18 +406,18 @@ CREATE FUNCTION get_all_privileges_for_user_varchar(user_id integer)
     group by tbl_ticket_types.name) as tbl) ,
 
     'requestTypeToSubmit' ,
-    (select jsonb_agg(distinct tbl_request_types.name) from (
+    (select jsonb_agg(distinct tbl_module_type.name) from (
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
     inner join tbl_request_type_to_submit on tbl_request_type_to_submit.group_id = tug.group_id
-    left join tbl_request_types on tbl_request_types.id = tbl_request_type_to_submit.request_type_id),
+    left join tbl_module_type on tbl_module_type.id = tbl_request_type_to_submit.request_type_id),
 
-    'requestTypeToSolve',
-    (select jsonb_agg(distinct tbl_request_types.name) from (
+    'moduleTypesToManage',
+    (select jsonb_agg(distinct tbl_module_type.name) from (
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
-    inner join tbl_request_type_to_solve on tbl_request_type_to_solve.group_id = tug.group_id
-    left join tbl_request_types on tbl_request_types.id = tbl_request_type_to_solve.request_type_id),
+    inner join tbl_module_type_to_manage on tbl_module_type_to_manage.group_id = tug.group_id
+    left join tbl_module_type on tbl_module_type.id = tbl_module_type_to_manage.request_type_id),
 
     'FinanceTypeToSubmit',
     (select jsonb_agg(distinct tbl_finance_types.name) from (
@@ -439,7 +440,7 @@ select json_agg( json_build_object(
     'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as my_open_requests
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     left join tbl_users assigned on assigned.id = r.assigned_uid
     where r.creator_uid = input_user_id and closed_uid is null
     order by id asc)
@@ -451,7 +452,7 @@ select json_agg( json_build_object(
     'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned, 'creation' , creation) ) as assigned_on_me
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     left join tbl_users assigned on assigned.id = r.assigned_uid
     where r.assigned_uid = input_user_id and closed_uid is null
     order by id asc)
@@ -463,7 +464,7 @@ select json_agg( json_build_object(
     'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as watched_requests
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     left join tbl_users assigned on assigned.id = r.assigned_uid
     left join tbl_request_watched_by_user rw on rw.request_id = r.id
     where rw.user_id = input_user_id
@@ -477,7 +478,7 @@ select json_agg( json_build_object(
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
     where r.creator_uid in (select distinct user_id from  tbl_user_groups where user_id != input_user_id and group_id in
@@ -494,7 +495,7 @@ select json_agg( json_build_object(
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
     where r.assigned_uid in (select distinct user_id from  tbl_user_groups where user_id != input_user_id and group_id in
@@ -512,7 +513,7 @@ as t),
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
     from tbl_requests r
-    inner join tbl_request_types rt on rt.id = r.type_id
+    inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
     left join tbl_tickets on  tbl_tickets.request_id = r.id

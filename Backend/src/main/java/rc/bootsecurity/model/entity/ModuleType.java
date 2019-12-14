@@ -1,9 +1,8 @@
-package rc.bootsecurity.model.entity.request;
+package rc.bootsecurity.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.*;
-import rc.bootsecurity.model.entity.Group;
+import rc.bootsecurity.model.entity.request.Request;
 
 import javax.persistence.*;
 import javax.persistence.Entity;
@@ -12,12 +11,12 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * tickets, reports, ets.
+ * tickets, reports, finance, module privilege, document sharing ets.
  */
 @Entity
-@Table(name = "tbl_request_types")
+@Table(name = "tbl_module_type")
 @Data
-public class RequestType {
+public class ModuleType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -29,7 +28,7 @@ public class RequestType {
     private Boolean active;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestType")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "moduleType")
     private List<Request> requests;
 
     /**
@@ -43,8 +42,8 @@ public class RequestType {
      * which group can what request solve
      */
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSolve")
-    private Set<Group> groupsToSolveDifferentRequests;
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "moduleTypesToManage")
+    private Set<Group> groupsToManageDifferentModules;
 
 
 

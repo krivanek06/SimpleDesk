@@ -4,25 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestPosition;
 import rc.bootsecurity.model.entity.request.RequestPriority;
-import rc.bootsecurity.model.entity.request.RequestType;
+import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.enums.REQUEST_POSITION;
 import rc.bootsecurity.model.enums.REQUEST_PRIORITY;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.report.*;
 import rc.bootsecurity.repository.request.RequestPositionRepository;
 import rc.bootsecurity.repository.request.RequestPriorityRepository;
-import rc.bootsecurity.repository.request.RequestTypeRepository;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.test.creator.Creator;
-import rc.bootsecurity.test.creator.NAMES;
 
 import java.util.*;
 
@@ -36,7 +34,7 @@ public class Inserter {
     private GroupRepository groupRepository;
 
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
 
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
@@ -134,10 +132,10 @@ public class Inserter {
         RequestPriority requestPriority3 = Creator.createRequestPriority(REQUEST_PRIORITY.LARGE.name());
         this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2, requestPriority3));
 
-        RequestType requestType1 = Creator.createRequestType(REQUEST_TYPE.TICKET.name());
-        RequestType requestType2 = Creator.createRequestType(REQUEST_TYPE.REPORT.name());
-        RequestType requestType3 = Creator.createRequestType(REQUEST_TYPE.FINANCE.name());
-        this.requestTypeRepository.saveAll(List.of(requestType1,requestType2, requestType3));
+        ModuleType moduleType1 = Creator.createRequestType(MODULE_TYPE.TICKET.name());
+        ModuleType moduleType2 = Creator.createRequestType(MODULE_TYPE.REPORT.name());
+        ModuleType moduleType3 = Creator.createRequestType(MODULE_TYPE.FINANCE.name());
+        this.moduleTypeRepository.saveAll(List.of(moduleType1, moduleType2, moduleType3));
     }
 
 
@@ -150,17 +148,17 @@ public class Inserter {
         Group group4 = this.groupRepository.findByGroupName("TESTGROUP4");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        RequestType requestType1 = this.requestTypeRepository.findByName(REQUEST_TYPE.TICKET.name()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
-        RequestType requestType2 = this.requestTypeRepository.findByName(REQUEST_TYPE.REPORT.name()); // Set.of(group1), Set.of(group1,group2,group3)
-        RequestType requestType3 = this.requestTypeRepository.findByName(REQUEST_TYPE.FINANCE.name()); // Set.of(group1), Set.of(group2,group3)
+        ModuleType moduleType1 = this.moduleTypeRepository.findByName(MODULE_TYPE.TICKET.name()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
+        ModuleType moduleType2 = this.moduleTypeRepository.findByName(MODULE_TYPE.REPORT.name()); // Set.of(group1), Set.of(group1,group2,group3)
+        ModuleType moduleType3 = this.moduleTypeRepository.findByName(MODULE_TYPE.FINANCE.name()); // Set.of(group1), Set.of(group2,group3)
 
 
-        group1.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1, requestType2)));
-        group1.setRequestTypesToSolve(new HashSet<>(Arrays.asList(requestType1, requestType2,requestType3)));
-        group2.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1, requestType2,requestType3)));
-        group3.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1, requestType2,requestType3)));
-        group4.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(requestType1)));
-        group5.setRequestTypesToSolve(new HashSet<>(Arrays.asList(requestType1)));
+        group1.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2)));
+        group1.setModuleTypesToManage(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group2.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group3.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group4.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1)));
+        group5.setModuleTypesToManage(new HashSet<>(Arrays.asList(moduleType1)));
 
         this.groupRepository.saveAll(List.of(group1, group2,group3, group4, group5));
     }

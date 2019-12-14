@@ -28,7 +28,7 @@ public class GroupDTO {
 
     private List<String> requestTypesToSubmit;
 
-    private List<String> requestTypesToSolve;
+    private List<String> moduleTypeToManage;
 
     private List<String> financeTypes;
 }

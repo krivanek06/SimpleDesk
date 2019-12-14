@@ -4,35 +4,28 @@ package rc.bootsecurity.service.request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.exception.RequestNotFoundException;
-import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.dto.request.FinanceDTO;
 import rc.bootsecurity.model.dto.request.ReportDTO;
-import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.Finance;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
-import rc.bootsecurity.model.entity.request.RequestComment;
-import rc.bootsecurity.model.entity.request.RequestPosition;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.enums.REQUEST_POSITION;
-import rc.bootsecurity.model.enums.REQUEST_TYPE;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
+import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.finance.FinanceTypeRepository;
 import rc.bootsecurity.repository.report.ReportRefreshRepository;
 import rc.bootsecurity.repository.report.ReportTypeRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
-import javax.annotation.PostConstruct;
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * service used for creating and modifying request
@@ -62,7 +55,7 @@ public class RequestManagementService{
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;
     @Autowired
-    private RequestTypeRepository requestTypeRepository;
+    private ModuleTypeRepository moduleTypeRepository;
 
 
 
@@ -78,14 +71,14 @@ public class RequestManagementService{
         request.setCreator(this.userRepository.findByUsername(creator).get());
         request.setName(name);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.CREATED.name()));
-        request.setRequestType(this.requestTypeRepository.findByName(requestType));
+        request.setModuleType(this.moduleTypeRepository.findByName(requestType));
         request.setRequestPriority(this.requestPriorityRepository.findByName(priority));
         request.setAllowCommenting(true);
     }
 
     public Ticket createTicket(TicketDTO ticketDTO){
         Ticket ticket = new Ticket();
-        this.setAttributesForRequest(ticket,REQUEST_TYPE.TICKET.name(),ticketDTO.getName(), ticketDTO.getCreator(), ticketDTO.getRequestPriority());
+        this.setAttributesForRequest(ticket, MODULE_TYPE.TICKET.name(),ticketDTO.getName(), ticketDTO.getCreator(), ticketDTO.getRequestPriority());
 
         ticket.setProblem(ticketDTO.getProblem());
         ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
@@ -96,7 +89,7 @@ public class RequestManagementService{
 
     public Report createReport(ReportDTO reportDTO){
         Report report = new Report();
-        this.setAttributesForRequest(report,REQUEST_TYPE.REPORT.name(),reportDTO.getName(), reportDTO.getCreator(), reportDTO.getRequestPriority());
+        this.setAttributesForRequest(report, MODULE_TYPE.REPORT.name(),reportDTO.getName(), reportDTO.getCreator(), reportDTO.getRequestPriority());
 
         report.setReportType(this.reportTypeRepository.findByName(reportDTO.getReportType()));
         report.setReportRefresh(this.reportRefreshRepository.findByName(reportDTO.getReportRefresh()));
@@ -112,7 +105,7 @@ public class RequestManagementService{
 
     public Finance createFinance(FinanceDTO financeDTO){
         Finance finance = new Finance();
-        this.setAttributesForRequest(finance,REQUEST_TYPE.FINANCE.name(),financeDTO.getName(), financeDTO.getCreator(), financeDTO.getRequestPriority());
+        this.setAttributesForRequest(finance, MODULE_TYPE.FINANCE.name(),financeDTO.getName(), financeDTO.getCreator(), financeDTO.getRequestPriority());
 
         finance.setFinanceType(this.financeTypeRepository.findByName(financeDTO.getFinanceType()));
 
