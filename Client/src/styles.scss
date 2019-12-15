@@ -1,4 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
+@import '~@angular/material/theming';
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+body {
+font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif !important; 
+/*color: #606060;
+font-weight: lighter;*/
+
+}
+
+
+mat-icon{
+font-family: 'Material Icons' !important;
+}
+
+
+/*
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+*/

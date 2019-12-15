@@ -4,32 +4,85 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule, routingComponents } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ParticlesModule } from 'angular-particle';
-import { LoginFormComponent } from './modules/login/login-form/login-form.component';
 import { AlertModule } from 'ngx-bootstrap';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { DashboardBackgroundComponent } from './modules/dashboard/dashboard-background/dashboard-background.component'; // bootstrap
-import { AuthenticationService } from './core/services/authentication/Authentication.service';
-import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
-import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
-import { LogoutComponent } from './modules/login/logout/logout.component';
-import { NavigationBackgroundComponent } from './modules/navigation/navigation-background/navigation-background.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
-// material
-import { MatInputModule, MatButtonModule, MatSelectModule, MatIconModule } from '@angular/material';
+import { MaterialModule } from './material.module';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 import { IconSpriteModule } from 'ng-svg-icon-sprite';
+
+// custom services
+import { AuthenticationService } from './core/services/authentication/Authentication.service';
+
+// custom interceptors
+import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
+import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
+
+// custom components
+import { NavigationComponent } from './shared/components/navigation/navigation.component';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { ChartComponent } from './shared/components/chart/chart.component';
+import { UnauthorizedPopUpComponent } from './shared/components/popUp/unauthorized-pop-up/unauthorized-pop-up.component';
+import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { MyOpenRequestsComponent } from './modules/dashboard/my-open-requests/my-open-requests.component';
+import { TeamOpenRequestsComponent } from './modules/dashboard/team-open-requests/team-open-requests.component';
+import { TeamAssignedRequestsComponent } from './modules/dashboard/team-assigned-requests/team-assigned-requests.component';
+import { OtherOpenRequestsComponent } from './modules/dashboard/other-open-requests/other-open-requests.component';
+import { UserProfileComponent } from './modules/user-profile/user-profile.component';
+import { UserDetailsComponent } from './modules/user-profile/user-details/user-details.component';
+import { UserPrivilegesComponent } from './modules/user-profile/user-privileges/user-privileges.component';
+import { UserGroupsComponent } from './modules/user-profile/user-groups/user-groups.component';
+import { GroupDetailsComponent } from './modules/user-profile/group-details/group-details.component';
+import { GroupPrivilegesComponent } from './modules/user-profile/group-privileges/group-privileges.component';
+import { RequestTicketFormComponent } from './modules/request-forms/request-ticket-form/request-ticket-form.component';
+import { RequestReportFormComponent } from './modules/request-forms/request-report-form/request-report-form.component';
+import { RequestFinanceFormComponent } from './modules/request-forms/request-finance-form/request-finance-form.component';
+import { RequestClosedComponent } from './modules/request-closed/request-closed.component';
+import { CommentComponent } from './modules/request-details/comment/comment.component';
+import { SideInformationsComponent } from './modules/request-details/side-informations/side-informations.component';
+import { RequestDetailsComponent } from './modules/request-details/request-details.component';
+import { AppManagementComponent } from './modules/app-management/app-management.component';
+import { RegisterUserComponent } from './modules/app-management/register-user/register-user.component';
+import { RegisterGroupComponent } from './modules/app-management/register-group/register-group.component';
+import { RequestFormsComponent } from './modules/request-forms/request-forms.component';
+import { LoginComponent } from './modules/login/login.component';
+import { LoginFormComponent } from './modules/login/login-form/login-form.component';
+import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
     LoginFormComponent,
-    DashboardBackgroundComponent,
-    LogoutComponent,
-    NavigationBackgroundComponent
+    LoginBackgroundComponent,
+    NavigationComponent,
+    HeaderComponent,
+    ChartComponent,
+    UnauthorizedPopUpComponent,
+    DashboardComponent,
+    MyOpenRequestsComponent,
+    TeamOpenRequestsComponent,
+    TeamAssignedRequestsComponent,
+    OtherOpenRequestsComponent,
+    UserProfileComponent,
+    UserDetailsComponent,
+    UserPrivilegesComponent,
+    UserGroupsComponent,
+    GroupDetailsComponent,
+    GroupPrivilegesComponent,
+    RequestTicketFormComponent,
+    RequestReportFormComponent,
+    RequestFinanceFormComponent,
+    RequestClosedComponent,
+    CommentComponent,
+    SideInformationsComponent,
+    RequestDetailsComponent,
+    AppManagementComponent,
+    RegisterUserComponent,
+    RegisterGroupComponent,
+    RequestFormsComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -45,10 +98,7 @@ import { IconSpriteModule } from 'ng-svg-icon-sprite';
     BrowserModule,
     BrowserAnimationsModule,
     AngularSvgIconModule,
-    MatInputModule,
-    MatButtonModule,
-    MatSelectModule,
-    MatIconModule
+    MaterialModule
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},
