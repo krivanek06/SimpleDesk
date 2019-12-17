@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, HostListener, ViewChildren, QueryList } from '@angular/core';
 
 @Component({
   selector: 'app-navigation',
@@ -7,14 +7,13 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener } from '@angular
 })
 export class NavigationComponent implements OnInit {
 
-  @ViewChild("navigation", {read: ElementRef , static: false}) navigation: ElementRef;
   
   constructor() { }
 
-  ngOnInit() {
+  ngOnInit() { 
   }
 
-  @HostListener('mouseenter')
+  /*@HostListener('mouseenter')
   onMouseEnter() {
     console.log(this.navigation.nativeElement)
   }
@@ -22,6 +21,5 @@ export class NavigationComponent implements OnInit {
   @HostListener('mouseleave')
   onMouseLeave() {
 
-  }
-
+  }*/
 }

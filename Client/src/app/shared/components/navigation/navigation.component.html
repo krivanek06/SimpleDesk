@@ -1,34 +1,55 @@
 
 
-<!-- navigation background-->
-<svg-icon src="./../../../../assets/svg/navigation_background.svg" [stretch]="true" 
-  [svgStyle]="{'width':100, 'height': '100%'}"
-  #navigation >
+<div id="navigationContainer">
+    <!-- navigation background -->
+    <img src="./../../../../assets/images_design/navigation_background_2.png" 
+        alt="dashboard navigation icon"
+        id="navigationBackground" >
 
-</svg-icon>
 
-<!-- Dashboard -->
-<svg-icon src="./../../../../assets/svg/dashboard-24.svg"  [applyCss]="true" [svgStyle]="{'width':65, 'height':65}"
-class = 'icon' style="top: 30px;">
-</svg-icon>
+        <!-- dashboard -->
+        <div class='navigationIconContainer'>
+            <img src="./../../../../assets/images_design/dashboard_2.png" 
+                alt="dashboard navigation icon" 
+                id='dashboardIcon'
+                class='navigationIcon'
+                appNavigationIconHover>
+        </div>
 
-<!-- new request -->
-<svg-icon src="./../../../../assets/svg/papers.svg"  [applyCss]="true" [svgStyle]="{'width':65, 'height':65}"
-class = 'icon' style="top: 135px;">
-</svg-icon>
+        <!-- request new -->
+        <div class='navigationIconContainer'>
+            <img src="./../../../../assets/images_design/request_new_icon.png" 
+                alt="dashboard navigation icon" 
+                id='requestNewIcon'
+                class='navigationIcon'
+                appNavigationIconHover>
+        </div>
 
-<!-- open request - mine / all -->
-<svg-icon src="./../../../../assets/svg/folder.svg"  [applyCss]="true" [svgStyle]="{'width':65, 'height':65}"
-class = 'icon' style="top: 240px;">
-</svg-icon>
+        <!-- request closed -->
+        <div class='navigationIconContainer'>
+            <img src="./../../../../assets/images_design/request_closed_icon.png" 
+                alt="dashboard navigation icon" 
+                id='requestClosedIcon'
+                class='navigationIcon'
+                appNavigationIconHover>
+        </div>
 
-<!-- account management -->
-<svg-icon src="./../../../../assets/svg/account.svg"  [applyCss]="true" [svgStyle]="{'width':65, 'height':65}"
-class = 'icon' style="top: 345px;">
-</svg-icon>
+        <!-- user profile -->
+        <div class='navigationIconContainer'>
+            <img src="./../../../../assets/images_design/user_profile_icon.png" 
+                alt="dashboard navigation icon" 
+                id='userProfileIcon'
+                class='navigationIcon'
+                appNavigationIconHover>
+        </div>
 
-<!-- users / groups management -->
-<svg-icon src="./../../../../assets/svg/people.svg"  [applyCss]="true" [svgStyle]="{'width':65, 'height':65}"
-class = 'icon' style="top: 450px;">
-</svg-icon>
+        <!-- app management -->
+        <div class='navigationIconContainer'>
+            <img src="./../../../../assets/images_design/team_icon.png" 
+                alt="dashboard navigation icon" 
+                id='appManagementIcon'
+                class='navigationIcon'
+                appNavigationIconHover>
+        </div>
 
+</div>

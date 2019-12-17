@@ -1,22 +1,65 @@
-.icon {
+
+
+#navigationBackground{
     position: absolute;
-    left: 10px;
-    height: 65px;
-    width: 65px;
+    top: 0px;
+    left: 0px;
+    z-index: -1;
+    width: 85px;
+    height: 100%;
 }
 
-
-.icon :hover{
+.navigationIconContainer{
+    margin-left: 6px;
+    margin-bottom: 2px;
     cursor: pointer;
-   background-color: red;
+    width: 70px;
+    padding: 15px 8px ;
+    border-radius: 20px;
+    transition: all .5s;
+    
 }
 
-
-.navigation_background{
-
+.navigationContainer{
+    display: inline-block;
+    vertical-align: middle;
+    height:auto;
 }
 
-.navigation_background:hover {
+/* navigaiton icons */ 
+.navigationIcon {
+    &:hover {
+        transition: All 0.45s ease-in-out;
+        transform: translate(-8px, -8px);
+    }
+}
 
-    background-color: blue;
+#dashboardIcon{
+    width: 45px;
+    height: 45px;
+    margin-left:5px;
+}
+
+#requestNewIcon{
+    width: 45px;
+    height: 45px;
+    margin-left: 5px;
+}
+
+#requestClosedIcon{
+    width: 45px;
+    height: 45px;
+    margin-left: 5px;
+}
+
+#userProfileIcon{
+    width: 45px;
+    height: 45px;
+    margin-left: 5px;
+}
+
+#appManagementIcon{
+    width: 45px;
+    height: 45px;
+    margin-left: 5px;
 }

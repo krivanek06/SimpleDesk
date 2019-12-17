@@ -9,7 +9,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
-import { AngularSvgIconModule } from 'angular-svg-icon';
 import { IconSpriteModule } from 'ng-svg-icon-sprite';
 
 // custom services
@@ -49,6 +48,7 @@ import { RequestFormsComponent } from './modules/request-forms/request-forms.com
 import { LoginComponent } from './modules/login/login.component';
 import { LoginFormComponent } from './modules/login/login-form/login-form.component';
 import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
+import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
 
 @NgModule({
   declarations: [
@@ -82,7 +82,8 @@ import { LoginBackgroundComponent } from './modules/login/login-background/login
     RegisterUserComponent,
     RegisterGroupComponent,
     RequestFormsComponent,
-    LoginComponent
+    LoginComponent,
+    NavigationIconHoverDirective
   ],
   imports: [
     BrowserModule,
@@ -97,7 +98,6 @@ import { LoginBackgroundComponent } from './modules/login/login-background/login
     BrowserAnimationsModule,
     BrowserModule,
     BrowserAnimationsModule,
-    AngularSvgIconModule,
     MaterialModule
   ],
   providers: [
