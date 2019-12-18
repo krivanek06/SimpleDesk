@@ -1,4 +1,5 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, ViewChildren, QueryList } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-navigation',
@@ -8,9 +9,13 @@ import { Component, OnInit, ElementRef, ViewChild, HostListener, ViewChildren, Q
 export class NavigationComponent implements OnInit {
 
   
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit() { 
+  }
+
+  public changeBodyComponent(path: string){
+    this.router.navigate(['./' + path]);
   }
 
   /*@HostListener('mouseenter')

@@ -11,8 +11,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { IconSpriteModule } from 'ng-svg-icon-sprite';
 
-// custom services
-import { AuthenticationService } from './core/services/authentication/Authentication.service';
 
 // custom interceptors
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
@@ -49,6 +47,7 @@ import { LoginComponent } from './modules/login/login.component';
 import { LoginFormComponent } from './modules/login/login-form/login-form.component';
 import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
 import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
+import { MeAssignedRequestsComponent } from './modules/dashboard/me-assigned-requests/me-assigned-requests.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +82,8 @@ import { NavigationIconHoverDirective } from './shared/directives/navigation-ico
     RegisterGroupComponent,
     RequestFormsComponent,
     LoginComponent,
-    NavigationIconHoverDirective
+    NavigationIconHoverDirective,
+    MeAssignedRequestsComponent
   ],
   imports: [
     BrowserModule,
@@ -103,7 +103,6 @@ import { NavigationIconHoverDirective } from './shared/directives/navigation-ico
   providers: [
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
-    AuthenticationService
   ],
   bootstrap: [AppComponent]
 })

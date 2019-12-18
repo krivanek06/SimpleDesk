@@ -1,8 +1,27 @@
 
-#navigationHeaderContainer{
-    height: 50px;
+#headerBackground{
+    height: 40px;
     position: relative;
     background-color: #F3F3F4;
-    z-index: -5;
+    opacity: 0.7;
     margin-bottom: 20px;
+}
+
+#headerContainer{
+    float: right;
+    width: calc(100% - 85px);
+    height: 40px;
+    position: relative;
+}
+
+#headerTitle{
+    float: left;
+    margin-left: 10px;
+    margin-top:6px;
+    font-size: 20px;
+}
+#headerLogout{
+    float: right;
+    margin-right: 25px;
+    margin-top:2px;
 }

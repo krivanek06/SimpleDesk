@@ -1,6 +1,7 @@
 
+
 <div class='header'>
-        <div class='headerTitle'>Požiadavky pridelene členom môjho tímu</div>
+        <div class='headerTitle'>Požiadavky pridelené na mňa</div>
     </div>
     <div class="tableRequest mat-elevation-z3">
             <mat-table #table [dataSource]="dataSource">
@@ -35,8 +36,8 @@
                 <mat-cell *matCellDef="let element"> priorita </mat-cell>
                 </ng-container>
             
-                <ng-container matColumnDef="assigned">
-                <mat-header-cell *matHeaderCellDef> Pridelené </mat-header-cell>
+                <ng-container matColumnDef="userAction">
+                <mat-header-cell *matHeaderCellDef> Zahodit </mat-header-cell>
                 <mat-cell *matCellDef="let element"> Zahodit </mat-cell>
             </ng-container>
         

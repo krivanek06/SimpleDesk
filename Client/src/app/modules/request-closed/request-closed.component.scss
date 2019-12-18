@@ -1,0 +1,56 @@
+
+#contentContainer{
+    height: 100%;
+    width: calc(100% - 85px);
+    padding: 5px;
+    float: right;
+}
+
+
+/* table design */
+.tableRequest {
+    display: flex;
+    flex-direction: column;
+    width: 95%;
+    margin: auto;
+    margin-bottom: 20px;
+  }
+  
+  .mat-table {
+    overflow: auto;
+  }
+
+
+
+.fontChange{
+  color: #606060;
+  font-weight: lighter;
+}
+
+.header{
+    width: 95%;
+    margin: auto;
+    position: relative;
+}
+
+.headerTitle{
+    float: right;
+    color:#606060;
+    margin-right: 15px;
+}
+
+
+mat-header-cell{
+    color:black;
+}
+
+mat-paginator{
+   
+    min-height: 35px;
+    max-height: 45px;
+}
+
+mat-header-row{
+    min-height: 28px;
+    background-color: #B5D7FF;
+  }
