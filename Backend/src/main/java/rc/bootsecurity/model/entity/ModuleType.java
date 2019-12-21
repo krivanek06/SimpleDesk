@@ -35,14 +35,14 @@ public class ModuleType {
      * which group can what request submit
      */
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSubmit")
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "moduleTypesToUse")
     private Set<Group> groupsToSubmitDifferentRequests;
 
     /**
      * which group can what request solve
      */
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "moduleTypesToManage")
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSolve")
     private Set<Group> groupsToManageDifferentModules;
 
 

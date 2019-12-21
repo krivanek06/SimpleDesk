@@ -64,21 +64,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
 
         // load permissions
-        String[] userRoles = principal.getAuthorities().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+       /* String[] userRoles = principal.getAuthorities().stream().map(x -> x.getAuthority()).toArray(String[]::new);
         String[] softwarePermissions = principal.getAuthoritiesSoftware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
         String[] hardwarePermissions = principal.getAuthoritiesHardware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
-        String[] serverPermissions = principal.getAuthoritiesServer().stream().map(x -> x.getAuthority()).toArray(String[]::new);
+        String[] serverPermissions = principal.getAuthoritiesServer().stream().map(x -> x.getAuthority()).toArray(String[]::new);*/
 
 
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withArrayClaim("applicationPermissions" , userRoles)
+                /*.withArrayClaim("applicationPermissions" , userRoles)
                 .withArrayClaim("softwarePermissions" , softwarePermissions)
                 .withArrayClaim("hardwarePermissions", hardwarePermissions)
                 .withArrayClaim("serverPermissions", serverPermissions)
                 .withClaim("userPermissions", principal.getAuthoritiesUser())
-                .withClaim("otherPermissions" , principal.getAuthoritiesOther())
+                .withClaim("otherPermissions" , principal.getAuthoritiesOther())*/
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 

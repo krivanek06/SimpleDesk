@@ -70,9 +70,9 @@ public class GroupService {
                 .map(user -> this.userService.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : null);
         groupDTO.setFinanceTypes(group.getFinanceTypes() != null ? group.getFinanceTypes().stream()
                 .map(FinanceType::getName).collect(Collectors.toList()) : null);
-        groupDTO.setModuleTypeToManage(group.getModuleTypesToManage() != null ? group.getModuleTypesToManage().stream()
+        groupDTO.setModuleTypeToManage(group.getRequestTypesToSolve() != null ? group.getRequestTypesToSolve().stream()
                 .map(ModuleType::getName).collect(Collectors.toList()) : null);
-        groupDTO.setRequestTypesToSubmit(group.getRequestTypesToSubmit() != null ? group.getRequestTypesToSubmit().stream()
+        groupDTO.setRequestTypesToSubmit(group.getModuleTypesToUse() != null ? group.getModuleTypesToUse().stream()
                 .map(ModuleType::getName).collect(Collectors.toList()) : null);
         groupDTO.setTicketPrivilegesList(group.getTicketPrivilegesList() != null ? group.getTicketPrivilegesList().stream()
                 .map(ticketPrivileges -> this.requestConverterService.convertTicketPrivilegeToDTO(ticketPrivileges)).collect(Collectors.toList()) : null);

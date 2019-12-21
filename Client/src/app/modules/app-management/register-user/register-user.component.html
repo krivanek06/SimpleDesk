@@ -1,1 +1,34 @@
-<p>register-user works!</p>
+<form [formGroup] = "userRegistrationForm" (ngSubmit)="submit()">
+        <div class='inlineParameters formTitleContainer'>
+            <img src = "../../../../assets/images_design/registeru_user_icon.png" class='registerUserIcon'>
+            <span class='formTitle'>Registrovanie uživateľa</span>
+        </div>
+
+        <mat-form-field  class='inlineParameters'>
+            <input matInput placeholder="Meno uživateľa" formControlName = "firstname">
+            <mat-error *ngIf="firstname.invalid">  Prosím zadefinujte meno uživateľa</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class='inlineParameters'>
+            <input  matInput placeholder="Priezvisko uživateľa" formControlName = "lastname">
+            <mat-error *ngIf="lastname.invalid">  Prosím zadefinujte priezvisko uživateľa</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class='inlineParameters'>
+            <input  matInput placeholder="Prihlasovacie meno (username) uživateľa" formControlName = "username">
+            <mat-error *ngIf="username.invalid">  Prosím zadefinujte prihlasovacie meno uživateľa</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class='inlineParameters'>
+            <input  matInput placeholder="Email uživateľa" formControlName = "email">
+            <mat-error *ngIf="email.invalid">  Prosím zadefinujte email uživateľa</mat-error>
+        </mat-form-field>
+    
+        <!-- submit button -->
+        <div class='inlineParameters'>
+            <button mat-raised-button color="primary" id="sendingButton"  type="submit">
+                    Odoslať
+            </button>
+        </div>
+    
+    </form>

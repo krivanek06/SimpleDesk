@@ -13,6 +13,7 @@ import { AppManagementComponent } from './modules/app-management/app-management.
 import { RegisterUserComponent } from './modules/app-management/register-user/register-user.component';
 import { RegisterGroupComponent } from './modules/app-management/register-group/register-group.component';
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
+import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
 
 
 const routes: Routes = [
@@ -30,8 +31,10 @@ const routes: Routes = [
   { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]},
   { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard],
       children:[
+        { path: '', component: UserGroupManagementComponent, canActivate:[AuthGuard]},
         { path: 'register_user', component: RegisterUserComponent, canActivate:[AuthGuard]},
         { path: 'register_group', component: RegisterGroupComponent, canActivate:[AuthGuard]},
+        { path: '**' ,  redirectTo: ''  }
     ]},
     
   { path: '**', redirectTo: 'dashboard' }

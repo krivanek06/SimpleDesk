@@ -38,12 +38,12 @@ public class JsonStringParser {
 
         userPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
 
-        if(!userPrivileges.isNull("moduleTypesToManage")) {
-            userPrivilegeDTO.setManageModules(userPrivileges.getJSONArray("moduleTypesToManage")
+        if(!userPrivileges.isNull("requestTypeToSolve")) {
+            userPrivilegeDTO.setRequestTypesToSolve(userPrivileges.getJSONArray("requestTypeToSolve")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
-        if(!userPrivileges.isNull("requestTypeToSubmit")) {
-            userPrivilegeDTO.setSubmitRequests(userPrivileges.getJSONArray("requestTypeToSubmit")
+        if(!userPrivileges.isNull("moduleTypeToUse")) {
+            userPrivilegeDTO.setModuleTypesToUse(userPrivileges.getJSONArray("moduleTypeToUse")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
 
@@ -51,7 +51,7 @@ public class JsonStringParser {
             userPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("FinanceTypeToSubmit")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
-        userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getManageModules() == null));
+        userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getRequestTypesToSolve() == null));
         return userPrivilegeDTO;
     }
 }

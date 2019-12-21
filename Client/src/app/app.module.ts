@@ -49,6 +49,7 @@ import { LoginBackgroundComponent } from './modules/login/login-background/login
 import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
 import { MeAssignedRequestsComponent } from './modules/dashboard/me-assigned-requests/me-assigned-requests.component';
 import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
+import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +86,8 @@ import { FileUploadComponent } from './shared/components/file-upload/file-upload
     LoginComponent,
     NavigationIconHoverDirective,
     MeAssignedRequestsComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    UserGroupManagementComponent
   ],
   imports: [
     BrowserModule,

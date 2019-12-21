@@ -162,10 +162,10 @@ public class BasicTest {
 
         ModuleType moduleTypeTicket = this.moduleTypeRepository.selectByName(MODULE_TYPE.TICKET.name());
         ModuleType moduleTypeReport = this.moduleTypeRepository.findByName(MODULE_TYPE.REPORT.name());
-        List<Group> requestTypeTicketSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(moduleTypeTicket).get();
-        List<Group> requestTypeTicketSolveGroups = this.groupRepository.findAllByModuleTypesToManage(moduleTypeTicket).get();
-        List<Group> requestTypeReportSubmitGroups = this.groupRepository.findAllByRequestTypesToSubmit(moduleTypeReport).get();
-        List<Group> requestTypeReportSolveGroups = this.groupRepository.findAllByModuleTypesToManage(moduleTypeReport).get();
+        List<Group> requestTypeTicketSubmitGroups = this.groupRepository.findAllByModuleTypesToUse(moduleTypeTicket).get();
+        List<Group> requestTypeTicketSolveGroups = this.groupRepository.findAllByRequestTypesToSolve(moduleTypeTicket).get();
+        List<Group> requestTypeReportSubmitGroups = this.groupRepository.findAllByModuleTypesToUse(moduleTypeReport).get();
+        List<Group> requestTypeReportSolveGroups = this.groupRepository.findAllByRequestTypesToSolve(moduleTypeReport).get();
 
 
         assertThat(requestTypeTicketSubmitGroups).containsExactlyInAnyOrder(group1 , group2,group3,group4);
@@ -324,9 +324,9 @@ public class BasicTest {
 
         UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user1));
 
-        assertThat(userPrivilegeDTO.getManageModules())
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve())
                 .containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
-        assertThat(userPrivilegeDTO.getSubmitRequests())
+        assertThat(userPrivilegeDTO.getModuleTypesToUse())
                 .containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
         assertThat(userPrivilegeDTO.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName(), ticketTypeHardware.getName());
         assertThat(userPrivilegeDTO.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
@@ -337,8 +337,8 @@ public class BasicTest {
 
         UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user12));
 
-        assertThat(userPrivilegeDTO5.getManageModules()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name());
-        assertThat(userPrivilegeDTO5.getSubmitRequests().size()).isEqualTo(0);
+        assertThat(userPrivilegeDTO5.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name());
+        assertThat(userPrivilegeDTO5.getModuleTypesToUse().size()).isEqualTo(0);
         assertThat(userPrivilegeDTO5.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName());
         assertThat(userPrivilegeDTO5.getSolveTickets()).doesNotContainKeys(ticketTypeHardware.getName());
         assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(

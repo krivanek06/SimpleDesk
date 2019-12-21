@@ -59,7 +59,7 @@ public class RequestPrivilegeService {
 
     public void modifyRequestTypeForGroupToSubmit(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setRequestTypesToSubmit(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSubmit())));
+        group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSubmit())));
 
         this.groupRepository.save(group);
     }
@@ -67,7 +67,7 @@ public class RequestPrivilegeService {
 
     public void modifyModuleTypeForGroupToManage(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setModuleTypesToManage(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getModuleTypeToManage())));
+        group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getModuleTypeToManage())));
 
         this.groupRepository.save(group);
     }

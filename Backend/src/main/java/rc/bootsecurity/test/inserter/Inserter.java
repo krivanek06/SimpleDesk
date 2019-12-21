@@ -153,12 +153,12 @@ public class Inserter {
         ModuleType moduleType3 = this.moduleTypeRepository.findByName(MODULE_TYPE.FINANCE.name()); // Set.of(group1), Set.of(group2,group3)
 
 
-        group1.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2)));
-        group1.setModuleTypesToManage(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
-        group2.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
-        group3.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
-        group4.setRequestTypesToSubmit(new HashSet<>(Arrays.asList(moduleType1)));
-        group5.setModuleTypesToManage(new HashSet<>(Arrays.asList(moduleType1)));
+        group1.setModuleTypesToUse(new HashSet<>(Arrays.asList(moduleType1, moduleType2)));
+        group1.setRequestTypesToSolve(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group2.setModuleTypesToUse(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group3.setModuleTypesToUse(new HashSet<>(Arrays.asList(moduleType1, moduleType2, moduleType3)));
+        group4.setModuleTypesToUse(new HashSet<>(Arrays.asList(moduleType1)));
+        group5.setRequestTypesToSolve(new HashSet<>(Arrays.asList(moduleType1)));
 
         this.groupRepository.saveAll(List.of(group1, group2,group3, group4, group5));
     }

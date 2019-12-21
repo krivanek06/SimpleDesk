@@ -58,8 +58,7 @@ create table tbl_users(
   email varchar unique NOT NULL,
   active boolean default True,
   timestamp_creation TIMESTAMP default current_timestamp,
-  timestamp_ending TIMESTAMP default NULL,
-  is_admin boolean default False
+  timestamp_ending TIMESTAMP default NULL
 );
 
 DROP TABLE IF EXISTS tbl_request_comments CASCADE;
@@ -242,16 +241,16 @@ create table tbl_request_watched_by_user(
   request_id Integer NOT NULL
 );
 
-DROP TABLE IF EXISTS tbl_module_type_to_manage CASCADE;
-create table tbl_module_type_to_manage
+DROP TABLE IF EXISTS tbl_request_type_to_solve CASCADE;
+create table tbl_request_type_to_solve
 (
    id serial primary key,
    group_id int ,
    request_type_id int
 );
 
-DROP TABLE IF EXISTS tbl_request_type_to_submit CASCADE;
-create table tbl_request_type_to_submit(
+DROP TABLE IF EXISTS tbl_module_type_to_use CASCADE;
+create table tbl_module_type_to_use(
    id serial primary key,
    group_id int ,
    request_type_id int
@@ -360,11 +359,11 @@ ALTER TABLE tbl_hardwares ADD FOREIGN KEY (ticket_type_id) REFERENCES tbl_ticket
 
 ALTER TABLE tbl_groups add  FOREIGN KEY (manager_id) REFERENCES tbl_users(id);
 
-ALTER TABLE tbl_module_type_to_manage ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
-ALTER TABLE tbl_module_type_to_manage ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
+ALTER TABLE tbl_request_type_to_solve ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
+ALTER TABLE tbl_request_type_to_solve ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
 
-ALTER TABLE tbl_request_type_to_submit ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
-ALTER TABLE tbl_request_type_to_submit ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
+ALTER TABLE tbl_module_type_to_use ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
+ALTER TABLE tbl_module_type_to_use ADD FOREIGN KEY (request_type_id) REFERENCES tbl_module_type(id);
 
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (request_comment_id) REFERENCES tbl_request_comments(id);
@@ -406,21 +405,21 @@ CREATE FUNCTION get_all_privileges_for_user_varchar(user_id integer)
      left join tbl_ticket_types on tbl_ticket_types.id = tbl_ticket_privileges.ticket_type_id
     group by tbl_ticket_types.name) as tbl) ,
 
-    'requestTypeToSubmit' ,
+    'moduleTypeToUse' ,
     (select jsonb_agg(distinct tbl_module_type.name) from (
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
-    inner join tbl_request_type_to_submit on tbl_request_type_to_submit.group_id = tug.group_id
-    left join tbl_module_type on tbl_module_type.id = tbl_request_type_to_submit.request_type_id),
+    inner join tbl_module_type_to_use on tbl_module_type_to_use.group_id = tug.group_id
+    left join tbl_module_type on tbl_module_type.id = tbl_module_type_to_use.request_type_id),
 
-    'moduleTypesToManage',
+    'requestTypeToSolve',
     (select jsonb_agg(distinct tbl_module_type.name) from (
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid
-    inner join tbl_module_type_to_manage on tbl_module_type_to_manage.group_id = tug.group_id
-    left join tbl_module_type on tbl_module_type.id = tbl_module_type_to_manage.request_type_id),
+    inner join tbl_request_type_to_solve on tbl_request_type_to_solve.group_id = tug.group_id
+    left join tbl_module_type on tbl_module_type.id = tbl_request_type_to_solve.request_type_id),
 
-    'FinanceTypeToSubmit',
+    'financeTypeToSubmit',
     (select jsonb_agg(distinct tbl_finance_types.name) from (
     select id as uid from tbl_users users where id = user_id ) as t_user
     inner join tbl_user_groups as tug on tug.user_id = t_user.uid

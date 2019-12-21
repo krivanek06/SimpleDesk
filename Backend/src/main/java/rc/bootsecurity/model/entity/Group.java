@@ -54,20 +54,20 @@ public class Group {
     private Set<RequestType> requestTypesToSubmit;*/
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_type_to_submit",
+    @JoinTable(name = "tbl_module_type_to_use",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private Set<ModuleType> requestTypesToSubmit;
+    private Set<ModuleType> moduleTypesToUse;
 
     /**
      * which application can a group solve
      */
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
-    @JoinTable(name = "tbl_module_type_to_manage",
+    @JoinTable(name = "tbl_request_type_to_solve",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
-    private Set<ModuleType> moduleTypesToManage;
+    private Set<ModuleType> requestTypesToSolve;
 
     /**
      * which finance types can a group submit

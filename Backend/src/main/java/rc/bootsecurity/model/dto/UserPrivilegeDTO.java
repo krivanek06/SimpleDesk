@@ -24,12 +24,12 @@ public class UserPrivilegeDTO {
     private boolean isSolver;
 
     // GUI
-    private List<String> submitRequests;
+    private List<String> moduleTypesToUse;
     private List<String> submitFinanceRequests;
 
     // JWT
     // ticket, reports , privileges, documents
-    private List<String> manageModules;
+    private List<String> requestTypesToSolve;
     // software -> sw1, sw2 ... hardware -> hw1, hw2
     private Map<String, List<String>> solveTickets;
 

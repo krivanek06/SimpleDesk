@@ -202,11 +202,11 @@ public class RequestSimulationTest {
         assertThat(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupNormal3).get()).containsExactlyInAnyOrder(finance);
         assertThat(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupSolver1)).isEmpty();
 
-        assertThat(this.groupRepository.findAllByRequestTypesToSubmit(ticket).get()).containsExactlyInAnyOrder(groupBasic,groupNormal1);
-        assertThat(this.groupRepository.findAllByRequestTypesToSubmit(finance).get()).containsExactlyInAnyOrder(groupNormal2,groupNormal3);
+        assertThat(this.groupRepository.findAllByModuleTypesToUse(ticket).get()).containsExactlyInAnyOrder(groupBasic,groupNormal1);
+        assertThat(this.groupRepository.findAllByModuleTypesToUse(finance).get()).containsExactlyInAnyOrder(groupNormal2,groupNormal3);
 
-        assertThat(this.groupRepository.findAllByModuleTypesToManage(ticket).get()).containsExactlyInAnyOrder(groupSolver1,groupSolver3);
-        assertThat(this.groupRepository.findAllByModuleTypesToManage(finance).get()).containsExactlyInAnyOrder(groupSolver1,groupSolver3);
+        assertThat(this.groupRepository.findAllByRequestTypesToSolve(ticket).get()).containsExactlyInAnyOrder(groupSolver1,groupSolver3);
+        assertThat(this.groupRepository.findAllByRequestTypesToSolve(finance).get()).containsExactlyInAnyOrder(groupSolver1,groupSolver3);
 
         assertThat(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupError)).isEmpty();
         assertThat(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(groupError)).isEmpty();
@@ -318,8 +318,8 @@ public class RequestSimulationTest {
         assertThat(groupNormal3.getFinanceTypes().size()).isEqualTo(4);
         assertThat(groupNormal3.getFinanceTypes()).doesNotContain(removedFinanceType);
         assertThat(groupNormal3.getTicketPrivilegesList()).isEmpty();
-        assertThat(groupNormal3.getModuleTypesToManage()).isEmpty();
-        assertThat(groupNormal3.getRequestTypesToSubmit()).containsExactlyInAnyOrder(this.moduleTypeRepository.findByName(MODULE_TYPE.FINANCE.name()));
+        assertThat(groupNormal3.getRequestTypesToSolve()).isEmpty();
+        assertThat(groupNormal3.getModuleTypesToUse()).containsExactlyInAnyOrder(this.moduleTypeRepository.findByName(MODULE_TYPE.FINANCE.name()));
 
         // add back
         groupDTO = this.groupService.convertGroupToDTO(groupNormal3);
@@ -335,7 +335,7 @@ public class RequestSimulationTest {
         this.requestPrivilegeService.modifyModuleTypeForGroupToManage(groupDTO);
         groupNormal3 = this.groupRepository.findByGroupName(groupDTO.getName());
         initGroupAttributes(groupNormal3);
-        assertThat(groupNormal3.getModuleTypesToManage()).containsExactlyInAnyOrder(this.moduleTypeRepository.findByName(MODULE_TYPE.TICKET.name()));
+        assertThat(groupNormal3.getRequestTypesToSolve()).containsExactlyInAnyOrder(this.moduleTypeRepository.findByName(MODULE_TYPE.TICKET.name()));
 
         TicketPrivilegeDTO privilegeDTO1 = Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_1);
         TicketPrivilegeDTO privilegeDTO2 = Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_2);
@@ -450,8 +450,8 @@ public class RequestSimulationTest {
     private void initGroupAttributes(Group group){
         group.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>()));
         group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(group).orElse(new ArrayList<>())));
-        group.setRequestTypesToSubmit(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new ArrayList<>())));
-        group.setModuleTypesToManage(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group).orElse(new ArrayList<>())));
+        group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new ArrayList<>())));
+        group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group).orElse(new ArrayList<>())));
     }
 
     @Test
@@ -525,8 +525,8 @@ public class RequestSimulationTest {
         groupSolver3.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(groupSolver3).orElse(new ArrayList<>()));
         groupSolver3.setUsersInGroup(new HashSet<>(this.userRepository.findAllByGroupsInvolved(groupSolver3)));
         groupSolver3.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(groupSolver3).orElse(new ArrayList<>())));
-        groupSolver3.setModuleTypesToManage(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(groupSolver3).orElse(new ArrayList<>())));
-        groupSolver3.setModuleTypesToManage(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupSolver3).orElse(new ArrayList<>())));
+        groupSolver3.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(groupSolver3).orElse(new ArrayList<>())));
+        groupSolver3.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupSolver3).orElse(new ArrayList<>())));
 
         GroupDTO groupDTO = this.groupService.convertGroupToDTO(groupSolver3);
         assertThat(groupDTO.getFinanceTypes()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,NAMES.FINANCE_TYPE_2,
@@ -650,9 +650,9 @@ public class RequestSimulationTest {
         UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user2));
 
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
-        assertThat(userPrivilegeDTO.getManageModules()).containsExactlyInAnyOrder(MODULE_TYPE.FINANCE.name(),
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.FINANCE.name(),
                 MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name());
-        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(MODULE_TYPE.REPORT.name(), MODULE_TYPE.TICKET.name());
+        assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.REPORT.name(), MODULE_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO.getSolveTickets().keySet()).containsExactlyInAnyOrder(TICKET_TYPE.SOFTWARE.name(),
                 TICKET_TYPE.HARDWARE.name(), TICKET_TYPE.USER.name(), TICKET_TYPE.SERVER.name(), TICKET_TYPE.OTHER.name());
         assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SERVER)).containsExactlyInAnyOrder(NAMES.SERVER_1, NAMES.SERVER_2);
@@ -667,33 +667,33 @@ public class RequestSimulationTest {
 
         userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user4));
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
-        assertThat(userPrivilegeDTO.getManageModules()).containsExactlyInAnyOrder( MODULE_TYPE.REPORT.name());
-        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(MODULE_TYPE.REPORT.name(), MODULE_TYPE.TICKET.name());
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve()).containsExactlyInAnyOrder( MODULE_TYPE.REPORT.name());
+        assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.REPORT.name(), MODULE_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
         userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user10));
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
-        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
+        assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
                 MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
-        assertThat(userPrivilegeDTO.getManageModules()).isNull();
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve()).isNull();
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,
                 NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
         userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user6));
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
-        assertThat(userPrivilegeDTO.getSubmitRequests()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
+        assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
                 MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
-        assertThat(userPrivilegeDTO.getManageModules()).isNull();
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve()).isNull();
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,
                 NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3, NAMES.FINANCE_TYPE_4, NAMES.FINANCE_TYPE_5);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
 
         userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user11));
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
-        assertThat(userPrivilegeDTO.getSubmitRequests()).isNull();
-        assertThat(userPrivilegeDTO.getManageModules()).isNull();
+        assertThat(userPrivilegeDTO.getModuleTypesToUse()).isNull();
+        assertThat(userPrivilegeDTO.getRequestTypesToSolve()).isNull();
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
 

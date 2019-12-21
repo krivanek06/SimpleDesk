@@ -30,10 +30,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(name = "username" , nullable = false)
     private String username;
 
-    @Column(nullable = false)
+    @Column(name = "password" , nullable = false)
     private String password;
 
     @Column(name = "first_name")
@@ -56,9 +56,6 @@ public class User {
 
     @Column(name = "timestamp_ending")
     private Timestamp dateEnding;
-
-    @Column(name = "is_admin")
-    private Boolean isAdmin;
 
     public String getFullName(){ return getFirstName() + " " + getLastName(); }
 
