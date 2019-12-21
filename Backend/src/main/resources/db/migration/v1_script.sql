@@ -391,6 +391,7 @@ insert into hibernate_sequences(sequence_name, next_val) values ('default',0);
 
 
 -- get all privileges for user what he can submit or solve
+drop function if exists get_all_privileges_for_user_varchar(integer);
 CREATE FUNCTION get_all_privileges_for_user_varchar(user_id integer)
     RETURNS varchar AS
     $$

@@ -48,6 +48,7 @@ import { LoginFormComponent } from './modules/login/login-form/login-form.compon
 import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
 import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
 import { MeAssignedRequestsComponent } from './modules/dashboard/me-assigned-requests/me-assigned-requests.component';
+import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
 
 @NgModule({
   declarations: [
@@ -83,10 +84,12 @@ import { MeAssignedRequestsComponent } from './modules/dashboard/me-assigned-req
     RequestFormsComponent,
     LoginComponent,
     NavigationIconHoverDirective,
-    MeAssignedRequestsComponent
+    MeAssignedRequestsComponent,
+    FileUploadComponent
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
     ParticlesModule,

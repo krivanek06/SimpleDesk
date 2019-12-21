@@ -4,4 +4,16 @@
     width: calc(100% - 85px);
     padding: 5px;
     float: right;
+    position: relative;
+}
+
+
+.requestFormButtonContainer{
+    position: absolute;
+    display: inline-grid;
+    right: 10px;
+}
+
+.requestFormButton{
+    margin-bottom: 10px;
 }

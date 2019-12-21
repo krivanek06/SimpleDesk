@@ -14,9 +14,6 @@ export class NavigationComponent implements OnInit {
   ngOnInit() { 
   }
 
-  public changeBodyComponent(path: string){
-    this.router.navigate(['./' + path]);
-  }
 
   /*@HostListener('mouseenter')
   onMouseEnter() {

@@ -80,9 +80,9 @@ public class RequestManagementService{
         Ticket ticket = new Ticket();
         this.setAttributesForRequest(ticket, MODULE_TYPE.TICKET.name(),ticketDTO.getName(), ticketDTO.getCreator(), ticketDTO.getRequestPriority());
 
-        ticket.setProblem(ticketDTO.getProblem());
-        ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
         ticket.setTicketSubtypeName(ticketDTO.getTicketSubtypeName());
+        ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
+        ticket.setProblem(ticketDTO.getProblem());
 
         return ticket;
     }

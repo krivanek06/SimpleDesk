@@ -1,1 +1,140 @@
-<p>request-report-form works!</p>
+<form [formGroup] = "reportForm" (ngSubmit)="submit()">
+        Values : {{ reportForm.value | json }}
+        <hr>
+
+        <div class = 'reportInlineParameters'>
+            <!--name -->
+            <mat-form-field >
+                <input  matInput placeholder="Názov reportu" formControlName = "name">
+
+                <mat-error *ngIf="name.invalid">
+                        Prosím zadefinujte meno reportu v dĺžke od 5 po 254 znakov
+                </mat-error>
+
+            </mat-form-field>
+
+            <!--nazov -->
+            <mat-form-field >
+                <input  matInput placeholder="Vlastník reportu" formControlName = "owner">
+
+                <mat-error *ngIf="owner.invalid">
+                        Prosím zadefinujte vlastníka reportu v dĺžke od 5 po 254 znakov
+                </mat-error>
+
+            </mat-form-field>
+        </div>
+
+        <div class = 'reportInlineParameters'>
+            <!--refresh -->
+            <mat-form-field >
+                <mat-label>Frekvencia obnovenia:</mat-label>
+                <mat-select formControlName="reportRefresh">
+                    <mat-option value="jendorázové">jendorázové</mat-option>
+                    <mat-option value="denne">denne</mat-option>
+                    <mat-option value="týždenne">týždenne</mat-option>
+                    <mat-option value="mesačne">mesačne</mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="reportRefresh.invalid">
+                        Prosím zadefinujte frekvenciu obnovenia
+                </mat-error>
+
+            </mat-form-field>
+
+            <!--Priority -->
+            <mat-form-field >
+                <mat-label>Priorita</mat-label>
+                <mat-select formControlName="priority">
+                    <mat-option value="malá">malá</mat-option>
+                    <mat-option value="stredná">stredná</mat-option>
+                    <mat-option value="veľká">veľká</mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="reportRefresh.invalid">
+                        Prosím vyberte prioritu reportu
+                </mat-error>
+            </mat-form-field>
+
+
+            <!--report type -->
+            <mat-form-field >
+                <mat-label>Typ reportu</mat-label>
+                <mat-select formControlName="reportType">
+                    <mat-option value="Nový report">Nový report</mat-option>
+                    <mat-option value="Existujúci report">Existujúci report</mat-option>
+                </mat-select>
+
+                <mat-error *ngIf="reportType.invalid">
+                        Prosím vyberte typ reportu
+                </mat-error>
+            </mat-form-field>
+        </div>
+    
+        <div class='reportInlineParameters'>
+            <mat-form-field >
+                <textarea  matInput placeholder="Účeľ reportu" formControlName = "purpose"></textarea>
+
+                <mat-error *ngIf="purpose.invalid">
+                        Prosím zadefinujte účeľ reportu
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field >
+                <textarea  matInput placeholder="Kritéria reportu" formControlName = "criteria"></textarea>
+
+                <mat-error *ngIf="criteria.invalid">
+                        Prosím zadefinujte kritéria reportu
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field >
+                <textarea  matInput placeholder="Viditeľne údaje" formControlName = "visibleData"></textarea>
+
+                <mat-error *ngIf="visibleData.invalid">
+                        Prosím zadefinujte viditeľné údaje reportu
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field >
+                <textarea  matInput placeholder="Iné Informácie" formControlName = "otherInformation"></textarea>
+            </mat-form-field>
+        </div>
+
+
+        <div class = 'reportInlineParameters'>
+            <!--access -->
+            <mat-form-field >
+                <input  matInput placeholder="Sprístupniť pre" formControlName = "accessBy">
+                <mat-error *ngIf="accessBy.errors?.accessValid">
+                        Prosím zadefinujte pre koho má byť report sprístupnený
+                </mat-error>
+                
+            </mat-form-field>
+          <!--  <button mat-raised-button type = "button" color="primary" class='formAssignedButton'>Pridať</button>-->
+          <img src="../../../../assets/images_design/add_icon.png" class='formAssignedButton'  (click)="addPeopleToAccess()">
+
+          <!-- display added people / remove them -->
+            <div class = 'printingResults'>
+                <ul> 
+                    <li *ngFor="let item of accessByPeopleArray; let i = index" class="oneLineLI">
+                        <img src="../../../../assets/images_design/delete_icon.png" 
+                            class='formdeleteButton'  
+                            (click)="deleteItem(i)">
+                            {{item}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+         <!-- uploader -->
+        <div class = 'reportInlineParameters'>
+            <app-file-upload id='uploader' [uploaderHeight] = '65'></app-file-upload>
+        </div>
+
+         <!-- submit button -->
+        <div class = 'reportInlineParameters'>
+            <button mat-raised-button color="primary" id="reportSendingButton" type="submit">Odoslať</button>
+        </div>
+   
+
+    </form>

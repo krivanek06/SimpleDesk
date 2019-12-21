@@ -4,5 +4,11 @@
 
 
 <div id='contentContainer'>
-    sadas
+        <div class="requestFormButtonContainer">
+            <a mat-raised-button class="requestFormButton" routerLink="/request_new/ticket">Ticket</a>
+            <a mat-raised-button class="requestFormButton" routerLink="/request_new/report" >Report</a>
+            <a mat-raised-button class="requestFormButton" routerLink="/request_new/finance">Financie</a>
+        </div>
+
+        <router-outlet></router-outlet>
 </div>
