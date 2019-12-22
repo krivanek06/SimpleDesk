@@ -13,6 +13,7 @@ import java.util.Optional;
 @Repository
 public interface GroupRepository extends CrudRepository<Group, Integer > {
     Optional<List<Group>> findAllByGroupManager(User groupManager);
+    Optional<List<Group>> findAllByUsersWatchingGroupActivity(User user);
 
     List<Group> findAllByUsersInGroup(User users);
     List<Group> findAllByGroupNameIn(List<String> groupsNames);

@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rc.bootsecurity.model.dto.LoginViewModel;
+import rc.bootsecurity.model.enums.TICKET_TYPE;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -60,25 +61,23 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-        // Grab principal
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
-
-        // load permissions
-       /* String[] userRoles = principal.getAuthorities().stream().map(x -> x.getAuthority()).toArray(String[]::new);
-        String[] softwarePermissions = principal.getAuthoritiesSoftware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
-        String[] hardwarePermissions = principal.getAuthoritiesHardware().stream().map(x -> x.getAuthority()).toArray(String[]::new);
-        String[] serverPermissions = principal.getAuthoritiesServer().stream().map(x -> x.getAuthority()).toArray(String[]::new);*/
-
 
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                /*.withArrayClaim("applicationPermissions" , userRoles)
-                .withArrayClaim("softwarePermissions" , softwarePermissions)
-                .withArrayClaim("hardwarePermissions", hardwarePermissions)
-                .withArrayClaim("serverPermissions", serverPermissions)
-                .withClaim("userPermissions", principal.getAuthoritiesUser())
-                .withClaim("otherPermissions" , principal.getAuthoritiesOther())*/
+                .withClaim("FULL_NAME" , principal.getUser().getFullName())
+                .withClaim("EMAIL" , principal.getUser().getEmail())
+                .withClaim("IS_ADMIN" , principal.isAdmin())
+                .withClaim("IS_GHOST" , principal.isGhost())
+                .withArrayClaim("MODULE_TYPES_TO_USE" , principal.getModuleTypesToUse())
+                .withArrayClaim("REQUEST_TYPE_TO_SOLVE" , principal.getRequestTypesToSolve())
+                .withArrayClaim("FINANCE_TYPE_TO_SUBMIT" , principal.getFinanceTypeToSubmit())
+                .withArrayClaim("TICKET_SOFTWARE_PRIVILEGES" , principal.getSolveTicketsTypeSoftware())
+                .withArrayClaim("TICKET_HARDWARE_PRIVILEGES" , principal.getSolveTicketsTypeHardware())
+                .withArrayClaim("TICKET_SERVER_PRIVILEGES" , principal.getSolveTicketsTypeServer())
+                .withClaim("TICKET_USER_PRIVILEGES" , principal.getSolveTicketsTypeUser() )
+                .withClaim("TICKET_OTHER_PRIVILEGES" , principal.getSolveTicketsTypeOther() )
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 

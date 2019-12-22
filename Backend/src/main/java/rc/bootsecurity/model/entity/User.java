@@ -72,6 +72,13 @@ public class User {
     private List<Group> groupsInvolved;
 
     /**
+     *  all groups I can watch activity
+     */
+    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "usersWatchingGroupActivity")
+    @EqualsAndHashCode.Exclude
+    private List<Group> groupsActivityWatched;
+
+    /**
      * get requests which I am watching
      */
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
@@ -100,28 +107,5 @@ public class User {
     @OrderBy(value = "id ASC")
     @EqualsAndHashCode.Exclude
     private Set<Reminder> remindersSharedWithMe;
-
-    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    //private List<WorkingDay> workingDays;
-
-
-    //-----------------------------------------------------------------
-
-
-    // requests - will be fetched by principal
-    /*@OneToMany(mappedBy = "creator", fetch = FetchType.LAZY)
-    private List<Request> requestsICreated;
-
-    @OneToMany(mappedBy = "assigned", fetch = FetchType.LAZY)
-    private List<Request> requestsIamAssignedTo;
-
-    @OneToMany(mappedBy = "solver", fetch = FetchType.LAZY)
-    private List<Request> requestsISolved;
-
-    @OneToMany(mappedBy = "closed", fetch = FetchType.LAZY)
-    private List<Request> requestsIClosed;*/
-
-    // -----------------------------------
-
 
 }

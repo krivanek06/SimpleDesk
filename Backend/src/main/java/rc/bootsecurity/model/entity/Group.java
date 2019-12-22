@@ -30,9 +30,6 @@ public class Group {
     @JoinColumn(name = "manager_id")
     private User groupManager;
 
-    /**
-     * users who are part of this group
-     */
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_user_groups",
@@ -40,18 +37,17 @@ public class Group {
             inverseJoinColumns = { @JoinColumn(name = "user_id")})
     private Set<User> usersInGroup;
 
-    /**
-     *  one group has what privileges to solve tickets
-     */
+    @EqualsAndHashCode.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "tbl_group_activity_watched_by_user",
+            joinColumns = { @JoinColumn(name = "group_id")},
+            inverseJoinColumns = { @JoinColumn(name = "user_id")})
+    private Set<User> usersWatchingGroupActivity;
+
     @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "group") // orphanRemoval=true, cascade = CascadeType.PERSIST
     private List<TicketPrivileges> ticketPrivilegesList;
 
-    /**
-     * which application can a group use
-     */
-    /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "groupsToSubmitDifferentRequests")
-    private Set<RequestType> requestTypesToSubmit;*/
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_module_type_to_use",
@@ -59,9 +55,6 @@ public class Group {
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
     private Set<ModuleType> moduleTypesToUse;
 
-    /**
-     * which application can a group solve
-     */
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY) // cascade = CascadeType.DETACH
     @JoinTable(name = "tbl_request_type_to_solve",
@@ -69,9 +62,6 @@ public class Group {
             inverseJoinColumns = { @JoinColumn(name = "request_type_id")})
     private Set<ModuleType> requestTypesToSolve;
 
-    /**
-     * which finance types can a group submit
-     */
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_finance_type_privileges",

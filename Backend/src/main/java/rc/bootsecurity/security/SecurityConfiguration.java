@@ -43,16 +43,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and().exceptionHandling().accessDeniedPage("/login")
-
-                .and()
-                    .formLogin()
-                    .loginProcessingUrl("/login")
-                   // .usernameParameter("j_username")
-                   // .passwordParameter("j_password")
-                    .permitAll()
-
-                .and().requiresChannel().anyRequest().requiresSecure() // i do not know
+              //  .and().authorizeRequests()
+              //  .and().requiresChannel().anyRequest().requiresSecure() // i do not know
 
                 .and()
                     // add jwt filters (1. authentication, 2. authorization)
@@ -62,9 +54,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     // configure access rules
                     .authorizeRequests()
                     .antMatchers( "/login").permitAll() // HttpMethod.POST,
-                    .antMatchers( "/PersonalDetails/*").permitAll()
-                    //.antMatchers("/api/public/management/*").hasRole("MANAGER")
-                    .antMatchers("/api/public/*").permitAll()
+                    //.antMatchers( "/PersonalDetails/*").permitAll()
                     .anyRequest().authenticated();
     }
 

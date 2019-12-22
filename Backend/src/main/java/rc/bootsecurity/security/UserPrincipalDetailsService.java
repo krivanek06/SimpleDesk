@@ -4,26 +4,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserPrincipalDetailsService implements UserDetailsService {
-   // @Autowired
-  //  private UserService userService;
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
+    @Autowired
+    private GroupService groupService;
 
-    // when user performs authentication this will be called
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        // load user
-        User user = this.userRepository.findByUsername(s).orElseThrow(() -> new UsernameNotFoundException("Not found " + s ));
-        //this.userService.loadPrivilegesToUser(user);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user =  this.userService.loadUser(username);
+        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(username);
+        List<Group> groupsToManage = this.groupService.getGroupsToManageForUser(user);
+        List<Group> groupToWatchActivity = this.groupService.getGroupToWatchActivity(user);
 
-        UserPrincipal userPrincipal = new UserPrincipal(user);
+        UserPrincipal userPrincipal = new UserPrincipal();
+        userPrincipal.setUser(user);
+        userPrincipal.setUserPrivilegeDTO(userPrivilegeDTO);
+
+        userPrincipal.setGroupsToManage(groupsToManage.stream().map(Group::getGroupName).collect(Collectors.toList()));
+        userPrincipal.setGroupsActivityToWatch(groupToWatchActivity.stream().map(Group::getGroupName).collect(Collectors.toList()));
+
         return userPrincipal;
      }
 }

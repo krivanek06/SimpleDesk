@@ -647,7 +647,7 @@ public class RequestSimulationTest {
         User user10 = this.userRepository.findByUsername("user10").get();
         User user11 = this.userRepository.findByUsername("user11").get();
 
-        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user2));
+        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(user2.getUsername());
 
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
         assertThat(userPrivilegeDTO.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.FINANCE.name(),
@@ -665,14 +665,14 @@ public class RequestSimulationTest {
         assertThat(userPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.SERVER).size()).isEqualTo(2);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user4));
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(user4.getUsername());
         assertThat(userPrivilegeDTO.getSubmitFinanceRequests()).isNull();
         assertThat(userPrivilegeDTO.getRequestTypesToSolve()).containsExactlyInAnyOrder( MODULE_TYPE.REPORT.name());
         assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.REPORT.name(), MODULE_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user10));
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(user10.getUsername());
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
                 MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
@@ -681,7 +681,7 @@ public class RequestSimulationTest {
                 NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user6));
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(user6.getUsername());
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(),
                 MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
@@ -690,7 +690,7 @@ public class RequestSimulationTest {
                 NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3, NAMES.FINANCE_TYPE_4, NAMES.FINANCE_TYPE_5);
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(false);
 
-        userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user11));
+        userPrivilegeDTO = this.userService.getPrivilegesForUser(user11.getUsername());
         assertThat(userPrivilegeDTO.getSolveTickets()).isNull();
         assertThat(userPrivilegeDTO.getModuleTypesToUse()).isNull();
         assertThat(userPrivilegeDTO.getRequestTypesToSolve()).isNull();

@@ -322,7 +322,7 @@ public class BasicTest {
         assertThat(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group1).get()).containsExactlyInAnyOrder(ticket,report,finance);
          //   assertThat(group5.getUsersInGroup()).isEmpty();
 
-        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user1));
+        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(user1.getUsername());
 
         assertThat(userPrivilegeDTO.getRequestTypesToSolve())
                 .containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name());
@@ -335,7 +335,7 @@ public class BasicTest {
                 ticketSubtypesHardware.get(0).getName(), ticketSubtypesHardware.get(1).getName());
         assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-        UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(this.userService.convertUserToSimpleDTO(user12));
+        UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12.getUsername());
 
         assertThat(userPrivilegeDTO5.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.TICKET.name());
         assertThat(userPrivilegeDTO5.getModuleTypesToUse().size()).isEqualTo(0);

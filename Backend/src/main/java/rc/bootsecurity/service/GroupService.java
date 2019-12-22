@@ -43,6 +43,10 @@ public class GroupService {
         return this.groupRepository.findAllByGroupManager(user).orElseGet(ArrayList::new);
     }
 
+    public List<Group> getGroupToWatchActivity(User user){
+        return this.groupRepository.findAllByUsersWatchingGroupActivity(user).orElseGet(ArrayList::new);
+    }
+
 
     public void addUserIntoGroupsAndSave(UserSimpleDTO userDTO, List<String> groupNames){
         List<Group> groups = this.groupRepository.findAllByGroupNameIn(groupNames);

@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAllByWatchedRequests(Request request);
 
     @Query(nativeQuery = true, value = "select * from get_all_privileges_for_user_varchar(?1);")
-    String findPrivilegesForUser(Integer userId);
+    String findPrivilegesForUser(String searching_name);
 
    /* @Query(nativeQuery = true, value = "select * from get_all_privileges_for_user_json(?1);")
     String findPrivilegesForUser(Integer userId);*/

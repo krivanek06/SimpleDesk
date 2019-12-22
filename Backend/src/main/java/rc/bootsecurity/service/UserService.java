@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -13,6 +14,8 @@ import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.utils.modelmapper.JsonStringParser;
 import rc.bootsecurity.utils.modelmapper.UserModelMapper;
+
+import java.util.List;
 
 @Service
 public class UserService {
@@ -35,9 +38,9 @@ public class UserService {
     private JsonStringParser jsonStringParser;
 
 
-    public UserPrivilegeDTO getPrivilegesForUser(UserSimpleDTO userSimpleDTO){
+    public UserPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(
-                this.userRepository.findPrivilegesForUser(userSimpleDTO.getId()));
+                this.userRepository.findPrivilegesForUser(username));
     }
 
 
