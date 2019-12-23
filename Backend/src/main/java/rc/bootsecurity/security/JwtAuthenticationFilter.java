@@ -64,8 +64,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withClaim("FULL_NAME" , principal.getUser().getFullName())
-                .withClaim("EMAIL" , principal.getUser().getEmail())
                 .withClaim("IS_ADMIN" , principal.isAdmin())
                 .withClaim("IS_GHOST" , principal.isGhost())
                 .withArrayClaim("MODULE_TYPES_TO_USE" , principal.getModuleTypesToUse())

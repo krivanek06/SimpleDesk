@@ -31,7 +31,6 @@ import rc.bootsecurity.service.request.RequestPrivilegeService;
 import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.creator.NAMES;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.*;
 
@@ -90,8 +89,7 @@ public class InserterRequestsSimulation {
     private RequestCommentService requestCommentService;
     @Autowired
     private RequestConverterService requestConverterService;
-    @Autowired
-    private UserModelMapper userModelMapper;
+
 
     public void mainInserter(){
         this.insertUsersWithGroups();

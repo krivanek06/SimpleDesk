@@ -43,7 +43,6 @@ import rc.bootsecurity.service.request.RequestPrivilegeService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.creator.NAMES;
 import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
-import rc.bootsecurity.utils.modelmapper.UserModelMapper;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -115,8 +114,6 @@ public class RequestSimulationTest {
     private RequestCommentRepository requestCommentRepository;
     @Autowired
     private GroupService groupService;
-    @Autowired
-    private UserModelMapper userModelMapper;
     @Autowired
     private RequestConverterService requestConverterService;
     @Autowired

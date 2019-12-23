@@ -47,8 +47,8 @@ public class JsonStringParser {
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
 
-        if(!userPrivileges.isNull("FinanceTypeToSubmit")) {
-            userPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("FinanceTypeToSubmit")
+        if(!userPrivileges.isNull("financeTypeToSubmit")) {
+            userPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("financeTypeToSubmit")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
         userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getRequestTypesToSolve() == null));
