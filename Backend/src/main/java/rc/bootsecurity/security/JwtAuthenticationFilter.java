@@ -24,11 +24,9 @@ import static com.auth0.jwt.algorithms.Algorithm.HMAC512;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private AuthenticationManager authenticationManager;
-    //private UserModelMapper userModelMapper;
 
     public JwtAuthenticationFilter(AuthenticationManager authenticationManager) {
         this.authenticationManager = authenticationManager;
-        //this.userModelMapper = userModelMapper;
     }
 
     /* Trigger when we issue POST request to /login
@@ -81,11 +79,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 
-
         // Add token in response
-        response.addHeader(JwtProperties.HEADER_STRING, JwtProperties.TOKEN_PREFIX +  token);
+        response.addHeader(JwtProperties.HEADER_STRING, token);
 
-        response.addHeader("UserObject" , principal.getUsername());
     }
 
 

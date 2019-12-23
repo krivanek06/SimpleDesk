@@ -433,8 +433,8 @@ select json_build_object(
 -- my open requests
 'my_open_requests', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as my_open_requests
-    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
+    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation, 'watched' , watched) ) as my_open_requests
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation,  true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
     left join tbl_users assigned on assigned.id = r.assigned_uid
@@ -444,90 +444,89 @@ select json_build_object(
 -- assigned on me and still open
 'assigned_on_me', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned, 'creation' , creation) ) as assigned_on_me
-    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
+    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned, 'creation' , creation, 'watched' , watched) ) as assigned_on_me
+    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation, true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
     left join tbl_users assigned on assigned.id = r.assigned_uid
     where r.assigned_uid = (select id from tbl_users where tbl_users.username = searching_name) and closed_uid is null
     order by id asc)
     as t ),
--- watched requests does not matter if open or closed
-'watched_requests', (
-    select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation) ) as watched_requests
-    from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation
-    from tbl_requests r
-    inner join tbl_module_type rt on rt.id = r.type_id
-    left join tbl_users assigned on assigned.id = r.assigned_uid
-    left join tbl_request_watched_by_user rw on rw.request_id = r.id
-    where rw.user_id = (select id from tbl_users where tbl_users.username = searching_name)
-    order by id asc)
-    as t),
 -- open requests sent by members of my team
 'sent_by_my_team', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) ) as sent_by_my_team
+    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation , 'watched' , watched) ) as sent_by_my_team
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
-    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation , true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
-    where r.creator_uid in (select distinct user_id from  tbl_user_groups where user_id != (select id from tbl_users where tbl_users.username = searching_name) and group_id in
-             (select id from  tbl_groups where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
-              union select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
+    where r.creator_uid in (
+    select distinct user_id from  tbl_user_groups
+    cross join (select id as request_making_user_id from tbl_users where tbl_users.username = searching_name) as tmp
+    where user_id != tmp.request_making_user_id and group_id in
+    (select id from  tbl_groups where manager_id = tmp.request_making_user_id
+    union
+    select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = tmp.request_making_user_id))
     and closed_uid is null
     order by id asc)
     as t),
 -- open requests assigned by members of my team
 'assigned_on_my_team', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) ) as assigned_on_my_team
+    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation, 'watched' , watched) ) as assigned_on_my_team
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
-    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation , true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
-    where r.assigned_uid in (select distinct user_id from  tbl_user_groups where user_id != (select id from tbl_users where tbl_users.username = searching_name) and group_id in
-              (select id from  tbl_groups where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
-               union select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
-    and r.closed_uid is null
+    where r.assigned_uid  in (
+    select distinct user_id from  tbl_user_groups
+    cross join (select id as request_making_user_id from tbl_users where tbl_users.username = searching_name) as tmp
+    where user_id != tmp.request_making_user_id and group_id in
+    (select id from  tbl_groups where manager_id = tmp.request_making_user_id
+    union
+    select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = tmp.request_making_user_id))
+    and closed_uid is null
     order by id asc)
     as t),
 -- open requests assigned by members of my team
 'all_open_requests', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation) )
+    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation, 'watched' , watched) )
     as all_open_requests
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
-    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation
+    concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation,
+    case when tbl_request_watched_by_user.user_id is not null then true else false end as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
     inner join tbl_users creator on creator.id  = r.creator_uid
     left join tbl_users assigned on assigned.id = r.assigned_uid
     left join tbl_tickets on  tbl_tickets.request_id = r.id
     left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+    left join tbl_request_watched_by_user on tbl_request_watched_by_user.request_id = r.id
     where r.closed_uid is null and (
-    -- get privileges if I can solve reports or tickets
-    (rt.name != 'TICKET' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
-    from get_all_privileges_for_user_varchar(searching_name)) )
-    OR
-    -- get privileges on ticket types
-        (rt.name = 'TICKET' AND (select case
+        -- get privileges if I can solve reports or tickets
+        (rt.name != 'TICKET' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
+        from get_all_privileges_for_user_varchar( searching_name)) )
+OR
+-- get privileges on ticket types
+    (rt.name = 'TICKET' AND (select case
         when  tbl_ticket_types.name = 'USER' or tbl_ticket_types.name = 'OTHER' then (
         select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-        like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(searching_name))
+        like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar( searching_name))
         else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-        like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(searching_name))
+        like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar( searching_name))
         end as contain
-        )  ) -- remove those which appear in another table
-    ) and  (r.assigned_uid is null or
+    )  ) -- remove those which appear in another table
+        ) and  (r.assigned_uid is null or
         r.assigned_uid not in (select distinct user_id from  tbl_user_groups where group_id in
-        (select id from  tbl_groups where manager_id =  (select id from tbl_users where tbl_users.username = searching_name))))
-        and r.creator_uid not in (select distinct user_id from  tbl_user_groups where user_id !=  (select id from tbl_users where tbl_users.username = searching_name) and group_id in
-                      (select id from  tbl_groups where manager_id =  (select id from tbl_users where tbl_users.username = searching_name)))
-        order by id asc ) as t
-        ))::varchar;
+        (select id from  tbl_groups where manager_id =  (select id from tbl_users where tbl_users.username =  searching_name))))
+        and r.creator_uid not in (select distinct user_id from  tbl_user_groups where user_id !=  (select id from tbl_users where tbl_users.username =  searching_name) and group_id in
+        (select id from  tbl_groups where manager_id =  (select id from tbl_users where tbl_users.username = searching_name)))
+        order by id asc
+    ) as t
+))::varchar;
 $$ LANGUAGE sql;
