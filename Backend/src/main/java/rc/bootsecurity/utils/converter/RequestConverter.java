@@ -1,4 +1,4 @@
-package rc.bootsecurity.service.request;
+package rc.bootsecurity.utils.converter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +15,10 @@ import rc.bootsecurity.service.UserService;
 
 import java.util.stream.Collectors;
 
-@Service
-public class RequestConverterService {
-    @Autowired
-    private UserService userService;
+
+public class RequestConverter {
+
+    private UserConverter userConverter = new UserConverter();
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
         requestDTO.setRequestType(request.getModuleType().getName());
@@ -35,8 +35,25 @@ public class RequestConverterService {
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
         requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
-                request.getUserWhoWatchThisRequest().stream().map(user -> this.userService.convertUserToSimpleDTO(user))
+                request.getUserWhoWatchThisRequest().stream().map(user -> this.userConverter.convertUserToSimpleDTO(user))
                         .collect(Collectors.toList()) : null);
+    }
+
+    public RequestTableDTO convertRequestToRequestTableDTO(Request request, Boolean watch){
+        RequestTableDTO requestTableDTO = new RequestTableDTO();
+        requestTableDTO.setId(request.getId());
+        requestTableDTO.setTimestampCreation(request.getTimestampCreation());
+        requestTableDTO.setTimestampClosed(request.getTimestampClosed());
+        requestTableDTO.setName(request.getName());
+        requestTableDTO.setRequestPriority(request.getRequestPriority().getName());
+        requestTableDTO.setRequestPosition(request.getRequestPosition().getName());
+        requestTableDTO.setRequestType(request.getModuleType().getName());
+        requestTableDTO.setCreator(request.getCreator().getFullName());
+        requestTableDTO.setAssigned(request.getAssigned().getFullName());
+        requestTableDTO.setClosed(request.getClosed().getFullName());
+        requestTableDTO.setWatched(watch);
+
+        return requestTableDTO;
     }
 
     public TicketDTO convertTicketToTicketDTO(Ticket ticket){

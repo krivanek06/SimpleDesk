@@ -6,21 +6,18 @@ import rc.bootsecurity.exception.CommentNotFoundException;
 import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.exception.UserNotFoundException;
 import rc.bootsecurity.model.dto.GroupDTO;
-import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.dto.request.RequestCommentDTO;
-import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.RequestCommentRepository;
 import rc.bootsecurity.repository.request.RequestRepository;
+import rc.bootsecurity.utils.converter.RequestConverter;
 
 import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RequestCommentService {
@@ -32,8 +29,7 @@ public class RequestCommentService {
     private RequestRepository requestRepository;
     @Autowired
     private GroupRepository groupRepository;
-    @Autowired
-    private RequestConverterService requestConverterService;
+
 
     public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
     public void saveOrUpdateComment(List<RequestComment> requestComments){ this.requestCommentRepository.saveAll(requestComments); }

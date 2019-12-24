@@ -1,6 +1,7 @@
 package rc.bootsecurity.repository.request;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
@@ -37,5 +38,7 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     List<Request> findAllByRequestPosition(RequestPosition requestPosition);
     List<Request> findAllByRequestPriorityAndRequestPosition(RequestPriority requestPriority, RequestPosition requestPosition);
 
+    @Query(nativeQuery = true, value = "select * from get_requests_on_dashboard_for_user_varchar(?1);")
+    String findOpenRequestOnDashboard(String searching_name);
 
 }

@@ -27,8 +27,4 @@ public class UserDTO {
 
     private Timestamp dateEnding;
 
-    private String[] groupsInvolved;
-
-    private String[] groupsToMange;
-
 }

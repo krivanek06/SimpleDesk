@@ -37,12 +37,14 @@ import rc.bootsecurity.repository.ticket.*;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.service.request.RequestCommentService;
-import rc.bootsecurity.service.request.RequestConverterService;
+import rc.bootsecurity.utils.converter.GroupConverter;
+import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.service.request.RequestPrivilegeService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.creator.NAMES;
 import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
+import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -115,13 +117,15 @@ public class RequestSimulationTest {
     @Autowired
     private GroupService groupService;
     @Autowired
-    private RequestConverterService requestConverterService;
-    @Autowired
     private RequestManagementService requestManagementService;
     @Autowired
     private RequestCommentService requestCommentService;
     @Autowired
     private RequestPrivilegeService requestPrivilegeService;
+
+    private RequestConverter requestConverter = new RequestConverter();
+    private UserConverter userConverter = new UserConverter();
+    private GroupConverter groupConverter = new GroupConverter();
 
     @Before
     public void insertIntoDB(){
@@ -167,9 +171,9 @@ public class RequestSimulationTest {
         User user12 = Creator.createUser("firstname12" , "lastname12", "user12" , "fakemail11@gmail.com" , "123456");
         this.userRepository.save(user12);
 
-        this.groupService.addUserIntoGroupsAndSave(this.userService.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
+        this.groupService.addUserIntoGroupsAndSave(this.userConverter.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
         assertThat(this.groupRepository.findByGroupName(NAMES.TEST_GROUP_ERROR).getUsersInGroup()).containsExactlyInAnyOrder(user11, user12);
-        this.groupService.removeUserFromGroupsAndSave(this.userService.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
+        this.groupService.removeUserFromGroupsAndSave(this.userConverter.convertUserToSimpleDTO(user12), new ArrayList<>(Collections.singletonList(NAMES.TEST_GROUP_ERROR)));
         assertThat(this.groupRepository.findByGroupName(NAMES.TEST_GROUP_ERROR).getUsersInGroup()).containsExactlyInAnyOrder(user11);
     }
 
@@ -305,7 +309,7 @@ public class RequestSimulationTest {
         FinanceType removedFinanceType = groupNormal3.getFinanceTypes().iterator().next();
         groupNormal3.getFinanceTypes().remove(removedFinanceType);
 
-        GroupDTO groupDTO = this.groupService.convertGroupToDTO(groupNormal3);
+        GroupDTO groupDTO = this.groupConverter.convertGroupToDTO(groupNormal3);
         groupDTO.getFinanceTypes().remove(removedFinanceType.getName());
         this.requestPrivilegeService.modifyFinanceTypeToSubmit(groupDTO);
 
@@ -319,14 +323,14 @@ public class RequestSimulationTest {
         assertThat(groupNormal3.getModuleTypesToUse()).containsExactlyInAnyOrder(this.moduleTypeRepository.findByName(MODULE_TYPE.FINANCE.name()));
 
         // add back
-        groupDTO = this.groupService.convertGroupToDTO(groupNormal3);
+        groupDTO = this.groupConverter.convertGroupToDTO(groupNormal3);
         groupDTO.getFinanceTypes().add(removedFinanceType.getName());
         this.requestPrivilegeService.modifyFinanceTypeToSubmit(groupDTO);
         groupNormal3 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_NORMAL_3);
         initGroupAttributes(groupNormal3);
         assertThat(groupNormal3.getFinanceTypes().size()).isEqualTo(5);
         // add ticket to submit
-        groupDTO = this.groupService.convertGroupToDTO(groupNormal3);
+        groupDTO = this.groupConverter.convertGroupToDTO(groupNormal3);
         assertThat(groupDTO.getRequestTypesToSubmit()).containsExactlyInAnyOrder(MODULE_TYPE.FINANCE.name());
         groupDTO.setModuleTypeToManage(new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name())));
         this.requestPrivilegeService.modifyModuleTypeForGroupToManage(groupDTO);
@@ -364,7 +368,7 @@ public class RequestSimulationTest {
         /**
          * delete and add - requestToSubmit, requestToSolve, FinanceTypeToSubmit
          */
-        GroupDTO groupDTOError = this.groupService.convertGroupToDTO(groupError);
+        GroupDTO groupDTOError = this.groupConverter.convertGroupToDTO(groupError);
         groupDTOError.setRequestTypesToSubmit(new ArrayList<>(Arrays.asList(MODULE_TYPE.FINANCE.name())));
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(groupDTOError);
         assertThat(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupError).get()
@@ -525,14 +529,14 @@ public class RequestSimulationTest {
         groupSolver3.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(groupSolver3).orElse(new ArrayList<>())));
         groupSolver3.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(groupSolver3).orElse(new ArrayList<>())));
 
-        GroupDTO groupDTO = this.groupService.convertGroupToDTO(groupSolver3);
+        GroupDTO groupDTO = this.groupConverter.convertGroupToDTO(groupSolver3);
         assertThat(groupDTO.getFinanceTypes()).containsExactlyInAnyOrder(NAMES.FINANCE_TYPE_1,NAMES.FINANCE_TYPE_2,
                 NAMES.FINANCE_TYPE_3,NAMES.FINANCE_TYPE_4,NAMES.FINANCE_TYPE_5);
         assertThat(groupDTO.getModuleTypeToManage()).containsExactly(MODULE_TYPE.FINANCE.name());
         assertThat(groupDTO.getTicketPrivilegesList()).isEmpty();
         assertThat(groupDTO.getRequestTypesToSubmit()).containsExactlyInAnyOrder(MODULE_TYPE.FINANCE.name());
-        assertThat(groupDTO.getUsersInGroup()).containsExactlyInAnyOrder(this.userService.convertUserToSimpleDTO(user6));
-        assertThat(groupDTO.getGroupManager()).isEqualTo(this.userService.convertUserToSimpleDTO(user6));
+        assertThat(groupDTO.getUsersInGroup()).containsExactlyInAnyOrder(this.userConverter.convertUserToSimpleDTO(user6));
+        assertThat(groupDTO.getGroupManager()).isEqualTo(this.userConverter.convertUserToSimpleDTO(user6));
     }
 
     @Test
@@ -547,14 +551,14 @@ public class RequestSimulationTest {
         RequestComment requestComment1 = this.requestCommentService.createRequestComment(
                 Creator.createRequestCommentDTO(ticket4.getId(), user2.getUsername(), "COMMENT1", true));
         this.requestCommentService.saveOrUpdateComment(requestComment1);
-        this.requestCommentService.shareCommentWith(this.requestConverterService.convertRequestCommentToDTO(requestComment1),
-                this.groupService.convertGroupToDTO(groupSolver1) );
+        this.requestCommentService.shareCommentWith(this.requestConverter.convertRequestCommentToDTO(requestComment1),
+                this.groupConverter.convertGroupToDTO(groupSolver1) );
         requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0);
 
         assertThat(requestComment1.getGroupsToViewRequestComment()).containsExactlyInAnyOrder(groupSolver1);
         assertThat(requestComment1.getComment()).isEqualToIgnoringCase("COMMENT1");
 
-        RequestCommentDTO requestCommentDTO = this.requestConverterService.convertRequestCommentToDTO(requestComment1);
+        RequestCommentDTO requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
         requestCommentDTO.setComment("AHOJ");
         this.requestCommentService.modifyComment(requestCommentDTO);
         requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0);
@@ -563,7 +567,7 @@ public class RequestSimulationTest {
         assertThat(requestComment1.getTimestamp()).isNotNull();
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).size()).isEqualTo(1);
 
-        this.requestCommentService.shareCommentWith(requestCommentDTO, this.groupService.convertGroupToDTO(groupSolver2) );
+        this.requestCommentService.shareCommentWith(requestCommentDTO, this.groupConverter.convertGroupToDTO(groupSolver2) );
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0).getGroupsToViewRequestComment())
                 .containsExactlyInAnyOrder(groupSolver1, groupSolver2);
 
@@ -597,34 +601,34 @@ public class RequestSimulationTest {
 
         Ticket ticket = (Ticket)  watchedRequests.get(1);
         ticket.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(ticket)));
-        TicketDTO ticketDTO = this.requestConverterService.convertTicketToTicketDTO(ticket);
+        TicketDTO ticketDTO = this.requestConverter.convertTicketToTicketDTO(ticket);
         assertThat(ticketDTO.getProblem()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();
         assertThat(ticketDTO.getUserToWatchRequest().get(0).getId()).isEqualTo(user3.getId());
-        assertThat(ticketDTO.getUserToWatchRequest()).containsExactlyInAnyOrder(this.userService.convertUserToSimpleDTO(user3));
+        assertThat(ticketDTO.getUserToWatchRequest()).containsExactlyInAnyOrder(this.userConverter.convertUserToSimpleDTO(user3));
 
-        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userService.convertUserToSimpleDTO(user4));
+        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userConverter.convertUserToSimpleDTO(user4));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3, user4);
 
-        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userService.convertUserToSimpleDTO(user4));
+        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userConverter.convertUserToSimpleDTO(user4));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3);
 
         assertThat(this.requestRepository.findAllByUserWhoWatchThisRequestContainsOrderByIdAsc(user5).size()).isEqualTo(1);
         assertThat(this.requestRepository.findAllByUserWhoWatchThisRequestContainsOrderByIdAsc(user10)).isEmpty();
 
-        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userService.convertUserToSimpleDTO(user5));
-        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userService.convertUserToSimpleDTO(user6));
+        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userConverter.convertUserToSimpleDTO(user5));
+        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userConverter.convertUserToSimpleDTO(user6));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3, user5, user6);
-        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userService.convertUserToSimpleDTO(user6));
+        this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userConverter.convertUserToSimpleDTO(user6));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3, user5, user6);
-        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userService.convertUserToSimpleDTO(user5));
+        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userConverter.convertUserToSimpleDTO(user5));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3, user6);
-        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userService.convertUserToSimpleDTO(user6));
+        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userConverter.convertUserToSimpleDTO(user6));
         assertThat(ticket.getUserWhoWatchThisRequest()).containsExactlyInAnyOrder(user3);
-        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userService.convertUserToSimpleDTO(user3));
+        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userConverter.convertUserToSimpleDTO(user3));
         assertThat(ticket.getUserWhoWatchThisRequest()).isEmpty();
-        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userService.convertUserToSimpleDTO(user3));
+        this.requestManagementService.removeWatchRequestAndSave(ticket.getId(), this.userConverter.convertUserToSimpleDTO(user3));
         assertThat(ticket.getUserWhoWatchThisRequest()).isEmpty();
     }
 

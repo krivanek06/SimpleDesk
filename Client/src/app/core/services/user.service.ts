@@ -11,26 +11,21 @@ import { tap, mapTo, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class UserService {
-  private user$: BehaviorSubject<User>;
-  private userDetailsInformation = '';
+  private userPrefix: string = 'logged_in_user';
+  public user: User;
+  private userInformationURL = environment.apiUrl + "user/basicInformation";
 
-  constructor(private http: HttpClient) { 
-    console.log('aa')
+  constructor(private http: HttpClient) {  
+    this.checkIfUserAvailable();
   }
 
-  public getUser():Observable<User>{
-    return this.user$.asObservable();
-  }
 
-  public getUserInformation (): Observable<boolean> {
-    //const body = new HttpParams().set('username', username).set('password', password);
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-
-    return this.http.post<User>(this.userDetailsInformation, null, {headers})
+  public loadLoggedInUser (): Observable<boolean> {
+    return this.http.get<User>(this.userInformationURL)
       .pipe(
         tap(user => {
-          console.log(user);
-          this.user$ = new BehaviorSubject<User>(user);
+          this.saveUserToLocalStorage(user);
+          this.user = user 
         }),
         mapTo(true),
         catchError(error => {
@@ -38,4 +33,19 @@ export class UserService {
           return of(false);
         }));
   }
+
+  private checkIfUserAvailable():void{
+    if(this.user === undefined){
+      this.user = JSON.parse(localStorage.getItem(this.userPrefix));
+    }
+  }
+
+  private saveUserToLocalStorage(user: User): void{
+    localStorage.setItem(this.userPrefix, JSON.stringify(user));
+  }
+
+  public removeUserFromLocalStorage(){
+    localStorage.removeItem(this.userPrefix);
+  }
+
 }

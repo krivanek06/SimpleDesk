@@ -26,14 +26,27 @@ public class UserPrincipal implements UserDetails {
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
 
-        if(user.getUsername().equalsIgnoreCase("admin")) {
+        if(this.isAdmin()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
         }
 
-        if(user.getUsername().equalsIgnoreCase("ghost")) {
+        if(this.isGhost()) {
             authorities.add(new SimpleGrantedAuthority("ROLE_GHOST"));
         }
+
+        if(this.getRequestTypesToSolve() != null){
+            authorities.add(new SimpleGrantedAuthority("ROLE_SOLVER"));
+        }
+
+        if(!this.groupsToManage.isEmpty()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
+        }
+        if(!this.groupsActivityToWatch.isEmpty()){
+            authorities.add(new SimpleGrantedAuthority("ROLE_MANAGER_RIGHT_HAND"));
+        }
+
 
         return authorities;
     }

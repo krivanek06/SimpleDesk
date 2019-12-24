@@ -433,7 +433,7 @@ select json_build_object(
 -- my open requests
 'my_open_requests', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned,'creation' , creation, 'watched' , watched) ) as my_open_requests
+    'id', id,'name' , subject,'requestType' , name,'assigned' ,assigned,'timestampCreation' , creation, 'watched' , watched) ) as my_open_requests
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation,  true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
@@ -444,7 +444,7 @@ select json_build_object(
 -- assigned on me and still open
 'assigned_on_me', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'assigned' ,assigned, 'creation' , creation, 'watched' , watched) ) as assigned_on_me
+    'id', id,'name' , subject,'requestType' , name,'assigned' ,assigned, 'timestampCreation' , creation, 'watched' , watched) ) as assigned_on_me
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned, r.timestamp_creation as creation, true as watched
     from tbl_requests r
     inner join tbl_module_type rt on rt.id = r.type_id
@@ -455,7 +455,7 @@ select json_build_object(
 -- open requests sent by members of my team
 'sent_by_my_team', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation , 'watched' , watched) ) as sent_by_my_team
+    'id', id,'name' , subject,'requestType' , name,'creator', creator,'assigned' ,assigned,'timestampCreation' , creation , 'watched' , watched) ) as sent_by_my_team
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation , true as watched
     from tbl_requests r
@@ -475,7 +475,7 @@ select json_build_object(
 -- open requests assigned by members of my team
 'assigned_on_my_team', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation, 'watched' , watched) ) as assigned_on_my_team
+    'id', id,'name' , subject,'requestType' , name,'creator', creator,'assigned' ,assigned,'timestampCreation' , creation, 'watched' , watched) ) as assigned_on_my_team
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation , true as watched
     from tbl_requests r
@@ -495,7 +495,7 @@ select json_build_object(
 -- open requests assigned by members of my team
 'all_open_requests', (
     select json_agg( json_build_object(
-    'id', id,'title' , subject,'type_name' , name,'creator', creator,'assigned' ,assigned,'creation' , creation, 'watched' , watched) )
+    'id', id,'name' , subject,'requestType' , name,'creator', creator,'assigned' ,assigned,'timestampCreation' , creation, 'watched' , watched) )
     as all_open_requests
     from (select r.id , r.subject, rt.name, concat(assigned.first_name, ' ',assigned.last_name ) as assigned,
     concat(creator.first_name, ' ',creator.last_name ) as creator,  r.timestamp_creation as creation,

@@ -15,6 +15,7 @@ import rc.bootsecurity.repository.finance.FinanceTypeRepository;
 import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
+import rc.bootsecurity.utils.converter.RequestConverter;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -31,8 +32,8 @@ public class RequestPrivilegeService {
     private TicketPrivilegesRepository ticketPrivilegesRepository;
     @Autowired
     private FinanceTypeRepository financeTypeRepository;
-    @Autowired
-    private RequestConverterService requestConverterService;
+
+    private RequestConverter requestConverter = new RequestConverter();
 
     private TicketPrivileges convertTicketPrivilegeDTOtoEntity(Group group, TicketPrivilegeDTO ticketPrivilegeDTO){
         TicketPrivileges ticketPrivileges = new TicketPrivileges();
@@ -85,7 +86,7 @@ public class RequestPrivilegeService {
 
         // current Ticket privileges for Group
         List<TicketPrivilegeDTO> currentPrivilegesForUser = this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>())
-                .stream().map(ticketPrivileges -> this.requestConverterService.convertTicketPrivilegeToDTO(ticketPrivileges)).collect(Collectors.toList());
+                .stream().map(ticketPrivileges -> this.requestConverter.convertTicketPrivilegeToDTO(ticketPrivileges)).collect(Collectors.toList());
 
         // new privileges which will be saved
         List<TicketPrivileges> privilegesSave = groupDTO.getTicketPrivilegesList().stream().filter(ticketPrivilegeDTO ->

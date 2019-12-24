@@ -49,8 +49,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                     // configure access rules
                     .authorizeRequests()
-                    .antMatchers( "/login").permitAll() // HttpMethod.POST,
-                    //.antMatchers( "/PersonalDetails/*").permitAll()
+                    .antMatchers( "/login").permitAll()
+                    .antMatchers("/api/user/**").authenticated()
+                    .antMatchers("/api/requests/dashboard").authenticated()
                     .anyRequest().authenticated();
     }
 

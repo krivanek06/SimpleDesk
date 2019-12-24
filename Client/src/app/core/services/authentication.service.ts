@@ -12,7 +12,7 @@ import { tap, mapTo, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private urlLogin = environment.apiUrl + "login";
+  private urlLogin = environment.loginUrl + "login";
   private urlRefreshToken = '';
   private jwtHelper: JwtHelperService;
   private JWToken$: BehaviorSubject<JWToken>;
@@ -23,6 +23,9 @@ export class AuthenticationService {
   }
 
   public getDecodedToken():Observable<JWToken>{
+    if(this.JWToken$ === undefined){
+      this.JWToken$= new BehaviorSubject<JWToken>(this.jwtHelper.decodeToken(this.getAccessToken()));
+    }
     return this.JWToken$.asObservable();
   }
 

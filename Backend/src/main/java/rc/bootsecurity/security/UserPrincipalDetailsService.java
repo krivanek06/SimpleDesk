@@ -1,6 +1,7 @@
 package rc.bootsecurity.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -30,10 +31,10 @@ public class UserPrincipalDetailsService implements UserDetailsService {
         List<Group> groupsToManage = this.groupService.getGroupsToManageForUser(user);
         List<Group> groupToWatchActivity = this.groupService.getGroupToWatchActivity(user);
 
+        // privileges
         UserPrincipal userPrincipal = new UserPrincipal();
         userPrincipal.setUser(user);
         userPrincipal.setUserPrivilegeDTO(userPrivilegeDTO);
-
         userPrincipal.setGroupsToManage(groupsToManage.stream().map(Group::getGroupName).collect(Collectors.toList()));
         userPrincipal.setGroupsActivityToWatch(groupToWatchActivity.stream().map(Group::getGroupName).collect(Collectors.toList()));
 

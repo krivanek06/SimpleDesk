@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -52,13 +53,15 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
             // parse the token and validate it
             String userName = decodedJWT.getSubject();
-            List<SimpleGrantedAuthority> rights = decodedJWT.getClaim("applicationPermissions").asList(SimpleGrantedAuthority.class);
+            List<SimpleGrantedAuthority> rights = decodedJWT.getClaim("AUTHORITIES").asList(SimpleGrantedAuthority.class);
 
             // create spring auth token using username, pass, authorities/roles
             if (userName != null) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userName, null, rights);
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 return authToken;
+
+
             }
             return null;
         }

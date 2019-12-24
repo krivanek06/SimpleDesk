@@ -26,11 +26,12 @@ import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.service.request.RequestCommentService;
-import rc.bootsecurity.service.request.RequestConverterService;
+import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.service.request.RequestPrivilegeService;
 import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.creator.NAMES;
+import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.util.*;
 
@@ -43,38 +44,6 @@ public class InserterRequestsSimulation {
 
     @Autowired
     private GroupRepository groupRepository;
-
-    @Autowired
-    private ModuleTypeRepository moduleTypeRepository;
-
-    @Autowired
-    private TicketTypeRepository ticketTypeRepository;
-
-    @Autowired
-    private TicketSubtypeRepository ticketSubtypeRepository;
-
-    @Autowired
-    private TicketPrivilegesRepository ticketPrivilegesRepository;
-
-    @Autowired
-    private RequestPriorityRepository requestPriorityRepository;
-
-    @Autowired
-    private RequestPositionRepository requestPositionRepository;
-
-    @Autowired
-    private TicketRepository ticketRepository;
-
-    @Autowired
-    private ReportAccessStoredRepository reportAccessStoredRepository;
-    @Autowired
-    private ReportAccessRepository reportAccessRepository;
-    @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
-    private ReportRefreshRepository reportRefreshRepository;
-    @Autowired
-    private ReportTypeRepository reportTypeRepository;
     @Autowired
     private Inserter inserter;
     @Autowired
@@ -87,9 +56,9 @@ public class InserterRequestsSimulation {
     private RequestManagementService requestManagementService;
     @Autowired
     private RequestCommentService requestCommentService;
-    @Autowired
-    private RequestConverterService requestConverterService;
 
+    private RequestConverter requestConverter = new RequestConverter();
+    private UserConverter userConverter = new UserConverter();
 
     public void mainInserter(){
         this.insertUsersWithGroups();
@@ -263,10 +232,10 @@ public class InserterRequestsSimulation {
         // -------------------------------------------------------------------------
 
         // assign user on comments
-        RequestCommentDTO requestCommentDTO3 = this.requestConverterService.convertRequestCommentToDTO(requestComment3);
-        RequestCommentDTO requestCommentDTO4 = this.requestConverterService.convertRequestCommentToDTO(requestComment4);
-        RequestCommentDTO requestCommentDTO6 = this.requestConverterService.convertRequestCommentToDTO(requestComment6);
-        RequestCommentDTO requestCommentDTO7 = this.requestConverterService.convertRequestCommentToDTO(requestComment7);
+        RequestCommentDTO requestCommentDTO3 = this.requestConverter.convertRequestCommentToDTO(requestComment3);
+        RequestCommentDTO requestCommentDTO4 = this.requestConverter.convertRequestCommentToDTO(requestComment4);
+        RequestCommentDTO requestCommentDTO6 = this.requestConverter.convertRequestCommentToDTO(requestComment6);
+        RequestCommentDTO requestCommentDTO7 = this.requestConverter.convertRequestCommentToDTO(requestComment7);
 
         requestCommentDTO3.setGroupsToShare(new ArrayList<>(Arrays.asList(NAMES.TEST_GROUP_SOLVER_1)));
         requestCommentDTO4.setGroupsToShare(new ArrayList<>(Arrays.asList(NAMES.TEST_GROUP_SOLVER_1)));
@@ -291,9 +260,9 @@ public class InserterRequestsSimulation {
         UserSimpleDTO userSimpleDTOUser10 = Creator.createUserSimpleDTO(user10);
 
         // assign -> assigned, solver, closed
-        TicketDTO ticketDTO2 = this.requestConverterService.convertTicketToTicketDTO(ticket2);
-        TicketDTO ticketDTO3 = this.requestConverterService.convertTicketToTicketDTO(ticket3);
-        TicketDTO ticketDTO4 = this.requestConverterService.convertTicketToTicketDTO(ticket4);
+        TicketDTO ticketDTO2 = this.requestConverter.convertTicketToTicketDTO(ticket2);
+        TicketDTO ticketDTO3 = this.requestConverter.convertTicketToTicketDTO(ticket3);
+        TicketDTO ticketDTO4 = this.requestConverter.convertTicketToTicketDTO(ticket4);
         this.requestManagementService.setAssignUserAndSave(ticket1.getId(), userSimpleDTOUser2);
         this.requestManagementService.setAssignUserAndSave(ticketDTO2.getId(), userSimpleDTOUser2);
         this.requestManagementService.setSolverUserAndSave(ticketDTO2.getId(), userSimpleDTOUser2, "SOLUTION");
@@ -318,11 +287,11 @@ public class InserterRequestsSimulation {
         // -------------------------------------------------------------------------
 
         // set watching requests
-        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userService.convertUserToSimpleDTO(user3));
-        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userService.convertUserToSimpleDTO(user2));
-        this.requestManagementService.setWatchRequestAndSave(ticket3.getId(),this.userService.convertUserToSimpleDTO(user3));
-        this.requestManagementService.setWatchRequestAndSave(ticket4.getId(),this.userService.convertUserToSimpleDTO(user2));
-        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userService.convertUserToSimpleDTO(user5));
+        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userConverter.convertUserToSimpleDTO(user3));
+        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userConverter.convertUserToSimpleDTO(user2));
+        this.requestManagementService.setWatchRequestAndSave(ticket3.getId(),this.userConverter.convertUserToSimpleDTO(user3));
+        this.requestManagementService.setWatchRequestAndSave(ticket4.getId(),this.userConverter.convertUserToSimpleDTO(user2));
+        this.requestManagementService.setWatchRequestAndSave(ticket2.getId(),this.userConverter.convertUserToSimpleDTO(user5));
 
     }
 

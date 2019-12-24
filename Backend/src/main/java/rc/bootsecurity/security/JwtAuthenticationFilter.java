@@ -7,6 +7,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import rc.bootsecurity.model.dto.LoginViewModel;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
@@ -60,12 +61,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
-
+        String[] authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(String[]::new);
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
                 .withClaim("IS_ADMIN" , principal.isAdmin())
                 .withClaim("IS_GHOST" , principal.isGhost())
+                .withArrayClaim("AUTHORITIES", authorities)
                 .withArrayClaim("MODULE_TYPES_TO_USE" , principal.getModuleTypesToUse())
                 .withArrayClaim("REQUEST_TYPE_TO_SOLVE" , principal.getRequestTypesToSolve())
                 .withArrayClaim("FINANCE_TYPE_TO_SUBMIT" , principal.getFinanceTypeToSubmit())
