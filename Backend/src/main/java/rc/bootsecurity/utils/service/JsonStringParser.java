@@ -1,16 +1,14 @@
-package rc.bootsecurity.utils.converter;
+package rc.bootsecurity.utils.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.modelmapper.internal.asm.TypeReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
-import rc.bootsecurity.service.UserService;
 
 import java.io.IOException;
 import java.util.*;
@@ -37,7 +35,7 @@ public class JsonStringParser {
                 try {
                     ticketTypeToSolve.putAll(new ObjectMapper().readValue(ticketTypeToSolveRawJson.get(i).toString(), Map.class));
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    LOGGER.error("error in method parseFromRawJsonToUserPrivilegeDTO : " + e.getMessage());
                 }
             }
         }
@@ -60,6 +58,8 @@ public class JsonStringParser {
         userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getRequestTypesToSolve() == null));
         return userPrivilegeDTO;
     }
+
+
 
     private List<RequestTableDTO> convertRawJsonToRequestTableDTO(JSONObject requestsJson , String jsonField){
         List<RequestTableDTO> result = new ArrayList<>();

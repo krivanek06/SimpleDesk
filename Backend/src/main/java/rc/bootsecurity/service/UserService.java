@@ -11,7 +11,7 @@ import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.utils.converter.JsonStringParser;
+import rc.bootsecurity.utils.service.JsonStringParser;
 import rc.bootsecurity.utils.converter.UserConverter;
 
 @Service

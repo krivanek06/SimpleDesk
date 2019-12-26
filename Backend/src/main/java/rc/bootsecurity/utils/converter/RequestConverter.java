@@ -1,7 +1,5 @@
 package rc.bootsecurity.utils.converter;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.*;
 import rc.bootsecurity.model.entity.Group;
@@ -11,7 +9,6 @@ import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
-import rc.bootsecurity.service.UserService;
 
 import java.util.stream.Collectors;
 

@@ -7,15 +7,11 @@ import rc.bootsecurity.model.dto.request.RequestTableDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
-import rc.bootsecurity.repository.GroupRepository;
-import rc.bootsecurity.repository.ModuleTypeRepository;
-import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.*;
-import rc.bootsecurity.repository.ticket.TicketRepository;
-import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.creator.Creator;
-import rc.bootsecurity.utils.converter.JsonStringParser;
+import rc.bootsecurity.utils.service.FileService;
+import rc.bootsecurity.utils.service.JsonStringParser;
 
 import java.util.List;
 
@@ -50,9 +46,30 @@ public class RequestService {
     public RequestDashboardDTO getRequestOnDashboard(){
         String username = this.userService.getPrincipalUsername();
         String rawJson = this.requestRepository.findOpenRequestOnDashboard(username);
-        return this.jsonStringParser.parseFromRawJsonToRequestTableDTO(rawJson);
+        RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestTableDTO(rawJson);
+
+        this.setImageForRequestTableDTO(requestDashboardDTO.getMyOpen());
+        this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMe());
+        this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMyTeam());
+        this.setImageForRequestTableDTO(requestDashboardDTO.getSentByMyTeam());
+        this.setImageForRequestTableDTO(requestDashboardDTO.getOtherOpen());
+
+        return requestDashboardDTO;
     }
 
+    private void setImageForRequestTableDTO(List<RequestTableDTO> list){
+        FileService fileService = new FileService();
+
+        for(RequestTableDTO requestTableDTO: list){
+            requestTableDTO.setCreatorImageByte(fileService.getUserImage(requestTableDTO.getCreatorImageString()));
+            if(requestTableDTO.getAssignedImageString() != null) {
+                requestTableDTO.setAssignedImageByte(fileService.getUserImage(requestTableDTO.getAssignedImageString()));
+            }
+            if(requestTableDTO.getClosedImageString() != null) {
+                requestTableDTO.setClosedImageByte(fileService.getUserImage(requestTableDTO.getClosedImageString()));
+            }
+        }
+    }
 
 
 }

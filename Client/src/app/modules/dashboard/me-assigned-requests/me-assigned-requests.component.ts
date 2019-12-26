@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, AfterViewInit, AfterViewChecked } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { CustomRequest } from 'app/shared/models/CustomRequest';
-
+import { RequestTable } from 'app/shared/models/RequestTable';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 export interface SatDatepickerRangeValue<D> {
   begin: D | null;
@@ -16,14 +16,16 @@ export interface SatDatepickerRangeValue<D> {
 })
 export class MeAssignedRequestsComponent implements OnInit, AfterViewInit {
 
-  public displayedColumns = ['id', 'type','creator',  'name', 'information', 'priority', 'userAction' ,'timeCreated' , 'action'];
-  public dataSource = new MatTableDataSource<CustomRequest>();
+  public displayedColumns = ['id', 'type','creator',  'name',
+   'additionalInformation', 'priority','assigned', 'userAction' ,'timeCreated' , 'action'];
+  public dataSource = new MatTableDataSource<RequestTable>();
   public dateFrom: string;
   public dateTo: string;
+  public imageBase64: SafeUrl;
   
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
-  constructor() { }
+  constructor(public sanitizer: DomSanitizer) { }
 
   ngOnInit() {
   }
@@ -31,13 +33,5 @@ export class MeAssignedRequestsComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-
-  /*public filterLogsIntoTable() {
-    this.backendAPI.authenticate().subscribe(() => {
-      this.backendAPI.getFilteredLogs(this.dateFrom, this.dateTo, this.filterEventIdContainer, this.filterEvetNameContainer, this.filterUsername).subscribe(result => {
-          this.dataSource.data = result as Log[];
-        });
-    });
-  }*/
 
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { CustomRequest } from 'app/shared/models/CustomRequest';
+import { RequestTable } from 'app/shared/models/RequestTable';
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -15,8 +15,8 @@ export interface SatDatepickerRangeValue<D> {
   styleUrls: ['./other-open-requests.component.scss']
 })
 export class OtherOpenRequestsComponent implements OnInit, AfterViewInit {
-  public displayedColumns = ['id', 'type','creator',  'name', 'information', 'priority', 'assigned' ,'timeCreated' , 'action'];
-  public dataSource = new MatTableDataSource<CustomRequest>();
+  public displayedColumns = ['id', 'type','creator',  'name', 'additionalInformation', 'priority', 'assigned' ,'timeCreated' , 'action'];
+  public dataSource = new MatTableDataSource<RequestTable>();
   public dateFrom: string;
   public dateTo: string;
   

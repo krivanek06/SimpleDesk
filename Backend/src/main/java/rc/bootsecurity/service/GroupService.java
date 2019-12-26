@@ -2,12 +2,9 @@ package rc.bootsecurity.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.finance.FinanceType;
-import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.ModuleTypeRepository;
@@ -16,7 +13,6 @@ import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class GroupService {

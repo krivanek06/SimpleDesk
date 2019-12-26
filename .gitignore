@@ -1,7 +1,8 @@
 # Don't track content of these folders
 Client/node_modules/
 Backend/target
-
+Backend/src/main/resources/images
+Backend/src/main/webapp
 
 # Compiled source #
 ###################

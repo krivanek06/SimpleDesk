@@ -12,6 +12,8 @@ public class RequestTableDTO {
 
     private Timestamp timestampClosed;
 
+    private String additionalInformation;
+
     private String name;
 
     private String requestPriority;
@@ -20,10 +22,16 @@ public class RequestTableDTO {
 
     private String requestType;
 
+    private byte[] creatorImageByte;
+    private String creatorImageString;
     private String creator;
 
+    private byte[] assignedImageByte;
+    private String assignedImageString;
     private String assigned;
 
+    private byte[] closedImageByte;
+    private String closedImageString;
     private String closed;
 
     private Boolean watched;

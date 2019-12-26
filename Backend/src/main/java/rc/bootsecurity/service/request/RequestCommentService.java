@@ -12,7 +12,6 @@ import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.RequestCommentRepository;
 import rc.bootsecurity.repository.request.RequestRepository;
-import rc.bootsecurity.utils.converter.RequestConverter;
 
 import java.sql.Timestamp;
 import java.util.Date;

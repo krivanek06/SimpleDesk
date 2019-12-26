@@ -8,32 +8,42 @@
             
                 <ng-container matColumnDef="id">
                 <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
-                <mat-cell *matCellDef="let element"> 12. </mat-cell>
+                <mat-cell *matCellDef="let element">  {{ element.id }}. </mat-cell>
                 </ng-container>
             
                 <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef>  Typ požiadavky  </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{ element.requestType}}  </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="additionalInformation">
                 <mat-header-cell *matHeaderCellDef> Typ </mat-header-cell>
-                <mat-cell *matCellDef="let element"> typ </mat-cell>
+                <mat-cell *matCellDef="let element"> {{ element.additionalInformation}}  </mat-cell>
                 </ng-container>
     
                 <ng-container matColumnDef="creator">
                 <mat-header-cell *matHeaderCellDef> Vytvoril </mat-header-cell>
-                <mat-cell *matCellDef="let element">Vytvoril </mat-cell>
+                <mat-cell *matCellDef="let element">
+                    <img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>
+                    {{ element.creator}} </mat-cell>
                 </ng-container>
             
                 <ng-container matColumnDef="name">
                 <mat-header-cell *matHeaderCellDef> Názov </mat-header-cell>
-                <mat-cell *matCellDef="let element">nazov </mat-cell>
-                </ng-container>
-            
-                <ng-container matColumnDef="information">
-                <mat-header-cell *matHeaderCellDef> Informácie </mat-header-cell>
-                <mat-cell *matCellDef="let element"> Crif </mat-cell>
+                <mat-cell *matCellDef="let element">{{ element.name}} </mat-cell>
                 </ng-container>
             
                 <ng-container matColumnDef="priority">
                 <mat-header-cell *matHeaderCellDef> Priorita </mat-header-cell>
-                <mat-cell *matCellDef="let element"> priorita </mat-cell>
+                <mat-cell *matCellDef="let element"> {{ element.requestPriority }} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="assigned">
+                    <mat-header-cell *matHeaderCellDef> Pridelené </mat-header-cell>
+                    <mat-cell *matCellDef="let element">
+                        <img [src]="'data:image/jpeg;base64,'+element.assignedImageByte" class='userIcon'/> 
+                        {{ element.assigned }}
+                    </mat-cell>
                 </ng-container>
             
                 <ng-container matColumnDef="userAction">
@@ -43,7 +53,7 @@
         
             <ng-container matColumnDef="timeCreated">
                 <mat-header-cell *matHeaderCellDef> Dátum </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.TimeCreated | date:'MMM d, y, h:mm:ss a'}} </mat-cell>
+                <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, h:mm:ss a'}} </mat-cell>
             </ng-container>
         
             <ng-container matColumnDef="action">

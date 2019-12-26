@@ -39,11 +39,22 @@
     margin-right: 15px;
 }
 
-
+.userIcon{
+  width: 25px;
+  height: 25px;
+  margin-right: 5px;
+}
 mat-header-cell{
     color:black;
 }
 
+mat-cell{
+  font-size: 11px;
+  color: #515151;
+}
+mat-footer-row, mat-row{
+  min-height: 20px;
+}
 mat-paginator{
    
     min-height: 35px;

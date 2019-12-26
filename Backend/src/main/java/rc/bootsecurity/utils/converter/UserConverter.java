@@ -29,6 +29,8 @@ public class UserConverter {
         userDTOSimple.setDateCreation(user.getDateCreation());
         userDTOSimple.setDateEnding(user.getDateEnding());
 
+
+
         return  userDTOSimple;
     }
 }
