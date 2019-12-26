@@ -4,6 +4,7 @@ export interface User{
     lastName: string,
     fullname: string,
     photo: string,
+    photoBytes: string,
     email: string,
     active: boolean,
     dateCreation: string,

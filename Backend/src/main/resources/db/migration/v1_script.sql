@@ -557,9 +557,9 @@ CREATE FUNCTION get_additional_information_for_request(searching_id integer)
     RETURNS varchar AS $$
 select
     case
-        when rt.name = 'TICKET' then tbl_tickets.t_application_name
-        when rt.name = 'REPORT' then tbl_report_types.name
-        when rt.name = 'FINANCE' then tbl_finance_types.name
+        when rt.name = 'Ticket' then tbl_tickets.t_application_name
+        when rt.name = 'Report' then tbl_report_types.name
+        when rt.name = 'Financie' then tbl_finance_types.name
         else null
         end as additional_info
 

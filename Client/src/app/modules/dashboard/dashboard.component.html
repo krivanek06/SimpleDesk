@@ -3,13 +3,36 @@
 <app-navigation></app-navigation>
 
 <div id='contentContainer'>
-    <app-my-open-requests></app-my-open-requests>
-    
-    <app-me-assigned-requests></app-me-assigned-requests>
-    
-    <app-team-open-requests></app-team-open-requests>
+    <app-request-table #myOpenRequests 
+        headerColor="#358BF0" 
+        [displayedColumns]= "viewTable"
+        tableTitle="Moje požiadávky">
+    </app-request-table>   
 
-    <app-team-assigned-requests></app-team-assigned-requests>
+    <app-request-table #meAssignedRequests 
+        headerColor="#56A3FF" 
+        [displayedColumns]= "modifyTable"
+        tableTitle="Požiadavky pridelené na mňa">
+    </app-request-table> 
 
-    <app-other-open-requests></app-other-open-requests>
+    <app-request-table #teamRequests headerColor="#B5D7FF" 
+        [displayedColumns]= "viewTable"  
+        displayAssignToMe='true'
+        tableTitle="Požiadavky poslané členmi môjho tímu">
+    </app-request-table>  
+
+    <app-request-table #teamAssignedRequests headerColor="#B5D7FF" 
+        [displayedColumns]= "viewTable"  
+        displayAssignToMe='true'
+        tableTitle="Požiadavky pridelené členom môjho tímu">
+    </app-request-table>   
+
+    <app-request-table #otherOpenRequests 
+        headerColor="#E8F3FF" 
+        [displayedColumns]= "viewTable" 
+        displayAssignToMe='true'
+        tableTitle="Ostatné otvorené požiadavky">
+    </app-request-table>   
+
+    
 </div>

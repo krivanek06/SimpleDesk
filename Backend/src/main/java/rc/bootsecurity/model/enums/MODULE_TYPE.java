@@ -3,7 +3,7 @@ package rc.bootsecurity.model.enums;
 public enum MODULE_TYPE {
     TICKET("Ticket"),
     REPORT("Report"),
-    FINANCE("Finance");
+    FINANCE("Financie");
 
     private final String text;
 

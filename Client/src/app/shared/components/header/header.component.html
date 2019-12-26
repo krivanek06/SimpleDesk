@@ -3,11 +3,16 @@
 
     <div  id='headerContainer'>
         <div id="headerTitle">
-            {{ userService.user.fullname }}
+           Vitaj, {{ userService.user.fullname }}
         </div>
 
         <div id="headerLogout">
-            <button mat-button (click)="logout()">Odhlásiť sa</button>
+            <div class="button_cont example_f" >
+                <span>
+                <img [src]="'data:image/jpeg;base64,'+userService.user.photoBytes" class='userIcon'/>
+                 Odhlásiť sa
+                </span>
+            </div>
         </div>
     </div>
 </div>

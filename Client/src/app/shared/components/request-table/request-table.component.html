@@ -1,0 +1,90 @@
+<div class='header'>
+    <div class='headerTitle'> {{ tableTitle }}</div>
+</div>
+<div class="tableRequest mat-elevation-z3">
+        <mat-table #table [dataSource]="dataSource" >
+        
+            <ng-container matColumnDef="id">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > # </mat-header-cell>
+            <mat-cell *matCellDef="let element" class='fontWeight'> 
+               {{ element.id }}.
+                <img *ngIf="element.requestType === 'Ticket' " src="../../../../assets/images_design/ticket_icon.png"  class ='userIcon requestIcon'/>
+                <img  *ngIf="element.requestType === 'Report' " src="../../../../assets/images_design/report_icon_2.png"  class ='userIcon requestIcon'/>
+                <img *ngIf="element.requestType === 'Financie' " src="../../../../assets/images_design/finance_icon.png"  class ='userIcon requestIcon'/>  
+                {{ element.requestType}} 
+            </mat-cell>
+            </ng-container>
+    
+
+            <ng-container matColumnDef="additionalInformation">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Typ </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.additionalInformation}}  </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="creator">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Vytvoril </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>
+                {{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}
+            </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="name">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Názov </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{ element.name}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="priority">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Priorita </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img *ngIf="element.requestPriority === 'malá' " src="../../../../assets/images_design/priority_low_icon_2.png"  class ='userIcon'/>
+                <img  *ngIf="element.requestPriority === 'stredná' " src="../../../../assets/images_design/priority_medium_icon_2.png"  class ='userIcon'/>
+                <img *ngIf="element.requestPriority === 'veľká' " src="../../../../assets/images_design/priority_high_icon_2.png"  class ='userIcon'/>
+                 {{ element.requestPriority}} 
+            </mat-cell>
+            </ng-container>
+        
+            <ng-container matColumnDef="assigned">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Pridelené </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div *ngIf = "element.assigned !== ' ' ">
+                    <img [src]="'data:image/jpeg;base64,'+element.assignedImageByte" class='userIcon'/> 
+                    {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}
+                </div>  
+                <div *ngIf = "element.assigned === ' ' && displayAssignToMe" class='assignOnMe' (click) = "assignOnMe(element.id)">
+                    pridelit mne
+                </div>
+            </mat-cell>
+            </ng-container>
+
+        <ng-container matColumnDef="userAction" >
+            <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" > Zahodit </mat-header-cell>
+            <mat-cell *matCellDef="let element" > 
+                <div *ngIf = "element.assigned === userService.user.fullname " class='removeFromMe' (click) = "removeFromMe(element.id)">
+                    Zahodiť
+                </div>
+            </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="timeCreated">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Dátum </mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, h:mm:ss a'}} </mat-cell>
+        </ng-container>
+    
+        <ng-container matColumnDef="details">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" >   </mat-header-cell>
+            <mat-cell *matCellDef="let element"> 
+                <button mat-button   class="detailButton">detaily</button>
+            </mat-cell>
+        </ng-container>
+        
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        
+        <mat-paginator #paginator
+                        [pageSize]="10"
+                        [pageSizeOptions]="[5, 10, 20]">
+        </mat-paginator>
+    </div>
+    

@@ -22,10 +22,6 @@ import { HeaderComponent } from './shared/components/header/header.component';
 import { ChartComponent } from './shared/components/chart/chart.component';
 import { UnauthorizedPopUpComponent } from './shared/components/popUp/unauthorized-pop-up/unauthorized-pop-up.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
-import { MyOpenRequestsComponent } from './modules/dashboard/my-open-requests/my-open-requests.component';
-import { TeamOpenRequestsComponent } from './modules/dashboard/team-open-requests/team-open-requests.component';
-import { TeamAssignedRequestsComponent } from './modules/dashboard/team-assigned-requests/team-assigned-requests.component';
-import { OtherOpenRequestsComponent } from './modules/dashboard/other-open-requests/other-open-requests.component';
 import { UserProfileComponent } from './modules/user-profile/user-profile.component';
 import { UserDetailsComponent } from './modules/user-profile/user-details/user-details.component';
 import { UserPrivilegesComponent } from './modules/user-profile/user-privileges/user-privileges.component';
@@ -47,11 +43,11 @@ import { LoginComponent } from './modules/login/login.component';
 import { LoginFormComponent } from './modules/login/login-form/login-form.component';
 import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
 import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
-import { MeAssignedRequestsComponent } from './modules/dashboard/me-assigned-requests/me-assigned-requests.component';
 import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
 import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
 import { AuthenticationService } from './core/services/authentication.service';
 import { UserService } from './core/services/user.service';
+import { RequestTableComponent } from './shared/components/request-table/request-table.component';
 
 @NgModule({
   declarations: [
@@ -64,10 +60,6 @@ import { UserService } from './core/services/user.service';
     ChartComponent,
     UnauthorizedPopUpComponent,
     DashboardComponent,
-    MyOpenRequestsComponent,
-    TeamOpenRequestsComponent,
-    TeamAssignedRequestsComponent,
-    OtherOpenRequestsComponent,
     UserProfileComponent,
     UserDetailsComponent,
     UserPrivilegesComponent,
@@ -87,9 +79,9 @@ import { UserService } from './core/services/user.service';
     RequestFormsComponent,
     LoginComponent,
     NavigationIconHoverDirective,
-    MeAssignedRequestsComponent,
     FileUploadComponent,
-    UserGroupManagementComponent
+    UserGroupManagementComponent,
+    RequestTableComponent
   ],
   imports: [
     BrowserModule,

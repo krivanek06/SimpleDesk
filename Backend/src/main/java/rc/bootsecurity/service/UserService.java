@@ -11,6 +11,7 @@ import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPrivilegeDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
+import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 import rc.bootsecurity.utils.converter.UserConverter;
 
@@ -48,9 +49,12 @@ public class UserService {
     }
 
     public UserDTO getLoggedInUserDetails(){
+        FileService fileService = new FileService();
         String username = this.getPrincipalUsername();
-        User user = this.loadUser(username);
-        return this.userConverter.convertUserToUserDTO(user);
+        UserDTO userDTO = this.userConverter.convertUserToUserDTO(this.loadUser(username));
+        userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
+
+        return userDTO;
     }
 
 

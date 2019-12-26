@@ -27,6 +27,6 @@ public class UserDTO {
 
     private Timestamp dateEnding;
 
-    private byte[] image;
+    private byte[] photoBytes;
 
 }
