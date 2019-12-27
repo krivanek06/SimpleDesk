@@ -200,7 +200,7 @@ public class Creator {
         FinanceDTO financeDTO = new FinanceDTO();
         financeDTO.setCreator(creator);
         financeDTO.setRequestPriority(requestPriority);
-        financeDTO.setRequestType(MODULE_TYPE.FINANCE.name());
+        financeDTO.setRequestType(MODULE_TYPE.Financie.name());
         financeDTO.setName("FINANCE_NAME");
         financeDTO.setFinanceType(financeType);
 
@@ -212,7 +212,7 @@ public class Creator {
         ReportDTO report = new ReportDTO();
         report.setCreator(creator);
         report.setRequestPriority(requestPriority);
-        report.setRequestType(MODULE_TYPE.REPORT.name());
+        report.setRequestType(MODULE_TYPE.Report.name());
         report.setName("REPORT_NAME");
 
         report.setOwner("OWNER");
@@ -236,7 +236,7 @@ public class Creator {
         ticketDTO.setRequestPriority(requestPriority);
         ticketDTO.setCreator(user);
         ticketDTO.setTicketSubtypeName(ticketSubtypeName);
-        ticketDTO.setRequestType(MODULE_TYPE.TICKET.name());
+        ticketDTO.setRequestType(MODULE_TYPE.Ticket.name());
         return ticketDTO;
     }
 

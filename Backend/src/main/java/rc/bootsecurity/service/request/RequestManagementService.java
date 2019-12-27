@@ -7,12 +7,10 @@ import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.dto.request.FinanceDTO;
 import rc.bootsecurity.model.dto.request.ReportDTO;
-import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.Finance;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
-import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.enums.REQUEST_POSITION;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.repository.ModuleTypeRepository;
@@ -21,7 +19,7 @@ import rc.bootsecurity.repository.finance.FinanceTypeRepository;
 import rc.bootsecurity.repository.report.ReportRefreshRepository;
 import rc.bootsecurity.repository.report.ReportTypeRepository;
 import rc.bootsecurity.repository.request.*;
-import rc.bootsecurity.repository.ticket.TicketTypeRepository;
+import rc.bootsecurity.service.UserService;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -32,20 +30,12 @@ import java.util.List;
  */
 @Service
 public class RequestManagementService{
-   /* @Autowired
-    private TicketRepository ticketRepository;
-    @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
-    private FinanceRepository financeRepository;*/
    @Autowired
    private RequestPositionRepository requestPositionRepository;
    @Autowired
    private RequestPriorityRepository requestPriorityRepository;
    @Autowired
    private UserRepository userRepository;
-   @Autowired
-   private TicketTypeRepository ticketTypeRepository;
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
@@ -56,7 +46,8 @@ public class RequestManagementService{
     private ReportRefreshRepository reportRefreshRepository;
     @Autowired
     private ModuleTypeRepository moduleTypeRepository;
-
+    @Autowired
+    protected UserService userService;
 
 
     public void saveOrUpdateRequest(Request request){
@@ -66,30 +57,21 @@ public class RequestManagementService{
         this.requestRepository.saveAll(requests);
     }
 
-    private void setAttributesForRequest(Request request,String requestType, String name, String creator, String priority ){
+    protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
         request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        request.setCreator(this.userRepository.findByUsername(creator).get());
+        request.setCreator(this.userRepository.findByUsername(this.userService.getPrincipalUsername()).get());
         request.setName(name);
-        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.CREATED.name()));
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name()));
         request.setModuleType(this.moduleTypeRepository.findByName(requestType));
         request.setRequestPriority(this.requestPriorityRepository.findByName(priority));
         request.setAllowCommenting(true);
     }
 
-    public Ticket createTicket(TicketDTO ticketDTO){
-        Ticket ticket = new Ticket();
-        this.setAttributesForRequest(ticket, MODULE_TYPE.TICKET.name(),ticketDTO.getName(), ticketDTO.getCreator(), ticketDTO.getRequestPriority());
 
-        ticket.setTicketSubtypeName(ticketDTO.getTicketSubtypeName());
-        ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
-        ticket.setProblem(ticketDTO.getProblem());
-
-        return ticket;
-    }
 
     public Report createReport(ReportDTO reportDTO){
         Report report = new Report();
-        this.setAttributesForRequest(report, MODULE_TYPE.REPORT.name(),reportDTO.getName(), reportDTO.getCreator(), reportDTO.getRequestPriority());
+        this.setAttributesForRequest(report, MODULE_TYPE.Report.name(),reportDTO.getName(), reportDTO.getRequestPriority());
 
         report.setReportType(this.reportTypeRepository.findByName(reportDTO.getReportType()));
         report.setReportRefresh(this.reportRefreshRepository.findByName(reportDTO.getReportRefresh()));
@@ -105,7 +87,7 @@ public class RequestManagementService{
 
     public Finance createFinance(FinanceDTO financeDTO){
         Finance finance = new Finance();
-        this.setAttributesForRequest(finance, MODULE_TYPE.FINANCE.name(),financeDTO.getName(), financeDTO.getCreator(), financeDTO.getRequestPriority());
+        this.setAttributesForRequest(finance, MODULE_TYPE.Financie.name(),financeDTO.getName(), financeDTO.getRequestPriority());
 
         finance.setFinanceType(this.financeTypeRepository.findByName(financeDTO.getFinanceType()));
 

@@ -1,9 +1,9 @@
 package rc.bootsecurity.model.enums;
 
 public enum MODULE_TYPE {
-    TICKET("Ticket"),
-    REPORT("Report"),
-    FINANCE("Financie");
+    Ticket("Ticket"),
+    Report("Report"),
+    Financie("Financie");
 
     private final String text;
 

@@ -16,11 +16,18 @@ export class ErrorInterceptor implements HttpInterceptor {
                 console.log("403 error, handle it ! ")
             }else if(err.status === 404){
                 console.log("404 error, shoud be created an error page")
+            }else{
+                this.generalError(err.error)
             }
-            console.log('error got : ')
-            console.log(err)
             return throwError(err.error.error);
         }))
+    }
+
+    private generalError(error : string){
+        Swal.fire({
+            icon: 'error',
+            text: 'Požiadavka zlahala, chyba hlášky : ' + error,
+          })
     }
 
 

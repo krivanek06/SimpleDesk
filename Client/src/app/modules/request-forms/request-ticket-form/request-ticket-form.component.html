@@ -1,14 +1,14 @@
 <form [formGroup] = "ticketForm" (ngSubmit)="submit()">
-    Values : {{ ticketForm.value | json }}
-    <hr>
+   <!-- Values : {{ ticketForm.value | json }}
+    <hr> -->
     <mat-form-field class='ticketInlineParameters'>
         <mat-label>Typ Tiketu</mat-label>
         <mat-select formControlName="ticketType" (selectionChange)= "resetTicketType()">
             <mat-option value="Software">Software</mat-option>
             <mat-option value="Hardware">Hardware</mat-option>
-            <mat-option value="User">Uživateľ</mat-option>
+            <mat-option value="Užívateľ">Uživateľ</mat-option>
             <mat-option value="Server">Server</mat-option>
-            <mat-option value="Other">Iné</mat-option>
+            <mat-option value="Iné">Iné</mat-option>
         </mat-select>
 
         <mat-error *ngIf="ticketType.invalid">
@@ -23,7 +23,7 @@
                             ticketForm.value.ticketType === 'Server' "
                     class='ticketInlineParameters'>
         <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>
-        <mat-select formControlName="ticketSubtupeName">
+        <mat-select formControlName="ticketSubtypeName">
             <mat-option value="test">test</mat-option>
             <mat-option value="test1">test</mat-option>
             <mat-option value="test2">test</mat-option>
@@ -31,17 +31,17 @@
             <mat-option value="test4">test</mat-option>
         </mat-select>
 
-        <mat-error *ngIf="ticketSubtupeName.invalid">
+        <mat-error *ngIf="ticketSubtypeName.invalid">
                 Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}
         </mat-error>
 
     </mat-form-field>
 
-    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' "
+    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'Užívateľ' || ticketForm.value.ticketType === 'Iné' "
                      class='ticketInlineParameters'>
-        <input matInput placeholder="Typ Tiketu" formControlName = "ticketSubtupeName">
+        <input matInput placeholder="Typ Tiketu" formControlName = "ticketSubtypeName">
 
-        <mat-error *ngIf="ticketSubtupeName.invalid">
+        <mat-error *ngIf="ticketSubtypeName.invalid">
                 Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}
         </mat-error>
 
@@ -51,13 +51,13 @@
     <!--Priority -->
     <mat-form-field class='ticketInlineParameters' >
         <mat-label>Priorita</mat-label>
-        <mat-select formControlName="priority">
+        <mat-select formControlName="requestPriority">
             <mat-option value="malá">malá</mat-option>
             <mat-option value="stredná">stredná</mat-option>
             <mat-option value="veľká">veľká</mat-option>
         </mat-select>
 
-        <mat-error *ngIf="priority.invalid">
+        <mat-error *ngIf="requestPriority.invalid">
                 Prosím vyberte prioritu tiketu
         </mat-error>
 
@@ -96,3 +96,6 @@
     </div>
 
 </form>
+
+
+<img id='ticketFormImage' src="../../../../assets/images_design/ticket_form.png"/>

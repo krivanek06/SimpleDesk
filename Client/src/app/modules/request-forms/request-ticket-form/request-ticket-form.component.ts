@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -9,7 +12,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 export class RequestTicketFormComponent implements OnInit {
   ticketForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  private ticketURL = 'requests/ticket';
+
+  constructor(private formBuilder: FormBuilder, private http: HttpClient) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -21,11 +26,11 @@ export class RequestTicketFormComponent implements OnInit {
       ticketType: ['' , [
         Validators.required,
       ]],
-      ticketSubtupeName: ['' , [
+      ticketSubtypeName: ['' , [
         Validators.required,
         Validators.minLength(2),
       ]],
-      priority: ['' , [
+      requestPriority: ['' , [
         Validators.required,
       ]],
       name: ['' , [
@@ -44,12 +49,12 @@ export class RequestTicketFormComponent implements OnInit {
     return this.ticketForm.get("ticketType");
   }
 
-  get ticketSubtupeName(){
-    return this.ticketForm.get("ticketSubtupeName");
+  get ticketSubtypeName(){
+    return this.ticketForm.get("ticketSubtypeName");
   }
 
-  get priority(){
-    return this.ticketForm.get("priority");
+  get requestPriority(){
+    return this.ticketForm.get("requestPriority");
   }
 
   get name(){
@@ -65,14 +70,14 @@ export class RequestTicketFormComponent implements OnInit {
     if(this.ticketForm.invalid){
       return;
     }
-    
-    const formValues = this.ticketForm.value;
-    console.log(formValues);
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.http.post(environment.apiUrl + this.ticketURL, this.ticketForm.value, {headers}).subscribe(succ => {
+      Swal.fire(  '', 'Vaša požiadavka s id : ' + succ + ". bola zaznamenaná.", 'success'  )
+    })
   }
 
   private resetTicketType(){
-    
-    this.ticketForm.patchValue({ticketSubtupeName : ''});
+    this.ticketForm.patchValue({'ticketSubtypeName' : ''});
   }
 
 }

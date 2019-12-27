@@ -18,6 +18,7 @@ import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.service.request.RequestCommentService;
+import rc.bootsecurity.service.request.TicketService;
 import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.service.request.RequestPrivilegeService;
 import rc.bootsecurity.service.request.RequestManagementService;
@@ -48,6 +49,8 @@ public class InserterRequestsSimulation {
     private RequestManagementService requestManagementService;
     @Autowired
     private RequestCommentService requestCommentService;
+    @Autowired
+    private TicketService ticketService;
 
     private RequestConverter requestConverter = new RequestConverter();
     private UserConverter userConverter = new UserConverter();
@@ -103,52 +106,52 @@ public class InserterRequestsSimulation {
 
     private void insertRequestPrivileges(){
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
 
         this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
 
         this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.REPORT.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Report.name()))));
 
         this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name(), MODULE_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_1,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.TICKET.name(), MODULE_TYPE.REPORT.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_2,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
 
         this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_3,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.FINANCE.name()))));
+                new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
         // group 8 -> no request type to solver -> should throw error
     }
 
     private void insertTicketPrivilegesForGroupsToSolve(){
         this.requestPrivilegeService.modifyTicketTypeToSolve(Creator.createGroupDTOWithTicketPrivileges(NAMES.TEST_GROUP_SOLVER_1,
-                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SERVER.name(), NAMES.SERVER_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.USER.name(), null),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.OTHER.name(), null)
+                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_2),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_2),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Užívateľ.name(), null),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Iné.name(), null)
                         ))));
 
         this.requestPrivilegeService.modifyTicketTypeToSolve(Creator.createGroupDTOWithTicketPrivileges(NAMES.TEST_GROUP_SOLVER_3,
-                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_3),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SOFTWARE.name(), NAMES.SOFTWARE_4),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_3),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.HARDWARE.name(), NAMES.HARDWARE_4),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SERVER.name(), NAMES.SERVER_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.SERVER.name(), NAMES.SERVER_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.USER.name(), null),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.OTHER.name(), null)
+                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_2),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_3),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_4),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_2),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_3),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_4),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_1),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_2),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Užívateľ.name(), null),
+                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Iné.name(), null)
                 ))));
     }
 
@@ -173,27 +176,27 @@ public class InserterRequestsSimulation {
         User user10 = this.userRepository.findByUsername("user10").get();
 
 
-        Ticket ticket1 = this.requestManagementService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_1 ));
-        Ticket ticket2 = this.requestManagementService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_1 ));
-        Ticket ticket3 = this.requestManagementService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_1 ));
-        Ticket ticket4 = this.requestManagementService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_2 ));
-        Ticket ticket5 = this.requestManagementService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_2 ));
-        Ticket ticket6 = this.requestManagementService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_3 ));
-        Ticket ticket7 = this.requestManagementService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SOFTWARE.name(),NAMES.SOFTWARE_3 ));
+        Ticket ticket1 = this.ticketService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_1 ));
+        Ticket ticket2 = this.ticketService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_1 ));
+        Ticket ticket3 = this.ticketService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_1 ));
+        Ticket ticket4 = this.ticketService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_2 ));
+        Ticket ticket5 = this.ticketService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_2 ));
+        Ticket ticket6 = this.ticketService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_3 ));
+        Ticket ticket7 = this.ticketService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Software.name(),NAMES.SOFTWARE_3 ));
 
-        Ticket ticket8 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.HARDWARE.name(),NAMES.HARDWARE_1 ));
-        Ticket ticket9 = this.requestManagementService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.HARDWARE.name(),NAMES.HARDWARE_3 ));
-        Ticket ticket10 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.HARDWARE.name(),NAMES.HARDWARE_3 ));
+        Ticket ticket8 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Hardware.name(),NAMES.HARDWARE_1 ));
+        Ticket ticket9 = this.ticketService.createTicket(Creator.createTicketDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Hardware.name(),NAMES.HARDWARE_3 ));
+        Ticket ticket10 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Hardware.name(),NAMES.HARDWARE_3 ));
 
-        Ticket ticket11 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SERVER.name(),NAMES.SERVER_1 ));
-        Ticket ticket12 = this.requestManagementService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SERVER.name(),NAMES.SERVER_2 ));
-        Ticket ticket13 = this.requestManagementService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.SERVER.name(),NAMES.SERVER_2 ));
+        Ticket ticket11 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Server.name(),NAMES.SERVER_1 ));
+        Ticket ticket12 = this.ticketService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Server.name(),NAMES.SERVER_2 ));
+        Ticket ticket13 = this.ticketService.createTicket(Creator.createTicketDTO(user9.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Server.name(),NAMES.SERVER_2 ));
 
-        Ticket ticket14 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.USER.name() ,NAMES.PERSON_1));
-        Ticket ticket15 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.USER.name() ,NAMES.PERSON_2));
+        Ticket ticket14 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Užívateľ.name() ,NAMES.PERSON_1));
+        Ticket ticket15 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Užívateľ.name() ,NAMES.PERSON_2));
 
-        Ticket ticket16 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.OTHER.name() ,NAMES.OTHER_1));
-        Ticket ticket17 = this.requestManagementService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.OTHER.name() ,NAMES.OTHER_2));
+        Ticket ticket16 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Iné.name() ,NAMES.OTHER_1));
+        Ticket ticket17 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Iné.name() ,NAMES.OTHER_2));
 
         Report report1 = this.requestManagementService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
         Report report2 = this.requestManagementService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));

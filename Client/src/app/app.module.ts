@@ -20,7 +20,6 @@ import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
 import { NavigationComponent } from './shared/components/navigation/navigation.component';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { ChartComponent } from './shared/components/chart/chart.component';
-import { UnauthorizedPopUpComponent } from './shared/components/popUp/unauthorized-pop-up/unauthorized-pop-up.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { UserProfileComponent } from './modules/user-profile/user-profile.component';
 import { UserDetailsComponent } from './modules/user-profile/user-details/user-details.component';
@@ -58,7 +57,6 @@ import { RequestTableComponent } from './shared/components/request-table/request
     NavigationComponent,
     HeaderComponent,
     ChartComponent,
-    UnauthorizedPopUpComponent,
     DashboardComponent,
     UserProfileComponent,
     UserDetailsComponent,

@@ -1,11 +1,11 @@
 package rc.bootsecurity.model.enums;
 
 public enum TICKET_TYPE {
-    SOFTWARE("Software"),
-    HARDWARE("Hardware"),
-    SERVER("Server"),
-    USER("užívateľ"),
-    OTHER("Ine");
+    Software("Software"),
+    Hardware("Hardware"),
+    Server("Server"),
+    Užívateľ("Užívateľ"),
+    Iné("Iné");
 
     private final String text;
 

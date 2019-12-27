@@ -81,7 +81,7 @@ public class RequestPrivilegeService {
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
 
         // if no Request Type Ticket has been set for the group, throw error
-        if(!checkIfGroupCanSolveRequestType(group , MODULE_TYPE.TICKET.toString()))
+        if(!checkIfGroupCanSolveRequestType(group , MODULE_TYPE.Ticket.toString()))
             throw new PrivilegeException("Request type 'Ticket' not set for solver, can't give him rights for subtickets. ");
 
         // current Ticket privileges for Group
@@ -111,7 +111,7 @@ public class RequestPrivilegeService {
     public void modifyFinanceTypeToSubmit(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
 
-        if(!checkIfGroupCanSubmitRequestType(group , MODULE_TYPE.FINANCE.toString())){
+        if(!checkIfGroupCanSubmitRequestType(group , MODULE_TYPE.Financie.toString())){
             throw new PrivilegeException("Request type 'Finance' not set for user, can't give him rights for Finance types.");
         }
         group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByNameIn(groupDTO.getFinanceTypes())));

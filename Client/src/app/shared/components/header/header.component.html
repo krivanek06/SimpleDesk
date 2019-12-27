@@ -7,7 +7,7 @@
         </div>
 
         <div id="headerLogout">
-            <div class="button_cont example_f" >
+            <div class="button_cont example_f" (click)= "logout()">
                 <span>
                 <img [src]="'data:image/jpeg;base64,'+userService.user.photoBytes" class='userIcon'/>
                  Odhlásiť sa
