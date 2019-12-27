@@ -1,6 +1,8 @@
+<h2 class='formTitle'>Požiadavka na Report</h2>
+
 <form [formGroup] = "reportForm" (ngSubmit)="submit()">
-        Values : {{ reportForm.value | json }}
-        <hr>
+      <!--  Values : {{ reportForm.value | json }}
+        <hr> -->
 
         <div class = 'reportInlineParameters'>
             <!--name -->
@@ -21,6 +23,17 @@
                         Prosím zadefinujte vlastníka reportu v dĺžke od 5 po 254 znakov
                 </mat-error>
 
+            </mat-form-field>
+
+            <!--deadline -->
+            <mat-form-field>
+                <input matInput [matDatepicker]="picker" placeholder="Deadline" formControlName = "deadline">
+                <mat-datepicker-toggle matSuffix [for]="picker" ></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                
+                <mat-error *ngIf="deadline.invalid">
+                    Prosím zadefinujte deadline reportu
+                </mat-error>
             </mat-form-field>
         </div>
 
@@ -44,7 +57,7 @@
             <!--Priority -->
             <mat-form-field >
                 <mat-label>Priorita</mat-label>
-                <mat-select formControlName="priority">
+                <mat-select formControlName="requestPriority">
                     <mat-option value="malá">malá</mat-option>
                     <mat-option value="stredná">stredná</mat-option>
                     <mat-option value="veľká">veľká</mat-option>
@@ -114,7 +127,7 @@
           <img src="../../../../assets/images_design/add_icon.png" class='formAssignedButton'  (click)="addPeopleToAccess()">
 
           <!-- display added people / remove them -->
-            <div class = 'printingResults'>
+            <div class = 'printingResults'> 
                 <ul> 
                     <li *ngFor="let item of accessByPeopleArray; let i = index" class="oneLineLI">
                         <img src="../../../../assets/images_design/delete_icon.png" 
@@ -128,7 +141,7 @@
 
          <!-- uploader -->
         <div class = 'reportInlineParameters'>
-            <app-file-upload id='uploader' [uploaderHeight] = '65'></app-file-upload>
+            <app-file-upload id='uploader' [uploaderHeight] = '45'></app-file-upload>
         </div>
 
          <!-- submit button -->

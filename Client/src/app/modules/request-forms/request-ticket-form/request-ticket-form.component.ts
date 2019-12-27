@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
+import { TicketSubtype } from 'app/shared/models/TicketSubtype';
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -10,9 +11,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./request-ticket-form.component.scss']
 })
 export class RequestTicketFormComponent implements OnInit {
-  ticketForm: FormGroup;
+  public softwareTypes:TicketSubtype[] = [];
+  public hardwareTypes:TicketSubtype[] = [];
+  public serverTypes:TicketSubtype[] = [];
 
-  private ticketURL = 'requests/ticket';
+  ticketForm: FormGroup;
 
   constructor(private formBuilder: FormBuilder, private http: HttpClient) { }
 
@@ -65,19 +68,48 @@ export class RequestTicketFormComponent implements OnInit {
     return this.ticketForm.get("problem");
   }
 
-
-  private submit(){
-    if(this.ticketForm.invalid){
-      return;
-    }
+  private sendTicketFormToAPI(): void{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post(environment.apiUrl + this.ticketURL, this.ticketForm.value, {headers}).subscribe(succ => {
+    this.http.post(environment.apiUrl + 'requests/ticket', this.ticketForm.value, {headers}).subscribe(succ => {
       Swal.fire(  '', 'Vaša požiadavka s id : ' + succ + ". bola zaznamenaná.", 'success'  )
     })
   }
 
-  private resetTicketType(){
+  private submit() : void{
+    if(this.ticketForm.invalid){ 
+      return;
+    }
+    Swal.fire({ text: "Naozaj chcetete odoslať ticket ? ", icon: 'warning', showCancelButton: true,
+      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
+    }).then((result) => {
+      if (result.value) {
+        this.sendTicketFormToAPI();
+      }
+    })
+  }
+
+  private changeTicketType(value: string): void{
+    this.loadTicketSubtype(value);
     this.ticketForm.patchValue({'ticketSubtypeName' : ''});
+  }
+
+  private loadTicketSubtype(value: string): void{
+    //let headers = new Headers().set('Content-Type', 'application/json');
+    let params = new HttpParams().set('ticketTypeName' , value)  
+
+    if(value === 'Software' && this.softwareTypes.length === 0){
+      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
+        .subscribe(ticketSubTypes =>this.softwareTypes = ticketSubTypes)
+    }
+    else if(value === 'Hardware' && this.hardwareTypes.length === 0){
+      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
+        .subscribe(ticketSubTypes =>this.hardwareTypes = ticketSubTypes)
+    }
+    else if(value === 'Server' && this.serverTypes.length === 0){
+      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
+        .subscribe(ticketSubTypes =>this.serverTypes = ticketSubTypes)
+    }
+
   }
 
 }

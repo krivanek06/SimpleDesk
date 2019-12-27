@@ -11,6 +11,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 import { IconSpriteModule } from 'ng-svg-icon-sprite';
 import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
+import { DatePipe } from '@angular/common'
+import { NgxSpinnerModule } from "ngx-spinner";
+import { RouterModule } from '@angular/router';
 
 // custom interceptors
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
@@ -96,9 +99,12 @@ import { RequestTableComponent } from './shared/components/request-table/request
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
-    SweetAlert2Module.forRoot()
+    SweetAlert2Module.forRoot(),
+    NgxSpinnerModule,
+    RouterModule,
   ],
   providers: [
+    DatePipe,
     AuthenticationService,
     UserService,
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},

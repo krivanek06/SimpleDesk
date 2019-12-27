@@ -17,11 +17,8 @@ import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.service.UserService;
-import rc.bootsecurity.service.request.RequestCommentService;
-import rc.bootsecurity.service.request.TicketService;
+import rc.bootsecurity.service.request.*;
 import rc.bootsecurity.utils.converter.RequestConverter;
-import rc.bootsecurity.service.request.RequestPrivilegeService;
-import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.creator.NAMES;
 import rc.bootsecurity.utils.converter.UserConverter;
@@ -51,6 +48,10 @@ public class InserterRequestsSimulation {
     private RequestCommentService requestCommentService;
     @Autowired
     private TicketService ticketService;
+    @Autowired
+    private ReportService reportService;
+    @Autowired
+    private FinanceService financeService;
 
     private RequestConverter requestConverter = new RequestConverter();
     private UserConverter userConverter = new UserConverter();
@@ -198,12 +199,12 @@ public class InserterRequestsSimulation {
         Ticket ticket16 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Iné.name() ,NAMES.OTHER_1));
         Ticket ticket17 = this.ticketService.createTicket(Creator.createTicketDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(),TICKET_TYPE.Iné.name() ,NAMES.OTHER_2));
 
-        Report report1 = this.requestManagementService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
-        Report report2 = this.requestManagementService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
-        Report report3 = this.requestManagementService.createReport(Creator.createReportDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
+        Report report1 = this.reportService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
+        Report report2 = this.reportService.createReport(Creator.createReportDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
+        Report report3 = this.reportService.createReport(Creator.createReportDTO(user8.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.REPORT_TYPE_1, NAMES.REPORT_REFRESH_1 ));
 
-        Finance finance1 = this.requestManagementService.createFinance(Creator.createFinanceDTO(user6.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.FINANCE_TYPE_1));
-        Finance finance2 = this.requestManagementService.createFinance(Creator.createFinanceDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.FINANCE_TYPE_3));
+        Finance finance1 = this.financeService.createFinance(Creator.createFinanceDTO(user6.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.FINANCE_TYPE_1));
+        Finance finance2 = this.financeService.createFinance(Creator.createFinanceDTO(user10.getUsername(),REQUEST_PRIORITY.SMALL.name(), NAMES.FINANCE_TYPE_3));
         // ------------------------------------------------------------------
 
         this.requestManagementService.saveOrUpdateRequest(Arrays.asList(ticket1,ticket2,ticket3, ticket4,ticket5,ticket6,ticket7,ticket8,ticket9,ticket10,ticket11,

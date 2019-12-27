@@ -98,7 +98,7 @@ create table tbl_reports(
   r_other_info varchar,
   r_refresh_id Integer NOT NULL,
   r_access_people varchar,
-  r_deadline TIMESTAMP,
+  r_deadline date,
   r_evaluation double precision,
   r_type_id Integer NOT NULL
 

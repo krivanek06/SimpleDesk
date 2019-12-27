@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { accessValidator } from 'app/shared/validators/reportAccessValidator';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import Swal from 'sweetalert2';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-request-report-form',
@@ -8,12 +12,11 @@ import { accessValidator } from 'app/shared/validators/reportAccessValidator';
   styleUrls: ['./request-report-form.component.scss']
 })
 export class RequestReportFormComponent implements OnInit {
-
   reportForm: FormGroup;
-
+  deadlineReport: string;
   accessByPeopleArray:any[] = [];
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private http : HttpClient, private datepipe: DatePipe) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -25,7 +28,7 @@ export class RequestReportFormComponent implements OnInit {
         Validators.required,
         Validators.minLength(5),
       ]],
-      priority: ['' , [
+      requestPriority: ['' , [
         Validators.required,
       ]],
       owner: ['' , [
@@ -53,8 +56,25 @@ export class RequestReportFormComponent implements OnInit {
       ]],
     })
   }
-  private submit(){
 
+  private sendReportFormToAPI(): void{
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    this.reportForm.patchValue({'accessBy' : this.accessByPeopleArray.join(",")});
+    this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers}).subscribe(succ => {
+      Swal.fire(  '', 'Vaša požiadavka s id : ' + succ + ". bola zaznamenaná.", 'success'  )
+    })
+  }
+  private submit(): void{
+    if(this.reportForm.invalid){
+      return;
+    }
+    Swal.fire({ text: "Naozaj chcetete odoslať report ? ", icon: 'warning', showCancelButton: true,
+      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
+    }).then((result) => {
+      if (result.value) {
+        this.sendReportFormToAPI();
+      }
+    })
   }
 
   private addPeopleToAccess(){
@@ -69,11 +89,10 @@ export class RequestReportFormComponent implements OnInit {
   private deleteItem(index: number){
     this.accessByPeopleArray.splice(index,1);
   }
+ 
 
-  private 
-
-  get priority(){
-    return this.reportForm.get("priority");
+  get requestPriority(){
+    return this.reportForm.get("requestPriority");
   }
 
   get name(){
@@ -115,5 +134,6 @@ export class RequestReportFormComponent implements OnInit {
   get deadline(){
     return this.reportForm.get("deadline");
   }
+  
 
 }

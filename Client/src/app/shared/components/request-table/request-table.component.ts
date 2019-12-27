@@ -3,6 +3,9 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { RequestTable } from 'app/shared/models/RequestTable';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { environment } from 'environments/environment';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-table',
@@ -20,7 +23,7 @@ export class RequestTableComponent implements OnInit {
   public dateTo: string;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
-  constructor(public userService: UserService) { }
+  constructor(public userService: UserService, private http: HttpClient) { }
 
   ngOnInit() {  }
 
@@ -39,9 +42,16 @@ export class RequestTableComponent implements OnInit {
       confirmButtonText: 'Ano'
     }).then((result) => {
       if (result.value) {
-        Swal.fire( 'Pridelené', '','success' )
+        this.assignOrRemoveRequestOnMe(requestId, true).subscribe(result => {
+          Swal.fire( 'Pridelené', 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId,'success' );
+        })
       }
     })
+  }
+
+  private assignOrRemoveRequestOnMe(requestid: number, assign: boolean): Observable<any>{
+      let params = new HttpParams().set('assign' , String(assign)) ;
+      return this.http.put(environment.apiUrl + `requests/modification/${requestid}/solver`,null, {params : params} );
   }
 
 
@@ -56,7 +66,9 @@ export class RequestTableComponent implements OnInit {
       confirmButtonText: 'Ano'
     }).then((result) => {
       if (result.value) {
-        Swal.fire( 'Odstránené', '','success' )
+        this.assignOrRemoveRequestOnMe(requestId, false).subscribe(result => {
+          Swal.fire( 'Odstranené', 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId,'success' );
+        })
       }
     })
   }

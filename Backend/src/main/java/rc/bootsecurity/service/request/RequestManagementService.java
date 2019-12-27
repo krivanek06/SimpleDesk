@@ -39,12 +39,6 @@ public class RequestManagementService{
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
-    private FinanceTypeRepository financeTypeRepository;
-    @Autowired
-    private ReportTypeRepository reportTypeRepository;
-    @Autowired
-    private ReportRefreshRepository reportRefreshRepository;
-    @Autowired
     private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     protected UserService userService;
@@ -69,35 +63,24 @@ public class RequestManagementService{
 
 
 
-    public Report createReport(ReportDTO reportDTO){
-        Report report = new Report();
-        this.setAttributesForRequest(report, MODULE_TYPE.Report.name(),reportDTO.getName(), reportDTO.getRequestPriority());
-
-        report.setReportType(this.reportTypeRepository.findByName(reportDTO.getReportType()));
-        report.setReportRefresh(this.reportRefreshRepository.findByName(reportDTO.getReportRefresh()));
-        report.setAccessBy(reportDTO.getAccessBy());
-        report.setOtherInformation(reportDTO.getOtherInformation());
-        report.setVisibleData(reportDTO.getVisibleData());
-        report.setCriteria(reportDTO.getCriteria());
-        report.setPurpose(reportDTO.getPurpose());
-        report.setOwner(reportDTO.getOwner());
-        report.setDeadline(reportDTO.getDeadline());
-        return report;
-    }
-
-    public Finance createFinance(FinanceDTO financeDTO){
-        Finance finance = new Finance();
-        this.setAttributesForRequest(finance, MODULE_TYPE.Financie.name(),financeDTO.getName(), financeDTO.getRequestPriority());
-
-        finance.setFinanceType(this.financeTypeRepository.findByName(financeDTO.getFinanceType()));
-
-        return finance;
-    }
 
     // -----------------------------------------------------
     private Request findRequest(Integer requestId){
         return this.requestRepository.findById(requestId)
                 .orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
+    }
+
+    public void removeAssignUserAndSave(Integer requestId){
+        Request request = this.findRequest(requestId);
+        request.setAssigned(null);
+        this.saveOrUpdateRequest(request);
+    }
+
+    public void setAssignUserAndSave(Integer requestId){
+        User user = this.userService.loadUser(this.userService.getPrincipalUsername());
+        Request request = this.findRequest(requestId);
+        request.setAssigned(user);
+        this.saveOrUpdateRequest(request);
     }
 
     public void setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){

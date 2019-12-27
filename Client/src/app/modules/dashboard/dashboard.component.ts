@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { RequestTable, RequestDashboard } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
+import { NgxSpinnerService } from "ngx-spinner";
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +27,7 @@ export class DashboardComponent implements OnInit {
 
 
 
-  constructor(private authService : AuthenticationService, private http: HttpClient) { }
+  constructor(private authService : AuthenticationService, private http: HttpClient, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();
@@ -34,14 +35,15 @@ export class DashboardComponent implements OnInit {
   }
 
   private getRequestOnDashboard(){
+      this.spinner.show();
       this.http.get<RequestDashboard>(environment.apiUrl + this.dashboardRequestURL).subscribe(requests =>{
-        console.log(requests);
-
         this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
         this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
         this.teamAssignedRequests.dataSource.data = requests.assignedOnMyTeam as RequestTable[];
         this.teamRequests.dataSource.data = requests.sentByMyTeam as RequestTable[];
         this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
+
+        this.spinner.hide();
       })
   }
 

@@ -4,13 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.ticket.Ticket;
+import rc.bootsecurity.model.entity.ticket.TicketSubtype;
+import rc.bootsecurity.model.entity.ticket.TicketType;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
+import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
+
+import java.util.List;
 
 @Service
 public class TicketService extends RequestManagementService{
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
+    @Autowired
+    private TicketSubtypeRepository ticketSubtypeRepository;
+
 
 
     public Ticket createTicket(TicketDTO ticketDTO){
@@ -22,6 +30,13 @@ public class TicketService extends RequestManagementService{
         ticket.setProblem(ticketDTO.getProblem());
 
         return ticket;
+    }
+
+    public List<TicketSubtype> getTicketSubtypesForTicketType(String ticketTypeName){
+        TicketType ticketType = this.ticketTypeRepository.findByName(ticketTypeName);
+        List<TicketSubtype> ticketSubtypeList = this.ticketSubtypeRepository.findAllByTicketType(ticketType);
+
+        return ticketSubtypeList;
     }
 
 
