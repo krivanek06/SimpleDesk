@@ -17,7 +17,7 @@ import rc.bootsecurity.utils.service.JsonStringParser;
 @RestController
 @RequestMapping("api/requests/report")
 public class ReportController {
-    private static final Logger LOGGER =  LoggerFactory.getLogger(JsonStringParser.class);
+    private static final Logger LOGGER =  LoggerFactory.getLogger(ReportController.class);
 
     @Autowired
     private ReportService reportService;

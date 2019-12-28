@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
 import { accessValidator } from 'app/shared/validators/reportAccessValidator';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 import { DatePipe } from '@angular/common';
+import { FileServiceService } from 'app/core/services/file-service.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-report-form',
@@ -15,8 +19,10 @@ export class RequestReportFormComponent implements OnInit {
   reportForm: FormGroup;
   deadlineReport: string;
   accessByPeopleArray:any[] = [];
+  @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
 
-  constructor(private formBuilder: FormBuilder, private http : HttpClient, private datepipe: DatePipe) { }
+  constructor(private formBuilder: FormBuilder, private http : HttpClient, 
+    private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -57,12 +63,10 @@ export class RequestReportFormComponent implements OnInit {
     })
   }
 
-  private sendReportFormToAPI(): void{
+  private sendReportFormToAPI(): Observable<any>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.reportForm.patchValue({'accessBy' : this.accessByPeopleArray.join(",")});
-    this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers}).subscribe(succ => {
-      Swal.fire(  '', 'Vaša požiadavka s id : ' + succ + ". bola zaznamenaná.", 'success'  )
-    })
+    return this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers});
   }
   private submit(): void{
     if(this.reportForm.invalid){
@@ -72,7 +76,13 @@ export class RequestReportFormComponent implements OnInit {
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
       if (result.value) {
-        this.sendReportFormToAPI();
+        this.spinner.show();
+        this.sendReportFormToAPI().subscribe(id => {
+          this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+            this.spinner.hide();
+            Swal.fire( '', 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", 'success');
+         });
+        })
       }
     })
   }

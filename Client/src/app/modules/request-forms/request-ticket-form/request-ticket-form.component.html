@@ -90,7 +90,7 @@
 
      <!-- uploader -->
     <div class='ticketInlineParameters'> 
-        <app-file-upload id='uploader' [uploaderHeight] = '45'></app-file-upload>
+        <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
     </div>
 
     <!-- submit button -->
@@ -100,5 +100,5 @@
 
 </form>
 
-
+<ngx-spinner><p style="font-size: 20px; color: white">Posielanie požiadavky...</p> </ngx-spinner>
 <img id='ticketFormImage' src="../../../../assets/images_design/ticket_form.png"/>

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-file-upload',
@@ -6,20 +7,22 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent {
+  
   constructor(){}
 
    @Input() public uploaderHeight: number;
+   @Input() public requiredUpload: boolean;
 
-  files: any = [];
+  public files: File[]  = [];
 
-  uploadFile(event) {
-    for (let index = 0; index < event.length; index++) {
-      const element = event[index];
-      this.files.push(element.name)
-    }  
+  private uploadFile(files: FileList ) {
+    this.files.push(files.item(0));
   }
-  deleteAttachment(index) {
+  private deleteAttachment(index) {
     this.files.splice(index, 1)
+  }
+  public isEmpty(): boolean{
+    return this.files.length === 0;
   }
 
 }

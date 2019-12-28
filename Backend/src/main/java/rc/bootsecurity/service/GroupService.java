@@ -21,19 +21,6 @@ public class GroupService {
     private GroupRepository groupRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private TicketPrivilegesRepository ticketPrivilegesRepository;
-    @Autowired
-    private ModuleTypeRepository moduleTypeRepository;
-
-    private UserConverter userConverter = new UserConverter();
-    private RequestConverter requestConverter = new RequestConverter();
-
-
-
-    public List<Group> getInvolvedGroupsForUser(User user){
-        return this.groupRepository.findAllByUsersInGroup(user);
-    }
 
     public List<Group> getGroupsToManageForUser(User user){
         return this.groupRepository.findAllByGroupManager(user).orElseGet(ArrayList::new);

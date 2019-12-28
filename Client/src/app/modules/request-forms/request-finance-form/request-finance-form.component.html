@@ -1,1 +1,43 @@
-<p>request-finance-form works!</p>
+
+
+<h2 class='formTitle'>Požiadavka na Financie</h2>
+
+<form [formGroup] = "financeForm" (ngSubmit)="submit()">
+    <!-- finance type -->
+    <mat-form-field class='InlineParameters'>
+        <mat-label>Typ Financie</mat-label>
+
+        <mat-select formControlName="financeType">
+            <mat-option  *ngFor="let type of financeTypeArray" [value]="type.name"  >{{ type.name }} </mat-option>
+        </mat-select>
+
+        <mat-error *ngIf="financeType.invalid"> Prosím vyberte kategóriu pre Finančný typ</mat-error>
+    </mat-form-field>
+
+    <!--name -->
+    <mat-form-field class='InlineParameters'>
+        <input  matInput placeholder="Číslo zmluvy" formControlName = "name" >
+
+        <mat-error *ngIf="name.invalid"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>
+    </mat-form-field>
+
+    <!--Priority -->
+    <div class='InlineParameters' >
+        <mat-checkbox (change) = "changeToUrgent($event.checked)">Urgent</mat-checkbox>
+    </div>
+
+     <!-- uploader -->
+    <div class='InlineParameters'> 
+        <app-file-upload id='fileUploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
+        <mat-error *ngIf="fileInput && fileInput.isEmpty()"> Prosím vyberte súbor</mat-error>
+    </div>
+
+    <!-- submit button -->
+    <div class='InlineParameters'>
+        <button mat-raised-button color="primary" id="ticketSendingButton" type="submit"> Odoslať </button>
+    </div>
+
+</form>
+
+<ngx-spinner><p style="font-size: 20px; color: white">Posielanie požiadavky...</p> </ngx-spinner>
+<img id='FormImage' src="../../../../assets/images_design/finance_form.png"/>

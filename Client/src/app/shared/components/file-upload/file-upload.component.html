@@ -3,10 +3,10 @@ class="uploadfilecontainer"
 (click)="fileInput.click()"  
 (onFileDropped)="uploadFile($event)" 
 [style.height.px]="uploaderHeight">
-    <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)">
+    <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)" multiple >
 </div>
 <div  class="files-list" *ngFor="let file of files;let i=index">
-    <p>{{ file }}</p>
+    <p>{{ file.name }}</p>
     <button class="delete-file" (click)="deleteAttachment(i)">
     <img src="../../../../assets/images_design/trash_icon.png">
     </button>

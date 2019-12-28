@@ -1,0 +1,43 @@
+.InlineParameters{
+    display: block;
+    width: 40%;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+#fileUploader{
+    float: left;
+    width: 100%;
+}
+
+#ticketSendingButton{
+    margin-top: 10px;
+    float: right;
+    background-color: #0077ec;
+}
+
+#FormImage{
+    position: absolute;
+    top:125px;
+    width: 325px;
+    left: 50%;
+    -webkit-transition: -webkit-transform .8s ease-in-out;
+    transition:  transform .8s ease-in-out;
+}
+#ticketFormImage:hover {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+
+
+textarea{
+    height: 175px;
+}
+
+.formTitle{
+    margin-top: -20px;
+    margin-left: -10px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #898989;
+}

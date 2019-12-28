@@ -4,12 +4,14 @@ import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.*;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.finance.Finance;
+import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 
+import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
@@ -114,6 +116,24 @@ public class RequestConverter {
         ticketPrivilegeDTO.setTicketType(ticketPrivileges.getTicketType().getName());
         ticketPrivilegeDTO.setApplicationName(ticketPrivileges.getApplicationName());
         return ticketPrivilegeDTO;
+    }
+
+    public FinanceTypeDTO convertFinanceTypeToFinanceTypeDTO(FinanceType financeType){
+        FinanceTypeDTO financeTypeDTO = new FinanceTypeDTO();
+        financeTypeDTO.setId(financeType.getId());
+        financeTypeDTO.setName(financeType.getName());
+        if(financeType.getGroupsToSubmitSpecificFinanceType() != null) {
+            financeTypeDTO.setGroupsToSubmitSpecificFinanceType(new ArrayList<>(financeType.getGroupsToSubmitSpecificFinanceType()));
+        }
+        return financeTypeDTO;
+    }
+
+    public FinanceTypeDTO convertFinanceTypeToFinanceTypeDTOWithoutGroups(FinanceType financeType){
+        FinanceTypeDTO financeTypeDTO = new FinanceTypeDTO();
+        financeTypeDTO.setId(financeType.getId());
+        financeTypeDTO.setName(financeType.getName());
+
+        return financeTypeDTO;
     }
 
 

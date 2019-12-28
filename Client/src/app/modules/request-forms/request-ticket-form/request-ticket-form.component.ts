@@ -1,9 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
 import { TicketSubtype } from 'app/shared/models/TicketSubtype';
+import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
+import { FileServiceService } from 'app/core/services/file-service.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -11,13 +15,16 @@ import { TicketSubtype } from 'app/shared/models/TicketSubtype';
   styleUrls: ['./request-ticket-form.component.scss']
 })
 export class RequestTicketFormComponent implements OnInit {
-  public softwareTypes:TicketSubtype[] = [];
+  public softwareTypes:TicketSubtype[] = []; 
   public hardwareTypes:TicketSubtype[] = [];
   public serverTypes:TicketSubtype[] = [];
 
   ticketForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient) { }
+  @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
+
+  constructor(private formBuilder: FormBuilder, private http: HttpClient, 
+    private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -68,11 +75,9 @@ export class RequestTicketFormComponent implements OnInit {
     return this.ticketForm.get("problem");
   }
 
-  private sendTicketFormToAPI(): void{
+  private sendTicketFormToAPI(): Observable<any>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.http.post(environment.apiUrl + 'requests/ticket', this.ticketForm.value, {headers}).subscribe(succ => {
-      Swal.fire(  '', 'Vaša požiadavka s id : ' + succ + ". bola zaznamenaná.", 'success'  )
-    })
+    return this.http.post(environment.apiUrl + 'requests/ticket', this.ticketForm.value, {headers});
   }
 
   private submit() : void{
@@ -83,7 +88,13 @@ export class RequestTicketFormComponent implements OnInit {
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
       if (result.value) {
-        this.sendTicketFormToAPI();
+        this.spinner.show();
+        this.sendTicketFormToAPI().subscribe(id => {
+            this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+              this.spinner.hide();
+              Swal.fire( '', 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", 'success');
+           });
+        });
       }
     })
   }

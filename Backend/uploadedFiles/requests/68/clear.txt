@@ -1,0 +1,79 @@
+
+-----------
+ SSID : konfer wifi 
+ Password : ediediedi1234
+-----------
+ SSID : AndroidAP
+ Password : xlds5527
+-----------
+ SSID : TP-LINK_Smart Plug_F129
+ Password :  
+-----------
+ SSID : eduroam
+ Password :  
+-----------
+ SSID : Fefe
+ Password : Fefewifi
+-----------
+ SSID : Konfer-Wifi-2
+ Password : Eduard1234
+
+
+
+api/
+  websockets/
+  user/
+	- POST
+	- /change_password (PUT)
+	- /change_email (PUT)
+	- /change_photo (PUT)
+	- /access?enable=false		(authorization privileges)
+	- /information	 (GET)		(detaily + opravnenia + skupiny = SQL)
+  group/
+	- /details/{id}		(group participants)
+		- get_mandatory_details (name + description)
+		- get_full_detials?chart=false (privileges + chart)
+	- /manage/{id}		(manager + authorization)
+		- add_watcher (PUT)
+		- remove_users (PUT)
+		- change_description (PUT)
+		- DELETE
+	- privileges/{id}/	(authorization)
+		- add_users (PUT)
+		- chnage_privileges (PUT)
+		- POST (create)
+		
+  requests/
+    ticket/
+	- POST
+	- details/{id} /  (authorization)
+		- GET, PUT, DELETE
+    report/
+	- POST
+	- details/{id} /  (authorization)
+		- GET, PUT, DELETE
+    finance/ 
+	- POST (authorization)
+	- details/{id} /  (authorization - creator + solver + manager + manager hand)
+		- GET, PUT, DELETE
+    comment?request_id=15 (authorization - creator + solver + manager + manager hand)
+	- GET(all) , POST 
+	- DELETE , EDIT (authorization - creator)
+	- &comment_id=5&secure=true (POST)
+		- @RequestBody List<GroupDTO>
+    modifination/{id} (authorization)
+	/state?close=true&username=krivaned
+	/email?username=krivanek
+	/files
+		- POST , DELETE{id}
+	/solver (authorization - solver)
+		?watch=true?username=krivaned (PUT)
+		?assign=true?username=krivaned (PUT)
+		?solver=true?username=krivaned (PUT)
+		?closed=true?username=krivaned (PUT)
+    dashboard?username=krivanek
+    closed (?filter by: id , creator, closed, timestamp from - to, ) 
+    
+Ahojte, Veselé  
+sorry ak sa to nerýmuje, to som stvoril za 
+

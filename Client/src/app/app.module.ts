@@ -50,6 +50,7 @@ import { UserGroupManagementComponent } from './modules/app-management/user-grou
 import { AuthenticationService } from './core/services/authentication.service';
 import { UserService } from './core/services/user.service';
 import { RequestTableComponent } from './shared/components/request-table/request-table.component';
+import { FileServiceService } from './core/services/file-service.service';
 
 @NgModule({
   declarations: [
@@ -107,6 +108,7 @@ import { RequestTableComponent } from './shared/components/request-table/request
     DatePipe,
     AuthenticationService,
     UserService,
+    FileServiceService,
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

@@ -33,7 +33,7 @@ import {
     MatSortModule,
     MatPaginatorModule,
     MatNativeDateModule,
-    MatRippleModule
+    MatRippleModule,
 } from '@angular/material';
 
 @NgModule({
@@ -71,7 +71,8 @@ import {
     MatPaginatorModule,
     MatNativeDateModule,
     MatFormFieldModule,
-     MatRippleModule
+     MatRippleModule,
+     
     //MatPaginator,
     //MatSort,
    // MatTableDataSource,
@@ -111,7 +112,8 @@ import {
     MatSortModule,
     MatPaginatorModule,
     MatFormFieldModule,
-     MatRippleModule
+     MatRippleModule,
+     MatCheckboxModule
     //MatPaginator,
    // MatSort,
    // MatTableDataSource,

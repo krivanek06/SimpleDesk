@@ -13,6 +13,7 @@ import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.enums.REQUEST_POSITION;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
+import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.finance.FinanceTypeRepository;
@@ -42,6 +43,8 @@ public class RequestManagementService{
     private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     protected UserService userService;
+    @Autowired
+    protected GroupRepository groupRepository;
 
 
     public void saveOrUpdateRequest(Request request){
@@ -61,10 +64,6 @@ public class RequestManagementService{
         request.setAllowCommenting(true);
     }
 
-
-
-
-    // -----------------------------------------------------
     private Request findRequest(Integer requestId){
         return this.requestRepository.findById(requestId)
                 .orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));

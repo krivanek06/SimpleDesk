@@ -573,3 +573,16 @@ from tbl_requests r
 where r.id = searching_id
 order by r.id asc;
 $$ LANGUAGE sql;
+
+
+drop function if exists get_finance_types_to_submit_for_user(varchar);
+CREATE OR REPLACE FUNCTION get_finance_types_to_submit_for_user(searching_name varchar)
+RETURNS TABLE(id integer, name varchar) AS $$
+BEGIN
+    RETURN QUERY
+    select tbl_finance_types.id , tbl_finance_types.name from tbl_finance_types where tbl_finance_types.id in (
+        select distinct finance_type_id from tbl_finance_type_privileges where group_id in (
+            select group_id from tbl_user_groups where user_id = (select tbl_users.id from tbl_users where username = searching_name))
+    ) order by id asc;
+END;
+$$ LANGUAGE plpgsql;
