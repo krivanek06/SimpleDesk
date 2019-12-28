@@ -58,19 +58,26 @@ public class RequestPrivilegeService {
     }
 
 
-    public void modifyRequestTypeForGroupToSubmit(GroupDTO groupDTO){
+    public void modifyModuleTypesToUse(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getRequestTypesToSubmit())));
+        group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getApplicationPrivilegeDTO().getModuleTypesToUse())));
 
         this.groupRepository.save(group);
     }
 
 
-    public void modifyModuleTypeForGroupToManage(GroupDTO groupDTO){
+    public void modifyRequestTypeToSolve(GroupDTO groupDTO){
         Group group = this.groupRepository.findByGroupName(groupDTO.getName());
-        group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getModuleTypeToManage())));
+        group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(groupDTO.getApplicationPrivilegeDTO().getRequestTypesToSolve())));
 
         this.groupRepository.save(group);
+    }
+
+    private TicketPrivilegeDTO createTicketPrivilegeDTO(String ticketType, String applicationSubtype){
+        TicketPrivilegeDTO ticketPrivilegeDTO = new TicketPrivilegeDTO();
+        ticketPrivilegeDTO.setApplicationName(applicationSubtype);
+        ticketPrivilegeDTO.setTicketType(ticketType);
+        return ticketPrivilegeDTO;
     }
 
     /**
@@ -89,23 +96,41 @@ public class RequestPrivilegeService {
                 .stream().map(ticketPrivileges -> this.requestConverter.convertTicketPrivilegeToDTO(ticketPrivileges)).collect(Collectors.toList());
 
         // new privileges which will be saved
-        List<TicketPrivileges> privilegesSave = groupDTO.getTicketPrivilegesList().stream().filter(ticketPrivilegeDTO ->
-                !currentPrivilegesForUser.contains(ticketPrivilegeDTO)).map(ticketPrivilegeDTO ->
-                convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO)).collect(Collectors.toList());
+        List<TicketPrivileges> privilegesSave = new ArrayList<>();
+        List<TicketPrivileges> privilegesRemove = new ArrayList<>();
+        for(String ticketType : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().keySet()){
+            for(String ticketSubtypeName: groupDTO.getApplicationPrivilegeDTO().getSolveTickets().get(ticketType)){
+                TicketPrivilegeDTO ticketPrivilegeDTO = this.createTicketPrivilegeDTO(ticketType, ticketSubtypeName);
+                // new privileges which will be saved into DB
+                if( !currentPrivilegesForUser.contains(ticketPrivilegeDTO)){
+                    privilegesSave.add(convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO));
+                }
+                // old privileges which are not in DTO then will be removed
+                if(currentPrivilegesForUser.contains(ticketPrivilegeDTO)){
+                    privilegesRemove.remove(convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO));
+                }
+            }
+        }
+       /* List<TicketPrivileges> privilegesSave = groupDTO.getApplicationPrivilegeDTO().getSolveTickets().keySet().stream()
+                .flatMap(ticketType -> groupDTO.getApplicationPrivilegeDTO().getSolveTickets().get(ticketType).stream()
+                        .map(ticketSubtypeName -> this.createTicketPrivilegeDTO(ticketType, ticketSubtypeName))
+                        .filter(ticketPrivilegeDTO -> !currentPrivilegesForUser.contains(ticketPrivilegeDTO))
+                        .map(ticketPrivilegeDTO -> convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO))
+                        .collect(Collectors.toList()));*/
+
+
 
         // old privileges which are not in DTO then will be removed
-        List<TicketPrivileges> privilegesRemove = currentPrivilegesForUser.stream().filter(ticketPrivilegeDTO ->
+       /* List<TicketPrivileges> privilegesRemove = currentPrivilegesForUser.stream().filter(ticketPrivilegeDTO ->
                 !groupDTO.getTicketPrivilegesList().contains(ticketPrivilegeDTO)).map(ticketPrivilegeDTO ->
-                convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO)).collect(Collectors.toList());
+                convertTicketPrivilegeDTOtoEntity(group, ticketPrivilegeDTO)).collect(Collectors.toList());*/
+
 
         if(!privilegesSave.isEmpty())
             this.ticketPrivilegesRepository.saveAll(privilegesSave);
 
         if(!privilegesRemove.isEmpty())
             this.ticketPrivilegesRepository.deleteAll(privilegesRemove);
-          //  this.ticketPrivilegesRepository.deleteByIdIn(privilegesRemove.stream().map(TicketPrivileges::getId).collect(Collectors.toList()));
-
-
     }
 
     public void modifyFinanceTypeToSubmit(GroupDTO groupDTO){
@@ -114,8 +139,11 @@ public class RequestPrivilegeService {
         if(!checkIfGroupCanSubmitRequestType(group , MODULE_TYPE.Financie.toString())){
             throw new PrivilegeException("Request type 'Finance' not set for user, can't give him rights for Finance types.");
         }
-        group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByNameIn(groupDTO.getFinanceTypes())));
+        group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByNameIn(groupDTO.getApplicationPrivilegeDTO().getSubmitFinanceRequests())));
 
         this.groupRepository.save(group);
     }
+
+
+
 }

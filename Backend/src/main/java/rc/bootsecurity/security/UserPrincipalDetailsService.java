@@ -1,15 +1,12 @@
 package rc.bootsecurity.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
-import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
@@ -27,14 +24,14 @@ public class UserPrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user =  this.userService.loadUser(username);
-        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(username);
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = this.userService.getPrivilegesForUser(username);
         List<Group> groupsToManage = this.groupService.getGroupsToManageForUser(user);
         List<Group> groupToWatchActivity = this.groupService.getGroupToWatchActivity(user);
 
         // privileges
         UserPrincipal userPrincipal = new UserPrincipal();
         userPrincipal.setUser(user);
-        userPrincipal.setUserPrivilegeDTO(userPrivilegeDTO);
+        userPrincipal.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
         userPrincipal.setGroupsToManage(groupsToManage.stream().map(Group::getGroupName).collect(Collectors.toList()));
         userPrincipal.setGroupsActivityToWatch(groupToWatchActivity.stream().map(Group::getGroupName).collect(Collectors.toList()));
 

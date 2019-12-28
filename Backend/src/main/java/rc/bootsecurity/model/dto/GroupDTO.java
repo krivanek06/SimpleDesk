@@ -24,11 +24,5 @@ public class GroupDTO {
 
     private List<UserSimpleDTO> usersInGroup;
 
-    private List<TicketPrivilegeDTO> ticketPrivilegesList;
-
-    private List<String> requestTypesToSubmit;
-
-    private List<String> moduleTypeToManage;
-
-    private List<String> financeTypes;
+    private ApplicationPrivilegeDTO applicationPrivilegeDTO;
 }

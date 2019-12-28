@@ -56,7 +56,7 @@ public class RequestManagementService{
 
     protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
         request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        request.setCreator(this.userRepository.findByUsername(this.userService.getPrincipalUsername()).get());
+        request.setCreator(this.userRepository.findByUsername(this.userService.getPrincipalUsername()).get()); //
         request.setName(name);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name()));
         request.setModuleType(this.moduleTypeRepository.findByName(requestType));

@@ -106,25 +106,25 @@ public class InserterRequestsSimulation {
     }
 
     private void insertRequestPrivileges(){
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
+        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
 
-        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
+        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
 
-        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
+        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Report.name()))));
 
-        this.requestPrivilegeService.modifyModuleTypeForGroupToManage(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
+        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_1,
+        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_1,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_2,
+        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_2,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeForGroupToSubmit(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_3,
+        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_3,
                 new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
         // group 8 -> no request type to solver -> should throw error
     }

@@ -20,9 +20,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
-public class UserPrivilegeDTO {
-    private boolean isSolver;
-
+public class ApplicationPrivilegeDTO {
     // GUI
     private List<String> moduleTypesToUse;
     private List<String> submitFinanceRequests;

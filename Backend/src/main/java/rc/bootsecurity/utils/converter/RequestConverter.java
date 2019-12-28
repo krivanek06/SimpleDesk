@@ -1,5 +1,6 @@
 package rc.bootsecurity.utils.converter;
 
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.*;
 import rc.bootsecurity.model.entity.Group;
@@ -135,7 +136,6 @@ public class RequestConverter {
 
         return financeTypeDTO;
     }
-
 
 
 

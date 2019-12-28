@@ -1,6 +1,7 @@
 package rc.bootsecurity.test.creator;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
@@ -19,8 +20,7 @@ import rc.bootsecurity.model.entity.ticket.*;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Creator {
 
@@ -272,18 +272,33 @@ public class Creator {
         return ticketPrivilegeDTO;
     }
 
+
+
+
     public static GroupDTO createGroupDTOWithTicketPrivileges(String name, List<TicketPrivilegeDTO> ticketPrivilegeDTOs){
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName(name);
-        groupDTO.setTicketPrivilegesList(ticketPrivilegeDTOs);
 
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
+        Map<String, List<String>> map = new HashMap<>();
+        for( TicketPrivilegeDTO ticketPrivilegeDTO : ticketPrivilegeDTOs){
+            if(!map.containsKey(ticketPrivilegeDTO.getTicketType())){
+                map.put(ticketPrivilegeDTO.getTicketType(), new ArrayList<>());
+            }
+            map.get(ticketPrivilegeDTO.getTicketType()).add(ticketPrivilegeDTO.getApplicationName());
+        }
+        applicationPrivilegeDTO.setSolveTickets(map);
+        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
         return groupDTO;
     }
 
     public static GroupDTO createGroupDTOWithRequestPrivilegesToSubmit(String name, List<String> requestNames){
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName(name);
-        groupDTO.setRequestTypesToSubmit(requestNames);
+
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
+        applicationPrivilegeDTO.setModuleTypesToUse(requestNames);
+        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
 
         return groupDTO;
     }
@@ -291,7 +306,10 @@ public class Creator {
     public static GroupDTO createGroupDTOWithRequestPrivilegesToSolve(String name, List<String> requestNames){
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName(name);
-        groupDTO.setModuleTypeToManage(requestNames);
+
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
+        applicationPrivilegeDTO.setRequestTypesToSolve(requestNames);
+        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
 
         return groupDTO;
     }
@@ -300,8 +318,10 @@ public class Creator {
     public static GroupDTO createGroupDTOWithFinanceType(String name, List<String> financeType){
         GroupDTO groupDTO = new GroupDTO();
         groupDTO.setName(name);
-        groupDTO.setFinanceTypes(financeType);
 
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
+        applicationPrivilegeDTO.setSubmitFinanceRequests(financeType);
+        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
         return groupDTO;
     }
 

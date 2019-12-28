@@ -1,5 +1,6 @@
 package rc.bootsecurity.repository;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import rc.bootsecurity.model.entity.Group;
@@ -22,5 +23,8 @@ public interface GroupRepository extends CrudRepository<Group, Integer > {
     Optional<List<Group>> findAllByRequestTypesToSolve(ModuleType moduleType);
     Optional<List<Group>> findAllByModuleTypesToUse(ModuleType moduleType);
     Optional<List<Group>> findAllByFinanceTypes(FinanceType financeType);
+
+    @Query(nativeQuery = true, value = "select * from get_all_privileges_for_group_varchar(?1);")
+    String findPrivilegesForGroup(String searching_name);
 
 }

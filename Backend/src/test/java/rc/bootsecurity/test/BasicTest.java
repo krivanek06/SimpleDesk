@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.entity.User;
@@ -322,29 +322,29 @@ public class BasicTest {
         assertThat(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group1).get()).containsExactlyInAnyOrder(ticket,report,finance);
          //   assertThat(group5.getUsersInGroup()).isEmpty();
 
-        UserPrivilegeDTO userPrivilegeDTO = this.userService.getPrivilegesForUser(user1.getUsername());
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = this.userService.getPrivilegesForUser(user1.getUsername());
 
-        assertThat(userPrivilegeDTO.getRequestTypesToSolve())
+        assertThat(applicationPrivilegeDTO.getRequestTypesToSolve())
                 .containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name());
-        assertThat(userPrivilegeDTO.getModuleTypesToUse())
+        assertThat(applicationPrivilegeDTO.getModuleTypesToUse())
                 .containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name());
-        assertThat(userPrivilegeDTO.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName(), ticketTypeHardware.getName());
-        assertThat(userPrivilegeDTO.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
+        assertThat(applicationPrivilegeDTO.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName(), ticketTypeHardware.getName());
+        assertThat(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(userPrivilegeDTO.getSolveTickets().get(ticketTypeHardware.getName())).containsExactlyInAnyOrder(
+        assertThat(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeHardware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypesHardware.get(0).getName(), ticketSubtypesHardware.get(1).getName());
-        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
 
-        UserPrivilegeDTO userPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12.getUsername());
 
-        assertThat(userPrivilegeDTO5.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name());
-        assertThat(userPrivilegeDTO5.getModuleTypesToUse().size()).isEqualTo(0);
-        assertThat(userPrivilegeDTO5.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName());
-        assertThat(userPrivilegeDTO5.getSolveTickets()).doesNotContainKeys(ticketTypeHardware.getName());
-        assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
+        ApplicationPrivilegeDTO applicationPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12.getUsername());
+
+        assertThat(applicationPrivilegeDTO5.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name());
+        assertThat(applicationPrivilegeDTO5.getModuleTypesToUse().size()).isEqualTo(0);
+        assertThat(applicationPrivilegeDTO5.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName());
+        assertThat(applicationPrivilegeDTO5.getSolveTickets()).doesNotContainKeys(ticketTypeHardware.getName());
+        assertThat(applicationPrivilegeDTO5.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
                 ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(userPrivilegeDTO5.getSolveTickets().get(ticketTypeHardware.getName())).isNullOrEmpty();
-        assertThat(userPrivilegeDTO.isSolver()).isEqualTo(true);
+        assertThat(applicationPrivilegeDTO5.getSolveTickets().get(ticketTypeHardware.getName())).isNullOrEmpty();
+
     }
 
     @Test

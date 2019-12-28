@@ -2,6 +2,7 @@ package rc.bootsecurity.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
@@ -44,6 +45,12 @@ public class GroupService {
         groups.forEach(group -> group.getUsersInGroup().remove(user));
 
         this.groupRepository.saveAll(groups);
+    }
+
+    public GroupDTO getGroupDetails(String groupName){
+        GroupDTO groupDTO = new GroupDTO();
+
+        return groupDTO;
     }
 
 }

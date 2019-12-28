@@ -6,7 +6,7 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
 import java.util.*;
@@ -16,7 +16,7 @@ import java.util.*;
 @ToString
 public class UserPrincipal implements UserDetails {
     private User user;
-    private UserPrivilegeDTO userPrivilegeDTO;
+    private ApplicationPrivilegeDTO applicationPrivilegeDTO;
     private List<String> groupsToManage;
     private List<String> groupsActivityToWatch;
 
@@ -59,44 +59,44 @@ public class UserPrincipal implements UserDetails {
     }
 
     public String[] getModuleTypesToUse(){
-        return (getUserPrivilegeDTO().getModuleTypesToUse() != null) ?
-                this.getUserPrivilegeDTO().getModuleTypesToUse().toArray(String[]::new) : null;
+        return (getApplicationPrivilegeDTO().getModuleTypesToUse() != null) ?
+                this.getApplicationPrivilegeDTO().getModuleTypesToUse().toArray(String[]::new) : null;
     }
 
     public String[] getRequestTypesToSolve(){
-        return (getUserPrivilegeDTO().getRequestTypesToSolve() != null) ?
-                this.getUserPrivilegeDTO().getRequestTypesToSolve().toArray(String[]::new) : null;
+        return (getApplicationPrivilegeDTO().getRequestTypesToSolve() != null) ?
+                this.getApplicationPrivilegeDTO().getRequestTypesToSolve().toArray(String[]::new) : null;
     }
 
     public String[] getFinanceTypeToSubmit(){
-        return (getUserPrivilegeDTO().getSubmitFinanceRequests() != null) ?
-                this.getUserPrivilegeDTO().getSubmitFinanceRequests().toArray(String[]::new) : null;
+        return (getApplicationPrivilegeDTO().getSubmitFinanceRequests() != null) ?
+                this.getApplicationPrivilegeDTO().getSubmitFinanceRequests().toArray(String[]::new) : null;
     }
 
     public String[] getSolveTicketsTypeSoftware(){
-        return (this.getUserPrivilegeDTO().getSolveTickets() != null) ?
-                this.getUserPrivilegeDTO().getSolveTickets()
+        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
+                this.getApplicationPrivilegeDTO().getSolveTickets()
                         .getOrDefault(TICKET_TYPE.Software.name(), new ArrayList<>()).toArray(String[]::new) : null;
     }
 
     public String[] getSolveTicketsTypeHardware(){
-        return (this.getUserPrivilegeDTO().getSolveTickets() != null) ?
-                this.getUserPrivilegeDTO().getSolveTickets()
+        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
+                this.getApplicationPrivilegeDTO().getSolveTickets()
                         .getOrDefault(TICKET_TYPE.Hardware.name(), new ArrayList<>()).toArray(String[]::new) : null;
     }
 
     public String[] getSolveTicketsTypeServer(){
-        return (this.getUserPrivilegeDTO().getSolveTickets() != null) ?
-                this.getUserPrivilegeDTO().getSolveTickets()
+        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
+                this.getApplicationPrivilegeDTO().getSolveTickets()
                         .getOrDefault(TICKET_TYPE.Server.name(), new ArrayList<>()).toArray(String[]::new) : null;
     }
 
     public boolean getSolveTicketsTypeUser(){
-        return (this.getUserPrivilegeDTO().getSolveTickets() != null) && getUserPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Užívateľ.name());
+        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) && getApplicationPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Užívateľ.name());
     }
 
     public boolean getSolveTicketsTypeOther(){
-        return (this.getUserPrivilegeDTO().getSolveTickets() != null) && getUserPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Iné.name());
+        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) && getApplicationPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Iné.name());
     }
 
 

@@ -6,7 +6,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
 
@@ -23,8 +23,8 @@ public class JsonStringParser {
      * Parse string json privileges for users what application can he user or solve
      * and return DTO
      */
-    public UserPrivilegeDTO parseFromRawJsonToUserPrivilegeDTO(String userPrivilegesRawJson){
-        UserPrivilegeDTO userPrivilegeDTO = new UserPrivilegeDTO();
+    public ApplicationPrivilegeDTO parseFromRawJsonToUserPrivilegeDTO(String userPrivilegesRawJson){
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
         Map<String, List<String>> ticketTypeToSolve = new HashMap<>();
 
         JSONObject userPrivileges = new JSONObject(userPrivilegesRawJson);
@@ -40,23 +40,22 @@ public class JsonStringParser {
             }
         }
 
-        userPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
+        applicationPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
 
         if(!userPrivileges.isNull("requestTypeToSolve")) {
-            userPrivilegeDTO.setRequestTypesToSolve(userPrivileges.getJSONArray("requestTypeToSolve")
+            applicationPrivilegeDTO.setRequestTypesToSolve(userPrivileges.getJSONArray("requestTypeToSolve")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
         if(!userPrivileges.isNull("moduleTypeToUse")) {
-            userPrivilegeDTO.setModuleTypesToUse(userPrivileges.getJSONArray("moduleTypeToUse")
+            applicationPrivilegeDTO.setModuleTypesToUse(userPrivileges.getJSONArray("moduleTypeToUse")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
 
         if(!userPrivileges.isNull("financeTypeToSubmit")) {
-            userPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("financeTypeToSubmit")
+            applicationPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("financeTypeToSubmit")
                     .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
         }
-        userPrivilegeDTO.setSolver(!(userPrivilegeDTO.getRequestTypesToSolve() == null));
-        return userPrivilegeDTO;
+        return applicationPrivilegeDTO;
     }
 
 

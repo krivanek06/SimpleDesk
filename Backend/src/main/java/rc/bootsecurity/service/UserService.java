@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserDTO;
-import rc.bootsecurity.model.dto.UserPrivilegeDTO;
+import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.utils.service.FileService;
@@ -26,7 +26,7 @@ public class UserService {
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
 
-    public UserPrivilegeDTO getPrivilegesForUser(String username){
+    public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(
                 this.userRepository.findPrivilegesForUser(username));
     }
