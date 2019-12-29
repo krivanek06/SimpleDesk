@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RestController;
 import rc.bootsecurity.model.dto.request.ReportDTO;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.service.request.ReportService;
-import rc.bootsecurity.utils.service.JsonStringParser;
 
 @RestController
 @RequestMapping("api/requests/report")

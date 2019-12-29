@@ -17,10 +17,10 @@ import java.util.List;
 
 @Service
 public class RequestService {
+    private JsonStringParser jsonStringParser = new JsonStringParser();
+
     @Autowired
     protected RequestLogRepository requestLogRepository;
-    @Autowired
-    private JsonStringParser jsonStringParser;
     @Autowired
     private RequestRepository requestRepository;
     @Autowired

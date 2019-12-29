@@ -612,7 +612,7 @@ public class RequestSimulationTest {
         assertThat(ticketDTO.getProblem()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();
-        assertThat(ticketDTO.getUserToWatchRequest().get(0).getId()).isEqualTo(user3.getId());
+        assertThat(ticketDTO.getUserToWatchRequest().get(0).getUsername()).isEqualTo(user3.getUsername());
         assertThat(ticketDTO.getUserToWatchRequest()).containsExactlyInAnyOrder(this.userConverter.convertUserToSimpleDTO(user3));
 
         this.requestManagementService.setWatchRequestAndSave(ticketDTO.getId(), this.userConverter.convertUserToSimpleDTO(user4));

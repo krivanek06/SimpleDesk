@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/requests/ticket")
 public class TicketController {
-    private static final Logger LOGGER =  LoggerFactory.getLogger(JsonStringParser.class);
+    private static final Logger LOGGER =  LoggerFactory.getLogger(TicketController.class);
 
     @Autowired
     private TicketService ticketService;

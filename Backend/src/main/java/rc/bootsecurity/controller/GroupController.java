@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.model.dto.GroupContainerDTO;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.service.GroupService;
@@ -31,6 +32,12 @@ public class GroupController {
         } catch (Exception e) {
             LOGGER.error("Failed method getGroupDetails for group: " + groupName+ ", error : " + e.getMessage());
         }
-        return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní detailov skupiny " + groupName + ", kontaktujte administrátora." ,
+                HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @GetMapping
+    public GroupContainerDTO getAllInvolvedGroupsName(){
+        return this.groupService.getAllGroupsForLoggedInUser();
     }
 }

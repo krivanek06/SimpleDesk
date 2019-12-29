@@ -1,1 +1,30 @@
-<p>user-details works!</p>
+<div class='content'>   
+    <h3 class='detailTitle'>Detaily uživateľa</h3>
+
+    <div class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Avatar</div>
+            <ul><li class='information'><img [src]="'data:image/jpeg;base64,'+userService.user.photoBytes" class='avatar'/></li></ul>
+        </li>
+        
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Meno</div>
+            <ul ><li div class='information'> {{ userService.user.firstName }}</li> </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Priezvisko</div>
+            <ul> <li class='information elevation'>{{ userService.user.lastName }}  </li></ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Email</div>
+            <ul> <li class='information elevation'>{{ userService.user.email }}  </li></ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Heslo</div>
+            <ul> <li class='information passwordChange'>zmeniť  </li></ul>
+        </li>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+@import "../user-profile.component.scss";
+
+.passwordChange{
+    cursor: pointer;
+    color: #4d72f9;
+}
+
+.passwordChange:hover{
+    font-weight: bold;
+}
+
+.avatar{
+    width: 35px;
+}
+
+
+.informationAnswer{
+    margin-top:0;
+}
+
+.userInformationsContainer{
+    margin-top:8px;
+}

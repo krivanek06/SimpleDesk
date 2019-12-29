@@ -7,7 +7,6 @@ import rc.bootsecurity.model.entity.User;
 public class UserConverter {
     public UserSimpleDTO convertUserToSimpleDTO(User user){
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
-        userSimpleDTO.setId(user.getId());
         userSimpleDTO.setUsername(user.getUsername());
         userSimpleDTO.setFirstName(user.getFirstName());
         userSimpleDTO.setLastName(user.getLastName());

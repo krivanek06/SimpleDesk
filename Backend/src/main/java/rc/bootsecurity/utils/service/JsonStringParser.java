@@ -14,10 +14,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Service
+
 public class JsonStringParser {
     private static final Logger LOGGER =  LoggerFactory.getLogger(JsonStringParser.class);
-
 
     /**
      * Parse string json privileges for users what application can he user or solve
@@ -42,19 +41,19 @@ public class JsonStringParser {
 
         applicationPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
 
-        if(!userPrivileges.isNull("requestTypeToSolve")) {
-            applicationPrivilegeDTO.setRequestTypesToSolve(userPrivileges.getJSONArray("requestTypeToSolve")
-                    .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
-        }
-        if(!userPrivileges.isNull("moduleTypeToUse")) {
-            applicationPrivilegeDTO.setModuleTypesToUse(userPrivileges.getJSONArray("moduleTypeToUse")
-                    .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
-        }
 
-        if(!userPrivileges.isNull("financeTypeToSubmit")) {
-            applicationPrivilegeDTO.setSubmitFinanceRequests(userPrivileges.getJSONArray("financeTypeToSubmit")
-                    .toList().stream().map(x -> (String) x).collect(Collectors.toList()));
-        }
+        applicationPrivilegeDTO.setRequestTypesToSolve(!userPrivileges.isNull("requestTypeToSolve") ?
+                userPrivileges.getJSONArray("requestTypeToSolve").toList().stream()
+                        .map(x -> (String) x).collect(Collectors.toList()): new ArrayList<>());
+
+        applicationPrivilegeDTO.setModuleTypesToUse(!userPrivileges.isNull("moduleTypeToUse") ?
+                userPrivileges.getJSONArray("moduleTypeToUse").toList().stream()
+                        .map(x -> (String) x).collect(Collectors.toList()) : new ArrayList<>());
+
+        applicationPrivilegeDTO.setSubmitFinanceRequests(!userPrivileges.isNull("financeTypeToSubmit") ?
+                userPrivileges.getJSONArray("financeTypeToSubmit").toList().stream()
+                        .map(x -> (String) x).collect(Collectors.toList()) : new ArrayList<>());
+
         return applicationPrivilegeDTO;
     }
 

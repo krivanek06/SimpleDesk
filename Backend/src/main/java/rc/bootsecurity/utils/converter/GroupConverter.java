@@ -30,7 +30,7 @@ public class GroupConverter {
         groupDTO.setUsersInGroup(group.getUsersInGroup() != null ? group.getUsersInGroup().stream()
                 .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : null);
 
-        ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
+        /*ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
         applicationPrivilegeDTO.setModuleTypesToUse(group.getModuleTypesToUse() != null ? group.getModuleTypesToUse().stream()
                 .map(ModuleType::getName).collect(Collectors.toList()) : new ArrayList<>());
         applicationPrivilegeDTO.setRequestTypesToSolve(group.getRequestTypesToSolve() != null ? group.getRequestTypesToSolve().stream()
@@ -48,7 +48,7 @@ public class GroupConverter {
             });
         }
         applicationPrivilegeDTO.setSolveTickets(map);
-        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);
+        groupDTO.setApplicationPrivilegeDTO(applicationPrivilegeDTO);*/
 
         return groupDTO;
     }

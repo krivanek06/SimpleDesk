@@ -16,13 +16,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
 
     List<User> findAllByGroupsInvolved(Group group);
+    Optional<List<User>> findAllByGroupsActivityWatched(Group group);
 
-    User findByFirstNameAndLastName(String firstName, String lastName);
     List<User> findAllByWatchedRequests(Request request);
 
     @Query(nativeQuery = true, value = "select * from get_all_privileges_for_user_varchar(?1);")
     String findPrivilegesForUser(String searching_name);
 
-    User findUserById(Integer id);
+
 
 }

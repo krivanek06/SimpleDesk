@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { UserService } from 'app/core/services/user.service';
+import { GroupService } from 'app/core/services/group.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -7,9 +10,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class UserProfileComponent implements OnInit {
 
-  constructor() { }
+  constructor(private authService : AuthenticationService, private userService : UserService) { }
 
   ngOnInit() {
+    this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();
+    console.log(this.userService.user);
+    
+  
   }
 
 }

@@ -27,10 +27,9 @@ export class DashboardComponent implements OnInit {
 
 
 
-  constructor(private authService : AuthenticationService, private http: HttpClient, private spinner: NgxSpinnerService) { }
+  constructor( private http: HttpClient, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();
     this.getRequestOnDashboard();
   }
 

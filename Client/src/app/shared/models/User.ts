@@ -9,6 +9,7 @@ export interface User{
     active: boolean,
     dateCreation: string,
     dateEnding: string,
-
-
 }
+
+
+

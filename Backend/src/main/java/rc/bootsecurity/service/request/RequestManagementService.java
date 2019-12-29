@@ -35,8 +35,6 @@ public class RequestManagementService{
    private RequestPositionRepository requestPositionRepository;
    @Autowired
    private RequestPriorityRepository requestPriorityRepository;
-   @Autowired
-   private UserRepository userRepository;
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
@@ -45,6 +43,8 @@ public class RequestManagementService{
     protected UserService userService;
     @Autowired
     protected GroupRepository groupRepository;
+    @Autowired
+    protected UserRepository userRepository;
 
 
     public void saveOrUpdateRequest(Request request){
@@ -56,7 +56,7 @@ public class RequestManagementService{
 
     protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
         request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        request.setCreator(this.userRepository.findByUsername(this.userService.getPrincipalUsername()).get()); //
+        request.setCreator(this.userService.loadUser(this.userService.getPrincipalUsername()));
         request.setName(name);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name()));
         request.setModuleType(this.moduleTypeRepository.findByName(requestType));
@@ -83,7 +83,7 @@ public class RequestManagementService{
     }
 
     public void setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
-        User user = this.userRepository.findByFirstNameAndLastName(userSimpleDTO.getFirstName(),userSimpleDTO.getLastName());
+        User user = this.userService.loadUser(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
         this.saveOrUpdateRequest(request);
@@ -91,7 +91,7 @@ public class RequestManagementService{
 
 
     public void setSolverUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO, String solution){
-        User user = this.userRepository.findByFirstNameAndLastName(userSimpleDTO.getFirstName(),userSimpleDTO.getLastName());
+        User user = this.userService.loadUser(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setSolver(user);
         request.setSolution(solution);
@@ -99,7 +99,7 @@ public class RequestManagementService{
     }
 
     public void setClosedUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
-        User user = this.userRepository.findByFirstNameAndLastName(userSimpleDTO.getFirstName(),userSimpleDTO.getLastName());
+        User user = this.userService.loadUser(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setClosed(user);
         this.saveOrUpdateRequest(request);
@@ -108,14 +108,14 @@ public class RequestManagementService{
     public void setWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
         request.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(request)));
-        request.getUserWhoWatchThisRequest().add(this.userRepository.findUserById(userSimpleDTO.getId()));
+        request.getUserWhoWatchThisRequest().add(this.userService.loadUser(userSimpleDTO.getUsername()));
         this.saveOrUpdateRequest(request);
     }
 
     public void removeWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
         request.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(request)));
-        User user = this.userRepository.findUserById(userSimpleDTO.getId());
+        User user = this.userService.loadUser(userSimpleDTO.getUsername());
         request.getUserWhoWatchThisRequest().remove(user);
         this.saveOrUpdateRequest(request);
     }

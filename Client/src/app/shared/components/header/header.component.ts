@@ -13,7 +13,6 @@ export class HeaderComponent implements OnInit {
   constructor(private authService: AuthenticationService , private router: Router, public userService: UserService) { }
 
   ngOnInit() {
-
   }
 
   public logout(): void{

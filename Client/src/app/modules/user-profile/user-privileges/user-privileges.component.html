@@ -1,1 +1,90 @@
-<p>user-privileges works!</p>
+<div class='content'>   
+    <h3 class='detailTitle'>Oprávnenia uživateĺa</h3>
+
+    <div class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Používanie modulov</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of (authService.getDecodedToken() | async).MODULE_TYPES_TO_USE"> 
+                    {{ name }}  
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer' *ngIf="(authService.getDecodedToken() | async).FINANCE_TYPE_TO_SUBMIT.length > 0">
+            <div class='informationAnswer'>Posielanie typov financií</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of (authService.getDecodedToken() | async).FINANCE_TYPE_TO_SUBMIT"> 
+                    {{ name }}  
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer' *ngIf="(authService.getDecodedToken() | async).REQUEST_TYPE_TO_SOLVE.length > 0">
+            <div class='informationAnswer'>Riešenie požiadávok</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of (authService.getDecodedToken() | async).REQUEST_TYPE_TO_SOLVE"> 
+                    {{ name }}  
+                </li>
+            </ul>    
+        </li>
+
+        <li class='userInformationsContainer'
+        *ngIf="(authService.getDecodedToken() | async).TICKET_SOFTWARE_PRIVILEGES.length > 0 ||
+                (authService.getDecodedToken() | async).TICKET_HARDWARE_PRIVILEGES.length > 0 ||
+                (authService.getDecodedToken() | async).TICKET_SERVER_PRIVILEGES.length > 0 || 
+                (authService.getDecodedToken() | async).TICKET_USER_PRIVILEGES || 
+                (authService.getDecodedToken() | async).TICKET_OTHER_PRIVILEGES">
+            <div class='informationAnswer'>Riešenie tiketov</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngIf="(authService.getDecodedToken() | async).TICKET_SOFTWARE_PRIVILEGES.length > 0"> 
+                    Software 
+                </li>
+                <li class='information lineHeight'*ngIf="(authService.getDecodedToken() | async).TICKET_HARDWARE_PRIVILEGES.length > 0"> 
+                    Hardware 
+                </li>
+                <li class='information lineHeight'*ngIf="(authService.getDecodedToken() | async).TICKET_SERVER_PRIVILEGES.length > 0"> 
+                    Server 
+                </li>
+                <li class='information lineHeight'*ngIf="(authService.getDecodedToken() | async).TICKET_USER_PRIVILEGES"> 
+                    Uživateľ 
+                </li>
+                <li class='information lineHeight'*ngIf="(authService.getDecodedToken() | async).TICKET_OTHER_PRIVILEGES"> 
+                    Iné 
+                </li>
+            </ul>    
+        </li>
+
+   
+        <li *ngIf="(authService.getDecodedToken() | async).TICKET_SOFTWARE_PRIVILEGES.length > 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Software</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of (authService.getDecodedToken() | async).TICKET_SOFTWARE_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+        <li *ngIf="(authService.getDecodedToken() | async).TICKET_HARDWARE_PRIVILEGES.length > 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Hardware</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of (authService.getDecodedToken() | async).TICKET_HARDWARE_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+        <li *ngIf="(authService.getDecodedToken() | async).TICKET_SERVER_PRIVILEGES.length > 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Server</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of (authService.getDecodedToken() | async).TICKET_SERVER_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+    </div>
+</div>

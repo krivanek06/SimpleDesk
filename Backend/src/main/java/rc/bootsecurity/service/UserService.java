@@ -9,18 +9,22 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 import rc.bootsecurity.utils.converter.UserConverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class UserService {
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private JsonStringParser jsonStringParser;
+
+    private JsonStringParser jsonStringParser = new JsonStringParser();
 
     private UserConverter userConverter = new UserConverter();
 
@@ -30,11 +34,17 @@ public class UserService {
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(
                 this.userRepository.findPrivilegesForUser(username));
     }
+    public List<User> getUsersInvolvedInGroup(Group group){
+        List<User> users = this.userRepository.findAllByGroupsInvolved(group);
+        return users != null ? users : new ArrayList<>();
+    }
 
+    public List<User> getUsersWatchedGroup(Group group){
+        return this.userRepository.findAllByGroupsActivityWatched(group).orElseGet(ArrayList::new);
+    }
 
     public User loadUser(String name){
-        return this.userRepository.findByUsername(name)
-                .orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
+        return this.userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
     }
 
     public String getPrincipalUsername() {
