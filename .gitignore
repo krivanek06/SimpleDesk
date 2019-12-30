@@ -1,6 +1,7 @@
 # Don't track content of these folders
 Client/node_modules/
 Backend/target
+Backend/uploadedFiles
 Backend/src/main/resources/images
 Backend/src/main/webapp
 

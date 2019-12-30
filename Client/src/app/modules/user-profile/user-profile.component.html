@@ -4,9 +4,19 @@
 
 
 <div id='contentContainer' >
-    <div  class = 'window'  >
-        <app-user-details></app-user-details>
-        <app-user-privileges ></app-user-privileges>
-        <app-user-groups></app-user-groups>
+    <div  class = 'windowLeft'  >
+        <app-user-details (changeWindow) = "changeFrames($event)"></app-user-details>
+        <app-privileges #userPrivileges name = "uživateĺa"></app-privileges>
     </div>
+
+    <div  class = 'windowLeft'  >
+        <app-user-groups (selectedGroupEmmiter) = "initGroupPrivileges($event)"></app-user-groups>
+        <app-group-details #groupDetails></app-group-details>
+        <app-privileges #groupPrivileges ></app-privileges>
+    </div>
+
+    <div  class = 'avatarsContent' *ngIf="displayAvatarts" >
+        <app-user-images (changeWindow) = "changeFrames($event)"></app-user-images>
+    </div>
+
 </div>

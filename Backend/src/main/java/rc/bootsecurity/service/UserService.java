@@ -6,9 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.model.dto.UserPasswordContainer;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
@@ -25,7 +28,7 @@ public class UserService {
     private UserRepository userRepository;
 
     private JsonStringParser jsonStringParser = new JsonStringParser();
-
+    private FileService fileService = new FileService();
     private UserConverter userConverter = new UserConverter();
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
@@ -67,6 +70,41 @@ public class UserService {
         return userDTO;
     }
 
+    public void changePassword(UserPasswordContainer userPasswordContainer) throws Exception {
+        String username = this.getPrincipalUsername();
+
+        if(!userPasswordContainer.getNewPassword1().contentEquals(userPasswordContainer.getNewPassword2())){
+            throw new Exception("Password does not match for user : " + username);
+        }
+
+        User user = this.loadUser(username);
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+
+        if(!bCryptPasswordEncoder.matches(userPasswordContainer.getOldPassword() , user.getPassword())){
+            throw new Exception("Provided old password with actual one does not match for user : " + username);
+        }
+
+        user.setPassword(bCryptPasswordEncoder.encode(userPasswordContainer.getNewPassword1()));
+        this.userRepository.save(user);
+
+    }
+
+    public void changeImageInDB(String imageToUpdate){
+        String username = this.getPrincipalUsername();
+
+        User user = this.loadUser(username);
+        user.setPhoto(imageToUpdate);
+
+        this.userRepository.save(user);
+    }
+
+    public void uploadImage(MultipartFile uploadingFiles){
+        this.fileService.uploadImageForUser(uploadingFiles);
+    }
+
+    public byte[] getAvatar(String name){
+        return this.fileService.getUserImage(name);
+    }
 
 
 

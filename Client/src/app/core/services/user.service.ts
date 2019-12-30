@@ -6,6 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/comm
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { tap, mapTo, catchError } from 'rxjs/operators';
+import { ImageDTO } from 'app/shared/models/ImageDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,11 @@ export class UserService {
 
   public removeUserFromLocalStorage(){
     localStorage.removeItem(this.userPrefix);
+  }
+
+  public changeUserImage(image: ImageDTO){
+    this.user.photoBytes = image.imageBytes;
+    this.saveUserToLocalStorage(this.user);
   }
 
 }

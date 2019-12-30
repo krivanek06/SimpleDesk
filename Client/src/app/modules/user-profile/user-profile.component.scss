@@ -22,6 +22,7 @@ li {
     font-weight: bold;
     color:#8a8a8a;
     margin-bottom: 15px;
+    font-size: 22px;
 }
 
 .informationAnswer{
@@ -46,11 +47,25 @@ li {
 }
 
 
-.window{
+.windowLeft{
     width: 40%;
     float: left;
+    margin-left: 7%;
 }
 
 .content{
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
+
+.titleIcon{
+    width: 25px;
+    margin-top: -5px;
+}
+
+.avatarsContent{
+    width: 90%;
+    float: left;
+    margin-left: 7%;
+}
+
+

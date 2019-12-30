@@ -26,10 +26,9 @@ import { ChartComponent } from './shared/components/chart/chart.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { UserProfileComponent } from './modules/user-profile/user-profile.component';
 import { UserDetailsComponent } from './modules/user-profile/user-details/user-details.component';
-import { UserPrivilegesComponent } from './modules/user-profile/user-privileges/user-privileges.component';
+import { PrivilegesComponent } from './modules/user-profile/privileges/privileges.component';
 import { UserGroupsComponent } from './modules/user-profile/user-groups/user-groups.component';
 import { GroupDetailsComponent } from './modules/user-profile/group-details/group-details.component';
-import { GroupPrivilegesComponent } from './modules/user-profile/group-privileges/group-privileges.component';
 import { RequestTicketFormComponent } from './modules/request-forms/request-ticket-form/request-ticket-form.component';
 import { RequestReportFormComponent } from './modules/request-forms/request-report-form/request-report-form.component';
 import { RequestFinanceFormComponent } from './modules/request-forms/request-finance-form/request-finance-form.component';
@@ -51,6 +50,7 @@ import { AuthenticationService } from './core/services/authentication.service';
 import { UserService } from './core/services/user.service';
 import { RequestTableComponent } from './shared/components/request-table/request-table.component';
 import { FileServiceService } from './core/services/file-service.service';
+import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
 
 @NgModule({
   declarations: [
@@ -64,10 +64,9 @@ import { FileServiceService } from './core/services/file-service.service';
     DashboardComponent,
     UserProfileComponent,
     UserDetailsComponent,
-    UserPrivilegesComponent,
     UserGroupsComponent,
     GroupDetailsComponent,
-    GroupPrivilegesComponent,
+    PrivilegesComponent,
     RequestTicketFormComponent,
     RequestReportFormComponent,
     RequestFinanceFormComponent,
@@ -83,7 +82,8 @@ import { FileServiceService } from './core/services/file-service.service';
     NavigationIconHoverDirective,
     FileUploadComponent,
     UserGroupManagementComponent,
-    RequestTableComponent
+    RequestTableComponent,
+    UserImagesComponent
   ],
   imports: [
     BrowserModule,

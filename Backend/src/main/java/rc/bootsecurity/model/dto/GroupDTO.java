@@ -24,5 +24,7 @@ public class GroupDTO {
 
     private List<UserSimpleDTO> usersInGroup;
 
+    private List<UserSimpleDTO> usersWatchGroup;
+
     private ApplicationPrivilegeDTO applicationPrivilegeDTO;
 }

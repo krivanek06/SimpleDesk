@@ -2,6 +2,7 @@ package rc.bootsecurity.model.dto.request;
 
 import lombok.Data;
 
+import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 
 @Data

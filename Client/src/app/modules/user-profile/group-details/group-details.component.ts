@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Group } from 'app/shared/models/Group';
 
 @Component({
   selector: 'app-group-details',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./group-details.component.scss']
 })
 export class GroupDetailsComponent implements OnInit {
-
+  public group: Group;
+  
   constructor() { }
 
   ngOnInit() {

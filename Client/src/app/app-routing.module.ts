@@ -14,6 +14,7 @@ import { RegisterUserComponent } from './modules/app-management/register-user/re
 import { RegisterGroupComponent } from './modules/app-management/register-group/register-group.component';
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
 import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
+import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
 
 
 const routes: Routes = [
@@ -28,7 +29,7 @@ const routes: Routes = [
     ]},
   { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]},
   { path: 'request_details/:id', component: RequestDetailsComponent, canActivate:[AuthGuard]},
-  { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]},
+  { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]} ,
   { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard],
       children:[
         { path: '', component: UserGroupManagementComponent, canActivate:[AuthGuard]},

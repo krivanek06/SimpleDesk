@@ -5,6 +5,7 @@ export interface Group{
     description: string,
     groupManager: UserSimple,
     usersInGroup: UserSimple[];
+    usersWatchGroup: UserSimple[];
     applicationPrivilegeDTO: ApplicationPrivilege;
 }
 

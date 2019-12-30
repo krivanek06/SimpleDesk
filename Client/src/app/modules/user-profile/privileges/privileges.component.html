@@ -1,0 +1,90 @@
+<div class='content' *ngIf = "name !== undefined">   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/privilege_icon.png" class="titleIcon"/>
+        Oprávnenia {{ name }} 
+    </h3>
+
+    <div class='userInformations'>
+        <li class='userInformationsContainer' [hidden]="MODULE_TYPES_TO_USE.length === 0">
+            <div class='informationAnswer'>Používanie modulov</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of MODULE_TYPES_TO_USE"> 
+                    {{ name }}  
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer' [hidden]="FINANCE_TYPE_TO_SUBMIT.length === 0">
+            <div class='informationAnswer'>Posielanie typov financií</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of FINANCE_TYPE_TO_SUBMIT"> 
+                    {{ name }}  
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer' [hidden]="REQUEST_TYPE_TO_SOLVE.length === 0">
+            <div class='informationAnswer'>Riešenie požiadávok</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let name of REQUEST_TYPE_TO_SOLVE"> 
+                    {{ name }}  
+                </li>
+            </ul>    
+        </li>
+
+        <li class='userInformationsContainer'
+        [hidden]="!(TICKET_SOFTWARE_PRIVILEGES.length > 0 || TICKET_HARDWARE_PRIVILEGES.length > 0 ||
+            TICKET_SERVER_PRIVILEGES.length > 0 || TICKET_USER_PRIVILEGES || TICKET_OTHER_PRIVILEGES)">
+            <div class='informationAnswer'>Riešenie tiketov</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' [hidden]="TICKET_SOFTWARE_PRIVILEGES.length === 0"> 
+                    Software 
+                </li>
+                <li class='information lineHeight' [hidden]="TICKET_HARDWARE_PRIVILEGES.length === 0"> 
+                    Hardware 
+                </li>
+                <li class='information lineHeight' [hidden]="TICKET_SERVER_PRIVILEGES.length === 0"> 
+                    Server 
+                </li>
+                <li class='information lineHeight' [hidden]="!TICKET_USER_PRIVILEGES"> 
+                    Uživateľ 
+                </li>
+                <li class='information lineHeight' [hidden]="!TICKET_OTHER_PRIVILEGES"> 
+                    Iné 
+                </li>
+            </ul>    
+        </li>
+
+   
+        <li [hidden]="TICKET_SOFTWARE_PRIVILEGES.length === 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Software</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of TICKET_SOFTWARE_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+        <li [hidden]="TICKET_HARDWARE_PRIVILEGES.length === 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Hardware</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of TICKET_HARDWARE_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+        <li [hidden]="TICKET_SERVER_PRIVILEGES.length === 0" class='userInformationsContainer'>
+            <div class='informationAnswer'>Reišenie Server</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' *ngFor="let name of TICKET_SERVER_PRIVILEGES"> 
+                    {{name}} 
+                </li>
+            </ul>    
+        </li>
+
+    </div>
+</div>

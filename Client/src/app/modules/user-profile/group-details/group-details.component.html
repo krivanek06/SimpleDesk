@@ -1,1 +1,39 @@
-<p>group-details works!</p>
+<div class='content' *ngIf = "group !== undefined">   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/group_icon_details.png" class="titleIcon"/>
+        Skupina {{ group.name }} 
+    </h3>
+
+    <div class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Manažér skupiny</div>
+            <ul ><li div class='information'> {{ group.groupManager.firstName }} {{ group.groupManager.lastName }}</li> </ul>
+        </li>
+        
+        <li class='userInformationsContainer'  [hidden]="group.description === null || group.description.length === 0">
+            <div class='informationAnswer'>Popis skupiny</div>
+            <ul ><li div class='information'> {{ group.description }}</li> </ul>
+        </li>
+
+        <li class='userInformationsContainer' [hidden]="group.usersWatchGroup.length === 0">
+            <div class='informationAnswer'>Sledovatelia skupiny</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let user of group.usersWatchGroup"> 
+                    {{ user.firstName }} {{ user.lastName }}  
+                </li>
+            </ul>    
+        </li>
+
+        <li class='userInformationsContainer' [hidden]="group.usersInGroup.length === 0">
+            <div class='informationAnswer'>Členovia skupiny</div>
+            <ul class='ulSecondColl'>
+                <li class='information lineHeight' 
+                *ngFor="let user of group.usersInGroup"> 
+                    {{ user.firstName }} {{ user.lastName }}  
+                </li>
+            </ul>    
+        </li>
+
+    </div>
+</div>

@@ -10,8 +10,25 @@
 }
 
 .avatar{
-    width: 35px;
+    width: 120px;
+    margin-left: -25px;
+    margin-top: -10px;
+    cursor: pointer;
+    -webkit-transition:  0.4s ease-out;
+    -moz-transition:  0.4s ease-out;
+    -o-transition:  0.4s ease-out;
+    transition:  0.4s ease-out;
+
+    &:hover {
+        transform: scale(1.15);
+        -webkit-transition:  0.4s ease-out;
+        -moz-transition:  0.4s ease-out;
+        -o-transition:  0.4s ease-out;
+        transition:  0.4s ease-out;
+    }
+    
 }
+
 
 
 .informationAnswer{

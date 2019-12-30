@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { GroupService } from 'app/core/services/group.service';
-import { GroupContainer } from 'app/shared/models/Group';
+import { GroupContainer, Group } from 'app/shared/models/Group';
+
 
 @Component({
   selector: 'app-user-groups',
@@ -8,13 +9,14 @@ import { GroupContainer } from 'app/shared/models/Group';
   styleUrls: ['./user-groups.component.scss']
 })
 export class UserGroupsComponent implements OnInit {
+  @Output() selectedGroupEmmiter: EventEmitter<Group> = new EventEmitter<Group>();
+
   groupContainer: GroupContainer;
 
   constructor(public groupService: GroupService) { }
 
   ngOnInit() {
     this.getAllGroupsForUser();
-  //  this.groupService.getAllGroupsForUser().subscribe(x => console.log(x));
   }
 
   private getAllGroupsForUser(): void{
@@ -25,8 +27,8 @@ export class UserGroupsComponent implements OnInit {
   }
 
   private getGroupDetails(groupName: string){
-    this.groupService.getGroupDetails(groupName).subscribe(x => {
-      console.log(x)
+    this.groupService.getGroupDetails(groupName).subscribe(group => {
+      this.selectedGroupEmmiter.emit(group);
     })
   }
 

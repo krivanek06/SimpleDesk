@@ -28,8 +28,9 @@ public class GroupConverter {
         groupDTO.setEmail(group.getEmail());
         groupDTO.setGroupManager(this.userConverter.convertUserToSimpleDTO(group.getGroupManager()));
         groupDTO.setUsersInGroup(group.getUsersInGroup() != null ? group.getUsersInGroup().stream()
-                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : null);
-
+                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
+        groupDTO.setUsersWatchGroup(group.getUsersWatchingGroupActivity() != null ? group.getUsersWatchingGroupActivity().stream()
+                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
         /*ApplicationPrivilegeDTO applicationPrivilegeDTO = new ApplicationPrivilegeDTO();
         applicationPrivilegeDTO.setModuleTypesToUse(group.getModuleTypesToUse() != null ? group.getModuleTypesToUse().stream()
                 .map(ModuleType::getName).collect(Collectors.toList()) : new ArrayList<>());
