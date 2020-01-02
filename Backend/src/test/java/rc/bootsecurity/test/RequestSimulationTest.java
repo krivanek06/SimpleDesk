@@ -508,7 +508,7 @@ public class RequestSimulationTest {
         TicketType software = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
 
         Ticket ticket1 = (Ticket) this.requestRepository.findAllByNameStartingWithOrderByIdAsc("TICKET_NAME").get().get(0);
-        RequestComment ticket1Comment = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket1).get(0);
+        RequestComment ticket1Comment = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket1).get().get(0);
 
         assertThat(ticket1.getTicketType()).isEqualTo(software);
         assertThat(ticket1.getCreator()).isEqualTo(user10);
@@ -520,14 +520,14 @@ public class RequestSimulationTest {
         assertThat(this.requestRepository.findAllByNameStartingWithOrderByIdAsc("TICKET_NAME").get().size()).isEqualTo(17);
 
         Ticket ticket2 = (Ticket) this.requestRepository.findAllByNameStartingWithOrderByIdAsc("TICKET_NAME").get().get(1);
-        List<RequestComment> requestCommentsTicket2 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket2);
+        List<RequestComment> requestCommentsTicket2 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket2).get();
 
         assertThat(ticket2.getSolver()).isEqualTo(user2);
         assertThat(requestCommentsTicket2.size()).isEqualTo(2);
         assertThat(requestCommentsTicket2.get(0).getUser()).isEqualTo(user10);
         assertThat(requestCommentsTicket2.get(1).getIsPrivate()).isEqualTo(true);
         assertThat(requestCommentsTicket2.get(1).getGroupsToViewRequestComment()).containsExactlyInAnyOrder(groupSolver1);
-        assertThat(this.userRepository.findAllByWatchedRequests(ticket2)).containsExactlyInAnyOrder(user3,user2,user5);
+        assertThat(this.userRepository.findAllByWatchedRequests(ticket2).get()).containsExactlyInAnyOrder(user3,user2,user5);
 
         Group groupSolver3 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_NORMAL_3);
         groupSolver3.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(groupSolver3).orElse(new ArrayList<>()));
@@ -560,7 +560,7 @@ public class RequestSimulationTest {
         this.requestCommentService.saveOrUpdateComment(requestComment1);
         this.requestCommentService.shareCommentWith(this.requestConverter.convertRequestCommentToDTO(requestComment1),
                 this.groupConverter.convertGroupToDTO(groupSolver1) );
-        requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0);
+        requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0);
 
         assertThat(requestComment1.getGroupsToViewRequestComment()).containsExactlyInAnyOrder(groupSolver1);
         assertThat(requestComment1.getComment()).isEqualToIgnoringCase("COMMENT1");
@@ -568,23 +568,23 @@ public class RequestSimulationTest {
         RequestCommentDTO requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
         requestCommentDTO.setComment("AHOJ");
         this.requestCommentService.modifyComment(requestCommentDTO);
-        requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0);
+        requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0);
 
         assertThat(requestComment1.getComment()).isEqualToIgnoringCase("AHOJ");
         assertThat(requestComment1.getTimestamp()).isNotNull();
-        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).size()).isEqualTo(1);
+        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().size()).isEqualTo(1);
 
         this.requestCommentService.shareCommentWith(requestCommentDTO, this.groupConverter.convertGroupToDTO(groupSolver2) );
-        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get(0).getGroupsToViewRequestComment())
+        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0).getGroupsToViewRequestComment())
                 .containsExactlyInAnyOrder(groupSolver1, groupSolver2);
 
         RequestComment requestComment2 = this.requestCommentService.createRequestComment(
                 Creator.createRequestCommentDTO(ticket4.getId(), user2.getUsername(), "COMMENT2", true));
         this.requestCommentService.saveOrUpdateComment(requestComment2);
         assertThat(requestComment2.getTimestamp()).isNotNull();
-        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4)).containsExactlyInAnyOrder(requestComment1, requestComment2);
+        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get()).containsExactlyInAnyOrder(requestComment1, requestComment2);
         this.requestCommentRepository.delete(requestComment2);
-        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4)).containsExactlyInAnyOrder(requestComment1);
+        assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get()).containsExactlyInAnyOrder(requestComment1);
     }
 
 
@@ -603,12 +603,12 @@ public class RequestSimulationTest {
         List<Request> watchedRequests = this.requestRepository.findAllByUserWhoWatchThisRequestContainsOrderByIdAsc(user3);
         assertThat(watchedRequests.size()).isEqualTo(2);
         assertThat(watchedRequests).containsExactlyInAnyOrder(allRequests.get(1), allRequests.get(2));
-        assertThat(this.userRepository.findAllByWatchedRequests(watchedRequests.get(0))).containsExactlyInAnyOrder(user3,user2,user5);
-        assertThat(this.userRepository.findAllByWatchedRequests(watchedRequests.get(1))).containsExactlyInAnyOrder(user3);
+        assertThat(this.userRepository.findAllByWatchedRequests(watchedRequests.get(0)).get()).containsExactlyInAnyOrder(user3,user2,user5);
+        assertThat(this.userRepository.findAllByWatchedRequests(watchedRequests.get(1)).get()).containsExactlyInAnyOrder(user3);
 
         Ticket ticket = (Ticket)  watchedRequests.get(1);
-        ticket.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(ticket)));
-        TicketDTO ticketDTO = this.requestConverter.convertTicketToTicketDTO(ticket);
+        ticket.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(ticket).get()));
+        TicketDTO ticketDTO = (TicketDTO) this.requestConverter.convertRequestToRequestDTO(ticket);
         assertThat(ticketDTO.getProblem()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();
         assertThat(ticketDTO.getTicketSubtypeName()).isNotEmpty();

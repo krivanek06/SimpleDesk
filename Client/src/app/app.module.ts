@@ -34,7 +34,6 @@ import { RequestReportFormComponent } from './modules/request-forms/request-repo
 import { RequestFinanceFormComponent } from './modules/request-forms/request-finance-form/request-finance-form.component';
 import { RequestClosedComponent } from './modules/request-closed/request-closed.component';
 import { CommentComponent } from './modules/request-details/comment/comment.component';
-import { SideInformationsComponent } from './modules/request-details/side-informations/side-informations.component';
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
 import { AppManagementComponent } from './modules/app-management/app-management.component';
 import { RegisterUserComponent } from './modules/app-management/register-user/register-user.component';
@@ -51,6 +50,7 @@ import { UserService } from './core/services/user.service';
 import { RequestTableComponent } from './shared/components/request-table/request-table.component';
 import { FileServiceService } from './core/services/file-service.service';
 import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
+import { RequestSideInformationComponent } from './modules/request-details/request-side-information/request-side-information.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +72,6 @@ import { UserImagesComponent } from './modules/user-profile/user-images/user-ima
     RequestFinanceFormComponent,
     RequestClosedComponent,
     CommentComponent,
-    SideInformationsComponent,
     RequestDetailsComponent,
     AppManagementComponent,
     RegisterUserComponent,
@@ -83,7 +82,8 @@ import { UserImagesComponent } from './modules/user-profile/user-images/user-ima
     FileUploadComponent,
     UserGroupManagementComponent,
     RequestTableComponent,
-    UserImagesComponent
+    UserImagesComponent,
+    RequestSideInformationComponent
   ],
   imports: [
     BrowserModule,

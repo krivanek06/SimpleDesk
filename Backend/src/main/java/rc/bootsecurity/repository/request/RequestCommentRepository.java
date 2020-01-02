@@ -6,8 +6,9 @@ import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface RequestCommentRepository extends CrudRepository<RequestComment, Integer> {
-    List<RequestComment> findAllByRequestOrderByTimestampAsc(Request request);
+    Optional<List<RequestComment>> findAllByRequestOrderByTimestampAsc(Request request);
 }

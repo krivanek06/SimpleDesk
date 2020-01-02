@@ -193,12 +193,16 @@ public class Creator {
         reportAccessStored.setReportAccess(reportAccess);
         return reportAccessStored;
     }
-
+    private static UserSimpleDTO createUserSimpleDto(String username){
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
+        userSimpleDTO.setUsername(username);
+        return  userSimpleDTO;
+    }
 
     // ************** END REPORT **********************
     public static FinanceDTO createFinanceDTO(String creator, String requestPriority, String financeType){
         FinanceDTO financeDTO = new FinanceDTO();
-        financeDTO.setCreator(creator);
+        financeDTO.setCreator(createUserSimpleDto(creator));
         financeDTO.setRequestPriority(requestPriority);
         financeDTO.setRequestType(MODULE_TYPE.Financie.name());
         financeDTO.setName("FINANCE_NAME");
@@ -210,7 +214,7 @@ public class Creator {
 
     public static ReportDTO createReportDTO(String creator, String requestPriority, String reportType, String reportRefresh){
         ReportDTO report = new ReportDTO();
-        report.setCreator(creator);
+        report.setCreator(createUserSimpleDto(creator));
         report.setRequestPriority(requestPriority);
         report.setRequestType(MODULE_TYPE.Report.name());
         report.setName("REPORT_NAME");
@@ -234,7 +238,7 @@ public class Creator {
         ticketDTO.setProblem("TICKET_PROBLEM");
         ticketDTO.setTicketType(ticketType);
         ticketDTO.setRequestPriority(requestPriority);
-        ticketDTO.setCreator(user);
+        ticketDTO.setCreator(createUserSimpleDto(user));
         ticketDTO.setTicketSubtypeName(ticketSubtypeName);
         ticketDTO.setRequestType(MODULE_TYPE.Ticket.name());
         return ticketDTO;

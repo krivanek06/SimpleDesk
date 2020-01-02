@@ -6,6 +6,7 @@ import Swal from 'sweetalert2';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-request-table',
@@ -23,7 +24,7 @@ export class RequestTableComponent implements OnInit {
   public dateTo: string;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
-  constructor(public userService: UserService, private http: HttpClient) { }
+  constructor(public userService: UserService, private http: HttpClient, private router:Router) { }
 
   ngOnInit() {  }
 
@@ -71,6 +72,10 @@ export class RequestTableComponent implements OnInit {
         })
       }
     })
+  }
+
+  private navigateToDetails(id : number){
+    this.router.navigateByUrl(`request_details/${id}`);
   }
 
 }

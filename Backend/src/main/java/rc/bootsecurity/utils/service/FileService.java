@@ -7,6 +7,7 @@ import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.exception.FileHandlerException;
 import rc.bootsecurity.model.dto.ImageDTO;
+import rc.bootsecurity.model.dto.NameFileDTO;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,6 +16,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 
 public class FileService {
@@ -27,20 +29,37 @@ public class FileService {
         File dir = new File(System.getProperty("user.dir") + IMAGE_PATH + File.separator);
         List<ImageDTO> imageDTOList = new ArrayList<>();
 
-      //  byte[][] result = new byte[dir.listFiles().length][];
-       // int i = 0;
         for(File file: dir.listFiles()){
             try {
                 ImageDTO imageDTO = new ImageDTO();
                 imageDTO.setImageBytes(Files.readAllBytes(file.toPath()));
                 imageDTO.setName(file.getName());
                 imageDTOList.add(imageDTO);
-               // result[i++] = Files.readAllBytes(file.toPath());
             }catch (IOException e){
                 LOGGER.error("error in method getUserImage : " + e.getMessage());
             }
         }
         return imageDTOList;
+    }
+
+    public List<NameFileDTO> getFilesForRequest(Integer id){
+        File dir = new File(System.getProperty("user.dir") + REQUEST_PATH + File.separator + id + File.separator);
+        List<NameFileDTO> files = new ArrayList<>();
+
+        if(dir.exists()) {
+            try {
+                for (File file : Objects.requireNonNull(dir.listFiles())) {
+                    NameFileDTO nameFileDTO = new NameFileDTO();
+                    nameFileDTO.setData(Files.readAllBytes(file.toPath()));
+                    nameFileDTO.setName(file.getName());
+                    nameFileDTO.setLastModified(file.lastModified());
+                    files.add(nameFileDTO);
+                }
+            }catch (IOException e){
+                LOGGER.error("error in method getFilesForRequest : " + e.getMessage());
+            }
+        }
+        return files;
     }
 
     public byte[] getUserImage(String imageName){

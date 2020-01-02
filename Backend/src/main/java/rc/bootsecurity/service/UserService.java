@@ -14,6 +14,7 @@ import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.UserPasswordContainer;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
@@ -32,6 +33,10 @@ public class UserService {
     private UserConverter userConverter = new UserConverter();
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
+
+    public List<User> getUsersWatchedRequest(Request request){
+        return this.userRepository.findAllByWatchedRequests(request).orElseGet(ArrayList::new);
+    }
 
     public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(

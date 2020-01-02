@@ -1,0 +1,156 @@
+<div class='content' *ngIf ='requestDetails !== undefined'>   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/information_icon.png" class="titleIcon"/>
+        Všeobecné informácie
+    </h3>
+
+    <ul class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Meno požiadavky</div>
+            <ul ><li div class='information'> {{ requestDetails.name }}</li> </ul>
+        </li>
+        
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Typ</div>
+            <ul ><li div class='information'> {{ requestDetails.requestType}}</li> </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Priorita</div>
+            <ul> 
+                <li class='information'>
+                    <img src="../../../../assets/images_design/priority_low_icon_2.png" class="avatar" 
+                            *ngIf='requestDetails.requestPriority === "malá"'/>
+                    <img src="../../../../assets/images_design/priority_medium_icon_2.png" class="avatar"
+                             *ngIf='requestDetails.requestPriority === "stredná"'/>
+                    <img src="../../../../assets/images_design/priority_high_icon_2.png" class="avatar"
+                             *ngIf='requestDetails.requestPriority === "vysoká"'/>
+                    {{ requestDetails.requestPriority | titlecase }}  
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Stav</div>
+            <ul> <li class='information'>{{ requestDetails.requestPosition }}  </li></ul>
+        </li>
+
+    </ul>
+</div>
+
+
+<div class='content' *ngIf ='requestDetails !== undefined'>   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/user_infomatio_icon.png" class="titleIcon"/>
+        Ľudia
+    </h3>
+
+    <ul class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Vytvoril</div>
+            <ul>
+                <li class='information'>
+                    <img [src]="'data:image/jpeg;base64,'+requestDetails.creator.photoBytes" class='avatar'/>
+                    {{ requestDetails.creator.firstName }} {{ requestDetails.creator.lastName }}
+                </li>
+            </ul>
+        </li>
+        
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Pridelené</div>
+            <ul *ngIf = 'requestDetails.assigned !== null'>
+                <li class='information'>
+                    <img [src]="'data:image/jpeg;base64,'+requestDetails.assigned.photoBytes" class='avatar'/>
+                    {{ requestDetails.assigned.firstName }} {{ requestDetails.assigned.lastName }}
+                </li>
+            </ul>
+            <ul *ngIf = 'requestDetails.assigned === null'> 
+                <li class='information clicable'> prideliť mne  </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Sledované</div>
+            <ul> 
+                <li class='information ' *ngFor='let person of requestDetails.userToWatchRequest'>
+                    <img [src]="'data:image/jpeg;base64,'+person.photoBytes" class='avatar'/>
+                    {{ person.firstName }} {{ person.lastName }}
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Uzavrel</div>
+            <ul *ngIf = 'requestDetails.closed !== null'>
+                <li class='information'>
+                    <img [src]="'data:image/jpeg;base64,'+requestDetails.closed.photoBytes" class='avatar'/>
+                    {{ requestDetails.closed.firstName }} {{ requestDetails.closed.lastName }}
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+
+
+<div class='content' *ngIf ='requestDetails !== undefined'>   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/clock_icon.png" class="titleIcon"/>
+        Sledovanie času
+    </h3>
+
+    <ul class='userInformations'>
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Čas vytvorenia</div>
+            <ul>
+                <li class='information'>
+                    {{ requestDetails.timestampCreation | date:'MMM d, y, h:mm:ss a' }}
+                </li>
+            </ul>
+        </li>
+        
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Čas uzatvorenia</div>
+            <ul>
+                <li class='information'>
+                    {{ requestDetails.timestampClosed | date:'MMM d, y, h:mm:ss a'}} 
+                </li>
+            </ul>
+        </li>
+
+        <li class='userInformationsContainer'>
+            <div class='informationAnswer'>Čas otvorenia</div>
+            <ul> 
+                <li class='information'>
+                    {{ calculateOpenDays() }} dni
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+
+
+<div class='content' *ngIf ='requestDetails !== undefined'>   
+    <h3 class='detailTitle'>
+        <img src="../../../../assets/images_design/download_document_icon.png" class="titleIcon"/>
+        Dokumenty
+    </h3>
+
+    <ul class='userInformations'>
+        <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
+            <div class='informationAnswer clicable'> {{ document.name }}</div>
+            <ul>
+                <li class='information'>
+                    {{ document.lastModified  | date }}
+                </li>
+            </ul>
+        </li>
+
+         <!-- uploader -->
+        <div class='uploaderContainer'> 
+            <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
+        </div>
+    </ul>
+</div>

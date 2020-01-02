@@ -58,7 +58,7 @@ export class LoginBackgroundComponent implements OnInit {
             random: false,
             anim: {
               enable: false,
-              speed: 1,
+              speed: 0.75,
               opacity_min: 0.1,
               sync: false
             }
@@ -68,7 +68,7 @@ export class LoginBackgroundComponent implements OnInit {
             random: true,
             anim: {
               enable: false,
-              speed: 40,
+              speed: 30,
               size_min: 0.1,
               sync: false
             }
@@ -82,7 +82,7 @@ export class LoginBackgroundComponent implements OnInit {
           },
           move: {
             enable: true,
-            speed: 2.4,
+            speed: 2,
             direction: 'none',
             random: false,
             straight: false,

@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import rc.bootsecurity.model.dto.NameFileDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 
 import java.sql.Timestamp;
@@ -32,16 +33,17 @@ public abstract class RequestDTO {
 
     private String requestType;
 
-    private String creator;
+    private UserSimpleDTO creator;
 
-    private String assigned;
+    private UserSimpleDTO assigned;
 
-    private String solver;
+    private UserSimpleDTO solver;
 
-    private String closed;
+    private UserSimpleDTO closed;
 
-    /**
-     * will contain username of users who watch this request
-     */
     private List<UserSimpleDTO> userToWatchRequest;
+
+    private List<RequestCommentDTO> requestCommentDTOS;
+
+    private List<NameFileDTO> documents;
 }

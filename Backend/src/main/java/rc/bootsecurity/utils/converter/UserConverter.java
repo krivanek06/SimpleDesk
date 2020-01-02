@@ -3,14 +3,17 @@ package rc.bootsecurity.utils.converter;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.utils.service.FileService;
 
 public class UserConverter {
+    private FileService fileService = new FileService();
+
     public UserSimpleDTO convertUserToSimpleDTO(User user){
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
         userSimpleDTO.setUsername(user.getUsername());
         userSimpleDTO.setFirstName(user.getFirstName());
         userSimpleDTO.setLastName(user.getLastName());
-
+        userSimpleDTO.setPhotoBytes(this.fileService.getUserImage(user.getPhoto()));
         return userSimpleDTO;
     }
 

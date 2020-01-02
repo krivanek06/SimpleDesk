@@ -7,6 +7,7 @@ import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.exception.UserNotFoundException;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.request.RequestCommentDTO;
+import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
@@ -14,6 +15,7 @@ import rc.bootsecurity.repository.request.RequestCommentRepository;
 import rc.bootsecurity.repository.request.RequestRepository;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -33,7 +35,11 @@ public class RequestCommentService {
     public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
     public void saveOrUpdateComment(List<RequestComment> requestComments){ this.requestCommentRepository.saveAll(requestComments); }
 
-    private RequestComment findRequestComment(RequestCommentDTO requestCommentDTO){
+    public List<RequestComment> getRequestCommentsForRequest(Request request){
+        return this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(request).orElseGet(ArrayList::new);
+    }
+
+    private RequestComment getRequestComment(RequestCommentDTO requestCommentDTO){
         return this.requestCommentRepository.findById(requestCommentDTO.getId())
                 .orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + requestCommentDTO.getId()));
     }
@@ -52,13 +58,13 @@ public class RequestCommentService {
     }
 
     public void modifyComment(RequestCommentDTO requestCommentDTO){
-        RequestComment requestComment = this.findRequestComment(requestCommentDTO);
+        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
         this.setValuesToRequestComment(requestComment,requestCommentDTO);
         this.saveOrUpdateComment(requestComment);
     }
 
     public void shareCommentWith(RequestCommentDTO requestCommentDTO, GroupDTO groupDTO){
-        RequestComment requestComment = this.findRequestComment(requestCommentDTO);
+        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
         if(requestComment.getGroupsToViewRequestComment() == null){
             requestComment.setGroupsToViewRequestComment(new HashSet<>());
         }

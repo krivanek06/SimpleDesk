@@ -256,9 +256,9 @@ public class InserterRequestsSimulation {
         UserSimpleDTO userSimpleDTOUser10 = Creator.createUserSimpleDTO(user10);
 
         // assign -> assigned, solver, closed
-        TicketDTO ticketDTO2 = this.requestConverter.convertTicketToTicketDTO(ticket2);
-        TicketDTO ticketDTO3 = this.requestConverter.convertTicketToTicketDTO(ticket3);
-        TicketDTO ticketDTO4 = this.requestConverter.convertTicketToTicketDTO(ticket4);
+        TicketDTO ticketDTO2 = (TicketDTO) this.requestConverter.convertRequestToRequestDTO(ticket2);
+        TicketDTO ticketDTO3 = (TicketDTO) this.requestConverter.convertRequestToRequestDTO(ticket3);
+        TicketDTO ticketDTO4 = (TicketDTO) this.requestConverter.convertRequestToRequestDTO(ticket4);
         this.requestManagementService.setAssignUserAndSave(ticket1.getId(), userSimpleDTOUser2);
         this.requestManagementService.setAssignUserAndSave(ticketDTO2.getId(), userSimpleDTOUser2);
         this.requestManagementService.setSolverUserAndSave(ticketDTO2.getId(), userSimpleDTOUser2, "SOLUTION");

@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
+import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.service.request.RequestService;
 import rc.bootsecurity.utils.service.FileService;
@@ -51,4 +53,9 @@ public class RequestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @GetMapping("/requestDetails/{id}")
+    public RequestDTO getRequestDetails(@PathVariable("id") Integer id) {
+        return this.requestService.getRequestDetails(id);
+
+    }
 }

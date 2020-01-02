@@ -11,22 +11,22 @@ import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 
 public class RequestConverter {
-
     private UserConverter userConverter = new UserConverter();
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
         requestDTO.setRequestType(request.getModuleType().getName());
-        requestDTO.setCreator(request.getCreator().getFullName());
-        requestDTO.setAssigned(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
-        requestDTO.setSolver(request.getSolver() != null ? request.getSolver().getFullName() : null);
+        requestDTO.setCreator( this.userConverter.convertUserToSimpleDTO(request.getCreator()));
+        requestDTO.setAssigned(request.getAssigned() != null ?  this.userConverter.convertUserToSimpleDTO(request.getAssigned()) : null);
+        requestDTO.setSolver(request.getSolver() != null ?  this.userConverter.convertUserToSimpleDTO(request.getSolver()) : null);
         requestDTO.setSolution(request.getSolution());
-        requestDTO.setClosed(request.getClosed() != null ? request.getClosed().getFullName() : null);
+        requestDTO.setClosed(request.getClosed() != null ? this.userConverter.convertUserToSimpleDTO(request.getClosed()) : null);
         requestDTO.setAllowCommenting(request.getAllowCommenting());
         requestDTO.setId(request.getId());
         requestDTO.setName(request.getName());
@@ -36,6 +36,9 @@ public class RequestConverter {
         requestDTO.setTimestampClosed(request.getTimestampClosed());
         requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
                 request.getUserWhoWatchThisRequest().stream().map(user -> this.userConverter.convertUserToSimpleDTO(user))
+                        .collect(Collectors.toList()) : null);
+        requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
+                request.getRequestComments().stream().map(this::convertRequestCommentToDTO)
                         .collect(Collectors.toList()) : null);
     }
 
@@ -56,7 +59,7 @@ public class RequestConverter {
         return requestTableDTO;
     }
 
-    public TicketDTO convertTicketToTicketDTO(Ticket ticket){
+    private TicketDTO convertTicketToTicketDTO(Ticket ticket){
         TicketDTO ticketDTO = new TicketDTO();
         this.setRequestDTOValuesFromRequest(ticketDTO, ticket);
 
@@ -67,7 +70,7 @@ public class RequestConverter {
         return ticketDTO;
     }
 
-    public ReportDTO convertReportToReportDTO(Report report){
+    private ReportDTO convertReportToReportDTO(Report report){
         ReportDTO reportDTO = new ReportDTO();
         this.setRequestDTOValuesFromRequest(reportDTO,report);
 
@@ -85,13 +88,26 @@ public class RequestConverter {
         return reportDTO;
     }
 
-    public FinanceDTO convertFinanceToFinanceDTO(Finance finance){
+    private FinanceDTO convertFinanceToFinanceDTO(Finance finance){
         FinanceDTO financeDTO = new FinanceDTO();
         this.setRequestDTOValuesFromRequest(financeDTO, finance);
 
         financeDTO.setFinanceType(finance.getFinanceType().getName());
 
         return financeDTO;
+    }
+
+    public RequestDTO convertRequestToRequestDTO(Request request){
+        if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Ticket.name())){
+            return this.convertTicketToTicketDTO((Ticket) request);
+        }
+        if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Report.name())){
+            return this.convertReportToReportDTO((Report) request);
+        }
+        if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Financie.name())){
+            return this.convertFinanceToFinanceDTO((Finance) request);
+        }
+        return null;
     }
 
     public RequestCommentDTO convertRequestCommentToDTO(RequestComment requestComment){

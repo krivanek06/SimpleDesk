@@ -42,7 +42,7 @@ export class RequestFinanceFormComponent implements OnInit {
 
   public changeToUrgent(checked){
       if(checked){
-        this.financeForm.patchValue({'requestPriority' : 'veľká'});
+        this.financeForm.patchValue({'requestPriority' : 'vysoká'});
       }else{
         this.financeForm.patchValue({'requestPriority' : 'malá'});
       }

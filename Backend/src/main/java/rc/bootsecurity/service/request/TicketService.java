@@ -2,15 +2,20 @@ package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.exception.RequestNotFoundException;
+import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.TicketDTO;
+import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketSubtype;
 import rc.bootsecurity.model.entity.ticket.TicketType;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
+import rc.bootsecurity.repository.ticket.TicketRepository;
 import rc.bootsecurity.repository.ticket.TicketSubtypeRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class TicketService extends RequestManagementService{
@@ -18,7 +23,6 @@ public class TicketService extends RequestManagementService{
     private TicketTypeRepository ticketTypeRepository;
     @Autowired
     private TicketSubtypeRepository ticketSubtypeRepository;
-
 
 
     public Ticket createTicket(TicketDTO ticketDTO){

@@ -393,12 +393,12 @@ public class BasicTest {
         this.requestCommentRepository.save(comment2);
         this.requestCommentRepository.save(comment3);
 
-        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest);
+        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest).get();
         assertThat(savedComments).containsSequence(comment1, comment2,comment3);
         assertThat(savedComments).containsExactly(comment1, comment2, comment3);
 
         this.requestCommentRepository.delete(comment2);
-        savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest);
+        savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest).get();
         assertThat(savedComments).containsSequence(comment1, comment3);
         assertThat(savedComments).containsExactly(comment1,  comment3);
 

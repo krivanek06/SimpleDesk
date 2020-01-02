@@ -2,6 +2,8 @@ package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.exception.RequestNotFoundException;
+import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
 import rc.bootsecurity.model.entity.User;
@@ -10,14 +12,18 @@ import rc.bootsecurity.model.entity.request.RequestLog;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.creator.Creator;
+import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
 public class RequestService {
     private JsonStringParser jsonStringParser = new JsonStringParser();
+    private RequestConverter requestConverter = new RequestConverter();
+    private FileService fileService = new FileService();
 
     @Autowired
     protected RequestLogRepository requestLogRepository;
@@ -25,7 +31,8 @@ public class RequestService {
     private RequestRepository requestRepository;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private RequestCommentService requestCommentService;
 
     public List<RequestLog> getLogsForRequest(Request request){
         return this.requestLogRepository.findAllByRequestOrderByTimestampAsc(request);
@@ -41,6 +48,11 @@ public class RequestService {
     protected void logRequestModification(Request request, User user, String changingObject, String oldState, String newState){
         String log =  "Stav " + changingObject + " sa zmenil z " + oldState + " na " + newState + ". "+ "Požiadavka bola inicializovaná uživateľom : " + user.getFullName();
         this.requestLogRepository.save(Creator.createRequestLog(log, user, request));
+    }
+
+    private Request loadRequestById(Integer requestId){
+        return this.requestRepository.findById(requestId).orElseThrow(()
+                -> new RequestNotFoundException("Could not found request with id : " + requestId));
     }
 
     public RequestDashboardDTO getRequestOnDashboard(){
@@ -70,6 +82,23 @@ public class RequestService {
             }
         }
     }
+
+   /* public RequestDTO getRequestDetails(Integer requestId){
+        Ticket ticket =  (Ticket) this.loadRequestById(requestId);
+        ticket.setRequestComments(this.requestCommentService.findRequestCommentsForRequest(ticket));
+
+    }*/
+
+   public RequestDTO getRequestDetails(Integer requestId){
+       Request request =  this.loadRequestById(requestId);
+       request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
+       request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request));
+
+       RequestDTO requestDTO =  this.requestConverter.convertRequestToRequestDTO(request);
+       requestDTO.setDocuments(this.fileService.getFilesForRequest(requestId));
+
+       return requestDTO;
+   }
 
 
 }

@@ -3,5 +3,42 @@
 
 
 <div id='contentContainer'>
-    sadas
+   <div id=requestRightSide>
+        <app-request-side-information #sideDetails></app-request-side-information>
+   </div>
+
+   <div id='requestLeftSide'>
+       <div  *ngIf = "ticketDetails?.requestType === 'Ticket'" class='customRow'>
+            <div class="raisedbox customCol" [style.width.%] = 75> <p > {{ticketDetails.name}} </p></div>
+       </div>
+
+       <div  *ngIf = "reportDetails?.requestType === 'Report'">
+           <div class='customRow'>
+                <div class="raisedbox customCol" [style.width.%] = 45>
+                    <p class="raisedboxName">Účeľ reportu</p>
+                    <p *ngIf = "reportDetails?.purpose"   class='test'>
+                         {{reportDetails.purpose}} 
+                    </p>
+                </div>
+
+                <div class="raisedbox customCol" [style.width.%] = 45>
+                    <p class="raisedboxName">Kritériá reportu</p>
+                    <p *ngIf = "reportDetails?.criteria"  class='test'> {{reportDetails.criteria}} </p>
+                </div>
+            </div>
+            <div class='customRow'>
+                <div class="raisedbox customCol" [style.width.%] = 45>
+                    <p class="raisedboxName">Viditeľné údaje</p>
+                    <p *ngIf = "reportDetails?.visibleData"   class='test'>{{reportDetails.visibleData}} </p>
+                </div>
+                <div class="raisedbox customCol" [style.width.%] = 45 *ngIf="reportDetails.otherInformation !== '' ">
+                    <p class="raisedboxName">Dodatočné informácie</p>
+                    <p *ngIf = "reportDetails?.otherInformation"  class='test'> {{reportDetails.otherInformation}} </p>
+                </div>
+            </div>
+       </div>
+
+
+   </div>
+
 </div>

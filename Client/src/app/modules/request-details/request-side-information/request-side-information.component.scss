@@ -1,0 +1,61 @@
+
+li {
+    display: flex;
+    font-size: 14px;
+  }
+  
+.information {
+    color:#676666;
+    margin-right: 5px;
+  }
+
+.detailTitle{
+    font-weight: bold;
+    color:#8a8a8a;
+    margin-bottom: 10px;
+    font-size: 19px;
+}
+
+.informationAnswer{
+    flex: 0 0 150px;
+    font-weight: bold;
+
+}
+
+
+.lineHeight{
+    line-height: 16px;
+}
+
+.ulSecondColl{
+    width: fit-content;
+}
+
+
+.content{
+    margin-bottom: 15px;
+}
+
+.titleIcon{
+    width: 25px;
+    margin-top: -5px;
+}
+
+.avatar {
+    height: 25px;
+    width: 25px;
+    margin-right: 5px;
+    margin-left: -30px;
+    margin-bottom: 4px;
+    margin-top: -3px;
+}
+
+.clicable{
+    color: #5fa9ff;
+    cursor: pointer;
+}
+
+.uploaderContainer{
+    margin-top:20px;
+    width: 350px;
+}

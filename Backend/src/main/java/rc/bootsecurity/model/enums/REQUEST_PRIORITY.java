@@ -3,7 +3,7 @@ package rc.bootsecurity.model.enums;
 public enum REQUEST_PRIORITY {
     SMALL("malá"),
     MEDIUM("stredná"),
-    LARGE("veľká");
+    LARGE("vysoká");
 
     private final String text;
 

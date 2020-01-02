@@ -45,6 +45,9 @@ public class RequestManagementService{
     protected GroupRepository groupRepository;
     @Autowired
     protected UserRepository userRepository;
+    @Autowired
+    protected RequestCommentService requestCommentService;
+
 
 
     public void saveOrUpdateRequest(Request request){
@@ -107,14 +110,14 @@ public class RequestManagementService{
 
     public void setWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
-        request.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(request)));
+        request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
         request.getUserWhoWatchThisRequest().add(this.userService.loadUser(userSimpleDTO.getUsername()));
         this.saveOrUpdateRequest(request);
     }
 
     public void removeWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
-        request.setUserWhoWatchThisRequest(new HashSet<>(this.userRepository.findAllByWatchedRequests(request)));
+        request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
         User user = this.userService.loadUser(userSimpleDTO.getUsername());
         request.getUserWhoWatchThisRequest().remove(user);
         this.saveOrUpdateRequest(request);

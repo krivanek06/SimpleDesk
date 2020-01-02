@@ -19,7 +19,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<User> findAllByGroupsInvolved(Group group);
     Optional<List<User>> findAllByGroupsActivityWatched(Group group);
 
-    List<User> findAllByWatchedRequests(Request request);
+    Optional<List<User>> findAllByWatchedRequests(Request request);
 
     @Query(nativeQuery = true, value = "select * from get_all_privileges_for_user_varchar(?1);")
     String findPrivilegesForUser(String searching_name);

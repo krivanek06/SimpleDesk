@@ -27,7 +27,7 @@ const routes: Routes = [
         { path: 'finance' , component: RequestFinanceFormComponent },
         { path: '**' ,  redirectTo: 'ticket'  }
     ]},
-  { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]},
+  { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]}, 
   { path: 'request_details/:id', component: RequestDetailsComponent, canActivate:[AuthGuard]},
   { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]} ,
   { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard],
