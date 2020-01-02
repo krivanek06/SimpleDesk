@@ -9,7 +9,10 @@
 
    <div id='requestLeftSide'>
        <div  *ngIf = "ticketDetails?.requestType === 'Ticket'" class='customRow'>
-            <div class="raisedbox customCol" [style.width.%] = 75> <p > {{ticketDetails.name}} </p></div>
+            <div class="raisedbox customCol" [style.width.%] = 75>
+                 <p class="raisedboxName">Popis požiadavky</p>
+                 <p > {{ticketDetails.name}} </p>
+            </div>
        </div>
 
        <div  *ngIf = "reportDetails?.requestType === 'Report'">

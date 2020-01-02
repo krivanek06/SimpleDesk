@@ -42,6 +42,7 @@ export class RequestDetailsComponent implements OnInit {
           this.sideDetails.financeDetails = <FinanceDetails> requestDetails;
         }
         this.sideDetails.requestDetails = requestDetails;
+      
       })
     
   }

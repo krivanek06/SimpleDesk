@@ -21,10 +21,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
   constructor(private authService : AuthenticationService, private userService : UserService) { }
 
   ngOnInit() {
-    this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();
-    console.log(this.userService.user);
-    
-    
+    this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();    
   }
 
   ngAfterViewInit(): void {
@@ -48,7 +45,6 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
 
 
   private initGroupPrivileges(group: Group):void{
-    console.log(group);
       let priv : ApplicationPrivilege = group.applicationPrivilegeDTO;
       this.groupPrivileges.FINANCE_TYPE_TO_SUBMIT = priv.submitFinanceRequests !== undefined ?  priv.submitFinanceRequests : [];
       this.groupPrivileges.MODULE_TYPES_TO_USE = priv.moduleTypesToUse !== undefined ? priv.moduleTypesToUse : [];

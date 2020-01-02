@@ -1,5 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, HostListener } from '@angular/core';
 import { RequestDetails, TicketDetails, ReportDetails, FinanceDetails } from 'app/shared/models/RequestDetails';
+import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
+import { FileServiceService } from 'app/core/services/file-service.service';
+import { CustomDocument} from '../../../shared/models/RequestDetails';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-request-side-information',
@@ -12,13 +16,11 @@ export class RequestSideInformationComponent implements OnInit {
   public financeDetails: FinanceDetails;
   public requestDetails: RequestDetails;
 
-  public openDays: number;
-
-  constructor() { }
+  constructor( private fileService: FileServiceService, private http: HttpClient) { }
 
   ngOnInit() {
   }
-  
+
 
   private calculateOpenDays(): number{
     let open = new Date(this.requestDetails.timestampCreation);
@@ -33,6 +35,20 @@ export class RequestSideInformationComponent implements OnInit {
       result = closed.getTime() - open.getTime() ;
     }
     return Math.round(result/one_day); 
+  }
+
+  public uploadFile(file: File){
+    this.fileService.postFileForRequest(this.requestDetails.id, [file]).subscribe(result => {
+      let document: CustomDocument = {
+        name: file.name,
+        lastModified: new Date().getMilliseconds()
+      }
+      this.requestDetails.documents.push(document);
+    });
+  }
+
+  private downloadFile(name: string){
+    this.fileService.downloadFileForRequest(this.requestDetails.id, name);
   }
 
 }

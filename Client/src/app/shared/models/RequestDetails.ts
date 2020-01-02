@@ -14,7 +14,7 @@ export interface RequestDetails{
     closed: UserSimple,
     userToWatchRequest: UserSimple[],
     requestCommentDTOS: RequestComment[],
-    documents: Document[],
+    documents: CustomDocument[],
 }
 
 export interface TicketDetails extends RequestDetails {
@@ -56,8 +56,7 @@ export interface UserSimple{
     photoBytes: string,
 }
 
-export interface Document{
+export interface CustomDocument{
     name: string,
-    data: string,
     lastModified: number,
 }

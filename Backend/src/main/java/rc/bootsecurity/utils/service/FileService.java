@@ -42,7 +42,7 @@ public class FileService {
         return imageDTOList;
     }
 
-    public List<NameFileDTO> getFilesForRequest(Integer id){
+    public List<NameFileDTO> getFileForRequest(Integer id){
         File dir = new File(System.getProperty("user.dir") + REQUEST_PATH + File.separator + id + File.separator);
         List<NameFileDTO> files = new ArrayList<>();
 
@@ -50,16 +50,27 @@ public class FileService {
             try {
                 for (File file : Objects.requireNonNull(dir.listFiles())) {
                     NameFileDTO nameFileDTO = new NameFileDTO();
-                    nameFileDTO.setData(Files.readAllBytes(file.toPath()));
                     nameFileDTO.setName(file.getName());
                     nameFileDTO.setLastModified(file.lastModified());
                     files.add(nameFileDTO);
                 }
-            }catch (IOException e){
+            }catch (Exception e){
                 LOGGER.error("error in method getFilesForRequest : " + e.getMessage());
             }
         }
         return files;
+    }
+
+    public byte[] getFileForRequest(Integer id, String name){
+        File dir = new File(System.getProperty("user.dir") + REQUEST_PATH + File.separator + id + File.separator + name);
+        if(dir.exists()) {
+            try {
+                return Files.readAllBytes(dir.toPath());
+            }catch (IOException e){
+                LOGGER.error("error in method getFileForRequest : " + e.getMessage());
+            }
+        }
+        return null;
     }
 
     public byte[] getUserImage(String imageName){

@@ -83,11 +83,9 @@ public class RequestService {
         }
     }
 
-   /* public RequestDTO getRequestDetails(Integer requestId){
-        Ticket ticket =  (Ticket) this.loadRequestById(requestId);
-        ticket.setRequestComments(this.requestCommentService.findRequestCommentsForRequest(ticket));
-
-    }*/
+   public byte[] getFileForRequest(Integer id, String name){
+        return this.fileService.getFileForRequest(id, name);
+   }
 
    public RequestDTO getRequestDetails(Integer requestId){
        Request request =  this.loadRequestById(requestId);
@@ -95,7 +93,7 @@ public class RequestService {
        request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request));
 
        RequestDTO requestDTO =  this.requestConverter.convertRequestToRequestDTO(request);
-       requestDTO.setDocuments(this.fileService.getFilesForRequest(requestId));
+       requestDTO.setDocuments(this.fileService.getFileForRequest(requestId));
 
        return requestDTO;
    }

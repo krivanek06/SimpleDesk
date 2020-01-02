@@ -140,7 +140,7 @@
 
     <ul class='userInformations'>
         <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
-            <div class='informationAnswer clicable'> {{ document.name }}</div>
+            <div class='informationAnswer clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
             <ul>
                 <li class='information'>
                     {{ document.lastModified  | date }}
@@ -150,7 +150,12 @@
 
          <!-- uploader -->
         <div class='uploaderContainer'> 
-            <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
+            <app-file-upload id='uploader' 
+                            [uploaderHeight] = '45' 
+                            #fileUploader 
+                            (fileInserted) = "uploadFile($event)"
+                            hideIt = true>
+            </app-file-upload>
         </div>
     </ul>
 </div>
