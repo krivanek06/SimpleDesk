@@ -39,6 +39,11 @@ public class RequestCommentService {
         return this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(request).orElseGet(ArrayList::new);
     }
 
+    public void deleteComment(RequestCommentDTO requestCommentDTO){
+        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
+        this.requestCommentRepository.delete(requestComment);
+    }
+
     private RequestComment getRequestComment(RequestCommentDTO requestCommentDTO){
         return this.requestCommentRepository.findById(requestCommentDTO.getId())
                 .orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + requestCommentDTO.getId()));
@@ -46,10 +51,11 @@ public class RequestCommentService {
 
     public RequestComment createRequestComment(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = new RequestComment();
-        this.setValuesToRequestComment(requestComment,requestCommentDTO);
+        requestComment.setComment(requestCommentDTO.getComment());
+        requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
 
-        requestComment.setUser(this.userRepository.findByUsername(requestCommentDTO.getCreatorUserName())
-                .orElseThrow(() -> new UserNotFoundException("Not found user when creating request comment : " + requestCommentDTO.getCreatorUserName())));
+        requestComment.setUser(this.userRepository.findByUsername(requestCommentDTO.getCreator().getUsername())
+                .orElseThrow(() -> new UserNotFoundException("Not found user when creating request comment : " + requestCommentDTO.getCreator().getUsername())));
         requestComment.setRequest(this.requestRepository.findById(requestCommentDTO.getRequestId())
                 .orElseThrow(() -> new RequestNotFoundException("Not found request when creating comment : " + requestCommentDTO.getRequestId())));
 
@@ -59,31 +65,24 @@ public class RequestCommentService {
 
     public void modifyComment(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        this.setValuesToRequestComment(requestComment,requestCommentDTO);
-        this.saveOrUpdateComment(requestComment);
-    }
-
-    public void shareCommentWith(RequestCommentDTO requestCommentDTO, GroupDTO groupDTO){
-        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        if(requestComment.getGroupsToViewRequestComment() == null){
-            requestComment.setGroupsToViewRequestComment(new HashSet<>());
-        }
-        requestComment.getGroupsToViewRequestComment().add(this.groupRepository.findByGroupName(groupDTO.getName()));
-        this.saveOrUpdateComment(requestComment);
-    }
-
-    private void setValuesToRequestComment(RequestComment requestComment , RequestCommentDTO requestCommentDTO){
         requestComment.setComment(requestCommentDTO.getComment());
         requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
-
-        // requestCommentDTO.getGroupsToShare() will contains existing groups which already can see comment
-        if(requestCommentDTO.getIsPrivate() && requestCommentDTO.getGroupsToShare() != null && !requestCommentDTO.getGroupsToShare().isEmpty()){
-            requestComment.setGroupsToViewRequestComment(new HashSet<>(this.groupRepository.findAllByGroupNameIn(requestCommentDTO.getGroupsToShare())));
+        if(!requestCommentDTO.getIsPrivate()){
+            requestComment.setGroupsToViewRequestComment(null);
         }
+
+        this.saveOrUpdateComment(requestComment);
     }
 
+    public void shareCommentWith(RequestCommentDTO requestCommentDTO){
+        if(requestCommentDTO.getGroupsToShare().size() == 0)
+            return;
 
+        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
 
-
+        String lastGroupNameInserted = requestCommentDTO.getGroupsToShare().get(requestCommentDTO.getGroupsToShare().size() -1);
+        requestComment.getGroupsToViewRequestComment().add(this.groupRepository.findByGroupName(lastGroupNameInserted));
+        this.saveOrUpdateComment(requestComment);
+    }
 
 }

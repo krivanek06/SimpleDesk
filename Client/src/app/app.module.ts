@@ -51,6 +51,7 @@ import { RequestTableComponent } from './shared/components/request-table/request
 import { FileServiceService } from './core/services/file-service.service';
 import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
 import { RequestSideInformationComponent } from './modules/request-details/request-side-information/request-side-information.component';
+import { CommentSharingComponent } from './modules/request-details/comment-sharing/comment-sharing.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +84,8 @@ import { RequestSideInformationComponent } from './modules/request-details/reque
     UserGroupManagementComponent,
     RequestTableComponent,
     UserImagesComponent,
-    RequestSideInformationComponent
+    RequestSideInformationComponent,
+    CommentSharingComponent
   ],
   imports: [
     BrowserModule,

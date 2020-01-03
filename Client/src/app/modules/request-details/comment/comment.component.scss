@@ -1,0 +1,121 @@
+.commentBox{
+    width: 70%;
+    color: #8a8a8a;
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 25px;
+    font-size: 14px;
+    border-bottom: 1px solid #bdbdbd;
+}
+
+.floatLeft{
+    float: left;
+}
+
+.floatRight{
+    float: right;
+}
+
+.avatar {
+    height: 35px;
+    width: 35px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+}
+
+.commentBoxName{
+    position: relative;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+    margin-right: 80px;
+}
+.light{
+    font-weight: lighter;
+    display: contents;
+}
+.flex{
+    position: relative;
+    display: flex;
+}
+
+p{
+    margin-bottom: 0px;
+}
+
+.icon{
+    z-index: 1;
+    top: -10px;
+    width: 18px;
+    height: 18px;
+    position: absolute;
+    cursor: pointer;
+
+    -webkit-transition:  0.4s ease-out;
+    -moz-transition:  0.4s ease-out;
+    -o-transition:  0.4s ease-out;
+    transition:  0.4s ease-out;
+
+    &:hover {
+        transform: scale(1.25);
+        -webkit-transition:  0.4s ease-out;
+        -moz-transition:  0.4s ease-out;
+        -o-transition:  0.4s ease-out;
+        transition:  0.4s ease-out;
+    }
+}
+
+
+#deleteBin{
+    right: 0px;
+}
+
+#editIcon{
+    right: 22px;
+}
+
+#lockOpen{
+    right: 44px;
+}
+
+#lockClosed{
+    right: 44px;
+}
+
+#share{
+    right: 66px;
+}
+
+
+
+
+
+
+.ticketInlineParameters{
+    display: block;
+    width: 80%;
+    position: relative;
+    margin-bottom: 5px;
+    margin:auto;
+}
+
+#sendingButton{
+    float: right;
+    background-color: #0077ec;
+}
+
+#commentField{
+    height: 150px;
+}
+
+mat-form-field{
+    margin-top: 60px;
+}
+
+
+
+.displayCommentSharing{
+    width: 90%;
+    float: left;
+    margin-left: 7%;
+}

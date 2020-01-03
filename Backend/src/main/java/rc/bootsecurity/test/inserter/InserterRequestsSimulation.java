@@ -211,17 +211,17 @@ public class InserterRequestsSimulation {
                 ticket12,ticket13,ticket14,ticket15,ticket16,ticket17,report1,report2,report3,finance1,finance2));
 
         ticket1.setAssigned(user2);
-        RequestCommentDTO requestCommentDTO = Creator.createRequestCommentDTO(ticket1.getId(),user10.getUsername(),false);
+        RequestCommentDTO requestCommentDTO = Creator.createRequestCommentDTO(ticket1.getId(),user10,false);
         RequestComment requestComment1 = this.requestCommentService.createRequestComment(requestCommentDTO);
-        RequestComment requestComment2 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket2.getId(),user10.getUsername(),false));
-        RequestCommentDTO requestCommentDTO1 = Creator.createRequestCommentDTO(ticket2.getId(),user2.getUsername(),true);
+        RequestComment requestComment2 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket2.getId(),user10,false));
+        RequestCommentDTO requestCommentDTO1 = Creator.createRequestCommentDTO(ticket2.getId(),user2,true);
         RequestComment requestComment3 = this.requestCommentService.createRequestComment(requestCommentDTO1);
-        RequestComment requestComment4 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2.getUsername(),true));
-        RequestComment requestComment5 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2.getUsername(),false));
-        RequestComment requestComment6 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2.getUsername(),true));
-        RequestComment requestComment7 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(report1.getId(),user4.getUsername(),true));
-        RequestComment requestComment8 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(report1.getId(),user4.getUsername(),false));
-        RequestComment requestComment9 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(finance1.getId(),user4.getUsername(),false));
+        RequestComment requestComment4 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2,true));
+        RequestComment requestComment5 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2,false));
+        RequestComment requestComment6 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(ticket5.getId(),user2,true));
+        RequestComment requestComment7 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(report1.getId(),user4,true));
+        RequestComment requestComment8 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(report1.getId(),user4,false));
+        RequestComment requestComment9 = this.requestCommentService.createRequestComment(Creator.createRequestCommentDTO(finance1.getId(),user4,false));
         // save created comments
         this.requestCommentService.saveOrUpdateComment(Arrays.asList(requestComment1,requestComment2,requestComment3,requestComment4,requestComment5,requestComment6,
                 requestComment7,requestComment8,requestComment9));

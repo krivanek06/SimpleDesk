@@ -556,16 +556,17 @@ public class RequestSimulationTest {
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4)).isEmpty();
 
         RequestComment requestComment1 = this.requestCommentService.createRequestComment(
-                Creator.createRequestCommentDTO(ticket4.getId(), user2.getUsername(), "COMMENT1", true));
+                Creator.createRequestCommentDTO(ticket4.getId(), user2, "COMMENT1", true));
         this.requestCommentService.saveOrUpdateComment(requestComment1);
-        this.requestCommentService.shareCommentWith(this.requestConverter.convertRequestCommentToDTO(requestComment1),
-                this.groupConverter.convertGroupToDTO(groupSolver1) );
+        RequestCommentDTO requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
+        requestCommentDTO.getGroupsToShare().add(groupSolver1.getGroupName());
+        this.requestCommentService.shareCommentWith(requestCommentDTO);
         requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0);
 
         assertThat(requestComment1.getGroupsToViewRequestComment()).containsExactlyInAnyOrder(groupSolver1);
         assertThat(requestComment1.getComment()).isEqualToIgnoringCase("COMMENT1");
 
-        RequestCommentDTO requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
+        requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
         requestCommentDTO.setComment("AHOJ");
         this.requestCommentService.modifyComment(requestCommentDTO);
         requestComment1 = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0);
@@ -574,12 +575,14 @@ public class RequestSimulationTest {
         assertThat(requestComment1.getTimestamp()).isNotNull();
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().size()).isEqualTo(1);
 
-        this.requestCommentService.shareCommentWith(requestCommentDTO, this.groupConverter.convertGroupToDTO(groupSolver2) );
+        requestCommentDTO = this.requestConverter.convertRequestCommentToDTO(requestComment1);
+        requestCommentDTO.getGroupsToShare().add(groupSolver2.getGroupName());
+        this.requestCommentService.shareCommentWith(requestCommentDTO);
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get().get(0).getGroupsToViewRequestComment())
                 .containsExactlyInAnyOrder(groupSolver1, groupSolver2);
 
         RequestComment requestComment2 = this.requestCommentService.createRequestComment(
-                Creator.createRequestCommentDTO(ticket4.getId(), user2.getUsername(), "COMMENT2", true));
+                Creator.createRequestCommentDTO(ticket4.getId(), user2, "COMMENT2", true));
         this.requestCommentService.saveOrUpdateComment(requestComment2);
         assertThat(requestComment2.getTimestamp()).isNotNull();
         assertThat(this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(ticket4).get()).containsExactlyInAnyOrder(requestComment1, requestComment2);

@@ -44,10 +44,10 @@ export interface RequestComment{
     id: number,
     requestId: number,
     comment: string,
-    creatorFullName: string,
-    creatorUserName: string,
+    creator: UserSimple,
     isPrivate: boolean,
     groupsToShare: string[],
+    timestamp: Date,
 }
 export interface UserSimple{
     username: string,

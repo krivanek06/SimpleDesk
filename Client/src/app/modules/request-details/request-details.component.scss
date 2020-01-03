@@ -37,6 +37,22 @@
     font-size: 14px;
 }
 
-.raisedboxName{
-    font-weight: bold;
+.avatar {
+    height: 35px;
+    width: 35px;
+    margin-right: 5px;
 }
+
+.raisedboxName{
+    position: relative;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+}
+
+.mainInformationContainer{
+    margin-bottom: 20px;
+}
+
+
+

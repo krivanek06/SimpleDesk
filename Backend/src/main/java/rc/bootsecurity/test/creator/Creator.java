@@ -244,20 +244,20 @@ public class Creator {
         return ticketDTO;
     }
 
-    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, String username, Boolean isPrivate){
+    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, User user, Boolean isPrivate){
         RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
         requestCommentDTO.setComment("COMMENT");
         requestCommentDTO.setRequestId(requestId);
-        requestCommentDTO.setCreatorUserName(username);
+        requestCommentDTO.setCreator(createUserSimpleDTO(user));
         requestCommentDTO.setIsPrivate(isPrivate);
         return requestCommentDTO;
     }
 
-    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, String username,String comment, Boolean isPrivate){
+    public static RequestCommentDTO createRequestCommentDTO(Integer requestId, User user,String comment, Boolean isPrivate){
         RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
         requestCommentDTO.setComment(comment);
         requestCommentDTO.setRequestId(requestId);
-        requestCommentDTO.setCreatorUserName(username);
+        requestCommentDTO.setCreator(createUserSimpleDTO(user));
         requestCommentDTO.setIsPrivate(isPrivate);
         return requestCommentDTO;
     }

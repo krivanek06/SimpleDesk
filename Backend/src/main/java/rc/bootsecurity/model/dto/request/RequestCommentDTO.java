@@ -4,7 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import rc.bootsecurity.model.dto.UserSimpleDTO;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 @ToString
@@ -15,8 +17,8 @@ public class RequestCommentDTO {
     private Integer id;
     private Integer requestId;
     private String comment;
-    private String creatorFullName;
-    private String creatorUserName;
+    private UserSimpleDTO creator;
     private Boolean isPrivate;
     private List<String> groupsToShare;
+    private Timestamp timestamp;
 }

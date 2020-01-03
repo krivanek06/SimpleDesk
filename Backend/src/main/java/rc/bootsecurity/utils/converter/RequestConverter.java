@@ -113,15 +113,17 @@ public class RequestConverter {
     public RequestCommentDTO convertRequestCommentToDTO(RequestComment requestComment){
         RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
         requestCommentDTO.setIsPrivate(requestComment.getIsPrivate());
-        requestCommentDTO.setCreatorFullName(requestComment.getUser().getFullName());
-        requestCommentDTO.setCreatorUserName(requestComment.getUser().getUsername());
+        requestCommentDTO.setCreator(this.userConverter.convertUserToSimpleDTO(requestComment.getUser()));
         requestCommentDTO.setRequestId(requestComment.getRequest().getId());
         requestCommentDTO.setComment(requestComment.getComment());
         requestCommentDTO.setId(requestComment.getId());
+        requestCommentDTO.setTimestamp(requestComment.getTimestamp());
 
         if(requestComment.getIsPrivate() && requestComment.getGroupsToViewRequestComment() != null && !requestComment.getGroupsToViewRequestComment().isEmpty()) {
             requestCommentDTO.setGroupsToShare(requestComment.getGroupsToViewRequestComment()
                     .stream().map(Group::getGroupName).collect(Collectors.toList()));
+        }else{
+            requestCommentDTO.setGroupsToShare(new ArrayList<>());
         }
 
         return requestCommentDTO;
