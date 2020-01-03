@@ -4,6 +4,9 @@ import { FileUploadComponent } from 'app/shared/components/file-upload/file-uplo
 import { FileServiceService } from 'app/core/services/file-service.service';
 import { CustomDocument} from '../../../shared/models/RequestDetails';
 import { HttpClient } from '@angular/common/http';
+import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { UserService } from 'app/core/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-request-side-information',
@@ -16,7 +19,8 @@ export class RequestSideInformationComponent implements OnInit {
   public financeDetails: FinanceDetails;
   public requestDetails: RequestDetails;
 
-  constructor( private fileService: FileServiceService, private http: HttpClient) { }
+  constructor( private fileService: FileServiceService, private userService: UserService, 
+    private requestService: RequestModificationService) { }
 
   ngOnInit() {
   }
@@ -49,6 +53,25 @@ export class RequestSideInformationComponent implements OnInit {
 
   private downloadFile(name: string){
     this.fileService.downloadFileForRequest(this.requestDetails.id, name);
+  }
+
+  private assignOnMe(){
+    Swal.fire({
+      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + this.requestDetails.id + " ? ",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: "Zrušiť",
+      confirmButtonText: 'Ano'
+    }).then((result) => {
+      if (result.value) {
+        this.requestService.assignOrRemoveRequestOnMe(this.requestDetails.id, true).subscribe(result => {
+          Swal.fire({ title: 'Pridelené', icon: 'success' , position: 'top-end', timer: 1200, showConfirmButton: false,});
+          this.requestDetails.assigned = this.userService.getUserSimple(); 
+        })
+      }
+    });   
   }
 
 }

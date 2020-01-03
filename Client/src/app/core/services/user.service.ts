@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { tap, mapTo, catchError } from 'rxjs/operators';
 import { ImageDTO } from 'app/shared/models/ImageDTO';
+import { UserSimple } from 'app/shared/models/RequestDetails';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +53,17 @@ export class UserService {
   public changeUserImage(image: ImageDTO){
     this.user.photoBytes = image.imageBytes;
     this.saveUserToLocalStorage(this.user);
+  }
+
+
+  public getUserSimple(): UserSimple{
+    let user: UserSimple = {
+      username: this.user.username,
+      firstName: this.user.firstName,
+      lastName: this.user.lastName,
+      photoBytes: this.user.photoBytes,
+    }
+    return user;
   }
 
 }

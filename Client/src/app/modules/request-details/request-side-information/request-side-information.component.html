@@ -65,7 +65,7 @@
                 </li>
             </ul>
             <ul *ngIf = 'requestDetails.assigned === null'> 
-                <li class='information clicable'> prideliť mne  </li>
+                <li class='information clicable' (click) = "assignOnMe()"> prideliť mne  </li>
             </ul>
         </li>
 

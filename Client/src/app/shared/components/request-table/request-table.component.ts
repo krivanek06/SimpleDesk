@@ -7,6 +7,7 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
+import { RequestModificationService } from 'app/core/services/request-modification.service';
 
 @Component({
   selector: 'app-request-table',
@@ -24,7 +25,7 @@ export class RequestTableComponent implements OnInit {
   public dateTo: string;
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   
-  constructor(public userService: UserService, private http: HttpClient, private router:Router) { }
+  constructor(public userService: UserService, private requestService: RequestModificationService, private router:Router) { }
 
   ngOnInit() {  }
 
@@ -32,46 +33,42 @@ export class RequestTableComponent implements OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  private assignOnMe(requestId: number){
-    Swal.fire({
-      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestId + " ? ",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: "Zrušiť",
-      confirmButtonText: 'Ano'
-    }).then((result) => {
-      if (result.value) {
-        this.assignOrRemoveRequestOnMe(requestId, true).subscribe(result => {
-          Swal.fire( 'Pridelené', 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId,'success' );
-        })
-      }
-    })
-  }
 
-  private assignOrRemoveRequestOnMe(requestid: number, assign: boolean): Observable<any>{
-      let params = new HttpParams().set('assign' , String(assign)) ;
-      return this.http.put(environment.apiUrl + `requests/modification/${requestid}/solver`,null, {params : params} );
+  public assignOnMe(requestId: number): void{
+    Swal.fire({
+       text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestId + " ? ",
+       icon: 'warning',
+       showCancelButton: true,
+       confirmButtonColor: '#3085d6',
+       cancelButtonColor: '#d33',
+       cancelButtonText: "Zrušiť",
+       confirmButtonText: 'Ano'
+     }).then((result) => {
+       if (result.value) {
+         this.requestService.assignOrRemoveRequestOnMe(requestId, true).subscribe(result => {
+           Swal.fire( 'Pridelené', 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId,'success' );
+         })
+       }
+     });   
   }
 
 
-  private removeFromMe(requestId: number){
-    Swal.fire({
-      text: "Naozaj chcetete odstrániť zo seba požiadavku s id : " + requestId + " ? ",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: "Zrušiť",
-      confirmButtonText: 'Ano'
-    }).then((result) => {
-      if (result.value) {
-        this.assignOrRemoveRequestOnMe(requestId, false).subscribe(result => {
-          Swal.fire( 'Odstranené', 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId,'success' );
-        })
-      }
-    })
+   public removeFromMe(requestId: number): void{
+      Swal.fire({
+        text: "Naozaj chcetete odstrániť zo seba požiadavku s id : " + requestId + " ? ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        cancelButtonText: "Zrušiť",
+        confirmButtonText: 'Ano'
+      }).then((result) => {
+        if (result.value) {
+          this.requestService.assignOrRemoveRequestOnMe(requestId, false).subscribe(result => {
+            Swal.fire( 'Odstranené', 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId,'success' );
+          })
+        }
+      })
   }
 
   private navigateToDetails(id : number){

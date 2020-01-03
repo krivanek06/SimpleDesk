@@ -7,11 +7,15 @@
         <div class="commentBoxName" >
             <img [src]="'data:image/jpeg;base64,'+requestComment.creator.photoBytes" class='avatar' />
                 {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>
-              <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, h:mm:ss a'}}  </div>            
+              <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>            
         </div>
         <div class="commentBoxName" *ngIf='requestComment.isPrivate' >
-            Privátny komentár<br>
-            <div class='light'> Zdieľané s : {{ requestComment.groupsToShare }}  </div>     
+            <div class='light bigBold'> 
+                Privátny komentár, zdieľané s : <br>
+            </div>
+            <div class='light'> 
+                <span *ngFor='let groupName of requestComment.groupsToShare'> {{ groupName  }} </span>
+            </div>     
         </div>
 
         <div *ngIf='requestComment.creator.username === userService.user.username'>

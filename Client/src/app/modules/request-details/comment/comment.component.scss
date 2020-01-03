@@ -21,19 +21,25 @@
     width: 35px;
     margin-right: 5px;
     margin-bottom: 10px;
+    float: left;
 }
 
 .commentBoxName{
     position: relative;
     font-weight: bold;
     font-size: 12px;
-    display: flex;
-    margin-right: 80px;
+    display: flow-root;
+    margin-right: 20px;
 }
 .light{
     font-weight: lighter;
     display: contents;
 }
+
+.bigBold{
+    font-weight: bold;
+}
+
 .flex{
     position: relative;
     display: flex;

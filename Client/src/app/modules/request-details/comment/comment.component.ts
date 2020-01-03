@@ -78,6 +78,9 @@ export class CommentComponent implements OnInit {
   private changeCommentPrivacy(requestComment: RequestComment){
     requestComment.isPrivate = !requestComment.isPrivate;
     this.http.put(environment.apiUrl + `requests/comment` ,requestComment).subscribe(() => {
+      if(!requestComment.isPrivate){
+        requestComment.groupsToShare = [];
+      }
       Swal.fire({ position: 'top-end',icon: 'success', title: 'Viditeľnosť komentára bolo zmenené', showConfirmButton: false, timer: 1500 })
     });
   }
@@ -149,8 +152,6 @@ export class CommentComponent implements OnInit {
   }
 
   private shareWith(group: Group){
-    console.log(group);
-    console.log(this.sharingComment);
     Swal.fire({
       text: `Naozaj chcete vyzdieľať komentár so skupinou : ${group.name} ?`,
       icon: 'warning',
@@ -161,24 +162,8 @@ export class CommentComponent implements OnInit {
       confirmButtonText: 'Zdieľať',
     }).then((result) => {
       if (result.value) {
-        
         this.sharingComment.groupsToShare.push(group.name);
-
         this.http.put(environment.apiUrl + `requests/comment/share`, this.sharingComment).subscribe(() => {
-
-          // add groupname to array
-          this.requestComments.forEach(comment => {
-            if(comment.id === this.sharingComment.id){
-              const index = this.requestComments.indexOf(comment);
-              if (index > -1) {
-                this.requestComments[index].groupsToShare.push(group.name);
-                console.log('bbb')
-              }
-              
-            }
-          });
-
-
           Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol vyzdieľaný', showConfirmButton: false, timer: 1500 })
         })
       }

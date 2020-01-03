@@ -18,7 +18,7 @@
   .modal-content {
     background-color: #fefefe;
     margin: auto;
-    padding: 25px;
+    padding: 29px;
     border: 1px solid #888;
     width: 80%;
     display: flow-root;
@@ -26,17 +26,31 @@
   
   /* The Close Button */
   .close {
-    color: #aaaaaa;
-    font-size: 28px;
+    color: #ff5252;
+    font-size: 39px;
     font-weight: bold;
     position: absolute;
     right: 10px;
     top: 0px;
+    opacity: 1;
+
+    -webkit-transition:  0.3s ease-out;
+    -moz-transition:  0.3s ease-out;
+    -o-transition:  0.3s ease-out;
+    transition:  0.3s ease-out;
+
+    &:hover {
+        transform: scale(1.35);
+        -webkit-transition:  0.3s ease-out;
+        -moz-transition:  0.3s ease-out;
+        -o-transition:  0.3s ease-out;
+        transition:  0.3s ease-out;
+    }
   }
   
   .close:hover,
   .close:focus {
-    color: #000;
+    color: #ff0000;
     text-decoration: none;
     cursor: pointer;
   }
