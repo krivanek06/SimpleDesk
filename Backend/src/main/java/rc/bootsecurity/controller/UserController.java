@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @PutMapping(value ="/changeImage" , params = "imageToUpload")
-    public ResponseEntity<?> changeImageWithUpload(@RequestPart("imageToUpload") MultipartFile uploadingImage){
+    public ResponseEntity<?> changeImageWithUpload(@RequestParam("imageToUpload") MultipartFile uploadingImage){
         try {
             String imageName = uploadingImage.getOriginalFilename();
 

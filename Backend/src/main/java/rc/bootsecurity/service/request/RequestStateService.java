@@ -29,9 +29,7 @@ public class RequestStateService {
     @Autowired
     protected UserService userService;
 
-
-
-    private Request findRequest(Integer requestId){
+    protected Request findRequest(Integer requestId){
         return this.requestRepository.findById(requestId)
                 .orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
     }

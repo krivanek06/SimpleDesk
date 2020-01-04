@@ -39,5 +39,18 @@ export class RequestModificationService {
   public removeSolver(requestid: number): Observable<any>{
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`,null );
   }
+
+
+
+  
+  /**
+   * Report modification
+   */
+
+  public reportAddEvaluation(requestid: number, days: number): Observable<any>{
+    let params = new HttpParams().set('days' , String(days)) ;
+    return this.http.put(environment.apiUrl + `requests/report/${requestid}/evaluation`, null, {params : params} );
+  }
+
   
 }

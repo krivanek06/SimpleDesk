@@ -34,4 +34,10 @@ public class ReportService extends RequestStateService{
         return report;
     }
 
+    public void addEvaluation(Integer reportId, Double days){
+        Report report = (Report) this.findRequest(reportId);
+        report.setEvaluation(days);
+        this.saveOrUpdateRequest(report);
+    }
+
 }

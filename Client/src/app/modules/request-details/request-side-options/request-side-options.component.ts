@@ -17,6 +17,7 @@ export class RequestSideOptionsComponent implements OnInit {
   public allusers: UserSimpleDTO[] = [];
   private priority: string;
   private userSimple: UserSimple;
+  private reportEvaluation: number;
 
   @Input() public requestDetails: RequestDetails;
 
@@ -95,6 +96,16 @@ export class RequestSideOptionsComponent implements OnInit {
     })
   }
 
+  private addEvaluationForReport(){
+    if(this.reportEvaluation === undefined){
+      return;
+    }
+    this.requestService.reportAddEvaluation(this.requestDetails.id, this.reportEvaluation).subscribe(() =>{
+      this.reportEvaluation = undefined;
+      Swal.fire(  '', 'Nadhodnocenie reportu bolo zaznamenané', 'success'  );
+    }) 
+  }
+
   private selectedPriority(priority: string){
     this.priority = priority;
    
@@ -102,6 +113,10 @@ export class RequestSideOptionsComponent implements OnInit {
 
   private selectedUser(userSimple: UserSimple){
     this.userSimple = userSimple;
+  }
+
+  private addedEvaluation(evaluation: number){
+    this.reportEvaluation = evaluation;
   }
 
 

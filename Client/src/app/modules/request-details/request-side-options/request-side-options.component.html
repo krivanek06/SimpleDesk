@@ -6,6 +6,7 @@
         <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
         <span class="switch-handle"></span> 
     </label>
+    <hr>
 </div>
 
 
@@ -15,6 +16,7 @@
             
     <button mat-raised-button id = 'sliderButton' color='warn' 
             class='customInput openInput'  *ngIf='requestDetails.closed !== null' (click) = 'reopenRequest()'>Otvoriť</button>
+    <hr>
 </div>
 
 
@@ -26,6 +28,7 @@
         </mat-select>
     </mat-form-field>
     <button mat-raised-button  class='sendingButton' (click) = 'changeAssignedUser()'>Odoslať</button>
+    <hr>
 </div>
 
 <div class = 'module'  *ngIf='requestDetails.closed === null'>
@@ -38,13 +41,15 @@
         </mat-select>
     </mat-form-field>
     <button mat-raised-button  class='sendingButton' (click) = 'changePriority()'>Odoslať</button>
+    <hr>
 </div>
 
-<div class = 'module'  *ngIf='requestDetails.closed === null'>
+<div class = 'module'  *ngIf='requestDetails.closed === null && requestDetails.requestType === "Report" '>
     <mat-form-field class='customInputSmall'>
-        <input  matInput placeholder="Nahodnocenie v dňoch" >
+        <input  matInput placeholder="Nahodnocenie v dňoch" (keyup)="addedEvaluation($event.target.value)"  type="number">
     </mat-form-field>
-    <button mat-raised-button  class='sendingButton'>Odoslať</button>
+    <button mat-raised-button  class='sendingButton' (click) = "addEvaluationForReport()">Odoslať</button>
+    <hr>
 </div>
 
 </div>
