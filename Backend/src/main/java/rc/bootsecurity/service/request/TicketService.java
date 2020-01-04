@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class TicketService extends RequestManagementService{
+public class TicketService extends RequestStateService{
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
     @Autowired

@@ -20,7 +20,7 @@ export class FileServiceService {
     for (let i = 0; i < filesToUpload.length; i++) { 
       formData.append("filesToUpload", filesToUpload[i]);
     }
-    return this.http.post(environment.apiUrl + `requests/modification/${id}/files`, formData).pipe( map(() => { return true; }) );
+    return this.http.post(environment.apiUrl + `requests/requestDetails/${id}/files`, formData).pipe( map(() => { return true; }) );
   }
   
   

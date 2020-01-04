@@ -4,7 +4,7 @@ export interface RequestDetails{
     timestampClosed: Date,
     name: string,
     solution: string,
-    allowCommenting: true,
+    allowCommenting: boolean,
     requestPriority: string,
     requestPosition: string
     requestType: string,

@@ -12,8 +12,6 @@ import { tap, mapTo, catchError } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class AuthenticationService {
-  private urlLogin = environment.loginUrl + "login";
-  private urlRefreshToken = '';
   private jwtHelper: JwtHelperService;
   private JWToken$: BehaviorSubject<JWToken>;
   
@@ -32,7 +30,7 @@ export class AuthenticationService {
   public login (username: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    return this.http.post<Response>(this.urlLogin, {username: username, password: password}, {headers, observe: 'response'})
+    return this.http.post<Response>( environment.loginUrl + "login", {username: username, password: password}, {headers, observe: 'response'})
       .pipe(
         tap(ressponse => {
           this.setAccessToken(ressponse.headers.get("authorization"));

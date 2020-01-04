@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.model.dto.ImageDTO;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPasswordContainer;
+import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.service.FileService;
 
@@ -71,6 +72,12 @@ public class UserController {
     public List<ImageDTO> getAllAvailableImages(){
         FileService fileService = new FileService();
         return fileService.getAllAvailableImages();
+    }
+
+
+    @GetMapping("/secure/all")
+    public List<UserSimpleDTO> getAllUsers(){
+        return this.userService.getAllUsersWithoutPhoto();
     }
 
 }

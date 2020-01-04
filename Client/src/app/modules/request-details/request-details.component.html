@@ -1,56 +1,81 @@
-<app-header></app-header>
-<app-navigation></app-navigation>
 
+<ng-sidebar-container>
 
-<div id='contentContainer' >
-   <div id=requestRightSide>
-        <app-request-side-information #sideDetails></app-request-side-information>
-   </div>
+    <ng-sidebar [opened]="sideBarBoolean" mode="over" [keyClose]="deny" position="right" [dock]="deny" [dockedSize]="'50px'"
+        autoCollapseHeight="null" autoCollapseWidth="null"  [closeOnClickOutside]="deny" [showBackdrop]="deny"
+         [ariaLabel]="'My sidebar'">
 
-   <div id='requestLeftSide' *ngIf="requestDetails !== undefined">
-       <div  *ngIf = "ticketDetails?.requestType === 'Ticket'" class='customRow mainInformationContainer' >
-            <div class="raisedbox customCol" [style.width.%] = 75>
-                 <p class="raisedboxName" >
-                    <img [src]="'data:image/jpeg;base64,'+requestDetails.creator.photoBytes" class='avatar' />
-                        {{ requestDetails.creator.firstName }} {{ requestDetails.creator.lastName }}<br>
-                        {{ requestDetails.timestampCreation | date:'MMM d, y, h:mm:ss a'}}            
-                 </p>
-                 <p > {{ticketDetails.name}} </p>
-            </div>
-       </div>
+        <div id = 'sliderDiv1'  (click)='openSideBar()'> <i class="material-icons sliderButton" > reorder</i></div>
+        <hr>
 
-       <div  *ngIf = "reportDetails?.requestType === 'Report'" class='mainInformationContainer'>
-           <div class='customRow'>
-                <div class="raisedbox customCol" [style.width.%] = 45>
-                    <p class="raisedboxName">Účeľ reportu</p>
-                    <p *ngIf = "reportDetails?.purpose"   class='test'>
-                         {{reportDetails.purpose}} 
-                    </p>
-                </div>
+        <app-request-side-options  *ngIf="requestDetails !== undefined"  #sideBar   [requestDetails] = "requestDetails" >
+        </app-request-side-options>
 
-                <div class="raisedbox customCol" [style.width.%] = 45>
-                    <p class="raisedboxName">Kritériá reportu</p>
-                    <p *ngIf = "reportDetails?.criteria"  class='test'> {{reportDetails.criteria}} </p>
-                </div>
-            </div>
-            <div class='customRow'>
-                <div class="raisedbox customCol" [style.width.%] = 45>
-                    <p class="raisedboxName">Viditeľné údaje</p>
-                    <p *ngIf = "reportDetails?.visibleData"   class='test'>{{reportDetails.visibleData}} </p>
-                </div>
-                <div class="raisedbox customCol" [style.width.%] = 45 *ngIf="reportDetails.otherInformation !== '' ">
-                    <p class="raisedboxName">Dodatočné informácie</p>
-                    <p *ngIf = "reportDetails?.otherInformation"  class='test'> {{reportDetails.otherInformation}} </p>
-                </div>
-            </div>
-       </div>
+    </ng-sidebar>
     
-       <app-comment [requestComments] = "requestDetails.requestCommentDTOS" [requestId]="requestDetails.id"></app-comment>
+    <div ng-sidebar-content>      
+        <app-header></app-header>
+        <app-navigation></app-navigation>
 
-      
        
-    
+       
 
-   </div>
+        <div id='contentContainer' >
+        <div id=requestRightSide>
+            <div id = 'sliderDiv2'  (click)='openSideBar()'> <i class="material-icons sliderButton" > reorder</i></div>
+            <app-request-side-information #sideDetails></app-request-side-information>
+        </div>
 
-</div>
+        <div id='requestLeftSide' *ngIf="requestDetails !== undefined">
+
+
+            <!-- TICKET -->
+            <div  *ngIf = "ticketDetails?.requestType === 'Ticket'" class='customRow mainInformationContainer' >
+                    <div class="raisedbox customCol" [style.width.%] = 75>
+                        <p class="raisedboxName" >
+                            <img [src]="'data:image/jpeg;base64,'+requestDetails.creator.photoBytes" class='avatar' />
+                                {{ requestDetails.creator.firstName }} {{ requestDetails.creator.lastName }}<br>
+                                {{ requestDetails.timestampCreation | date:'MMM d, y, h:mm:ss a'}}            
+                        </p>
+                        <p > {{ticketDetails.name}} </p>
+                    </div>
+            </div>
+            <!-- ------------------- -->
+
+            <!-- REPORT -->
+            <div  *ngIf = "reportDetails?.requestType === 'Report'" class='mainInformationContainer'>
+                <div class='customRow'>
+                        <div class="raisedbox customCol" [style.width.%] = 45>
+                            <p class="raisedboxName">Účeľ reportu</p>
+                            <p *ngIf = "reportDetails?.purpose"   class='test'>
+                                {{reportDetails.purpose}} 
+                            </p>
+                        </div>
+
+                        <div class="raisedbox customCol" [style.width.%] = 45>
+                            <p class="raisedboxName">Kritériá reportu</p>
+                            <p *ngIf = "reportDetails?.criteria"  class='test'> {{reportDetails.criteria}} </p>
+                        </div>
+                    </div>
+                    <div class='customRow'>
+                        <div class="raisedbox customCol" [style.width.%] = 45>
+                            <p class="raisedboxName">Viditeľné údaje</p>
+                            <p *ngIf = "reportDetails?.visibleData"   class='test'>{{reportDetails.visibleData}} </p>
+                        </div>
+                        <div class="raisedbox customCol" [style.width.%] = 45 *ngIf="reportDetails.otherInformation !== '' ">
+                            <p class="raisedboxName">Dodatočné informácie</p>
+                            <p *ngIf = "reportDetails?.otherInformation"  class='test'> {{reportDetails.otherInformation}} </p>
+                        </div>
+                    </div>
+            </div>
+                <!-- ------------------- -->
+
+
+
+            <app-comment [requestComments] = "requestDetails.requestCommentDTOS" [requestId]="requestDetails.id"></app-comment>
+
+        </div>
+    </div>
+ </div>
+
+</ng-sidebar-container>

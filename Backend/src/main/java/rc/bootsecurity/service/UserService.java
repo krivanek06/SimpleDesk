@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.UserPasswordContainer;
+import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
@@ -22,6 +23,7 @@ import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -109,6 +111,10 @@ public class UserService {
 
     public byte[] getAvatar(String name){
         return this.fileService.getUserImage(name);
+    }
+
+    public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
+        return this.userRepository.findAll().stream().map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
     }
 
 

@@ -10,7 +10,7 @@ import rc.bootsecurity.repository.report.ReportRepository;
 import rc.bootsecurity.repository.report.ReportTypeRepository;
 
 @Service
-public class ReportService extends RequestManagementService{
+public class ReportService extends RequestStateService{
     @Autowired
     private ReportRepository reportRepository;
     @Autowired

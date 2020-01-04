@@ -14,6 +14,7 @@ import { SweetAlert2Module } from '@sweetalert2/ngx-sweetalert2';
 import { DatePipe } from '@angular/common'
 import { NgxSpinnerModule } from "ngx-spinner";
 import { RouterModule } from '@angular/router';
+import { SidebarModule } from 'ng-sidebar';
 
 // custom interceptors
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
@@ -52,6 +53,7 @@ import { FileServiceService } from './core/services/file-service.service';
 import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
 import { RequestSideInformationComponent } from './modules/request-details/request-side-information/request-side-information.component';
 import { CommentSharingComponent } from './modules/request-details/comment-sharing/comment-sharing.component';
+import { RequestSideOptionsComponent } from './modules/request-details/request-side-options/request-side-options.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +87,8 @@ import { CommentSharingComponent } from './modules/request-details/comment-shari
     RequestTableComponent,
     UserImagesComponent,
     RequestSideInformationComponent,
-    CommentSharingComponent
+    CommentSharingComponent,
+    RequestSideOptionsComponent
   ],
   imports: [
     BrowserModule,
@@ -105,6 +108,7 @@ import { CommentSharingComponent } from './modules/request-details/comment-shari
     SweetAlert2Module.forRoot(),
     NgxSpinnerModule,
     RouterModule,
+    SidebarModule.forRoot(),
   ],
   providers: [
     DatePipe,

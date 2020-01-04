@@ -3,13 +3,13 @@ export interface Group{
     name: string,
     email: string,
     description: string,
-    groupManager: UserSimple,
-    usersInGroup: UserSimple[];
-    usersWatchGroup: UserSimple[];
+    groupManager: UserSimpleDTO,
+    usersInGroup: UserSimpleDTO[];
+    usersWatchGroup: UserSimpleDTO[];
     applicationPrivilegeDTO: ApplicationPrivilege;
 }
 
-export interface UserSimple{
+export interface UserSimpleDTO{
     username: string,
     firstName: string,
     lastName: string,

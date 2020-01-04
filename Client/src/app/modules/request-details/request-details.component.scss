@@ -11,8 +11,11 @@
 }
 
 #requestRightSide{
-    width: 35%;
+  /*  width: 35%;*/
+    width: auto;
+    margin-right: 5%;
     float: right;
+    position: relative;
 }
 .customRow {
     display: flex; 
@@ -54,5 +57,39 @@
     margin-bottom: 20px;
 }
 
+#sliderDiv1{
+    position: absolute;
+    top: 0px;
+    right: 5px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+#sliderDiv2{
+    position: absolute;
+    top: -18px;
+    right: 5px;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.sliderButton{
+    font-size: 50px;
+    color: coral;
+
+}
 
 
+ng-sidebar-container{
+    height: 100vh;
+}
+
+
+
+
+::ng-deep aside {
+    background-color:#f6f6f6;
+    padding: 2em 1em;
+  }
+
+  

@@ -17,6 +17,15 @@ public class UserConverter {
         return userSimpleDTO;
     }
 
+    public UserSimpleDTO convertUserToSimpleDTOWithoutImage(User user){
+        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
+        userSimpleDTO.setUsername(user.getUsername());
+        userSimpleDTO.setFirstName(user.getFirstName());
+        userSimpleDTO.setLastName(user.getLastName());
+        userSimpleDTO.setPhotoBytes(null);
+        return userSimpleDTO;
+    }
+
     public UserDTO convertUserToUserDTO(User user){
         UserDTO userDTOSimple = new UserDTO();
 

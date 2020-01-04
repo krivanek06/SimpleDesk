@@ -21,7 +21,7 @@ import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 @Service
-public class FinanceService extends RequestManagementService{
+public class FinanceService extends RequestStateService{
     @Autowired
     private FinanceTypeRepository financeTypeRepository;
 

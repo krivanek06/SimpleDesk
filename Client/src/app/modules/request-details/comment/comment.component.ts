@@ -46,7 +46,7 @@ export class CommentComponent implements OnInit {
     if (formValues) {
       requestComment.comment = formValues[0];
       this.addComment(requestComment, true).subscribe(() => {
-        Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol zmenený', showConfirmButton: false, timer: 1500 })
+       // Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol zmenený', showConfirmButton: false, timer: 1500 })
       })
     }
   }
@@ -136,7 +136,7 @@ export class CommentComponent implements OnInit {
         this.addComment(commentDTO, false).subscribe((addedComment: RequestComment) => {
           this.requestComments.push(addedComment);
           this.commentForm.patchValue({'commentField' : ''});
-          Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
+         // Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
         })
       }
     })

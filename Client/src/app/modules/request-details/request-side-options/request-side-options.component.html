@@ -1,0 +1,50 @@
+<div class='content'>
+
+<div class = 'module' *ngIf='requestDetails.closed === null'>
+    <label class="switch">
+        <input class="switch-input" type="checkbox"  (click) = 'changeCommenting()' [checked] = "requestDetails.allowCommenting" />
+        <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
+        <span class="switch-handle"></span> 
+    </label>
+</div>
+
+
+<div class = 'module'>
+    <button mat-raised-button id = 'sliderButton' color='warn' 
+            class='customInput' *ngIf='requestDetails.closed === null' (click) = 'closeRequest()'> Uzatvoriť</button>
+            
+    <button mat-raised-button id = 'sliderButton' color='warn' 
+            class='customInput openInput'  *ngIf='requestDetails.closed !== null' (click) = 'reopenRequest()'>Otvoriť</button>
+</div>
+
+
+<div class = 'module' *ngIf = "requestDetails.closed === null && allusers !== []">
+    <mat-form-field class='customInputSmall'>
+        <mat-label>Zmena riešiteľa</mat-label>
+        <mat-select  (selectionChange)="selectedUser($event.value)">
+            <mat-option *ngFor='let user of allusers' [value] = "user">{{ user.firstName }} {{ user.lastName }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button  class='sendingButton' (click) = 'changeAssignedUser()'>Odoslať</button>
+</div>
+
+<div class = 'module'  *ngIf='requestDetails.closed === null'>
+    <mat-form-field class='customInputSmall'>
+        <mat-label>Zmena priority</mat-label>
+        <mat-select (selectionChange)="selectedPriority($event.value)">
+            <mat-option value="malá">malá</mat-option>
+            <mat-option value="stredná">stredná</mat-option>
+            <mat-option value="vysoká">vysoká</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button mat-raised-button  class='sendingButton' (click) = 'changePriority()'>Odoslať</button>
+</div>
+
+<div class = 'module'  *ngIf='requestDetails.closed === null'>
+    <mat-form-field class='customInputSmall'>
+        <input  matInput placeholder="Nahodnocenie v dňoch" >
+    </mat-form-field>
+    <button mat-raised-button  class='sendingButton'>Odoslať</button>
+</div>
+
+</div>

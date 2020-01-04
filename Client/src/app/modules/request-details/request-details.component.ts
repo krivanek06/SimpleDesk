@@ -3,10 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { RequestDetails, TicketDetails, FinanceDetails, ReportDetails } from 'app/shared/models/RequestDetails';
 import { environment } from 'environments/environment';
 import { RequestSideInformationComponent } from './request-side-information/request-side-information.component';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { CommentComponent } from './comment/comment.component';
-import { RequestComment } from 'app/shared/models/RequestDetails';
-import { UserSimple } from 'app/shared/models/Group';
+import { RequestSideOptionsComponent } from './request-side-options/request-side-options.component';
 
 @Component({
   selector: 'app-request-details',
@@ -14,18 +11,23 @@ import { UserSimple } from 'app/shared/models/Group';
   styleUrls: ['./request-details.component.scss']
 })
 export class RequestDetailsComponent implements OnInit {
+  public sideBarBoolean = false;
+
   public ticketDetails: TicketDetails;
   public reportDetails: ReportDetails;
   public financeDetails: FinanceDetails;
   public requestDetails: RequestDetails;
-
-  
+  public deny = false;
+  public allow = true;
 
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
-  
 
 
   constructor(private http: HttpClient) { }
+
+  private openSideBar(){
+    this.sideBarBoolean = !this.sideBarBoolean;
+  }
 
   ngOnInit() {
     this.getRequstDetails();

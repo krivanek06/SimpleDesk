@@ -21,6 +21,7 @@ import rc.bootsecurity.repository.report.ReportRefreshRepository;
 import rc.bootsecurity.repository.report.ReportTypeRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.UserService;
+import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.sql.Timestamp;
 import java.util.HashSet;
@@ -31,14 +32,8 @@ import java.util.List;
  */
 @Service
 public class RequestManagementService{
-   @Autowired
-   private RequestPositionRepository requestPositionRepository;
-   @Autowired
-   private RequestPriorityRepository requestPriorityRepository;
     @Autowired
     private RequestRepository requestRepository;
-    @Autowired
-    private ModuleTypeRepository moduleTypeRepository;
     @Autowired
     protected UserService userService;
     @Autowired
@@ -48,7 +43,7 @@ public class RequestManagementService{
     @Autowired
     protected RequestCommentService requestCommentService;
 
-
+    private UserConverter userConverter = new UserConverter();
 
     public void saveOrUpdateRequest(Request request){
         this.requestRepository.save(request);
@@ -57,19 +52,19 @@ public class RequestManagementService{
         this.requestRepository.saveAll(requests);
     }
 
-    protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
-        request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        request.setCreator(this.userService.loadUser(this.userService.getPrincipalUsername()));
-        request.setName(name);
-        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name()));
-        request.setModuleType(this.moduleTypeRepository.findByName(requestType));
-        request.setRequestPriority(this.requestPriorityRepository.findByName(priority));
-        request.setAllowCommenting(true);
-    }
 
     private Request findRequest(Integer requestId){
         return this.requestRepository.findById(requestId)
                 .orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
+    }
+
+    public void removeMeAsAssignUserAndSave(Integer requestId){
+        Request request = this.findRequest(requestId);
+        String username = this.userService.getPrincipalUsername();
+        if(request.getAssigned().getUsername().equalsIgnoreCase(username)) {
+            request.setAssigned(null);
+            this.saveOrUpdateRequest(request);
+        }
     }
 
     public void removeAssignUserAndSave(Integer requestId){
@@ -85,11 +80,12 @@ public class RequestManagementService{
         this.saveOrUpdateRequest(request);
     }
 
-    public void setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
+    public UserSimpleDTO setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         User user = this.userService.loadUser(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
         this.saveOrUpdateRequest(request);
+        return this.userConverter.convertUserToSimpleDTO(user);
     }
 
 
@@ -98,13 +94,6 @@ public class RequestManagementService{
         Request request = this.findRequest(requestId);
         request.setSolver(user);
         request.setSolution(solution);
-        this.saveOrUpdateRequest(request);
-    }
-
-    public void setClosedUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
-        User user = this.userService.loadUser(userSimpleDTO.getUsername());
-        Request request = this.findRequest(requestId);
-        request.setClosed(user);
         this.saveOrUpdateRequest(request);
     }
 
@@ -122,6 +111,8 @@ public class RequestManagementService{
         request.getUserWhoWatchThisRequest().remove(user);
         this.saveOrUpdateRequest(request);
     }
+
+
 
 
 }

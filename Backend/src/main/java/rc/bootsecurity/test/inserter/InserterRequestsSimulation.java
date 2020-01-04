@@ -52,6 +52,8 @@ public class InserterRequestsSimulation {
     private ReportService reportService;
     @Autowired
     private FinanceService financeService;
+    @Autowired
+    private RequestStateService requestStateService;
 
     private RequestConverter requestConverter = new RequestConverter();
     private UserConverter userConverter = new UserConverter();
@@ -266,10 +268,10 @@ public class InserterRequestsSimulation {
         this.requestManagementService.setAssignUserAndSave(ticketDTO4.getId(), userSimpleDTOUser3);
         this.requestManagementService.setAssignUserAndSave(ticket5.getId(), userSimpleDTOUser5);
         this.requestManagementService.setSolverUserAndSave(ticket5.getId(), userSimpleDTOUser5, "SOLUTION");
-        this.requestManagementService.setClosedUserAndSave(ticket5.getId(), userSimpleDTOUser5);
+        this.requestStateService.closeRequest(ticket5.getId());
         this.requestManagementService.setAssignUserAndSave(ticket6.getId(),userSimpleDTOUser5);
         this.requestManagementService.setSolverUserAndSave(ticket6.getId(), userSimpleDTOUser2, "SOLUTION");
-        this.requestManagementService.setClosedUserAndSave(ticket6.getId(), userSimpleDTOUser2);
+        this.requestStateService.closeRequest(ticket6.getId());
         this.requestManagementService.setAssignUserAndSave(ticket7.getId(), userSimpleDTOUser4);
         this.requestManagementService.setAssignUserAndSave(ticket8.getId(), userSimpleDTOUser3);
         this.requestManagementService.setAssignUserAndSave(ticket9.getId(), userSimpleDTOUser3);
