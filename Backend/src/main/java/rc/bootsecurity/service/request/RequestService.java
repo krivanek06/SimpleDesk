@@ -1,5 +1,6 @@
 package rc.bootsecurity.service.request;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.exception.RequestNotFoundException;
@@ -58,7 +59,7 @@ public class RequestService {
     public RequestDashboardDTO getRequestOnDashboard(){
         String username = this.userService.getPrincipalUsername();
         String rawJson = this.requestRepository.findOpenRequestOnDashboard(username);
-        RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestTableDTO(rawJson);
+        RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestDashboardDTO(rawJson);
 
         this.setImageForRequestTableDTO(requestDashboardDTO.getMyOpen());
         this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMe());
@@ -67,6 +68,15 @@ public class RequestService {
         this.setImageForRequestTableDTO(requestDashboardDTO.getOtherOpen());
 
         return requestDashboardDTO;
+    }
+
+    public List<RequestTableDTO> getClosedRequests(String dateClosed1, String dateClosed2){
+        String username = this.userService.getPrincipalUsername();
+        String rawJson = this.requestRepository.findClosedRequestsBetweenDate(username, dateClosed1, dateClosed2);
+        JSONObject requestJsonObject = new JSONObject(rawJson);
+        List<RequestTableDTO> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(requestJsonObject,"closed_requests" );
+        this.setImageForRequestTableDTO(requestTableDTOS);
+        return requestTableDTOS;
     }
 
     private void setImageForRequestTableDTO(List<RequestTableDTO> list){

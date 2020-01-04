@@ -65,10 +65,23 @@
                 </div>
             </mat-cell>
         </ng-container>
+
+        <ng-container matColumnDef="closed">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Uzatvoril </mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <img [src]="'data:image/jpeg;base64,'+element.closedImageByte" class='userIcon'/>
+                {{ element.closed  | slice:0:1 | titlecase}}. {{ element.closed.split(' ')[1] | titlecase}}
+            </mat-cell>
+            </ng-container>
     
         <ng-container matColumnDef="timeCreated">
-            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Dátum </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Vytvorené </mat-header-cell>
             <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="timeClosed">
+            <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Uzatvorené</mat-header-cell>
+            <mat-cell *matCellDef="let element"> {{element.timestampClosed | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
         </ng-container>
     
         <ng-container matColumnDef="details">

@@ -1,0 +1,12 @@
+
+<div class='filterContainer'>
+    <mat-form-field >
+        <input matInput  placeholder="Filtrovanie dátumu"   [satDatepicker]="picker"   (dateChange)="saveDateAndFilter($event.value)">
+        <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
+        <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
+    </mat-form-field>
+
+
+    <span class=" fontChange ">Filtrovanie dátumu od <b>{{ dateFrom }} </b> do   <b>{{ dateTo }} </b> </span>
+
+</div>

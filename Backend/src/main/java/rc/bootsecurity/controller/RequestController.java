@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
+import rc.bootsecurity.model.dto.request.RequestTableDTO;
 import rc.bootsecurity.service.request.RequestService;
 import rc.bootsecurity.utils.service.FileService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/requests")
@@ -27,6 +30,10 @@ public class RequestController {
         return this.requestService.getRequestOnDashboard();
     }
 
+    @GetMapping("/closed")
+    public List<RequestTableDTO> getClosedRequests(@RequestParam String dateFrom, @RequestParam String dateTo){
+        return this.requestService.getClosedRequests(dateFrom, dateTo);
+    }
 
     @GetMapping("/requestDetails/{id}")
     public RequestDTO getRequestDetails(@PathVariable("id") Integer id) {

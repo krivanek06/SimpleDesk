@@ -59,7 +59,7 @@ public class JsonStringParser {
 
 
 
-    private List<RequestTableDTO> convertRawJsonToRequestTableDTO(JSONObject requestsJson , String jsonField){
+    public List<RequestTableDTO> convertRawJsonToRequestTableDTO(JSONObject requestsJson , String jsonField){
         List<RequestTableDTO> result = new ArrayList<>();
         ObjectMapper objectMapper = new ObjectMapper();
 
@@ -75,7 +75,7 @@ public class JsonStringParser {
         return result;
     }
 
-    public RequestDashboardDTO parseFromRawJsonToRequestTableDTO(String rawJson) {
+    public RequestDashboardDTO parseFromRawJsonToRequestDashboardDTO(String rawJson) {
         RequestDashboardDTO requestDashboardDTO = new RequestDashboardDTO();
         JSONObject requestJsonObject = new JSONObject(rawJson);
 
@@ -87,4 +87,5 @@ public class JsonStringParser {
 
         return requestDashboardDTO;
     }
+
 }

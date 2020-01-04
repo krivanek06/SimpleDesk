@@ -37,6 +37,7 @@
     "ngx-spinner": "^8.1.0",
     "popper.js": "^1.15.0",
     "rxjs": "~6.4.0",
+    "saturn-datepicker": "^8.0.1",
     "sweetalert2": "^9.5.3",
     "tslib": "^1.10.0",
     "zone.js": "~0.9.1"

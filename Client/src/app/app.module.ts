@@ -15,6 +15,7 @@ import { DatePipe } from '@angular/common'
 import { NgxSpinnerModule } from "ngx-spinner";
 import { RouterModule } from '@angular/router';
 import { SidebarModule } from 'ng-sidebar';
+import { SatNativeDateModule ,SatDatepickerModule } from 'saturn-datepicker';
 
 // custom interceptors
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
@@ -54,6 +55,7 @@ import { UserImagesComponent } from './modules/user-profile/user-images/user-ima
 import { RequestSideInformationComponent } from './modules/request-details/request-side-information/request-side-information.component';
 import { CommentSharingComponent } from './modules/request-details/comment-sharing/comment-sharing.component';
 import { RequestSideOptionsComponent } from './modules/request-details/request-side-options/request-side-options.component';
+import { RequestFilterComponent } from './shared/components/request-filter/request-filter.component';
 
 @NgModule({
   declarations: [
@@ -88,7 +90,8 @@ import { RequestSideOptionsComponent } from './modules/request-details/request-s
     UserImagesComponent,
     RequestSideInformationComponent,
     CommentSharingComponent,
-    RequestSideOptionsComponent
+    RequestSideOptionsComponent,
+    RequestFilterComponent
   ],
   imports: [
     BrowserModule,
@@ -109,6 +112,8 @@ import { RequestSideOptionsComponent } from './modules/request-details/request-s
     NgxSpinnerModule,
     RouterModule,
     SidebarModule.forRoot(),
+    SatNativeDateModule,
+    SatDatepickerModule,
   ],
   providers: [
     DatePipe,
