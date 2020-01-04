@@ -1,4 +1,4 @@
-<div class='content' *ngIf ='requestDetails !== undefined'>   
+<div class='content' *ngIf ='requestDetails !== null'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/information_icon.png" class="titleIcon"/>
         Všeobecné informácie
@@ -35,11 +35,51 @@
             <ul> <li class='information'>{{ requestDetails.requestPosition }}  </li></ul>
         </li>
 
+        <!-- Ticket informations -->
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '>
+            <div class='informationAnswer'>Typ ticketu</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).ticketType }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '>
+            <div class='informationAnswer'>{{ $any(requestDetails).ticketType }}</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).ticketSubtypeName }}</li> </ul>
+        </li>
+
+         <!-- Finance informations -->
+         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Financie" '>
+            <div class='informationAnswer'>Typ financií</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).financeType }}</li> </ul>
+        </li>
+
+
+
+        <!-- Report informations -->
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+            <div class='informationAnswer'>Vlastník reportu</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).owner }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+            <div class='informationAnswer'>Frekvencia obnovenia</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).reportRefresh }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+            <div class='informationAnswer'>Prístup pre</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).accessBy }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+            <div class='informationAnswer'>Vyhodnotenie v dňoch</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).evaluation }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+            <div class='informationAnswer'>Deadline</div>
+            <ul ><li div class='information'> {{ $any(requestDetails).deadline | date:'MMM d, y, HH:mm:ss '}}</li> </ul>
+        </li>
+
     </ul>
 </div>
 
 
-<div class='content' *ngIf ='requestDetails !== undefined'>   
+<div class='content' *ngIf ='requestDetails !== null'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/user_infomatio_icon.png" class="titleIcon"/>
         Ľudia
@@ -94,7 +134,7 @@
 
 
 
-<div class='content' *ngIf ='requestDetails !== undefined'>   
+<div class='content' *ngIf ='requestDetails !== null'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/clock_icon.png" class="titleIcon"/>
         Sledovanie času
@@ -105,7 +145,7 @@
             <div class='informationAnswer'>Čas vytvorenia</div>
             <ul>
                 <li class='information'>
-                    {{ requestDetails.timestampCreation | date:'MMM d, y, h:mm:ss a' }}
+                    {{ requestDetails.timestampCreation | date:'MMM d, y, HH:mm:ss ' }}
                 </li>
             </ul>
         </li>
@@ -114,7 +154,7 @@
             <div class='informationAnswer'>Čas uzatvorenia</div>
             <ul>
                 <li class='information'>
-                    {{ requestDetails.timestampClosed | date:'MMM d, y, h:mm:ss a'}} 
+                    {{ requestDetails.timestampClosed | date:'MMM d, y, HH:mm:ss '}} 
                 </li>
             </ul>
         </li>
@@ -132,7 +172,7 @@
 
 
 
-<div class='content' *ngIf ='requestDetails !== undefined'>   
+<div class='content' *ngIf ='requestDetails !== null'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/download_document_icon.png" class="titleIcon"/>
         Dokumenty

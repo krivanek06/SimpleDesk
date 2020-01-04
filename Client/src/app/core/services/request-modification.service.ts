@@ -1,17 +1,44 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import Swal from 'sweetalert2';
-import { UserSimple } from 'app/shared/models/RequestDetails';
+import { UserSimple, RequestDetails, TicketDetails, ReportDetails, FinanceDetails } from 'app/shared/models/RequestDetails';
+import { mapTo, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestModificationService {
+  private requestDetails: BehaviorSubject<RequestDetails> = new BehaviorSubject(null);
 
   constructor(private http: HttpClient) { }
 
+  public updateRequestDetails(details : RequestDetails){
+    this.requestDetails.next(details);
+  }
+
+  public getRequestDetials():Observable<RequestDetails>{
+    return this.requestDetails.asObservable();
+  }
+
+  public getTicketDetials():Observable<TicketDetails>{
+    return this.requestDetails.pipe(
+      map( detials => <TicketDetails> detials)
+    );
+  }
+
+  public getReportDetails():Observable<ReportDetails>{
+    return this.requestDetails.pipe(
+      map( detials => <ReportDetails> detials)
+    );
+  }
+
+  public getFinanceDetials():Observable<FinanceDetails>{
+    return this.requestDetails.pipe(
+      map( detials => <FinanceDetails> detials)
+    );
+  }
 
   public assignOrRemoveRequestOnMe(requestid: number, assign: boolean): Observable<any>{
     let params = new HttpParams().set('assign' , String(assign)) ;
@@ -42,7 +69,7 @@ export class RequestModificationService {
 
 
 
-  
+
   /**
    * Report modification
    */

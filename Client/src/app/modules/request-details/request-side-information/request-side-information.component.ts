@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, HostListener, OnDestroy } from '@angular/core';
 import { RequestDetails, TicketDetails, ReportDetails, FinanceDetails } from 'app/shared/models/RequestDetails';
 import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { FileServiceService } from 'app/core/services/file-service.service';
@@ -7,25 +7,27 @@ import { HttpClient } from '@angular/common/http';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-request-side-information',
   templateUrl: './request-side-information.component.html',
   styleUrls: ['./request-side-information.component.scss']
 })
-export class RequestSideInformationComponent implements OnInit {
-  public ticketDetails: TicketDetails;
-  public reportDetails: ReportDetails;
-  public financeDetails: FinanceDetails;
+export class RequestSideInformationComponent implements OnInit, OnDestroy {
   public requestDetails: RequestDetails;
+  private subscription: Subscription;
 
-  constructor( private fileService: FileServiceService, private userService: UserService, 
-    private requestService: RequestModificationService) { }
+  constructor( private fileService: FileServiceService, private userService: UserService, private requestService: RequestModificationService) { }
 
   ngOnInit() {
+    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
+      this.requestDetails = requestDetails;
+    });
   }
-
-
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
   private calculateOpenDays(): number{
     let open = new Date(this.requestDetails.timestampCreation);
     let result = 0;

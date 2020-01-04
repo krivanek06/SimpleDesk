@@ -1,33 +1,44 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { RequestComment, UserSimple } from 'app/shared/models/RequestDetails';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { RequestComment, UserSimple, RequestDetails } from 'app/shared/models/RequestDetails';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Group } from 'app/shared/models/Group';
+import { RequestModificationService } from 'app/core/services/request-modification.service';
 
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
   styleUrls: ['./comment.component.scss']
 })
-export class CommentComponent implements OnInit {
+export class CommentComponent implements OnInit, OnDestroy {
   public changeFramws = false;
   public commentForm: FormGroup;
 
+  public requestDetails: RequestDetails;
+  private subscription: Subscription;
+
   private sharingComment: RequestComment;
   @Input() public requestComments:RequestComment[];
-  @Input() public requestId: number;
 
-  constructor(public userService: UserService, private http: HttpClient, private formBuilder: FormBuilder) { }
+  constructor(public userService: UserService, private http: HttpClient, private formBuilder: FormBuilder, private requestService: RequestModificationService) { }
 
   ngOnInit() {
     this.commentForm = this.formBuilder.group({
       commentField: ['' ],
       isPrivate: [false],
     });
+
+    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
+      this.requestDetails = requestDetails;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private async editComment(requestComment: RequestComment){
@@ -115,7 +126,7 @@ export class CommentComponent implements OnInit {
     
     let commentDTO: RequestComment = {
         id: null,
-        requestId: this.requestId,
+        requestId: this.requestDetails.id,
         creator: userSimple,
         comment: values.commentField,
         isPrivate: values.isPrivate,

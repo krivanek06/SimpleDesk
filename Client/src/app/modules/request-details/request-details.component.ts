@@ -4,6 +4,7 @@ import { RequestDetails, TicketDetails, FinanceDetails, ReportDetails } from 'ap
 import { environment } from 'environments/environment';
 import { RequestSideInformationComponent } from './request-side-information/request-side-information.component';
 import { RequestSideOptionsComponent } from './request-side-options/request-side-options.component';
+import { RequestModificationService } from 'app/core/services/request-modification.service';
 
 @Component({
   selector: 'app-request-details',
@@ -12,18 +13,13 @@ import { RequestSideOptionsComponent } from './request-side-options/request-side
 })
 export class RequestDetailsComponent implements OnInit {
   public sideBarBoolean = false;
-
-  public ticketDetails: TicketDetails;
-  public reportDetails: ReportDetails;
-  public financeDetails: FinanceDetails;
-  public requestDetails: RequestDetails;
   public deny = false;
   public allow = true;
 
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, public requestService: RequestModificationService) { }
 
   private openSideBar(){
     this.sideBarBoolean = !this.sideBarBoolean;
@@ -37,23 +33,9 @@ export class RequestDetailsComponent implements OnInit {
     let url = window.location.pathname;
     let id = url.substring(url.lastIndexOf('/') + 1);
     
-    this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`)
-      .subscribe(requestDetails => {
-        console.log(requestDetails);
-
-        if(requestDetails.requestType === 'Ticket'){
-          this.ticketDetails =  <TicketDetails> requestDetails;
-          this.sideDetails.ticketDetails =  <TicketDetails> requestDetails;
-        }else if(requestDetails.requestType === 'Report'){
-          this.reportDetails =  <ReportDetails> requestDetails;
-          this.sideDetails.reportDetails =  <ReportDetails> requestDetails;
-        }else if(requestDetails.requestType === 'Finance'){
-          this.financeDetails =  <FinanceDetails> requestDetails;
-          this.sideDetails.financeDetails = <FinanceDetails> requestDetails;
-        }
-        this.requestDetails = requestDetails;
-        this.sideDetails.requestDetails = requestDetails;
-      
+    this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`).subscribe(requestDetails => {
+        this.requestService.updateRequestDetails( requestDetails);
+        this.requestService.getRequestDetials().subscribe(x => console.log(x));
       })
     
   }

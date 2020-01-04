@@ -68,7 +68,7 @@
     
         <ng-container matColumnDef="timeCreated">
             <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Dátum </mat-header-cell>
-            <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, h:mm:ss a'}} </mat-cell>
+            <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
         </ng-container>
     
         <ng-container matColumnDef="details">

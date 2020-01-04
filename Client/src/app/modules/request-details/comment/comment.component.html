@@ -56,7 +56,7 @@
 
 
 
-<form [formGroup] = "commentForm" (ngSubmit)="submit()">
+<form [formGroup] = "commentForm" (ngSubmit)="submit()" *ngIf = "requestDetails !== null && requestDetails.closed === null">
     <mat-form-field class='ticketInlineParameters' >
         <textarea  matInput placeholder="Napíšte komentár" id="commentField" formControlName = "commentField"></textarea>
         <!--<mat-error *ngIf="commentField.invalid"> Prosím zadajte komentár</mat-error>-->

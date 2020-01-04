@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { UserSimpleDTO } from 'app/shared/models/Group';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
@@ -6,25 +6,35 @@ import { RequestDetails, UserSimple } from 'app/shared/models/RequestDetails';
 import { UserService } from 'app/core/services/user.service';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import Swal from 'sweetalert2';
+import { takeWhile } from 'rxjs/operators';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-request-side-options',
   templateUrl: './request-side-options.component.html',
   styleUrls: ['./request-side-options.component.scss']
 })
-export class RequestSideOptionsComponent implements OnInit {
+export class RequestSideOptionsComponent implements OnInit, OnDestroy {
   
   public allusers: UserSimpleDTO[] = [];
   private priority: string;
   private userSimple: UserSimple;
   private reportEvaluation: number;
 
-  @Input() public requestDetails: RequestDetails;
+  public requestDetails: RequestDetails;
+  private subscription: Subscription;
 
   constructor(private http: HttpClient, private userService: UserService, private requestService: RequestModificationService) { }
 
   ngOnInit() {
     this.getAllUsers();
+    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
+      this.requestDetails = requestDetails;
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   private getAllUsers(){
@@ -38,7 +48,7 @@ export class RequestSideOptionsComponent implements OnInit {
       return;
     }
 
-    this.requestService.changePriority(this.requestDetails.id, this.priority).subscribe(() => {
+    this.requestService.changePriority( this.requestDetails.id, this.priority).subscribe(() => {
       this.requestDetails.requestPriority = this.priority;
       Swal.fire({ position: 'top-end',icon: 'success', title: 'Priorita bola zmenená', showConfirmButton: false, timer: 1500 })
     })
