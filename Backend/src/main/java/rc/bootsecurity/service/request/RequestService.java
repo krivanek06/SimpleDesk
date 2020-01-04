@@ -71,8 +71,8 @@ public class RequestService {
     }
 
     public List<RequestTableDTO> getClosedRequests(String dateClosed1, String dateClosed2){
-        String username = this.userService.getPrincipalUsername();
-        String rawJson = this.requestRepository.findClosedRequestsBetweenDate(username, dateClosed1, dateClosed2);
+        User user = this.userService.loadUser(this.userService.getPrincipalUsername());
+        String rawJson = this.requestRepository.findClosedRequestsBetweenDate(user.getId(), user.getUsername(), dateClosed1, dateClosed2);
         JSONObject requestJsonObject = new JSONObject(rawJson);
         List<RequestTableDTO> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(requestJsonObject,"closed_requests" );
         this.setImageForRequestTableDTO(requestTableDTOS);
