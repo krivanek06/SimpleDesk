@@ -41,7 +41,7 @@ public class RequestStateService {
 
     protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
         request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        request.setCreator(this.userService.loadUser(this.userService.getPrincipalUsername()));
+        request.setCreator(this.userService.loadUserByUsername(this.userService.getPrincipalUsername()));
         request.setName(name);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name()));
         request.setModuleType(this.moduleTypeRepository.findByName(requestType));
@@ -50,7 +50,7 @@ public class RequestStateService {
     }
 
     public void closeRequest(Integer requestId){
-        User user = this.userService.loadUser(this.userService.getPrincipalUsername());
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
         request.setClosed(user);
         request.setTimestampClosed(new Timestamp(System.currentTimeMillis()));
@@ -59,7 +59,7 @@ public class RequestStateService {
 
     public void reopenRequest(Integer requestId){
         Request request = this.findRequest(requestId);
-        User user = this.userService.loadUser(this.userService.getPrincipalUsername());
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         request.setClosed(null);
         request.setTimestampClosed(null);
         this.saveOrUpdateRequest(request);

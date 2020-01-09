@@ -673,7 +673,6 @@ or r.creator_uid in (select distinct user_id from  tbl_user_groups where group_i
     union
     select searching_id
 )
-
 -- closed somebody from my team
     or r.closed_uid in (select distinct user_id from  tbl_user_groups where group_id in (
         select id from  tbl_groups where manager_id =  searching_id

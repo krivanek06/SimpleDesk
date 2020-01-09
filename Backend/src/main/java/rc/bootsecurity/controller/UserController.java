@@ -74,6 +74,16 @@ public class UserController {
         return fileService.getAllAvailableImages();
     }
 
+    @PostMapping("/registration")
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO){
+        try {
+            this.userService.registerUser(userDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to register user, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie uživateľa",HttpStatus.BAD_REQUEST);
+    }
 
     @GetMapping("/secure/all")
     public List<UserSimpleDTO> getAllUsers(){

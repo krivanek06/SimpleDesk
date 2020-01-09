@@ -22,6 +22,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class FinanceService extends RequestStateService{
+    private RequestConverter requestConverter = new RequestConverter();
+
     @Autowired
     private FinanceTypeRepository financeTypeRepository;
 
@@ -35,13 +37,17 @@ public class FinanceService extends RequestStateService{
     }
 
     public List<FinanceTypeDTO> getFinanceTypesToSubmitForLoggedInUser(){
-        Optional<List<FinanceType>> financeTypes = this.financeTypeRepository.getFinanceTypesToSubmitForUser(this.userService.getPrincipalUsername());
+        return this.financeTypeRepository.getFinanceTypesToSubmitForUser(this.userService.getPrincipalUsername())
+                    .map(types -> types.stream().map(requestConverter::convertFinanceTypeToFinanceTypeDTOWithoutGroups)
+                            .collect(Collectors.toList())).orElseGet(ArrayList::new);
+    }
 
-       if(financeTypes.isPresent()) {
-            RequestConverter requestConverter = new RequestConverter();
-            return financeTypes.get().stream().map(requestConverter::convertFinanceTypeToFinanceTypeDTOWithoutGroups).collect(Collectors.toList());
-        }
-        return new ArrayList<>();
+    public List<FinanceTypeDTO> getFinanceTypesDTO(){
+        List<FinanceTypeDTO> financeTypes =  new ArrayList<>();
+        this.financeTypeRepository.findAll().forEach(financeType -> {
+            financeTypes.add(this.requestConverter.convertFinanceTypeToFinanceTypeDTOWithoutGroups(financeType));
+        });
+        return financeTypes;
     }
 
 }

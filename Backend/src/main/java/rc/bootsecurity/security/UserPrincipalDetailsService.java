@@ -23,7 +23,7 @@ public class UserPrincipalDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user =  this.userService.loadUser(username);
+        User user =  this.userService.loadUserByUsername(username);
         ApplicationPrivilegeDTO applicationPrivilegeDTO = this.userService.getPrivilegesForUser(username);
         List<Group> groupsToManage = this.groupService.getGroupsToManageForUser(user);
         List<Group> groupToWatchActivity = this.groupService.getGroupToWatchActivity(user);

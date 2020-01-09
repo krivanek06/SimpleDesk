@@ -28,8 +28,8 @@ public class Document {
      * in which request is this documents shared,
      * it is always just one request
      */
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "documents")
-    private List<Request> requestsDocumentIsShared;
+    /*@ManyToMany(fetch = FetchType.LAZY ,mappedBy = "documents")
+    private List<Request> requestsDocumentIsShared;*/
 
     /**
      * Users who can see this document.

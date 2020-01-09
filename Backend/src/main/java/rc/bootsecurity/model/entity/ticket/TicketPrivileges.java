@@ -2,6 +2,7 @@ package rc.bootsecurity.model.entity.ticket;
 
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.Group;
 
 import javax.persistence.*;
@@ -19,6 +20,7 @@ import javax.persistence.*;
 public class TicketPrivileges {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Exclude
     private Integer id;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -53,8 +53,12 @@ public class UserService {
         return this.userRepository.findAllByGroupsActivityWatched(group).orElseGet(ArrayList::new);
     }
 
-    public User loadUser(String name){
+    public User loadUserByUsername(String name){
         return this.userRepository.findByUsername(name).orElseThrow(() -> new UsernameNotFoundException("Not found " + name ));
+    }
+
+    public List<User> loadUsersByUsername(List<String> names){
+        return this.userRepository.findAllByUsernameIn(names);
     }
 
     public String getPrincipalUsername() {
@@ -71,7 +75,7 @@ public class UserService {
     public UserDTO getLoggedInUserDetails(){
         FileService fileService = new FileService();
         String username = this.getPrincipalUsername();
-        UserDTO userDTO = this.userConverter.convertUserToUserDTO(this.loadUser(username));
+        UserDTO userDTO = this.userConverter.convertUserToUserDTO(this.loadUserByUsername(username));
         userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
 
         return userDTO;
@@ -84,7 +88,7 @@ public class UserService {
             throw new Exception("Password does not match for user : " + username);
         }
 
-        User user = this.loadUser(username);
+        User user = this.loadUserByUsername(username);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         if(!bCryptPasswordEncoder.matches(userPasswordContainer.getOldPassword() , user.getPassword())){
@@ -99,7 +103,7 @@ public class UserService {
     public void changeImageInDB(String imageToUpdate){
         String username = this.getPrincipalUsername();
 
-        User user = this.loadUser(username);
+        User user = this.loadUserByUsername(username);
         user.setPhoto(imageToUpdate);
 
         this.userRepository.save(user);
@@ -109,12 +113,15 @@ public class UserService {
         this.fileService.uploadImageForUser(uploadingFiles);
     }
 
-    public byte[] getAvatar(String name){
-        return this.fileService.getUserImage(name);
-    }
 
     public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
-        return this.userRepository.findAll().stream().map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+        return this.userRepository.findAll().stream().filter(user -> !user.getUsername().equalsIgnoreCase("admin"))
+                .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+    }
+
+    public void registerUser(UserDTO userDTO){
+        User user = this.userConverter.generateFreshUser(userDTO);
+        this.userRepository.save(user);
     }
 
 

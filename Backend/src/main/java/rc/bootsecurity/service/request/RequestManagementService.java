@@ -5,25 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
-import rc.bootsecurity.model.dto.request.FinanceDTO;
-import rc.bootsecurity.model.dto.request.ReportDTO;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.finance.Finance;
-import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
-import rc.bootsecurity.model.enums.REQUEST_POSITION;
-import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
-import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.UserRepository;
-import rc.bootsecurity.repository.finance.FinanceTypeRepository;
-import rc.bootsecurity.repository.report.ReportRefreshRepository;
-import rc.bootsecurity.repository.report.ReportTypeRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.converter.UserConverter;
 
-import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 
@@ -74,14 +63,14 @@ public class RequestManagementService{
     }
 
     public void setAssignUserAndSave(Integer requestId){
-        User user = this.userService.loadUser(this.userService.getPrincipalUsername());
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
         this.saveOrUpdateRequest(request);
     }
 
     public UserSimpleDTO setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
-        User user = this.userService.loadUser(userSimpleDTO.getUsername());
+        User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
         this.saveOrUpdateRequest(request);
@@ -90,7 +79,7 @@ public class RequestManagementService{
 
 
     public void setSolverUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO, String solution){
-        User user = this.userService.loadUser(userSimpleDTO.getUsername());
+        User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setSolver(user);
         request.setSolution(solution);
@@ -100,14 +89,14 @@ public class RequestManagementService{
     public void setWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
         request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
-        request.getUserWhoWatchThisRequest().add(this.userService.loadUser(userSimpleDTO.getUsername()));
+        request.getUserWhoWatchThisRequest().add(this.userService.loadUserByUsername(userSimpleDTO.getUsername()));
         this.saveOrUpdateRequest(request);
     }
 
     public void removeWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
         request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
-        User user = this.userService.loadUser(userSimpleDTO.getUsername());
+        User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
         request.getUserWhoWatchThisRequest().remove(user);
         this.saveOrUpdateRequest(request);
     }

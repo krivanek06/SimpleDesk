@@ -38,7 +38,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
   }
 
   private getAllUsers(){
-    this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/all").subscribe(users =>{
+    this.userService.getAllUsers().subscribe(users =>{
       this.allusers = users;
     })
   }

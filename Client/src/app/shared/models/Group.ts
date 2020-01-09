@@ -1,5 +1,4 @@
 export interface Group{
-    id: number,
     name: string,
     email: string,
     description: string,
@@ -25,5 +24,5 @@ export interface ApplicationPrivilege{
     moduleTypesToUse: string[],
     submitFinanceRequests: string[],
     requestTypesToSolve: string[],
-    solveTickets: Map<string, string[]>,
+    solveTickets: any //Map<string, string[]>,
 }

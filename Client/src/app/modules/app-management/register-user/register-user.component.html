@@ -1,4 +1,6 @@
-<form [formGroup] = "userRegistrationForm" (ngSubmit)="submit()">
+
+<div class = 'leftContainer'>
+    <form [formGroup] = "userRegistrationForm" (ngSubmit)="submit()">
         <div class='inlineParameters formTitleContainer'>
             <img src = "../../../../assets/images_design/registeru_user_icon.png" class='registerUserIcon'>
             <span class='formTitle'>Registrovanie uživateľa</span>
@@ -26,9 +28,50 @@
     
         <!-- submit button -->
         <div class='inlineParameters'>
-            <button mat-raised-button color="primary" id="sendingButton"  type="submit">
+            <button mat-raised-button color="primary" class="sendingButton"  type="submit">
                     Odoslať
             </button>
         </div>
-    
     </form>
+</div>
+
+
+
+<!--
+<div class = 'rightContainer'>
+    <div class = 'formInformationContainerSubcontent smallerContent'>
+        <span class='formTitleSmall' id='detailTitle'>
+            <img src = '../../../../assets/images_design/research.png' class='icon'/>
+            Detaily uživateľa
+        </span>
+
+
+        <li class='informationsContainer topspace' *ngIf="firstname.value !== '' ">
+            <div class='informationTitle'>Meno uživateľa</div>
+            <ul class='informationsHolder'>
+                <li > {{firstname.value}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="lastname.value !== '' ">
+            <div class='informationTitle'>Priezvisko uživateľa</div>
+            <ul class='informationsHolder'>
+                <li > {{lastname.value}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="username.value !== '' ">
+            <div class='informationTitle'>Username uživateľa</div>
+            <ul class='informationsHolder'>
+                <li > {{username.value}} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="email.value !== '' ">
+            <div class='informationTitle'>Email uživateľa</div>
+            <ul class='informationsHolder'>
+                <li > {{email.value}}</li> 
+            </ul>
+        </li>
+
+    </div>
+</div>-->

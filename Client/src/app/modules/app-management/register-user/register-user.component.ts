@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { UserRegistration } from 'app/shared/models/User';
+import { UserService } from 'app/core/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register-user',
@@ -10,7 +13,7 @@ export class RegisterUserComponent implements OnInit {
 
   userRegistrationForm: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) { }
+  constructor(private formBuilder: FormBuilder, private userService: UserService) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -40,7 +43,24 @@ export class RegisterUserComponent implements OnInit {
     }
     
     const formValues = this.userRegistrationForm.value;
-    console.log(formValues);
+    const userRegistraion: UserRegistration = {
+      username : formValues.username,
+      firstName : formValues.firstname,
+      lastName : formValues.lastname,
+      email : formValues.email
+    }
+
+    Swal.fire({ text: "Naozaj chcetete vytvoriť uživateľa ? ", icon: 'warning', showCancelButton: true,
+      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
+    }).then((res) => {
+      if(res.value){
+        Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie uživateľa bolo zaslané', showConfirmButton: false, timer: 1500 })
+        this.userService.registerUser(userRegistraion).subscribe(x => {
+          Swal.fire({ position: 'top-end',icon: 'success', text: 'Uživateľ bol zaregistrovaný, emailom sa bude notifikovať', showConfirmButton: false, timer: 1500 })
+          this.userRegistrationForm.reset();
+        })
+      }
+    });
   }
 
   get firstname(){

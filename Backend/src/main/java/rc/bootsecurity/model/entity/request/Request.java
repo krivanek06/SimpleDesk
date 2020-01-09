@@ -55,12 +55,12 @@ public abstract class Request {
     @JoinColumn(name = "type_id")
     private ModuleType moduleType;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    /*@ManyToMany(fetch = FetchType.LAZY)
     @EqualsAndHashCode.Exclude
     @JoinTable(name = "tbl_document_to_requests",
             joinColumns = { @JoinColumn(name = "request_id")},
             inverseJoinColumns = { @JoinColumn(name = "document_id")})
-    private List<Document> documents;
+    private List<Document> documents;*/
 
     // users ------------------------
     @ManyToOne(fetch = FetchType.EAGER)

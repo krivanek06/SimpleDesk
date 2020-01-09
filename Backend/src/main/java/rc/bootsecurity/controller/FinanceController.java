@@ -48,5 +48,15 @@ public class FinanceController {
                 ,HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("secure/types")
+    public List<FinanceTypeDTO> getFinanceTypes(){
+        try {
+            return this.financeService.getFinanceTypesDTO();
+        } catch (Exception e) {
+            LOGGER.error("Method getFinanceTypesToSubmitForLoggedInUser failed, error : " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+
 
 }

@@ -1,0 +1,15 @@
+@import "../app-management.component.scss"; 
+@import "../../../shared/customCss/SideTablePrintScss.scss";
+
+.leftContainer{
+    width: 60%;
+    float: left;
+}
+
+
+.formInformationContainer{
+    float: left;
+    width: 45%;
+    margin-right: 15px;
+    margin-bottom: 5px;
+}

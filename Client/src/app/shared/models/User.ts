@@ -11,5 +11,12 @@ export interface User{
     dateEnding: string,
 }
 
+export interface UserRegistration{
+    username: string,
+    firstName: string,
+    lastName: string,
+    email: string,
+}
+
 
 

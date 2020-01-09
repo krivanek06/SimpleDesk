@@ -26,7 +26,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     private generalError(error : string){
         Swal.fire({
             icon: 'error',
-            text: 'Požiadavka zlahala, chyba hlášky : ' + error,
+            text: 'Požiadavka zlyhala, chyba hlášky : ' + error,
           })
     }
 

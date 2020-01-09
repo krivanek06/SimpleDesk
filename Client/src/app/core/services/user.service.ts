@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { JWToken } from 'app/shared/models/JWToken';
-import { User } from 'app/shared/models/User';
+import { User, UserRegistration } from 'app/shared/models/User';
 import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { tap, mapTo, catchError } from 'rxjs/operators';
 import { ImageDTO } from 'app/shared/models/ImageDTO';
 import { UserSimple } from 'app/shared/models/RequestDetails';
+import { UserSimpleDTO } from 'app/shared/models/Group';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +65,18 @@ export class UserService {
       photoBytes: this.user.photoBytes,
     }
     return user;
+  }
+
+
+  // endpoints
+  public registerUser(user : UserRegistration):Observable<any> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post(environment.apiUrl + "user/registration", user , {headers: headers});
+  } 
+
+  public getAllUsers(): Observable<UserSimpleDTO[]>{
+    console.log('getAllUsers')
+    return this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/all");
   }
 
 }

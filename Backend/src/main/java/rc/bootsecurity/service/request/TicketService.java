@@ -37,10 +37,7 @@ public class TicketService extends RequestStateService{
     }
 
     public List<TicketSubtype> getTicketSubtypesForTicketType(String ticketTypeName){
-        TicketType ticketType = this.ticketTypeRepository.findByName(ticketTypeName);
-        List<TicketSubtype> ticketSubtypeList = this.ticketSubtypeRepository.findAllByTicketType(ticketType);
-
-        return ticketSubtypeList;
+        return this.ticketSubtypeRepository.findAllByTicketType(this.ticketTypeRepository.findByName(ticketTypeName));
     }
 
 

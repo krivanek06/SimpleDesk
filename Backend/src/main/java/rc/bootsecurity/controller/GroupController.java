@@ -5,16 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.model.dto.GroupContainerDTO;
-import rc.bootsecurity.model.dto.GroupDTO;
+import org.springframework.web.bind.annotation.*;
+import rc.bootsecurity.model.dto.*;
 import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.request.ReportService;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/group")
@@ -32,12 +29,99 @@ public class GroupController {
         } catch (Exception e) {
             LOGGER.error("Failed method getGroupDetails for group: " + groupName+ ", error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní detailov skupiny " + groupName + ", kontaktujte administrátora." ,
-                HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní detailov skupiny " +
+                groupName + ", kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @GetMapping
     public GroupContainerDTO getAllInvolvedGroupsName(){
         return this.groupService.getAllGroupsForLoggedInUser();
     }
+
+
+
+    @PutMapping("manage/{name}/modifyUsers")
+    public ResponseEntity<?> modifyUsers(@PathVariable String name , @RequestBody List<UserSimpleDTO> users){
+        try {
+            this.groupService.modifyUsersInvolvedInGroupAndSave(name, users);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("manage/{name}/modifyWatchedUsers")
+    public ResponseEntity<?> modifyWatchedUsers(@PathVariable String name , @RequestBody List<UserSimpleDTO> users){
+        try {
+            this.groupService.modifyUsersWatchGroupActivityAndSave(name, users);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("manage/{name}/modifyManager")
+    public ResponseEntity<?> modifyManager(@PathVariable String name , @RequestBody UserSimpleDTO manager){
+        try {
+            this.groupService.modifyManagerInGroupAndSave(name, manager);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("manage/{name}/description")
+    public ResponseEntity<?> modifyDescription(@PathVariable String name , @RequestBody String description){
+        try {
+            this.groupService.modifyGroupDescription(name, description);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to modify group description, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani opisu skupny",HttpStatus.BAD_REQUEST);
+    }
+
+
+    /* Available only for authorized solvers -> authorization type privilege management */
+    @PostMapping("secure/manage/registration")
+    public ResponseEntity<?> registerGroup(@RequestBody GroupDTO groupDTO){
+        try {
+            this.groupService.registerGroup(groupDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to register group, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie skupiny",HttpStatus.BAD_REQUEST);
+    }
+
+    /* Available only for authorized solvers -> authorization type privilege management */
+    @PutMapping("secure/manage/{name}/modifyPrivileges")
+    public ResponseEntity<?> modifyPrivileges(@PathVariable String name , @RequestBody ApplicationPrivilegeDTO applicationPrivilegeDTO){
+        try {
+            this.groupService.modifyGroupPrivileges(name, applicationPrivilegeDTO);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to modify group privileges, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani pravomoci skupny",HttpStatus.BAD_REQUEST);
+    }
+
+    /* Available only for authorized solvers -> authorization type privilege management */
+    @DeleteMapping("secure/manage/{name}/removeGroup")
+    public ResponseEntity<?> removeGroup(@PathVariable String name){
+        try {
+            this.groupService.removeGroup(name);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
+    }
+
+
+
+
 }

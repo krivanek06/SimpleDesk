@@ -1,1 +1,258 @@
-<p>register-group works!</p>
+<div class = 'leftContainer'>
+    <form [formGroup] = "groupRegistrationForm" (ngSubmit)="submit()">
+        <div class='inlineParameters formTitleContainer'>
+            <img src = "../../../../assets/images_design/registeru_user_icon.png" class='registerUserIcon'>
+            <span class='formTitle'>Registrovanie skupiny</span>
+        </div>
+
+       
+        <div class = 'formInformationContainer'>
+             <!-- information -->
+            <div class = 'formInformationContainerSubcontent'>
+                <span class='formTitleSmall'>
+                    <img src = '../../../../assets/images_design/info.png' class='icon'/>
+                    Informácie skupiny
+                </span>
+                
+                <mat-form-field  class='inlineParameters'>
+                    <input matInput placeholder="Meno skupiny" formControlName = "groupName">
+                    <mat-error *ngIf="groupName.invalid">  Prosím zadefinujte meno skupiny</mat-error>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters'>
+                    <input  matInput placeholder="Email skupiny" formControlName = "groupEmail">
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters'>
+                    <textarea  matInput placeholder="Popis skupiny" formControlName = "groupDescription"></textarea>
+                    <mat-error *ngIf="groupDescription.invalid">  Prosím zadefinujte krátky popis skupiny, minimálne 10 znakov</mat-error>
+                </mat-form-field>
+                <hr>
+            </div>
+
+            <!-- user selection -->
+            <div class = 'formInformationContainerSubcontent'>
+                <span class='formTitleSmall'>
+                    <img src = '../../../../assets/images_design/groups_icon_2.png' class='icon'/>
+                    Uživatelia skupiny
+                </span>
+
+                <mat-form-field class='inlineParameters' >
+                    <mat-label>Manager skupiny</mat-label>
+                    <mat-select formControlName="groupManager"   >
+                        <mat-option *ngFor = "let user of allAvailableUsers" [value] = "user">
+                                {{ user.firstName }}  {{ user.lastName }}
+                        </mat-option>
+
+                        <mat-error *ngIf="groupManager.invalid">  Prosím vyberte menežéra skupiny</mat-error>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' >
+                    <mat-label>Sledovatelia skupiny</mat-label>
+                    <mat-select formControlName="usersWatchGroup" multiple >
+                        <mat-option *ngFor = "let user of allAvailableUsers" [value] = "user">
+                                {{ user.firstName }}  {{ user.lastName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' >
+                    <mat-label>Členovia skupiny</mat-label>
+                    <mat-select formControlName="usersInGroup"  multiple >
+                        <mat-option *ngFor = "let user of allAvailableUsers" [value] = "user">
+                                {{ user.firstName }}  {{ user.lastName }}
+                        </mat-option>
+
+                        <mat-error *ngIf="usersInGroup.invalid">  Prosím vyberte členov do skupiny</mat-error>
+                    </mat-select>
+                </mat-form-field>
+                <hr>
+            </div>
+        </div>
+
+
+
+
+
+
+
+        <!-- privileges -->
+        <div class = 'formInformationContainer'>
+            <div class = 'formInformationContainerSubcontent'>
+                <span class='formTitleSmall'>
+                    <img src = '../../../../assets/images_design/checkmark.png' class='icon'/>
+                    Právomoc skupiny
+                </span>
+
+                <mat-form-field class='inlineParameters' >
+                    <mat-label>Moduly na používanie</mat-label>
+                    <mat-select formControlName="moduleTypesToUse" multiple (selectionChange)= "changeModuleTypesToUse()">
+                        <mat-option value = "Ticket"> Tikety </mat-option>
+                        <mat-option value = "Report"> Reporty </mat-option>
+                        <mat-option value = "Finance"> Financie </mat-option>
+                        <mat-option value = "Privilege"> Oprávnenie uživateĺov </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' *ngIf = "moduleTypesToUse.value !== null && moduleTypesToUse.value.includes('Finance')" multiple>
+                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-select formControlName="submitFinanceRequests" multiple>
+                        <mat-option *ngFor="let financeType of financeTypes" [value] = "financeType.name"> 
+                            {{ financeType.name }} 
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                
+                <mat-form-field class='inlineParameters' >
+                    <mat-label>Požiadavky na riešenie</mat-label>
+                    <mat-select formControlName="requestTypesToSolve" multiple (selectionChange)= "changeTicketTypeToSolve()">
+                        <mat-option value = "Ticket"> Tikety </mat-option>
+                        <mat-option value = "Report"> Reporty </mat-option>
+                        <mat-option value = "Finance"> Financie </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+
+                <mat-form-field class='inlineParameters' *ngIf = "requestTypesToSolve.value != null && requestTypesToSolve.value.includes('Ticket')">
+                    <mat-label>Tikety na riešenie</mat-label>
+                    <mat-select  formControlName="solveTickets" multiple (selectionChange)= "changeTicketTypeToSolve()">
+                        <mat-option value = "Software"> Software </mat-option>
+                        <mat-option value = "Hardware"> Hardware </mat-option>
+                        <mat-option value = "Server"> Server </mat-option>
+                        <mat-option value = "Užívateľ"> Užívateľ </mat-option>
+                        <mat-option value = "Iné"> Iné </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Software')" multiple>
+                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-select formControlName="solveSoftware"  multiple>
+                        <mat-option *ngFor="let software of softwares" [value] = "software.name"> 
+                            {{ software.name }} 
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Hardware')" multiple>
+                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-select formControlName="solveHardware"  multiple>
+                        <mat-option *ngFor="let hardware of hardwares" [value] = "hardware.name"> 
+                            {{ hardware.name }} 
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Server')" multiple>
+                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-select formControlName="solveServer"  multiple>
+                        <mat-option *ngFor="let server of servers" [value] = "server.name"> 
+                            {{ server.name }} 
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <hr>
+            </div>   
+        </div>
+
+        <button mat-raised-button color="primary" class="sendingButton"  type="submit">
+            Odoslať
+        </button>
+    </form>
+</div>
+
+
+<div class = 'rightContainer'>
+    <div class = 'formInformationContainerSubcontent smallerContent'>
+        <span class='formTitleSmall' id='detailTitle'>
+            <img src = '../../../../assets/images_design/research.png' class='icon'/>
+            Detaily skupiny
+        </span>
+
+
+        <li class='informationsContainer topspace' *ngIf="groupName.value !== '' ">
+            <div class='informationTitle'>Meno skupiny</div>
+            <ul class='informationsHolder'>
+                <li > {{groupName.value}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="groupEmail.value !== '' ">
+            <div class='informationTitle'>Email skupiny</div>
+            <ul class='informationsHolder'>
+                <li > {{groupEmail.value}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="groupDescription.value !== '' ">
+            <div class='informationTitle'>Popis skupiny</div>
+            <ul class='informationsHolder'>
+                <li > {{groupDescription.value}} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="groupManager.value !== null ">
+            <div class='informationTitle'>Manažér</div>
+            <ul class='informationsHolder'>
+                <li > {{groupManager.value.firstName}} {{groupManager.value.lastName}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="usersWatchGroup.value !== null ">
+            <div class='informationTitle'>Sledovatelia</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let user of usersWatchGroup.value'> {{user.firstName}} {{user.lastName}} </li> 
+            </ul>
+        </li>
+
+        <li class='informationsContainer' *ngIf="usersInGroup.value !== null ">
+            <div class='informationTitle'>Členovia</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let user of usersInGroup.value'> {{user.firstName}} {{user.lastName}} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="moduleTypesToUse.value !== null ">
+            <div class='informationTitle'>Používanie modulov</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of moduleTypesToUse.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="submitFinanceRequests.value !== null ">
+            <div class='informationTitle'>Zasielanie financií</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of submitFinanceRequests.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="requestTypesToSolve.value !== null ">
+            <div class='informationTitle'>Riešenie požiadaviek</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of requestTypesToSolve.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="solveTickets.value !== null ">
+            <div class='informationTitle'>Riešenie typov tiketov</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of solveTickets.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="solveSoftware.value !== null ">
+            <div class='informationTitle'>Riešenie typov software</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of solveSoftware.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="solveHardware.value !== null ">
+            <div class='informationTitle'>Riešenie typov hardware</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of solveHardware.value'> {{ type }} </li> 
+            </ul>
+        </li>
+        <li class='informationsContainer' *ngIf="solveServer.value !== null ">
+            <div class='informationTitle'>Riešenie typov server</div>
+            <ul class='informationsHolder'>
+                <li *ngFor='let type of solveServer.value'> {{ type }} </li> 
+            </ul>
+        </li>
+
+    </div>
+</div>

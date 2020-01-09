@@ -45,7 +45,7 @@ public class Group {
     private Set<User> usersWatchingGroupActivity;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group") // orphanRemoval=true, cascade = CascadeType.PERSIST
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<TicketPrivileges> ticketPrivilegesList;
 
     @EqualsAndHashCode.Exclude
