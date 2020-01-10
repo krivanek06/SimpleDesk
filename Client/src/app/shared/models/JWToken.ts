@@ -12,8 +12,8 @@ export interface JWToken{
     TICKET_SOFTWARE_PRIVILEGES: string[],
     TICKET_HARDWARE_PRIVILEGES: string[]
     TICKET_SERVER_PRIVILEGES: string[],
-    TICKET_USER_PRIVILEGES: boolean,
-    TICKET_OTHER_PRIVILEGES: boolean,
+    TICKET_USER_PRIVILEGES: string[],
+    TICKET_OTHER_PRIVILEGES: string[],
     
       
       

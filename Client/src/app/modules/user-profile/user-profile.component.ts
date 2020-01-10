@@ -32,33 +32,27 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
 
   private initUserPrivileges(): void{
     this.authService.getDecodedToken().subscribe(token =>{
-      console.log(token);
-      this.userPrivileges.FINANCE_TYPE_TO_SUBMIT = token.FINANCE_TYPE_TO_SUBMIT;
-      this.userPrivileges.MODULE_TYPES_TO_USE = token.MODULE_TYPES_TO_USE;
-      this.userPrivileges.REQUEST_TYPE_TO_SOLVE = token.REQUEST_TYPE_TO_SOLVE;
-      this.userPrivileges.TICKET_HARDWARE_PRIVILEGES = token.TICKET_HARDWARE_PRIVILEGES;
-      this.userPrivileges.TICKET_OTHER_PRIVILEGES = token.TICKET_OTHER_PRIVILEGES;
-      this.userPrivileges.TICKET_SERVER_PRIVILEGES = token.TICKET_SERVER_PRIVILEGES;
-      this.userPrivileges.TICKET_SOFTWARE_PRIVILEGES = token.TICKET_SOFTWARE_PRIVILEGES;
-      this.userPrivileges.TICKET_USER_PRIVILEGES = token.TICKET_USER_PRIVILEGES;
+
+      let priv : ApplicationPrivilege = {
+        moduleTypesToUse : token.MODULE_TYPES_TO_USE,
+        requestTypesToSolve : token.REQUEST_TYPE_TO_SOLVE,
+        submitFinanceRequests : token.FINANCE_TYPE_TO_SUBMIT,
+        solveTickets : {
+          Software : token.TICKET_SOFTWARE_PRIVILEGES,
+          Hardware : token.TICKET_HARDWARE_PRIVILEGES,
+          Server :  token.TICKET_SERVER_PRIVILEGES,
+          User : token.TICKET_USER_PRIVILEGES,
+          Other : token.TICKET_OTHER_PRIVILEGES
+        }
+      };
+
+      this.userPrivileges.disabledPrivileges = priv;
     })
   }
 
 
   private initGroupPrivileges(group: Group):void{
-      let priv : ApplicationPrivilege = group.applicationPrivilegeDTO;
-      console.log(priv)
-      this.groupPrivileges.FINANCE_TYPE_TO_SUBMIT = priv.submitFinanceRequests !== undefined ?  priv.submitFinanceRequests : [];
-      this.groupPrivileges.MODULE_TYPES_TO_USE = priv.moduleTypesToUse !== undefined ? priv.moduleTypesToUse : [];
-      this.groupPrivileges.REQUEST_TYPE_TO_SOLVE = priv.requestTypesToSolve !== undefined ? priv.requestTypesToSolve : [];
-
-      this.groupPrivileges.TICKET_HARDWARE_PRIVILEGES = priv.solveTickets["Hardware"] !== undefined ? priv.solveTickets["Hardware"]: [];
-      this.groupPrivileges.TICKET_OTHER_PRIVILEGES = priv.solveTickets["Iné"] != undefined ? priv.solveTickets["Iné"] : false ;
-      this.groupPrivileges.TICKET_SERVER_PRIVILEGES = priv.solveTickets["Server"] != undefined ? priv.solveTickets["Server"] : [] ;
-      this.groupPrivileges.TICKET_SOFTWARE_PRIVILEGES = priv.solveTickets["Software"] != undefined ? priv.solveTickets["Software"] :[] ;
-      this.groupPrivileges.TICKET_USER_PRIVILEGES = priv.solveTickets["Užívateľ"] != undefined ? priv.solveTickets["Užívateľ"] : false;
-      this.groupPrivileges.name = "skupiny";
-      
+      this.groupPrivileges.disabledPrivileges = group.applicationPrivilegeDTO;
       this.groupDetails.group = group;
   }
 

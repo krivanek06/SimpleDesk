@@ -75,7 +75,6 @@ export class UserService {
   } 
 
   public getAllUsers(): Observable<UserSimpleDTO[]>{
-    console.log('getAllUsers')
     return this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/all");
   }
 

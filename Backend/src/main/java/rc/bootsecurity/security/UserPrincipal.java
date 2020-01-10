@@ -59,44 +59,35 @@ public class UserPrincipal implements UserDetails {
     }
 
     public String[] getModuleTypesToUse(){
-        return (getApplicationPrivilegeDTO().getModuleTypesToUse() != null) ?
-                this.getApplicationPrivilegeDTO().getModuleTypesToUse().toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getModuleTypesToUse().toArray(String[]::new);
     }
 
     public String[] getRequestTypesToSolve(){
-        return (getApplicationPrivilegeDTO().getRequestTypesToSolve() != null) ?
-                this.getApplicationPrivilegeDTO().getRequestTypesToSolve().toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getRequestTypesToSolve().toArray(String[]::new);
     }
 
     public String[] getFinanceTypeToSubmit(){
-        return (getApplicationPrivilegeDTO().getSubmitFinanceRequests() != null) ?
-                this.getApplicationPrivilegeDTO().getSubmitFinanceRequests().toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getSubmitFinanceRequests().toArray(String[]::new);
     }
 
     public String[] getSolveTicketsTypeSoftware(){
-        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
-                this.getApplicationPrivilegeDTO().getSolveTickets()
-                        .getOrDefault(TICKET_TYPE.Software.name(), new ArrayList<>()).toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getSolveTickets().get(TICKET_TYPE.Software.name()).toArray(String[]::new);
     }
 
     public String[] getSolveTicketsTypeHardware(){
-        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
-                this.getApplicationPrivilegeDTO().getSolveTickets()
-                        .getOrDefault(TICKET_TYPE.Hardware.name(), new ArrayList<>()).toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getSolveTickets().get(TICKET_TYPE.Hardware.name()).toArray(String[]::new);
     }
 
     public String[] getSolveTicketsTypeServer(){
-        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) ?
-                this.getApplicationPrivilegeDTO().getSolveTickets()
-                        .getOrDefault(TICKET_TYPE.Server.name(), new ArrayList<>()).toArray(String[]::new) : null;
+        return this.getApplicationPrivilegeDTO().getSolveTickets().get(TICKET_TYPE.Server.name()).toArray(String[]::new);
     }
 
-    public boolean getSolveTicketsTypeUser(){
-        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) && getApplicationPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Užívateľ.name());
-    }
+    public String[] getSolveTicketsTypeUser(){
+        return this.getApplicationPrivilegeDTO().getSolveTickets().get(TICKET_TYPE.User.name()).toArray(String[]::new);
+     }
 
-    public boolean getSolveTicketsTypeOther(){
-        return (this.getApplicationPrivilegeDTO().getSolveTickets() != null) && getApplicationPrivilegeDTO().getSolveTickets().containsKey(TICKET_TYPE.Iné.name());
+    public String[] getSolveTicketsTypeOther(){
+        return this.getApplicationPrivilegeDTO().getSolveTickets().get(TICKET_TYPE.Other.name()).toArray(String[]::new);
     }
 
 

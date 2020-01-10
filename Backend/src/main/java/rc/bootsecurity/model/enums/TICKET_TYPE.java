@@ -5,7 +5,9 @@ public enum TICKET_TYPE {
     Hardware("Hardware"),
     Server("Server"),
     Užívateľ("Užívateľ"),
-    Iné("Iné");
+    User("User"),
+    Iné("Iné"),
+    Other("Other");
 
     private final String text;
 

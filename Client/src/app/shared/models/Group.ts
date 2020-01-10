@@ -1,3 +1,4 @@
+
 export interface Group{
     name: string,
     email: string,
@@ -24,5 +25,13 @@ export interface ApplicationPrivilege{
     moduleTypesToUse: string[],
     submitFinanceRequests: string[],
     requestTypesToSolve: string[],
-    solveTickets: Map<TicketPrivileges, string[]>
+    solveTickets: ticketPriv
+}
+
+interface ticketPriv{
+    Software : string[],
+    Hardware : string[],
+    Server : string[],
+    User : string[],
+    Other: string[],
 }

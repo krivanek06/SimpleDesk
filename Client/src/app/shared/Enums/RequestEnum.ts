@@ -1,4 +1,4 @@
-enum TicketPrivileges {
+export enum ticketPrivilegesEnum {
     Software = 'Software',
     Hardware = 'Hardware',
     Server = 'Server',

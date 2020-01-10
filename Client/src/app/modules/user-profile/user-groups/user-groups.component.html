@@ -25,8 +25,8 @@
             </ul>
         </li>
 
-        <li class='informationsContainer topspace'>
-            <div class='informationTitle'  *ngIf="groupContainer && groupContainer.userInGroups.length > 0">Člen skupín</div>
+        <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.userInGroups.length > 0">
+            <div class='informationTitle' >Člen skupín</div>
             <ul class='informationsHolder'> 
                 <li class='elevation'  *ngFor="let name of groupContainer.userInGroups" (click)="getGroupDetails(name)">
                     {{ name }} 

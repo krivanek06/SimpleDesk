@@ -62,6 +62,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         UserPrincipal principal = (UserPrincipal) authResult.getPrincipal();
         String[] authorities = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray(String[]::new);
+
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
@@ -74,8 +75,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 .withArrayClaim("TICKET_SOFTWARE_PRIVILEGES" , principal.getSolveTicketsTypeSoftware())
                 .withArrayClaim("TICKET_HARDWARE_PRIVILEGES" , principal.getSolveTicketsTypeHardware())
                 .withArrayClaim("TICKET_SERVER_PRIVILEGES" , principal.getSolveTicketsTypeServer())
-                .withClaim("TICKET_USER_PRIVILEGES" , principal.getSolveTicketsTypeUser() )
-                .withClaim("TICKET_OTHER_PRIVILEGES" , principal.getSolveTicketsTypeOther() )
+                .withArrayClaim("TICKET_USER_PRIVILEGES" , principal.getSolveTicketsTypeUser() )
+                .withArrayClaim("TICKET_OTHER_PRIVILEGES" , principal.getSolveTicketsTypeOther() )
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 
