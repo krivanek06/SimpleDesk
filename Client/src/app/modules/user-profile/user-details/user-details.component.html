@@ -1,38 +1,42 @@
-<div class='content'>   
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/information_icon.png" class="titleIcon"/>
-        Detaily uživateľa
-    </h3>
+<div class='rightContainer'>   
+    <div class = 'formInformationContainerSubcontent smallerContent'>
 
-    <div class='userInformations'>
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Avatar</div>
-            <ul>
-                <li class='information'>
+        <span class='formTitleSmall' >
+            <img src="../../../../assets/images_design/information_icon.png" class="icon"/>
+            Detaily uživateľa
+        </span>
+
+
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'>Avatar</div>
+            <ul class='informationsHolder'>
+                <li>
                     <img [src]="'data:image/jpeg;base64,'+userService.user.photoBytes" class='avatar' (click)="changeFrames()"/>
                 </li>
-            </ul>
+            </ul> 
         </li>
         
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Meno</div>
-            <ul ><li div class='information'> {{ userService.user.firstName }}</li> </ul>
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'>Meno</div>
+            <ul class='informationsHolder'><li > {{ userService.user.firstName }}</li> </ul>
         </li>
 
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Priezvisko</div>
-            <ul> <li class='information elevation'>{{ userService.user.lastName }}  </li></ul>
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'>Priezvisko</div>
+            <ul class='informationsHolder'> <li>{{ userService.user.lastName }}  </li></ul>
         </li>
 
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Email</div>
-            <ul> <li class='information elevation'>{{ userService.user.email }}  </li></ul>
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'>Email</div>
+            <ul class='informationsHolder'> <li>{{ userService.user.email }}  </li></ul>
         </li>
 
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Heslo</div>
-            <ul> <li class='information passwordChange' (click) = "changePassword()">zmeniť  </li></ul>
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'>Heslo</div>
+            <ul class='informationsHolder'> <li class='passwordChange' (click) = "changePassword()">zmeniť  </li></ul>
         </li>
+
+        <ngx-spinner><p style="font-size: 20px; color: white">Načítavanie...</p> </ngx-spinner>
+
     </div>
-    <ngx-spinner><p style="font-size: 20px; color: white">Načítavanie...</p> </ngx-spinner>
 </div>

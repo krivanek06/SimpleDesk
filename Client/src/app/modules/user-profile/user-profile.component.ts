@@ -32,6 +32,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
 
   private initUserPrivileges(): void{
     this.authService.getDecodedToken().subscribe(token =>{
+      console.log(token);
       this.userPrivileges.FINANCE_TYPE_TO_SUBMIT = token.FINANCE_TYPE_TO_SUBMIT;
       this.userPrivileges.MODULE_TYPES_TO_USE = token.MODULE_TYPES_TO_USE;
       this.userPrivileges.REQUEST_TYPE_TO_SOLVE = token.REQUEST_TYPE_TO_SOLVE;
@@ -46,6 +47,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
 
   private initGroupPrivileges(group: Group):void{
       let priv : ApplicationPrivilege = group.applicationPrivilegeDTO;
+      console.log(priv)
       this.groupPrivileges.FINANCE_TYPE_TO_SUBMIT = priv.submitFinanceRequests !== undefined ?  priv.submitFinanceRequests : [];
       this.groupPrivileges.MODULE_TYPES_TO_USE = priv.moduleTypesToUse !== undefined ? priv.moduleTypesToUse : [];
       this.groupPrivileges.REQUEST_TYPE_TO_SOLVE = priv.requestTypesToSolve !== undefined ? priv.requestTypesToSolve : [];

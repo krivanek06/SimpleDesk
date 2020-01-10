@@ -1,41 +1,38 @@
-<div class='content'>   
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/groups_icon.png" class="titleIcon"/>
-        Skupiny
-    </h3>
 
-    <div class='userInformations' *ngIf = 'groupContainer'>
-        <li class='userInformationsContainer'  *ngIf="groupContainer.managerOfGroups.length > 0"> 
-            <div class='informationAnswer'>Manažér skupín</div>
-            <ul class='ulSecondColl'>
-                <li class='information lineHeight elevation' 
-                    *ngFor="let name of groupContainer.managerOfGroups"
-                    (click)="getGroupDetails(name)"> 
+<div class='rightContainer'>  
+    <div class = 'formInformationContainerSubcontent smallerContent'>
+
+        <span class='formTitleSmall' >
+            <img src="../../../../assets/images_design/groups_icon.png" class="icon"/>
+            Skupiny
+        </span>
+
+        <li class='informationsContainer topspace'  *ngIf="groupContainer && groupContainer.managerOfGroups.length > 0"> 
+            <div class='informationTitle'>Manažér skupín</div>
+            <ul class='informationsHolder'>
+                <li class='elevation'  *ngFor="let name of groupContainer.managerOfGroups" (click)="getGroupDetails(name)"> 
                     {{ name }}  
                 </li>
             </ul>
         </li>
 
-        <li class='userInformationsContainer' *ngIf="groupContainer.watchedGroupActivity.length > 0">
-            <div class='informationAnswer'>Sledované skupiny</div>
-            <ul class='ulSecondColl'>
-                <li div class='information lineHeight elevation' 
-                    *ngFor="let name of groupContainer.watchedGroupActivity"
-                    (click)="getGroupDetails(name)"> 
+        <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.watchedGroupActivity.length > 0">
+            <div class='informationTitle'>Sledované skupiny</div>
+            <ul class='informationsHolder'>
+                <li div class='elevation'  *ngFor="let name of groupContainer.watchedGroupActivity" (click)="getGroupDetails(name)"> 
                     {{ name }}
                 </li> 
             </ul>
         </li>
 
-        <li class='userInformationsContainer'>
-            <div class='informationAnswer'  *ngIf="groupContainer.userInGroups.length > 0">Člen skupín</div>
-            <ul class='ulSecondColl'> 
-                <li class='information lineHeight elevation' 
-                    *ngFor="let name of groupContainer.userInGroups"
-                    (click)="getGroupDetails(name)">
+        <li class='informationsContainer topspace'>
+            <div class='informationTitle'  *ngIf="groupContainer && groupContainer.userInGroups.length > 0">Člen skupín</div>
+            <ul class='informationsHolder'> 
+                <li class='elevation'  *ngFor="let name of groupContainer.userInGroups" (click)="getGroupDetails(name)">
                     {{ name }} 
                 </li>
             </ul>
         </li>
+
     </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
+import { ApplicationPrivilege } from 'app/shared/models/Group';
 
 @Component({
   selector: 'app-privileges',
@@ -17,6 +18,9 @@ export class PrivilegesComponent implements OnInit {
   public TICKET_SERVER_PRIVILEGES: string[]= [] ;
   public TICKET_USER_PRIVILEGES: boolean = false;
   public TICKET_OTHER_PRIVILEGES: boolean = false;
+
+  public enabledPrivileges: ApplicationPrivilege;
+  public disabledPrivileges: ApplicationPrivilege;
 
   constructor() { }
 

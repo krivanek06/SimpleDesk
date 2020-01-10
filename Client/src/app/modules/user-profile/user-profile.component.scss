@@ -6,66 +6,9 @@
     font-size: 14px;
 }
 
-li {
-    display: flex;
-    text-align: left;
-    line-height: 0;
-   /* margin-bottom: 4px;*/
-  }
-  
-.information {
-    color:#676666;
-    margin-right: 5px;
-  }
-
-.detailTitle{
-    font-weight: bold;
-    color:#8a8a8a;
-    margin-bottom: 15px;
-    font-size: 22px;
-}
-
-.informationAnswer{
-    flex: 0 0 200px;
-    font-weight: bold;
-    margin-bottom: 10px;
-    margin-top: 8px;
-}
-
-
-.lineHeight{
-    line-height: 16px;
-}
-
-.ulSecondColl{
-    width: fit-content;
-}
-
-.userInformationsContainer{
-    /*border-bottom: 1px solid #d6d2d2;*/
-    margin-left: 15px;
-}
-
 
 .windowLeft{
     width: 40%;
     float: left;
     margin-left: 7%;
 }
-
-.content{
-    margin-bottom: 15px;
-}
-
-.titleIcon{
-    width: 25px;
-    margin-top: -5px;
-}
-
-.avatarsContent{
-    width: 90%;
-    float: left;
-    margin-left: 7%;
-}
-
-

@@ -24,5 +24,5 @@ export interface ApplicationPrivilege{
     moduleTypesToUse: string[],
     submitFinanceRequests: string[],
     requestTypesToSolve: string[],
-    solveTickets: any //Map<string, string[]>,
+    solveTickets: Map<TicketPrivileges, string[]>
 }

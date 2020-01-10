@@ -38,7 +38,7 @@
                 </span>
 
                 <mat-form-field class='inlineParameters' >
-                    <mat-label>Manager skupiny</mat-label>
+                    <mat-label>Menežér skupiny</mat-label>
                     <mat-select formControlName="groupManager"   >
                         <mat-option *ngFor = "let user of allAvailableUsers" [value] = "user">
                                 {{ user.firstName }}  {{ user.lastName }}
@@ -169,7 +169,6 @@
             <img src = '../../../../assets/images_design/research.png' class='icon'/>
             Detaily skupiny
         </span>
-
 
         <li class='informationsContainer topspace' *ngIf="groupName.value !== '' ">
             <div class='informationTitle'>Meno skupiny</div>

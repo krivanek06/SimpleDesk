@@ -3,8 +3,13 @@
 }
 
 .smallerContent{
-    font-size: 13px;
-    border-left: 1px solid #bababa;
+    font-size: 14px;
+}
+
+.formTitleSmall{
+    font-size: 19px;
+    font-weight: bold;
+    color:#818181;
 }
 
 
@@ -12,6 +17,7 @@
     width: 25px;
     height: 25px;
     margin-right: 5px;
+    margin-top: -8px;
 }
 
 #detailTitle{
@@ -24,16 +30,11 @@
 }
 
 .rightContainer{
-     float: left;
-     margin-left: 3%;
-     max-width: 28%;
-     margin-top: 30px;
- }
-
+    position: relative;
+}
 
 .informationsContainer{
     margin-left: 15px;
-    border-bottom: 1px solid #bababa;
 }
 
 .informationTitle{
