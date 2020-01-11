@@ -15,9 +15,18 @@ export class GroupService {
     return this.http.get<GroupContainer>(environment.apiUrl + "group");
   }
 
+  public getAllGroups(): Observable<string[]>{
+    return this.http.get<string[]>(environment.apiUrl + "group/secure/manage/getAll");
+  }
+
   public getGroupDetails(groupName: string):Observable<Group>{
     let params = new HttpParams().set('groupName' , groupName) ;
     return this.http.get<Group>(environment.apiUrl + "group/details", {params: params});
+  }
+
+  public getGroupDetailsWithUnsetPrivileges(groupName: string):Observable<Group>{
+    let params = new HttpParams().set('groupName' , groupName) ;
+    return this.http.get<Group>(environment.apiUrl + "group/secure/manage/details", {params: params});
   }
 
   public registerGroup(group: Group): Observable<any>{

@@ -1,1 +1,31 @@
-<p>user-group-management works!</p>
+
+
+
+<div class = 'container'>
+    <mat-form-field >
+        <mat-label>Vyberte skupinu</mat-label>
+        <mat-select (selectionChange)= "selectGroup($event.value)">
+            <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>
+        </mat-select>
+
+    </mat-form-field>
+
+</div>
+
+
+
+<div class = 'container leftLine'>
+    <div class = 'contanierTitle'>
+        <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>
+        <mat-form-field >
+            <mat-label>Vyberte skupinu</mat-label>
+            <mat-select (selectionChange)= "selectGroup($event.value)">
+                <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+    <app-group-details #groupDetails></app-group-details>
+    <app-privileges #groupPrivileges ></app-privileges>
+</div>
+
+

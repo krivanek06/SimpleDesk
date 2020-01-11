@@ -45,7 +45,6 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
           Other : token.TICKET_OTHER_PRIVILEGES
         }
       };
-
       this.userPrivileges.disabledPrivileges = priv;
     })
   }
@@ -53,6 +52,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
 
   private initGroupPrivileges(group: Group):void{
       this.groupPrivileges.disabledPrivileges = group.applicationPrivilegeDTO;
+      this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
   }
 

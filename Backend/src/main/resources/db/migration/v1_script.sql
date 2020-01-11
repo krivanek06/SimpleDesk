@@ -456,9 +456,41 @@ select json_build_object(
 $$ LANGUAGE sql;
 
 
+
+drop function if exists get_all_existing_privileges();
+CREATE or replace FUNCTION get_all_existing_privileges()
+    RETURNS varchar AS
+$$
+select json_build_object(
+'ticketTypeToSolve' ,
+    (select jsonb_agg(ticket_priv) from(
+    select  json_build_object(tbl_ticket_types.name,
+    jsonb_agg(distinct tbl_ticket_privileges.application_name)) as ticket_priv
+    from tbl_ticket_privileges
+    left join tbl_ticket_types on tbl_ticket_types.id = tbl_ticket_privileges.ticket_type_id
+    group by tbl_ticket_types.name) as tbl) ,
+'moduleTypeToUse' ,
+    (select jsonb_agg( distinct t.name) from (
+    select  tbl_module_type.name from tbl_module_type
+    inner join tbl_module_type_to_use on tbl_module_type.id = tbl_module_type_to_use.request_type_id ) as t),
+'requestTypeToSolve',
+    (select jsonb_agg(distinct t.name) from (
+    select tbl_module_type.name from tbl_module_type
+    inner join tbl_request_type_to_solve on tbl_module_type.id = tbl_request_type_to_solve.request_type_id ) as t),
+'financeTypeToSubmit',
+    (select jsonb_agg(distinct t.name) from (
+    select  tbl_finance_types.name from tbl_finance_types
+    inner join tbl_finance_type_privileges  on tbl_finance_types.id = tbl_finance_type_privileges.finance_type_id) as t))::varchar;
+$$ LANGUAGE sql;
+
+
+
+
+
+
 -- get all open requests on dashboard page
 drop function if exists get_requests_on_dashboard_for_user_varchar(varchar);
-CREATE FUNCTION get_requests_on_dashboard_for_user_varchar(searching_name varchar)
+CREATE OR REPLACE FUNCTION get_requests_on_dashboard_for_user_varchar(searching_name varchar)
 RETURNS varchar AS $$
 select json_build_object(
 -- my open requests

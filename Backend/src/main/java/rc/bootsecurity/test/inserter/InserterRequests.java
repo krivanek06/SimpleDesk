@@ -104,8 +104,8 @@ public class InserterRequests {
         TicketType ticketTypeSoftware = Creator.createTicketType(TICKET_TYPE.Software.name());
         TicketType ticketTypeHardware = Creator.createTicketType(TICKET_TYPE.Hardware.name());
         TicketType ticketTypeServer = Creator.createTicketType(TICKET_TYPE.Server.name());
-        TicketType ticketTypeUser = Creator.createTicketType(TICKET_TYPE.Užívateľ.name());
-        TicketType ticketTypeOther = Creator.createTicketType(TICKET_TYPE.Iné.name());
+        TicketType ticketTypeUser = Creator.createTicketType(TICKET_TYPE.User.name());
+        TicketType ticketTypeOther = Creator.createTicketType(TICKET_TYPE.Other.name());
         this.ticketTypeRepository.saveAll(List.of(ticketTypeSoftware, ticketTypeHardware,ticketTypeServer,ticketTypeUser,ticketTypeOther));
 
         List<TicketSubtype> software = List.of(Creator.createSoftwareSubtype(NAMES.SOFTWARE_1, ticketTypeSoftware),

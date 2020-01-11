@@ -243,8 +243,8 @@ public class RequestSimulationTest {
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
         TicketType ticketTypeServer = this.ticketTypeRepository.findByName(TICKET_TYPE.Server.name());
-        TicketType ticketTypeUser = this.ticketTypeRepository.findByName(TICKET_TYPE.Užívateľ.name());
-        TicketType ticketTypeOther = this.ticketTypeRepository.findByName(TICKET_TYPE.Iné.name());
+        TicketType ticketTypeUser = this.ticketTypeRepository.findByName(TICKET_TYPE.User.name());
+        TicketType ticketTypeOther = this.ticketTypeRepository.findByName(TICKET_TYPE.Other.name());
 
         Software software1 = this.softwareRepository.findByName(NAMES.SOFTWARE_1);
         Software software2 = this.softwareRepository.findByName(NAMES.SOFTWARE_2);
@@ -470,10 +470,10 @@ public class RequestSimulationTest {
         User user10 = this.userRepository.findByUsername("user10").get();
 
         RequestPosition position1 = this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name());
-        TicketType ticketTypeUser = this.ticketTypeRepository.findByName(TICKET_TYPE.Užívateľ.name());
+        TicketType ticketTypeUser = this.ticketTypeRepository.findByName(TICKET_TYPE.User.name());
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
-        TicketType ticketTypeOther = this.ticketTypeRepository.findByName(TICKET_TYPE.Iné.name());
+        TicketType ticketTypeOther = this.ticketTypeRepository.findByName(TICKET_TYPE.Other.name());
         ModuleType moduleTypeFinance = this.moduleTypeRepository.findByName(MODULE_TYPE.Financie.name());
         ModuleType moduleTypeReport = this.moduleTypeRepository.findByName(MODULE_TYPE.Report.name());
         ModuleType moduleTypeTicket = this.moduleTypeRepository.findByName(MODULE_TYPE.Ticket.name());
@@ -665,7 +665,7 @@ public class RequestSimulationTest {
                 MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name());
         assertThat(applicationPrivilegeDTO.getModuleTypesToUse()).containsExactlyInAnyOrder(MODULE_TYPE.Report.name(), MODULE_TYPE.Ticket.name());
         assertThat(applicationPrivilegeDTO.getSolveTickets().keySet()).containsExactlyInAnyOrder(TICKET_TYPE.Software.name(),
-                TICKET_TYPE.Hardware.name(), TICKET_TYPE.Užívateľ.name(), TICKET_TYPE.Server.name(), TICKET_TYPE.Iné.name());
+                TICKET_TYPE.Hardware.name(), TICKET_TYPE.User.name(), TICKET_TYPE.Server.name(), TICKET_TYPE.Other.name());
         assertThat(applicationPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.Server)).containsExactlyInAnyOrder(NAMES.SERVER_1, NAMES.SERVER_2);
         assertThat(applicationPrivilegeDTO.getSolveTickets().get(TICKET_TYPE.Software)).containsExactlyInAnyOrder(NAMES.SOFTWARE_1,
                 NAMES.SOFTWARE_2, NAMES.SOFTWARE_3, NAMES.SOFTWARE_4);

@@ -27,4 +27,6 @@ public class GroupDTO {
     private List<UserSimpleDTO> usersWatchGroup;
 
     private ApplicationPrivilegeDTO applicationPrivilegeDTO;
+
+    private ApplicationPrivilegeDTO unsetApplicationPrivilegeDTO;
 }

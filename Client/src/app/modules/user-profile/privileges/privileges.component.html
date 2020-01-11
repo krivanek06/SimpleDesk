@@ -1,67 +1,151 @@
-<div class = 'rightContainer' *ngIf='enabledPrivileges || disabledPrivileges'> 
+<div class = 'rightContainer' *ngIf='name'> 
     <div class = 'formInformationContainerSubcontent smallerContent'>
         <span class='formTitleSmall' >
             <img src="../../../../assets/images_design/privilege_icon.png" class="icon"/>
-                Oprávnenia {{ name }} 
+               <span class='formTitleSmallText'> Oprávnenia {{ name }} </span>
+            
+            <button mat-button color="primary" 
+                    (click) = 'saveButtonClicked()' 
+                    class = 'rightButton'
+                    *ngIf='activateUnableClick'>
+                Uložiť
+            </button>
+
+            <button mat-button color="warn" 
+                    (click) = 'resetButtonClicked()' 
+                    class = 'rightButton'
+                    *ngIf='activateUnableClick'>
+                Resetovať
+            </button>
+            
         </span>
 
     
-        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.moduleTypesToUse.length > 0 || disabledPrivileges?.moduleTypesToUse.length > 0'>
+        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges.moduleTypesToUse.length > 0 || disabledPrivileges.moduleTypesToUse.length > 0'>
             <div class='informationTitle'>Používanie modulov</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.moduleTypesToUse'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.moduleTypesToUse'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.moduleTypesToUse' class ='enabledPriv' 
+                        (click) = 'changeModuleTypeToUse(type)' > {{ type }} </li>  
+
+                <li *ngFor='let type of disabledPrivileges.moduleTypesToUse'  
+                    (click) = 'changeModuleTypeToUse(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick }' > {{ type }} </li>  
             </ul>
         </li>
-        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.submitFinanceRequests.length > 0 || disabledPrivileges?.submitFinanceRequests.length > 0' >
+        <li class='informationsContainer topspace' 
+        *ngIf ='enabledPrivileges.submitFinanceRequests?.length > 0 || disabledPrivileges.submitFinanceRequests.length > 0' 
+        [ngClass] = '{"unableClick" : activateUnableClick &&  !enabledPrivileges.requestTypesToSolve.includes("Financie") }'>
             <div class='informationTitle'>Zasielanie financií</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.submitFinanceRequests'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.submitFinanceRequests'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.submitFinanceRequests' class ='enabledPriv' 
+                        (click) = 'changesubmitFinanceRequests(type)'> {{ type }} </li>  
+
+                <li *ngFor='let type of disabledPrivileges.submitFinanceRequests'  
+                    (click) = 'changesubmitFinanceRequests(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick  && (enabledPrivileges.submitFinanceRequests !== null)
+                            && enabledPrivileges.requestTypesToSolve.includes("Financie")}'> {{ type }} </li>  
             </ul>
         </li>
-        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.requestTypesToSolve.length > 0 || disabledPrivileges?.requestTypesToSolve.length > 0'>
+        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges.requestTypesToSolve.length > 0 || disabledPrivileges.requestTypesToSolve.length > 0'>
             <div class='informationTitle'>Riešenie požiadávok</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.requestTypesToSolve'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.requestTypesToSolve'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.requestTypesToSolve' class ='enabledPriv' 
+                        (click) = 'changeRequestTypeToSolve(type)'> {{ type }} </li> 
+
+                <li *ngFor='let type of disabledPrivileges.requestTypesToSolve' 
+                    (click) = 'changeRequestTypeToSolve(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick }'> {{ type }} </li>  
             </ul>
         </li>
-        <li class='informationsContainer topspace' *ngIf ='canSolveTickets()'>
+        <li class='informationsContainer topspace' *ngIf ='canSolveTickets()'  
+            [ngClass] = '{"unableClick" : activateUnableClick &&  (!enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>
             <div class='informationTitle'>Riešenie tiketov</div>
             <ul class='informationsHolder'> 
-                <li *ngIf = 'enabledPrivileges?.solveTickets.Software.length > 0'>Softvér</li>
-                <li *ngIf = 'enabledPrivileges?.solveTickets.Hardware.length > 0'>Hardvér</li>
-                <li *ngIf = 'enabledPrivileges?.solveTickets.Server.length > 0'>Server</li>
-                <li *ngIf = 'enabledPrivileges?.solveTickets.User.length > 0'>Uživateľ</li>
-                <li *ngIf = 'enabledPrivileges?.solveTickets.Other.length > 0'>Iné</li>
+                <li *ngIf = 'activateUnableClick && !unableSolveSoftware()' 
+                    (click) = "changeSolveTicketsSoftwareAll()"  
+                    [ngClass] = '{ "enabledPriv" :  (enabledPrivileges.solveTickets.Software.length !== null &&
+                                enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>Softvér</li>
+                <li *ngIf = 'activateUnableClick &&  !unableSolveHardware()' 
+                    (click) = "changeSolveTicketsHardwareAll()"
+                    [ngClass] = '{ "enabledPriv" :  (enabledPrivileges.solveTickets.Hardware.length  !== null &&
+                                enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>Hardvér</li>
+                <li *ngIf = 'activateUnableClick &&  !unableSolveServer()' 
+                    (click) = "changeSolveTicketsServerAll()" 
+                    [ngClass] = '{ "enabledPriv" :  (enabledPrivileges.solveTickets.Server.length  !== null && 
+                                enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>Server</li>
+                <li *ngIf = 'activateUnableClick &&  !unableSolveUser()' 
+                    (click) = 'changeSolveTicketsUserAll()' 
+                    [ngClass] = '{ "enabledPriv" :  (enabledPrivileges.solveTickets.User.length  !== null &&
+                                enabledPrivileges.requestTypesToSolve.includes("Ticket"))}'>Uživateľ</li>
+                <li *ngIf = 'activateUnableClick &&  !unableSolveOther()' 
+                    (click) = 'changeSolveTicketsOtherAll()' 
+                    [ngClass] = '{ "enabledPriv" :  (enabledPrivileges.solveTickets.Other.length  !== null && 
+                                enabledPrivileges.requestTypesToSolve.includes("Ticket"))}'>Iné</li>
 
-                <li *ngIf = 'disabledPrivileges?.solveTickets.Software.length > 0'>Softvér</li>
-                <li *ngIf = 'disabledPrivileges?.solveTickets.Hardware.length > 0'>Hardvér</li>
-                <li *ngIf = 'disabledPrivileges?.solveTickets.Server.length > 0'>Server</li>
-                <li *ngIf = 'disabledPrivileges?.solveTickets.User.length > 0'>Uživateľ</li>
-                <li *ngIf = 'disabledPrivileges?.solveTickets.Other.length > 0'>Iné</li>
+                <li *ngIf = 'unableSolveSoftware()'  
+                    (click) = "changeSolveTicketsSoftwareAll()" 
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket") }'>Softvér</li>
+
+                <li *ngIf = 'unableSolveHardware()' 
+                    (click) = "changeSolveTicketsHardwareAll()"
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket") }'>Hardvér</li>
+
+                <li *ngIf = 'unableSolveServer()' 
+                    (click) = "changeSolveTicketsServerAll()"
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'>Server</li>
+
+                <li *ngIf = 'unableSolveUser()' 
+                    (click) = 'changeSolveTicketsUserAll()'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket") }'>Uživateľ</li>
+
+                <li *ngIf = 'unableSolveOther()' 
+                    (click) = 'changeSolveTicketsOtherAll()'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket") }'>Iné</li>
             </ul>
         </li>
-      <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.solveTickets.Software.length > 0 || disabledPrivileges?.solveTickets.Software.length > 0' >
+      <li class='informationsContainer topspace' 
+            *ngIf ='enabledPrivileges.solveTickets.Software?.length > 0 || disabledPrivileges.solveTickets.Software.length > 0' 
+            [ngClass] = '{"unableClick" : activateUnableClick &&  
+                (enabledPrivileges.solveTickets.Software === null || !enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>
             <div class='informationTitle'>Riešenie Softvéru</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.solveTickets.Software'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.solveTickets.Software'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.solveTickets.Software' 
+                    class ='enabledPriv' 
+                    (click) = 'changeSolveTicketsSoftware(type)'> {{ type }} </li>  
+                <li *ngFor='let type of disabledPrivileges.solveTickets.Software' 
+                    (click) = 'changeSolveTicketsSoftware(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && (enabledPrivileges.solveTickets.Software !== null) 
+                                && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'> {{ type }} </li>  
             </ul>
         </li>
-        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.solveTickets.Hardware.length > 0 || disabledPrivileges?.solveTickets.Hardware.length > 0' >
+        <li class='informationsContainer topspace' 
+            *ngIf ='enabledPrivileges.solveTickets.Hardware?.length > 0 || disabledPrivileges.solveTickets.Hardware.length > 0' 
+            [ngClass] = '{"unableClick" : activateUnableClick &&  
+                (enabledPrivileges.solveTickets.Hardware === null || !enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>
             <div class='informationTitle'>Riešenie Hardvéru</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.solveTickets.Hardware'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.solveTickets.Hardware'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.solveTickets.Hardware' 
+                    class ='enabledPriv' 
+                    (click) = 'changeSolveTicketsHardware(type)'> {{ type }} </li>  
+                <li *ngFor='let type of disabledPrivileges.solveTickets.Hardware' 
+                    (click) = 'changeSolveTicketsHardware(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && (enabledPrivileges.solveTickets.Hardware !== null)
+                                && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'> {{ type }} </li>  
             </ul>
         </li>
-        <li class='informationsContainer topspace' *ngIf ='enabledPrivileges?.solveTickets.Server.length > 0 || disabledPrivileges?.solveTickets.Server.length > 0' >
+        <li class='informationsContainer topspace' 
+            *ngIf ='enabledPrivileges.solveTickets.Server?.length > 0 || disabledPrivileges.solveTickets.Server.length > 0' 
+            [ngClass] = '{"unableClick" : activateUnableClick &&  
+                (enabledPrivileges.solveTickets.Server === null || !enabledPrivileges.requestTypesToSolve.includes("Ticket")) }'>
             <div class='informationTitle'>Riešenie Serverov</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges?.solveTickets.Server'> {{ type }} </li>  
-                <li *ngFor='let type of disabledPrivileges?.solveTickets.Server'> {{ type }} </li>  
+                <li *ngFor='let type of enabledPrivileges.solveTickets.Server' 
+                    class ='enabledPriv' 
+                    (click) = 'changeSolveTicketsServer(type)'> {{ type }} </li>  
+                <li *ngFor='let type of disabledPrivileges.solveTickets.Server' 
+                    (click) = 'changeSolveTicketsServer(type)'
+                    [ngClass] = '{ "ableClick" :  activateUnableClick && (enabledPrivileges.solveTickets.Server !== null) 
+                                && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'> {{ type }} </li>  
             </ul>
         </li>
 

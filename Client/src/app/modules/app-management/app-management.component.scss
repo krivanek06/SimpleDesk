@@ -1,21 +1,26 @@
+
+
 #contentContainer{
     height: 100%;
     width: calc(100% - 85px);
-    padding: 10px;
+    padding: 0 10px 0 10px;
     float: right;
     position: relative;
 }
 
 .windowButtonChangers{
-    position: absolute;
-    display: inline-grid;
-    right: 15px;
-    top: -10px
+    position: relative;
+    float: right;
+    width: 100%;
+    /*border-bottom: 1px solid #d7d7d7;*/
+    margin-bottom: 15px;
 }
 
 
 .requestFormButton{
-    margin-bottom: 10px;
+    float: right;
+    margin-bottom: 8px;
+    margin-right: 10px;
 }
 
 
@@ -44,7 +49,13 @@
     color:#818181;
 }
 
-
+.formTitleSmall{
+    font-size: 26px;
+    font-weight: bold;
+    color:#818181;
+    position: absolute;
+    left: 30px;
+}
 
 .formTitleContainer{
     display: inline-flex;

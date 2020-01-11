@@ -11,6 +11,7 @@ import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.request.ReportService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -84,6 +85,28 @@ public class GroupController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani opisu skupny",HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("secure/manage/getAll")
+    public List<String> getAllGroups(){
+        try {
+            return this.groupService.getAllGroups();
+        } catch (Exception e) {
+            LOGGER.error("Failed to register group, error : " + e.getMessage());
+        }
+        return new ArrayList<>();
+    }
+    /* returns also privileges which groups does not have yet*/
+    @GetMapping("secure/manage/details")
+    public ResponseEntity<?> getGroupDetailsAll(@RequestParam("groupName") String groupName){
+        try {
+            GroupDTO groupDTO =  this.groupService.getGroupDetails(groupName);
+            groupDTO.setUnsetApplicationPrivilegeDTO(this.groupService.getUnsetPrivilegesForGroup(groupDTO));
+            return new ResponseEntity<>(groupDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed method getGroupDetails for group: " + groupName+ ", error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní detailov skupiny " +
+                groupName + ", kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     /* Available only for authorized solvers -> authorization type privilege management */
     @PostMapping("secure/manage/registration")

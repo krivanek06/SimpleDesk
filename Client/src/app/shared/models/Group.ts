@@ -7,6 +7,7 @@ export interface Group{
     usersInGroup: UserSimpleDTO[];
     usersWatchGroup: UserSimpleDTO[];
     applicationPrivilegeDTO: ApplicationPrivilege;
+    unsetApplicationPrivilegeDTO: ApplicationPrivilege;
 }
 
 export interface UserSimpleDTO{

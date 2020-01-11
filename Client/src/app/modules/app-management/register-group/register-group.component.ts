@@ -116,7 +116,8 @@ export class RegisterGroupComponent implements OnInit {
       groupManager : this.groupManager.value,
       usersInGroup : this.usersInGroup.value === null ? [] : this.usersInGroup.value,
       usersWatchGroup : this.usersWatchGroup.value === null ? [] : this.usersWatchGroup.value,
-      applicationPrivilegeDTO : privilege
+      applicationPrivilegeDTO : privilege,
+      unsetApplicationPrivilegeDTO: null
     }
     return group;
   }

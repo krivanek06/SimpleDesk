@@ -113,6 +113,20 @@ public class GroupService {
         return groupDTO;
     }
 
+    public ApplicationPrivilegeDTO getUnsetPrivilegesForGroup(GroupDTO groupDTO){
+        ApplicationPrivilegeDTO applicationPrivilegeDTO = this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.groupRepository.findAllExistingPrivileges());
+        applicationPrivilegeDTO.getModuleTypesToUse().removeAll(groupDTO.getApplicationPrivilegeDTO().getModuleTypesToUse());
+        applicationPrivilegeDTO.getRequestTypesToSolve().removeAll(groupDTO.getApplicationPrivilegeDTO().getRequestTypesToSolve());
+        applicationPrivilegeDTO.getSubmitFinanceRequests().removeAll(groupDTO.getApplicationPrivilegeDTO().getSubmitFinanceRequests());
+        for(String key : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().keySet()) {
+            for(String value : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().get(key)){
+                applicationPrivilegeDTO.getSolveTickets().get(key).remove(value);
+            }
+        }
+
+        return applicationPrivilegeDTO;
+    }
+
     public GroupContainerDTO getAllGroupsForUser(String name){
         GroupContainerDTO groupContainerDTO = new GroupContainerDTO();
         User user = this.userService.loadUserByUsername(name);
@@ -130,6 +144,12 @@ public class GroupService {
 
     public GroupContainerDTO getAllGroupsForLoggedInUser(){
         return this.getAllGroupsForUser(this.userService.getPrincipalUsername());
+    }
+
+    public List<String> getAllGroups(){
+        List<String> groups = new ArrayList<>();
+        this.groupRepository.findAll().forEach( group -> groups.add(group.getGroupName()));
+        return groups;
     }
 
     @Transactional
@@ -175,7 +195,7 @@ public class GroupService {
         for(String ticketTypeName: applicationPrivilegeDTO.getSolveTickets().keySet()){
             TicketType ticketType = this.ticketTypeRepository.findByName(ticketTypeName);
 
-            if(ticketTypeName.equalsIgnoreCase(TICKET_TYPE.Užívateľ.name()) || ticketTypeName.equalsIgnoreCase(TICKET_TYPE.Iné.name())){
+            if(ticketTypeName.equalsIgnoreCase(TICKET_TYPE.User.name()) || ticketTypeName.equalsIgnoreCase(TICKET_TYPE.Other.name())){
                 TicketPrivileges ticketPrivileges = new TicketPrivileges();
                 ticketPrivileges.setApplicationName(null);
                 ticketPrivileges.setGroup(group);

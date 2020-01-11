@@ -9,9 +9,9 @@
         <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType($event.value)">
             <mat-option value="Software">Software</mat-option>
             <mat-option value="Hardware">Hardware</mat-option>
-            <mat-option value="Užívateľ">Uživateľ</mat-option>
+            <mat-option value="User">Uživateľ</mat-option>
             <mat-option value="Server">Server</mat-option>
-            <mat-option value="Iné">Iné</mat-option>
+            <mat-option value="Other">Iné</mat-option>
         </mat-select>
 
         <mat-error *ngIf="ticketType.invalid"> Typ tiketu nemôže byť prázdny </mat-error>

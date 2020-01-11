@@ -27,4 +27,7 @@ public interface GroupRepository extends CrudRepository<Group, Integer > {
     @Query(nativeQuery = true, value = "select * from get_all_privileges_for_group_varchar(?1);")
     String findPrivilegesForGroup(String searching_name);
 
+    @Query(nativeQuery = true, value = "select * from get_all_existing_privileges()")
+    String findAllExistingPrivileges();
+
 }

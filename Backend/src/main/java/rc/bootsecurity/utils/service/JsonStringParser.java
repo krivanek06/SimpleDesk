@@ -43,9 +43,9 @@ public class JsonStringParser {
         ticketTypeToSolve.putIfAbsent(TICKET_TYPE.Software.name(), new ArrayList<>());
         ticketTypeToSolve.putIfAbsent(TICKET_TYPE.Hardware.name(), new ArrayList<>());
         ticketTypeToSolve.putIfAbsent(TICKET_TYPE.Server.name(), new ArrayList<>());
-        ticketTypeToSolve.put(TICKET_TYPE.User.name(),ticketTypeToSolve.containsKey(TICKET_TYPE.Užívateľ.name()) ?
+        ticketTypeToSolve.put(TICKET_TYPE.User.name(),ticketTypeToSolve.containsKey(TICKET_TYPE.User.name()) ?
                 new ArrayList<>(Collections.singletonList("True")) :  new ArrayList<>() );
-        ticketTypeToSolve.put(TICKET_TYPE.Other.name(),ticketTypeToSolve.containsKey(TICKET_TYPE.Iné.name()) ?
+        ticketTypeToSolve.put(TICKET_TYPE.Other.name(),ticketTypeToSolve.containsKey(TICKET_TYPE.Other.name()) ?
                 new ArrayList<>(Collections.singletonList("True")) :  new ArrayList<>() );
 
         applicationPrivilegeDTO.setSolveTickets(ticketTypeToSolve);
