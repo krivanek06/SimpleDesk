@@ -1,5 +1,6 @@
 package rc.bootsecurity.repository.finance;
 
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,8 @@ public interface FinanceTypeRepository extends CrudRepository<FinanceType, Integ
 
     @Query(nativeQuery = true, value = "select * from get_finance_types_to_submit_for_user(?1);")
     Optional<List<FinanceType>> getFinanceTypesToSubmitForUser(String username);
+
+    @Modifying
+    @Query(nativeQuery = true, value = "delete from tbl_finance_type_privileges where group_id = (?1)")
+    void deleteGroupAssociation(Integer GroupId);
 }

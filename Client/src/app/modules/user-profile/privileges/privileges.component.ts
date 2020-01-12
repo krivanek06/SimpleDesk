@@ -19,13 +19,13 @@ export class PrivilegesComponent implements OnInit {
     this.enabledPrivileges = {
       moduleTypesToUse : [],
       requestTypesToSolve : [],
-      submitFinanceRequests: null,
+      submitFinanceRequests: [],
       solveTickets: {
         Software : null,
         Hardware: null,
         Server: null,
-        Other: null,
-        User: null
+        Other: [],
+        User: []
       }
     }
 
@@ -57,7 +57,6 @@ export class PrivilegesComponent implements OnInit {
   }
 
   public changeModuleTypeToUse(name: string){
-    console.log(name)
     if(!this.activateUnableClick){
       return;
     }
@@ -85,45 +84,39 @@ export class PrivilegesComponent implements OnInit {
       const index: number = this.enabledPrivileges.requestTypesToSolve.indexOf(name);
       this.enabledPrivileges.requestTypesToSolve.splice(index , 1);
       this.disabledPrivileges.requestTypesToSolve.push(name);
-      if(name === 'Ticket'){
-        this.changeTicketsAll(true);
-      }
     }else{
       const index: number = this.disabledPrivileges.requestTypesToSolve.indexOf(name);
       this.disabledPrivileges.requestTypesToSolve.splice(index , 1);
-      this.enabledPrivileges.requestTypesToSolve.push(name);
-      if(name === 'Ticket'){
-        this.changeTicketsAll(false);
-      }
+      this.enabledPrivileges.requestTypesToSolve.push(name); 
+    }
+    if(name === 'Ticket'){
+      this.changeTicketsAll();
     }
   }
 
-  public changeTicketsAll(justClear: boolean){
+  public changeTicketsAll(){
     if(!this.activateUnableClick){
       return;
     }
+    this.disabledPrivileges.solveTickets.Software = this.disabledPrivileges.solveTickets.Software.concat(this.enabledPrivileges.solveTickets.Software);
+    this.enabledPrivileges.solveTickets.Software = null;
 
-    if(justClear){
-        this.changeSolveTicketsSoftwareAll(true);
-        this.changeSolveTicketsHardwareAll(true);
-        this.changeSolveTicketsServerAll(true);
-        this.changeSolveTicketsUserAll(true);
-        this.changeSolveTicketsOtherAll(true)
-    }else{
-        this.changeSolveTicketsSoftwareAll();
-        this.changeSolveTicketsHardwareAll();
-        this.changeSolveTicketsServerAll();
-        this.changeSolveTicketsUserAll();
-        this.changeSolveTicketsOtherAll();
-    }
+    this.disabledPrivileges.solveTickets.Hardware = this.disabledPrivileges.solveTickets.Hardware.concat(this.enabledPrivileges.solveTickets.Hardware);
+    this.enabledPrivileges.solveTickets.Hardware = null;
+
+    this.disabledPrivileges.solveTickets.Server = this.disabledPrivileges.solveTickets.Server.concat(this.enabledPrivileges.solveTickets.Server);
+    this.enabledPrivileges.solveTickets.Server = null;
+
+    this.enabledPrivileges.solveTickets.Other = [];
+    this.disabledPrivileges.solveTickets.Other.push('True');
+
+    this.enabledPrivileges.solveTickets.User = [];
+    this.disabledPrivileges.solveTickets.User.push('True');
+    
   }
 
   public changesubmitFinanceRequests(name: string){
-    if(!this.activateUnableClick){
-      return;
-    }
-
-    if(this.enabledPrivileges.submitFinanceRequests === null){
+    if(!this.activateUnableClick || !this.enabledPrivileges.moduleTypesToUse.includes("Financie")){
       return;
     }
 
@@ -139,27 +132,20 @@ export class PrivilegesComponent implements OnInit {
   }
 
   public changesubmitFinanceRequestsAll(){
-    if(!this.activateUnableClick){
+    if(!this.activateUnableClick ){
       return;
     }
 
-    if(this.enabledPrivileges.submitFinanceRequests !== null){
-      this.disabledPrivileges.submitFinanceRequests.push(...this.enabledPrivileges.submitFinanceRequests);
-      this.enabledPrivileges.submitFinanceRequests = null;
-    }else{
-      this.enabledPrivileges.submitFinanceRequests = [];
-    }
+    this.disabledPrivileges.submitFinanceRequests = this.disabledPrivileges.submitFinanceRequests.concat(this.enabledPrivileges.submitFinanceRequests);     
+    this.enabledPrivileges.submitFinanceRequests = [];
+    
   }
 
   public changeSolveTicketsSoftware(name: string){
-    if(!this.activateUnableClick){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket") ||
+      this.enabledPrivileges.solveTickets.Software === null ){
       return;
     }
-
-    if(this.enabledPrivileges.solveTickets.Software === null){
-      return;
-    }
-
 
     if(this.enabledPrivileges.solveTickets.Software.includes(name)){
       const index: number = this.enabledPrivileges.solveTickets.Software.indexOf(name);
@@ -172,27 +158,21 @@ export class PrivilegesComponent implements OnInit {
     }
   }
 
-  public changeSolveTicketsSoftwareAll(justClear ?: boolean){
-    if(!this.activateUnableClick){
+  public changeSolveTicketsSoftwareAll(justClear ?:boolean){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket")){
       return;
     }
-
     if(this.enabledPrivileges.solveTickets.Software !== null || justClear){
       this.disabledPrivileges.solveTickets.Software = this.disabledPrivileges.solveTickets.Software.concat(this.enabledPrivileges.solveTickets.Software);
       this.enabledPrivileges.solveTickets.Software = null;
     }else{
-      if(this.enabledPrivileges.requestTypesToSolve.includes('Ticket')){
-        this.enabledPrivileges.solveTickets.Software = [];
-      }
+      this.enabledPrivileges.solveTickets.Software = [];
     }
   }
 
   public changeSolveTicketsHardware(name: string){
-    if(!this.activateUnableClick){
-      return;
-    }
-
-    if(this.enabledPrivileges.solveTickets.Hardware === null){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket") || 
+    this.enabledPrivileges.solveTickets.Hardware === null){
       return;
     }
 
@@ -207,27 +187,21 @@ export class PrivilegesComponent implements OnInit {
     }
   }
 
-  public changeSolveTicketsHardwareAll(justClear ?: boolean){
-    if(!this.activateUnableClick){
+  public changeSolveTicketsHardwareAll(justClear ?:boolean){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket")){
       return;
     }
-    
     if(this.enabledPrivileges.solveTickets.Hardware !== null || justClear){
       this.disabledPrivileges.solveTickets.Hardware = this.disabledPrivileges.solveTickets.Hardware.concat(this.enabledPrivileges.solveTickets.Hardware);
       this.enabledPrivileges.solveTickets.Hardware = null;
     }else{
-      if(this.enabledPrivileges.requestTypesToSolve.includes('Ticket')){
-        this.enabledPrivileges.solveTickets.Hardware = [];
-      }
+      this.enabledPrivileges.solveTickets.Hardware = [];
     }
   }
 
   public changeSolveTicketsServer(name: string){
-    if(!this.activateUnableClick){
-      return;
-    }
-
-    if(this.enabledPrivileges.solveTickets.Server === null){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket") || 
+     this.enabledPrivileges.solveTickets.Server === null){
       return;
     }
 
@@ -242,101 +216,43 @@ export class PrivilegesComponent implements OnInit {
     }
   }
 
-  public changeSolveTicketsServerAll(justClear ?: boolean){
-    if(!this.activateUnableClick){
+  public changeSolveTicketsServerAll(justClear ?:boolean){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket")){
       return;
     }
-
     if(this.enabledPrivileges.solveTickets.Server !== null || justClear){
       this.disabledPrivileges.solveTickets.Server = this.disabledPrivileges.solveTickets.Server.concat(this.enabledPrivileges.solveTickets.Server);
       this.enabledPrivileges.solveTickets.Server = null;
     }else{
-      if(this.enabledPrivileges.requestTypesToSolve.includes('Ticket')){
-        this.enabledPrivileges.solveTickets.Server = [];
-      }
+      this.enabledPrivileges.solveTickets.Server = [];
     }
   }
 
   public changeSolveTicketsUserAll(justClear ?: boolean){
-    if(!this.activateUnableClick){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket")){
       return;
     }
 
-    if(this.enabledPrivileges.solveTickets.User !== null || justClear){
-      this.enabledPrivileges.solveTickets.User = null;
+    if(this.enabledPrivileges.solveTickets.User.length > 0 || justClear){
+      this.enabledPrivileges.solveTickets.User = [];
       this.disabledPrivileges.solveTickets.User.push('True');
     }else{
-      if(this.enabledPrivileges.requestTypesToSolve.includes('Ticket')){
-        this.disabledPrivileges.solveTickets.User = [];
-        this.enabledPrivileges.solveTickets.User = [];
-        this.enabledPrivileges.solveTickets.User.push('True');
-      }
+      this.disabledPrivileges.solveTickets.User = [];
+      this.enabledPrivileges.solveTickets.User.push('True');
     }
   }
 
 
   public changeSolveTicketsOtherAll(justClear ?: boolean){
-    if(!this.activateUnableClick){
+    if(!this.activateUnableClick || !this.enabledPrivileges.requestTypesToSolve.includes("Ticket")){
       return;
     }
-
-    if(this.enabledPrivileges.solveTickets.Other !== null || justClear){
-      this.enabledPrivileges.solveTickets.Other = null;
+    if(this.enabledPrivileges.solveTickets.Other.length > 0 || justClear){
+      this.enabledPrivileges.solveTickets.Other = [];
       this.disabledPrivileges.solveTickets.Other.push('True');
     }else{
-      if(this.enabledPrivileges.requestTypesToSolve.includes('Ticket')){
-        this.disabledPrivileges.solveTickets.Other = [];
-        this.enabledPrivileges.solveTickets.Other = [];
-        this.enabledPrivileges.solveTickets.Other.push('True');
-      }
+      this.disabledPrivileges.solveTickets.Other = [];
+      this.enabledPrivileges.solveTickets.Other.push('True');
     }
   }
-
-
-
-
-  public canSolveTickets():boolean {
-    return (this.enabledPrivileges !== undefined && (
-    (this.enabledPrivileges.solveTickets.Software !== null &&  this.enabledPrivileges.solveTickets.Software.length > 0) ||
-    (this.enabledPrivileges.solveTickets.Hardware !== null && this.enabledPrivileges.solveTickets.Hardware.length > 0 ) ||
-    (this.enabledPrivileges.solveTickets.Server !== null && this.enabledPrivileges.solveTickets.Server.length > 0  ) || 
-    ( this.enabledPrivileges.solveTickets.User !== null && this.enabledPrivileges.solveTickets.User.length > 0 )|| 
-    ( this.enabledPrivileges.solveTickets.Other !== null && this.enabledPrivileges.solveTickets.Other.length > 0))) ||
-
-    (this.disabledPrivileges !== undefined && ( this.disabledPrivileges.solveTickets.Software.length > 0 ||
-    this.disabledPrivileges.solveTickets.Hardware.length > 0 ||
-    this.disabledPrivileges.solveTickets.Server.length > 0 || 
-    this.disabledPrivileges.solveTickets.User.length > 0 || 
-    this.disabledPrivileges.solveTickets.Other.length > 0 )); 
-  }
-
-  public unableSolveSoftware(): boolean{
-    return this.disabledPrivileges.solveTickets.Software.length > 0 && 
-      (this.enabledPrivileges.solveTickets.Software === null );
-  }
-  public unableSolveHardware(): boolean{
-    return this.disabledPrivileges.solveTickets.Hardware.length > 0 && 
-    (this.enabledPrivileges.solveTickets.Hardware === null  );
-  }
-  public unableSolveServer(): boolean{
-    return this.disabledPrivileges.solveTickets.Server.length > 0 && 
-    (this.enabledPrivileges.solveTickets.Server === null  );
-  }
-
-  public unableSolveUser(): boolean{
-    return (this.enabledPrivileges.solveTickets.User === null);
-  }
-
-  public unableSolveOther(): boolean{
-    return  (this.enabledPrivileges.solveTickets.Other === null ) ;
-  }
-
-  public unableSubmitFinanceTypes(): boolean{
-    return this.disabledPrivileges.submitFinanceRequests.length > 0 && 
-    (this.enabledPrivileges.submitFinanceRequests === null ||  
-    this.enabledPrivileges.submitFinanceRequests.length === 0);
-  }
-
-   
-
 }

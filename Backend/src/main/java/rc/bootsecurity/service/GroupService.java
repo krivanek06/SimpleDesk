@@ -11,8 +11,10 @@ import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.model.entity.ticket.TicketType;
+import rc.bootsecurity.model.enums.MODULE_TYPE;
 import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.ModuleTypeRepository;
@@ -87,17 +89,30 @@ public class GroupService {
     //@Transactional(propagation = Propagation.REQUIRES_NEW)
    // @Transactional
    // @Async
+   // cannot be transactional because we delete same entity which will be pushed there
+    @Transactional
     public void modifyGroupPrivileges(String name, ApplicationPrivilegeDTO applicationPrivilegeDTO){
         Group group = this.groupRepository.findByGroupName(name);
 
+        if(!applicationPrivilegeDTO.getModuleTypesToUse().contains(MODULE_TYPE.Financie.name())){
+            this.financeTypeRepository.deleteGroupAssociation(group.getId());
+        }
+        group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getModuleTypesToUse())));
+
         List<TicketPrivileges> ticketPrivilegesOld = this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>());
         List<TicketPrivileges> ticketPrivilegesNew = this.convertTicketPrivilegesForGroupToDTO(group, applicationPrivilegeDTO);
+        List<TicketPrivileges> save = new ArrayList<>(); // contains distinct new privileges
+        for(TicketPrivileges ticketPrivileges : ticketPrivilegesNew){
+            if(!ticketPrivilegesOld.contains(ticketPrivileges))
+                save.add(ticketPrivileges);
+            ticketPrivilegesOld.remove(ticketPrivileges);
+        }
 
         this.addPrivilegesToGroup(group, applicationPrivilegeDTO);
-        this.groupRepository.save(group);
+
         this.ticketPrivilegesRepository.deleteAll(ticketPrivilegesOld);
-        //this.ticketPrivilegesRepository.deleteByIdIn(ticketPrivilegesOld.stream().map(TicketPrivileges::getId).collect(Collectors.toList()));
-        this.ticketPrivilegesRepository.saveAll(ticketPrivilegesNew);
+        this.ticketPrivilegesRepository.saveAll(save);
+        this.groupRepository.save(group);
     }
 
     public GroupDTO getGroupDetails(String groupName){
@@ -193,6 +208,12 @@ public class GroupService {
     private List<TicketPrivileges> convertTicketPrivilegesForGroupToDTO(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
         List<TicketPrivileges> ticketPrivilegesList = new ArrayList<>();
         for(String ticketTypeName: applicationPrivilegeDTO.getSolveTickets().keySet()){
+
+            if(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName) == null ||
+                    applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName).size() == 0 ) {
+                continue;
+            }
+
             TicketType ticketType = this.ticketTypeRepository.findByName(ticketTypeName);
 
             if(ticketTypeName.equalsIgnoreCase(TICKET_TYPE.User.name()) || ticketTypeName.equalsIgnoreCase(TICKET_TYPE.Other.name())){

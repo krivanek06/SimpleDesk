@@ -45,7 +45,7 @@ public class Group {
     private Set<User> usersWatchingGroupActivity;
 
     @EqualsAndHashCode.Exclude
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "group", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TicketPrivileges> ticketPrivilegesList;
 
     @EqualsAndHashCode.Exclude
@@ -63,7 +63,7 @@ public class Group {
     private Set<ModuleType> requestTypesToSolve;
 
     @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "tbl_finance_type_privileges",
             joinColumns = { @JoinColumn(name = "group_id")},
             inverseJoinColumns = { @JoinColumn(name = "finance_type_id")})

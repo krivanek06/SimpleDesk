@@ -4,6 +4,8 @@ import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/gr
 import { GroupService } from 'app/core/services/group.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ApplicationPrivilege } from 'app/shared/models/Group';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-group-management',
@@ -36,6 +38,22 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
+  }
+
+  private resetGroupPrivileges(){
+    this.groupService.getGroupDetailsWithUnsetPrivileges(this.groupDetails.group.name).pipe(takeUntil(this.destroy$))
+    .subscribe(group => {
+      console.log(group);
+      this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
+      this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
+    })
+  }
+
+  private saveGroupPrivileges(priv: ApplicationPrivilege){
+    Swal.fire({ position: 'top-end', text: 'Požiadavka o zmenu právomoci skupiny bola odoslaná',showConfirmButton: false,timer: 1500 })  
+    this.groupService.modifyPrivileges(this.groupDetails.group.name, priv).subscribe(() =>{
+      Swal.fire({ position: 'top-end', text: 'Pŕava skupiny boli zmenené',showConfirmButton: false,timer: 1500 })  
+    })
   }
 
 }
