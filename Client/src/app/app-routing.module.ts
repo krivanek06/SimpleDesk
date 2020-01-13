@@ -15,6 +15,9 @@ import { RegisterGroupComponent } from './modules/app-management/register-group/
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
 import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
 import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
+import { FinanceGuardGuard } from './core/guards/finance-guard.guard';
+import { PrivilegeManagerGuard } from './core/guards/privilege-manager.guard';
+import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
 
 
 const routes: Routes = [
@@ -24,20 +27,21 @@ const routes: Routes = [
     children : [
         { path: 'ticket' , component: RequestTicketFormComponent },
         { path: 'report' , component: RequestReportFormComponent },
-        { path: 'finance' , component: RequestFinanceFormComponent },
+        { path: 'finance' , component: RequestFinanceFormComponent, canActivate:[ FinanceGuardGuard] },
         { path: '**' ,  redirectTo: 'ticket'  }
     ]},
   { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]}, 
   { path: 'request_details/:id', component: RequestDetailsComponent, canActivate:[AuthGuard]},
   { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]} ,
-  { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard],
+  { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard, PrivilegeManagerGuard],
       children:[
         { path: '', component: UserGroupManagementComponent, canActivate:[AuthGuard]},
         { path: 'register_user', component: RegisterUserComponent, canActivate:[AuthGuard]},
         { path: 'register_group', component: RegisterGroupComponent, canActivate:[AuthGuard]},
         { path: '**' ,  redirectTo: ''  }
     ]},
-    
+  { path: 'unauthorized' , component: UnauthorizedComponent, canActivate:[AuthGuard] },
+  { path: '', redirectTo: 'dashboard' , pathMatch: 'full'},
   { path: '**', redirectTo: 'dashboard' }
 ];
 

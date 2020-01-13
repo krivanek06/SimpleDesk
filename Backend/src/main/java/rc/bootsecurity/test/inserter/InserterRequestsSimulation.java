@@ -39,8 +39,6 @@ public class InserterRequestsSimulation {
     @Autowired
     private InserterRequests inserterRequests;
     @Autowired
-    private RequestPrivilegeService requestPrivilegeService;
-    @Autowired
     private UserService userService;
     @Autowired
     private RequestManagementService requestManagementService;
@@ -108,63 +106,14 @@ public class InserterRequestsSimulation {
     }
 
     private void insertRequestPrivileges(){
-        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_BASIC_GROUP,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
 
-        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_1,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
-
-        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_2,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Report.name()))));
-
-        this.requestPrivilegeService.modifyRequestTypeToSolve(Creator.createGroupDTOWithRequestPrivilegesToSolve(NAMES.TEST_GROUP_SOLVER_3,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name()))));
-
-        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_1,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name()))));
-
-        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_2,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
-
-        this.requestPrivilegeService.modifyModuleTypesToUse(Creator.createGroupDTOWithRequestPrivilegesToSubmit(NAMES.TEST_GROUP_NORMAL_3,
-                new ArrayList<>(Arrays.asList(MODULE_TYPE.Financie.name()))));
-        // group 8 -> no request type to solver -> should throw error
     }
 
     private void insertTicketPrivilegesForGroupsToSolve(){
-        this.requestPrivilegeService.modifyTicketTypeToSolve(Creator.createGroupDTOWithTicketPrivileges(NAMES.TEST_GROUP_SOLVER_1,
-                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.User.name(), null),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Other.name(), null)
-                        ))));
 
-        this.requestPrivilegeService.modifyTicketTypeToSolve(Creator.createGroupDTOWithTicketPrivileges(NAMES.TEST_GROUP_SOLVER_3,
-                new ArrayList<>(Arrays.asList(Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_3),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Software.name(), NAMES.SOFTWARE_4),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_3),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Hardware.name(), NAMES.HARDWARE_4),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_1),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Server.name(), NAMES.SERVER_2),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.User.name(), null),
-                        Creator.createTicketPrivilegeDTO(TICKET_TYPE.Other.name(), null)
-                ))));
     }
 
     private void insertFinanceTypePrivilegesForGroupsToSubmit(){
-        this.requestPrivilegeService.modifyFinanceTypeToSubmit(Creator.createGroupDTOWithFinanceType(NAMES.TEST_GROUP_NORMAL_2,
-                new ArrayList<>(Arrays.asList(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3 ))));
-
-        this.requestPrivilegeService.modifyFinanceTypeToSubmit(Creator.createGroupDTOWithFinanceType(NAMES.TEST_GROUP_NORMAL_3,
-                new ArrayList<>(Arrays.asList(NAMES.FINANCE_TYPE_1, NAMES.FINANCE_TYPE_2, NAMES.FINANCE_TYPE_3,
-                        NAMES.FINANCE_TYPE_4,NAMES.FINANCE_TYPE_5 ))));
 
     }
 

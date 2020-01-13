@@ -16,7 +16,6 @@ import { UserSimpleDTO } from 'app/shared/models/Group';
 export class UserService {
   private userPrefix: string = 'logged_in_user';
   public user: User;
-  private userInformationURL = environment.apiUrl + "user/basicInformation";
 
   constructor(private http: HttpClient) {  
     this.checkIfUserAvailable();
@@ -24,7 +23,7 @@ export class UserService {
 
 
   public loadLoggedInUser (): Observable<boolean> {
-    return this.http.get<User>(this.userInformationURL)
+    return this.http.get<User>(environment.apiUrl + "user/basicInformation")
       .pipe(
         tap(user => {
           this.saveUserToLocalStorage(user);

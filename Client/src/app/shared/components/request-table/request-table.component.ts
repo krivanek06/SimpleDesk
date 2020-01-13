@@ -17,7 +17,7 @@ import { RequestModificationService } from 'app/core/services/request-modificati
 export class RequestTableComponent implements OnInit {
   @Input() public displayedColumns = [];
   @Input() public headerColor:string;
-  @Input() public displayAssignToMe: boolean;
+  @Input() public displayAssignToMe: boolean = false;
   @Input() public tableTitle: string;
 
   public dataSource = new MatTableDataSource<RequestTable>();

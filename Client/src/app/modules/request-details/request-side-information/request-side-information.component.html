@@ -72,7 +72,7 @@
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
             <div class='informationAnswer'>Deadline</div>
-            <ul ><li div class='information'> {{ $any(requestDetails).deadline | date:'MMM d, y, HH:mm:ss '}}</li> </ul>
+            <ul ><li div class='information'> {{ $any(requestDetails).deadline | date:'MMM d, y '}}</li> </ul>
         </li>
 
     </ul>
@@ -104,7 +104,7 @@
                     {{ requestDetails.assigned.firstName }} {{ requestDetails.assigned.lastName }}
                 </li>
             </ul>
-            <ul *ngIf = 'requestDetails.assigned === null'> 
+            <ul *ngIf = 'requestDetails.assigned === null && ( isSolver$ | async )'> 
                 <li class='information clicable' (click) = "assignOnMe()"> prideliť mne  </li>
             </ul>
         </li>

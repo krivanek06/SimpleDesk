@@ -36,8 +36,14 @@ public class RequestController {
     }
 
     @GetMapping("/requestDetails/{id}")
-    public RequestDTO getRequestDetails(@PathVariable("id") Integer id) {
-        return this.requestService.getRequestDetails(id);
+    public ResponseEntity<?> getRequestDetails(@PathVariable("id") Integer id) {
+        try {
+            RequestDTO requestDTO = this.requestService.getRequestDetails(id);
+            return new ResponseEntity<>(requestDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("error retrieving request detials : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Nemáte dostatočné práva na prezretie požiadavky s id : " + id ,HttpStatus.FORBIDDEN);
     }
 
     @GetMapping(value = "/requestDetails/{id}/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

@@ -1,5 +1,7 @@
 import { Component, OnInit, ElementRef, ViewChild, HostListener, ViewChildren, QueryList } from '@angular/core';
 import { Router } from '@angular/router';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-navigation',
@@ -8,20 +10,12 @@ import { Router } from '@angular/router';
 })
 export class NavigationComponent implements OnInit {
 
-  
-  constructor(private router: Router) { }
+  public hasPrivilegeAccess$: Observable<boolean>;
+
+  constructor( private authService: AuthenticationService) { }
 
   ngOnInit() { 
+    this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
   }
 
-
-  /*@HostListener('mouseenter')
-  onMouseEnter() {
-    console.log(this.navigation.nativeElement)
-  }
-
-  @HostListener('mouseleave')
-  onMouseLeave() {
-
-  }*/
 }

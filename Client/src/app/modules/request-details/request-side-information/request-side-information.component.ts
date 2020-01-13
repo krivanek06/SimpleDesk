@@ -7,7 +7,8 @@ import { HttpClient } from '@angular/common/http';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-request-side-information',
@@ -17,13 +18,17 @@ import { Subscription } from 'rxjs';
 export class RequestSideInformationComponent implements OnInit, OnDestroy {
   public requestDetails: RequestDetails;
   private subscription: Subscription;
+  public isSolver$: Observable<boolean>;
 
-  constructor( private fileService: FileServiceService, private userService: UserService, private requestService: RequestModificationService) { }
+  constructor( private fileService: FileServiceService, private userService: UserService, 
+    private requestService: RequestModificationService , private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
       this.requestDetails = requestDetails;
     });
+
+    this.isSolver$ = this.authService.isSolver();
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

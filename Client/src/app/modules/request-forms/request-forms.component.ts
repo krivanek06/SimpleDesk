@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-forms',
@@ -6,10 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./request-forms.component.scss']
 })
 export class RequestFormsComponent implements OnInit {
+  public hasFinanceModuleAccess$: Observable<boolean>;
 
-  constructor() { }
+  constructor( private authService: AuthenticationService ) { }
 
   ngOnInit() {
+    this.hasFinanceModuleAccess$ = this.authService.hasFinanceModuleAccess();
   }
 
 }

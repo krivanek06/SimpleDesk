@@ -86,8 +86,7 @@ public class GroupService {
         this.groupRepository.delete(group);
     }
 
-    //@Transactional(propagation = Propagation.REQUIRES_NEW)
-   // @Transactional
+
    // @Async
    // cannot be transactional because we delete same entity which will be pushed there
     @Transactional
@@ -194,15 +193,14 @@ public class GroupService {
     }
 
     private void addPrivilegesToGroup(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
-        if(!applicationPrivilegeDTO.getModuleTypesToUse().isEmpty()) {
-            group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getModuleTypesToUse())));
-        }
-        if(!applicationPrivilegeDTO.getRequestTypesToSolve().isEmpty()) {
-            group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getRequestTypesToSolve())));
-        }
-        if(!applicationPrivilegeDTO.getSubmitFinanceRequests().isEmpty()) {
-            group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getSubmitFinanceRequests())));
-        }
+        group.setModuleTypesToUse((!applicationPrivilegeDTO.getModuleTypesToUse().isEmpty()) ?
+                new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getModuleTypesToUse())) : null);
+
+        group.setRequestTypesToSolve((!applicationPrivilegeDTO.getRequestTypesToSolve().isEmpty()) ?
+                new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getRequestTypesToSolve())) : null);
+
+        group.setFinanceTypes((!applicationPrivilegeDTO.getSubmitFinanceRequests().isEmpty()) ?
+                new HashSet<>(this.financeTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getSubmitFinanceRequests())): null);
     }
 
     private List<TicketPrivileges> convertTicketPrivilegesForGroupToDTO(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){

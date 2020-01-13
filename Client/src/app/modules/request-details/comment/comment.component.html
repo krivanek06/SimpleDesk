@@ -29,19 +29,19 @@
                 id='editIcon'
                 (click) = "editComment(requestComment)" />
 
-            <img *ngIf='!requestComment.isPrivate' 
+            <img *ngIf='!requestComment.isPrivate && (isSolver$ | async)' 
                  src="../../../../assets/images_design/lock_open_icon.png" 
                  class = 'icon' 
                  id='lockOpen'
                  (click) = "changeCommentPrivacy(requestComment)" />
             
-            <img *ngIf='requestComment.isPrivate' 
+            <img *ngIf='requestComment.isPrivate  && (isSolver$ | async)' 
                   src="../../../../assets/images_design/lock_closed_icon.png" 
                   class = 'icon' 
                   id='lockClosed'
                   (click) = "changeCommentPrivacy(requestComment)"/>
             
-            <img *ngIf='requestComment.isPrivate' 
+            <img *ngIf='requestComment.isPrivate  && (isSolver$ | async)' 
                   src="../../../../assets/images_design/share_icon.png" 
                   class = 'icon' 
                   id='share'

@@ -8,6 +8,7 @@ import { environment } from 'environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Group } from 'app/shared/models/Group';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-comment',
@@ -17,14 +18,15 @@ import { RequestModificationService } from 'app/core/services/request-modificati
 export class CommentComponent implements OnInit, OnDestroy {
   public changeFramws = false;
   public commentForm: FormGroup;
-
   public requestDetails: RequestDetails;
   private subscription: Subscription;
-
   private sharingComment: RequestComment;
+
+  public isSolver$: Observable<boolean>;
   @Input() public requestComments:RequestComment[];
 
-  constructor(public userService: UserService, private http: HttpClient, private formBuilder: FormBuilder, private requestService: RequestModificationService) { }
+  constructor(public userService: UserService, private http: HttpClient, private formBuilder: FormBuilder, 
+    private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.commentForm = this.formBuilder.group({
@@ -35,6 +37,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
       this.requestDetails = requestDetails;
     });
+
+    this.isSolver$ = this.authService.isSolver();
   }
 
   ngOnDestroy(): void {

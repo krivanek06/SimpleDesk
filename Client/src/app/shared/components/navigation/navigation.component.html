@@ -49,6 +49,7 @@
                 alt="dashboard navigation icon" 
                 id='appManagementIcon'
                 class='navigationIcon'
+                *ngIf='hasPrivilegeAccess$ | async'
                 >
         </a>
 

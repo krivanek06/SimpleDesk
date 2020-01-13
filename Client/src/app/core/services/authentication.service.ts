@@ -6,7 +6,7 @@ import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/comm
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 import { JwtHelperService } from "@auth0/angular-jwt";
-import { tap, mapTo, catchError } from 'rxjs/operators';
+import { tap, mapTo, catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -57,7 +57,6 @@ export class AuthenticationService {
   }
 
   private handleAuthenticationError (err: any) {
-    // TODO: Only for authentication error codes
     this.setAccessToken(null);
     this.setRefreshToken(null);
   }
@@ -95,6 +94,35 @@ export class AuthenticationService {
   private getRefreshToken () {
     return localStorage.getItem('refresh_token');
   }
+
+  public isAdmin(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_ADMIN")));
+  }
+
+  public isGhost(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_GHOST")));
+  }
+
+  public isManager(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_MANAGER")));
+  }
+
+  public isManagerRightHand(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_MANAGER_RIGHT_HAND")));
+  }
+
+  public isSolver(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_SOLVER")));
+  }
+
+  public hasPrivilegeAccess(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Privilege")));
+  }
+
+  public hasFinanceModuleAccess(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Financie")));
+  }
+
 
 
 }

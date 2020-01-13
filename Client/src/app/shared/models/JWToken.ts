@@ -3,9 +3,8 @@ export interface JWToken{
     sub: string, // username
     IS_ADMIN: boolean,
     IS_GHOST: boolean,
-
     exp: number,
-
+    AUTHORITIES: string[],
     MODULE_TYPES_TO_USE: string[],
     FINANCE_TYPE_TO_SUBMIT: string[],
     REQUEST_TYPE_TO_SOLVE: string[]

@@ -5,6 +5,7 @@ import { environment } from 'environments/environment';
 import { RequestTable, RequestDashboard } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
 import { NgxSpinnerService } from "ngx-spinner";
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -25,22 +26,42 @@ export class DashboardComponent implements OnInit {
   @ViewChild('teamRequests',  {static: false}) teamRequests: RequestTableComponent;
   @ViewChild('otherOpenRequests',  {static: false}) otherOpenRequests: RequestTableComponent;
 
+  public isAdmin$: Observable<boolean>;
+  public isGhost$: Observable<boolean>;
+  public isSolver$: Observable<boolean>;
+  public isManager$: Observable<boolean>;
+  public isManagerRightHand$: Observable<boolean>;
 
 
-  constructor( private http: HttpClient, private spinner: NgxSpinnerService) { }
+  constructor( private http: HttpClient, private spinner: NgxSpinnerService, private authService: AuthenticationService ) { }
 
   ngOnInit() {
     this.getRequestOnDashboard();
+
+    this.isAdmin$ = this.authService.isAdmin();
+    this.isGhost$ = this.authService.isGhost();
+    this.isSolver$ = this.authService.isSolver();
+    this.isManager$ = this.authService.isManager();
+    this.isManagerRightHand$ = this.authService.isManagerRightHand();
   }
 
   private getRequestOnDashboard(){
       this.spinner.show();
       this.http.get<RequestDashboard>(environment.apiUrl + this.dashboardRequestURL).subscribe(requests =>{
+        console.log(requests);
         this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
         this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
-        this.teamAssignedRequests.dataSource.data = requests.assignedOnMyTeam as RequestTable[];
-        this.teamRequests.dataSource.data = requests.sentByMyTeam as RequestTable[];
-        this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
+        
+
+        if(this.teamAssignedRequests !== undefined){
+          this.teamAssignedRequests.dataSource.data = requests.assignedOnMyTeam as RequestTable[];
+        }
+        if(this.teamRequests !== undefined){
+          this.teamRequests.dataSource.data = requests.sentByMyTeam as RequestTable[];
+        }
+        if(this.otherOpenRequests !== undefined){
+          this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
+        }
 
         this.spinner.hide();
       })

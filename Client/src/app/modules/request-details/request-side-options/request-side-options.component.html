@@ -1,6 +1,6 @@
 <div class='content' *ngIf= 'requestDetails !== null'>
 
-<div class = 'module' *ngIf='requestDetails.closed === null'>
+<div class = 'module' *ngIf='requestDetails.closed === null && (isSolver$ | async)'>
     <label class="switch">
         <input class="switch-input" type="checkbox"  (click) = 'changeCommenting()' [checked] = "requestDetails.allowCommenting" />
         <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
@@ -20,7 +20,7 @@
 </div>
 
 
-<div class = 'module' *ngIf = "requestDetails.closed === null && allusers !== []">
+<div class = 'module' *ngIf = "requestDetails.closed === null && allusers !== [] && (isSolver$ | async)">
     <mat-form-field class='customInputSmall'>
         <mat-label>Zmena riešiteľa</mat-label>
         <mat-select  (selectionChange)="selectedUser($event.value)">
@@ -31,7 +31,7 @@
     <hr>
 </div>
 
-<div class = 'module'  *ngIf='requestDetails.closed === null'>
+<div class = 'module'  *ngIf='requestDetails.closed === null && (isSolver$ | async)'>
     <mat-form-field class='customInputSmall'>
         <mat-label>Zmena priority</mat-label>
         <mat-select (selectionChange)="selectedPriority($event.value)">
@@ -44,7 +44,7 @@
     <hr>
 </div>
 
-<div class = 'module'  *ngIf='requestDetails.closed === null && requestDetails.requestType === "Report" '>
+<div class = 'module'  *ngIf='requestDetails.closed === null && requestDetails.requestType === "Report" && (isSolver$ | async)'>
     <mat-form-field class='customInputSmall'>
         <input  matInput placeholder="Nahodnocenie v dňoch" (keyup)="addedEvaluation($event.target.value)"  type="number">
     </mat-form-field>

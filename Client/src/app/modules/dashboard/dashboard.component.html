@@ -10,27 +10,31 @@
     </app-request-table>   
 
     <app-request-table #meAssignedRequests 
+        [hidden] = '!(isSolver$ | async) && !(isGhost$ | async) 
+            && !(isAdmin$ | async) &&  meAssignedRequests.dataSource.data.length === 0'
         headerColor="#56A3FF" 
         [displayedColumns]= "modifyTable"
         tableTitle="Požiadavky pridelené na mňa">
     </app-request-table> 
 
     <app-request-table #teamRequests headerColor="#B5D7FF" 
+        *ngIf = '(isManager$ | async) || (isManagerRightHand$ | async) || (isGhost$ | async)  || (isAdmin$ | async)'
         [displayedColumns]= "viewTable"  
-        displayAssignToMe='true'
+        [displayAssignToMe] ='(isSolver$ | async)'
         tableTitle="Požiadavky poslané členmi môjho tímu">
     </app-request-table>  
 
     <app-request-table #teamAssignedRequests headerColor="#B5D7FF" 
+        *ngIf = '(isManager$ | async) || (isManagerRightHand$ | async)  || (isGhost$ | async)  || (isAdmin$ | async)'
         [displayedColumns]= "viewTable"  
-        displayAssignToMe='true'
         tableTitle="Požiadavky pridelené členom môjho tímu">
     </app-request-table>   
 
     <app-request-table #otherOpenRequests 
+        *ngIf = '(isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async)'
         headerColor="#E8F3FF" 
         [displayedColumns]= "viewTable" 
-        displayAssignToMe='true'
+        [displayAssignToMe] ='(isSolver$ | async)'
         tableTitle="Ostatné otvorené požiadavky">
     </app-request-table>   
 

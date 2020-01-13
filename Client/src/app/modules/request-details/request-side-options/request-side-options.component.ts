@@ -7,7 +7,8 @@ import { UserService } from 'app/core/services/user.service';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import Swal from 'sweetalert2';
 import { takeWhile } from 'rxjs/operators';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-request-side-options',
@@ -24,13 +25,17 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
   public requestDetails: RequestDetails;
   private subscription: Subscription;
 
-  constructor(private http: HttpClient, private userService: UserService, private requestService: RequestModificationService) { }
+  public isSolver$: Observable<boolean>;
+
+  constructor(private http: HttpClient, private userService: UserService, 
+    private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.getAllUsers();
     this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
       this.requestDetails = requestDetails;
     });
+    this.isSolver$ = this.authService.isSolver();
   }
 
   ngOnDestroy(): void {

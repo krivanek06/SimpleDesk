@@ -35,7 +35,7 @@ public class UserPrincipal implements UserDetails {
             authorities.add(new SimpleGrantedAuthority("ROLE_GHOST"));
         }
 
-        if(this.getRequestTypesToSolve() != null){
+        if(this.getRequestTypesToSolve().length > 0){
             authorities.add(new SimpleGrantedAuthority("ROLE_SOLVER"));
         }
 

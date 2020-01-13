@@ -56,6 +56,7 @@ import { RequestSideInformationComponent } from './modules/request-details/reque
 import { CommentSharingComponent } from './modules/request-details/comment-sharing/comment-sharing.component';
 import { RequestSideOptionsComponent } from './modules/request-details/request-side-options/request-side-options.component';
 import { RequestFilterComponent } from './shared/components/request-filter/request-filter.component';
+import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
 
 @NgModule({
   declarations: [
@@ -91,7 +92,8 @@ import { RequestFilterComponent } from './shared/components/request-filter/reque
     RequestSideInformationComponent,
     CommentSharingComponent,
     RequestSideOptionsComponent,
-    RequestFilterComponent
+    RequestFilterComponent,
+    UnauthorizedComponent
   ],
   imports: [
     BrowserModule,

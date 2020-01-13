@@ -3,17 +3,19 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2'
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor() { }
+    constructor(private router : Router) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
+            console.log(err);
             if (err.status === 401) {
                 this.authenticationFailed();
             }else if(err.status === 403){
-                console.log("403 error, handle it ! ")
+                Swal.fire({ icon: 'error', text: err.error}).then(() => this.router.navigate(['/unauthorized']));
             }else if(err.status === 404){
                 console.log("404 error, shoud be created an error page")
             }else{

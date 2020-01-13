@@ -4,6 +4,7 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.exception.RequestNotFoundException;
+import rc.bootsecurity.exception.UnauthorizedException;
 import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
@@ -52,8 +53,7 @@ public class RequestService {
     }
 
     private Request loadRequestById(Integer requestId){
-        return this.requestRepository.findById(requestId).orElseThrow(()
-                -> new RequestNotFoundException("Could not found request with id : " + requestId));
+        return this.requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Could not found request with id : " + requestId));
     }
 
     public RequestDashboardDTO getRequestOnDashboard(){
@@ -97,8 +97,14 @@ public class RequestService {
         return this.fileService.getFileForRequest(id, name);
    }
 
-   public RequestDTO getRequestDetails(Integer requestId){
+   public RequestDTO getRequestDetails(Integer requestId) throws UnauthorizedException{
        Request request =  this.loadRequestById(requestId);
+       String username = this.userService.getPrincipalUsername();
+       Boolean access = this.hasAccessForDetails(request, username);
+       if(access == null || !access){
+            throw new UnauthorizedException("User " + username + " does not have access for request " + request.getId());
+       }
+
        request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
        request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request));
 
@@ -106,6 +112,19 @@ public class RequestService {
        requestDTO.setDocuments(this.fileService.getFileForRequest(requestId));
 
        return requestDTO;
+   }
+
+
+   private Boolean hasAccessForDetails(Request request, String username ){
+
+        if(username.equalsIgnoreCase("admin") || username.equalsIgnoreCase("ghost")){
+            return true;
+        }
+        if(request.getCreator().getUsername().equalsIgnoreCase(username) ||
+                (request.getAssigned() != null && request.getAssigned().getUsername().equalsIgnoreCase(username)) )     {
+            return true;
+        }
+        return this.requestRepository.hasAccessForRequest(request.getId(), request.getModuleType().getName(), username);
    }
 
 
