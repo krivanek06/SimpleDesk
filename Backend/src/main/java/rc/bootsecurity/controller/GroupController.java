@@ -7,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rc.bootsecurity.model.dto.*;
-import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.service.GroupService;
-import rc.bootsecurity.service.request.ReportService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +34,7 @@ public class GroupController {
 
     @GetMapping
     public GroupContainerDTO getAllInvolvedGroupsName(){
-        return this.groupService.getAllGroupsForLoggedInUser();
+        return this.groupService.getAllGroupsDTOForLoggedInUser();
     }
 
 

@@ -5,7 +5,7 @@
 
 <div id='contentContainer' >
     <div  class = 'windowLeft'  >
-        <app-user-details (changeWindow) = "changeFrames($event)"></app-user-details>
+        <app-user-details (changeWindow) = "changeFrames($event)" [displayedUser] = ""></app-user-details>
         <app-privileges #userPrivileges name = "uživateľa"></app-privileges>
     </div>
 

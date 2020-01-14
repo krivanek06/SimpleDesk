@@ -90,4 +90,15 @@ public class UserController {
         return this.userService.getAllUsersWithoutPhoto();
     }
 
+    @GetMapping("/secure/{username}")
+    public ResponseEntity<?> getUserDetails(@PathVariable("username") String username){
+        try {
+            UserDTO userDTO =  this.userService.getUserDetails(username);
+            return new ResponseEntity<>(userDTO, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to get user details, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri získavaní údajov uživateľa",HttpStatus.BAD_REQUEST);
+    }
+
 }

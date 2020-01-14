@@ -8,18 +8,21 @@ import rc.bootsecurity.exception.UnauthorizedException;
 import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
+import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
 import rc.bootsecurity.repository.request.*;
+import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.utils.converter.RequestConverter;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RequestService {
@@ -35,6 +38,8 @@ public class RequestService {
     private UserService userService;
     @Autowired
     private RequestCommentService requestCommentService;
+    @Autowired
+    private GroupService groupService;
 
     public List<RequestLog> getLogsForRequest(Request request){
         return this.requestLogRepository.findAllByRequestOrderByTimestampAsc(request);
@@ -106,7 +111,7 @@ public class RequestService {
        }
 
        request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
-       request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request));
+       request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request, username));
 
        RequestDTO requestDTO =  this.requestConverter.convertRequestToRequestDTO(request);
        requestDTO.setDocuments(this.fileService.getFileForRequest(requestId));
@@ -114,7 +119,12 @@ public class RequestService {
        return requestDTO;
    }
 
-
+    /**
+     * return true only if user is  admin or ghost
+     * I am the creator / assigned / closed
+     * I am a manager / has view access for groups where creator / assigned / closed belongs
+     * I have privileges
+     */
    private Boolean hasAccessForDetails(Request request, String username ){
 
         if(username.equalsIgnoreCase("admin") || username.equalsIgnoreCase("ghost")){
@@ -124,6 +134,18 @@ public class RequestService {
                 (request.getAssigned() != null && request.getAssigned().getUsername().equalsIgnoreCase(username)) )     {
             return true;
         }
+
+        List<Group> creatorGroups  = this.groupService.getGroupsWhereUserIsInvolved(request.getCreator());
+        List<Group> assignedGroups  = this.groupService.getGroupsWhereUserIsInvolved(request.getAssigned());
+        List<Group> closedGroups  = this.groupService.getGroupsWhereUserIsInvolved(request.getClosed());
+        Set<Group> groups  =  Stream.of(creatorGroups, assignedGroups, closedGroups).flatMap(Collection::stream).collect(Collectors.toSet());
+
+        List<Group> myGroupsToManage = this.groupService.getGroupsToManageForUser(this.userService.loadUserByUsername(username));
+
+        if(groups.stream().anyMatch(myGroupsToManage::contains)){
+            return true;
+        }
+
         return this.requestRepository.hasAccessForRequest(request.getId(), request.getModuleType().getName(), username);
    }
 

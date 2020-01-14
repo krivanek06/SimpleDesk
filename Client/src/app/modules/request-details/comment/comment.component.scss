@@ -6,6 +6,7 @@
     margin-bottom: 25px;
     font-size: 14px;
     border-bottom: 1px solid #bdbdbd;
+    white-space: pre-wrap;
 }
 
 .floatLeft{
@@ -124,4 +125,10 @@ mat-form-field{
     width: 90%;
     float: left;
     margin-left: 7%;
+}
+
+::ng-deep .custom-tooltip-icon{
+    background-color: #818181;
+    font-size: 14px;
+    padding: 5px;
 }

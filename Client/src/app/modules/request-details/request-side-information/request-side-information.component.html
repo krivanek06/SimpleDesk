@@ -104,7 +104,7 @@
                     {{ requestDetails.assigned.firstName }} {{ requestDetails.assigned.lastName }}
                 </li>
             </ul>
-            <ul *ngIf = 'requestDetails.assigned === null && ( isSolver$ | async )'> 
+            <ul *ngIf = 'requestDetails.closed === null &&requestDetails.assigned === null && ( isSolver$ | async )'> 
                 <li class='information clicable' (click) = "assignOnMe()"> prideliť mne  </li>
             </ul>
         </li>
@@ -189,7 +189,7 @@
         </li>
 
          <!-- uploader -->
-        <div class='uploaderContainer'> 
+        <div class='uploaderContainer' *ngIf = 'requestDetails.closed === null'> 
             <app-file-upload id='uploader' 
                             [uploaderHeight] = '45' 
                             #fileUploader 

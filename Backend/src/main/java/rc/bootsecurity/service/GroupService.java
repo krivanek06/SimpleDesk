@@ -1,9 +1,7 @@
 package rc.bootsecurity.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.dto.GroupContainerDTO;
@@ -11,7 +9,6 @@ import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.model.entity.ticket.TicketType;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
@@ -50,8 +47,12 @@ public class GroupService {
         return this.groupRepository.findAllByGroupManager(user).orElseGet(ArrayList::new);
     }
 
-    public List<Group> getGroupToWatchActivity(User user){
+    public List<Group> getGroupsToWatchActivity(User user){
         return this.groupRepository.findAllByUsersWatchingGroupActivity(user).orElseGet(ArrayList::new);
+    }
+
+    public List<Group> getGroupsWhereUserIsInvolved(User user){
+        return this.groupRepository.findAllByUsersInGroup(user).orElseGet(ArrayList::new);
     }
 
     public void modifyGroupDescription(String groupName, String description){
@@ -86,6 +87,9 @@ public class GroupService {
         this.groupRepository.delete(group);
     }
 
+    public Group getGroupByGroupName(String groupName){
+        return this.groupRepository.findByGroupName(groupName);
+    }
 
    // @Async
    // cannot be transactional because we delete same entity which will be pushed there
@@ -141,13 +145,13 @@ public class GroupService {
         return applicationPrivilegeDTO;
     }
 
-    public GroupContainerDTO getAllGroupsForUser(String name){
+    public GroupContainerDTO getAllGroupsDTOForUsername(String name){
         GroupContainerDTO groupContainerDTO = new GroupContainerDTO();
         User user = this.userService.loadUserByUsername(name);
 
-        List<Group> userInGroups = this.groupRepository.findAllByUsersInGroup(user);
-        List<Group> managerOfGroups = this.groupRepository.findAllByGroupManager(user).orElse(new ArrayList<>());
-        List<Group> watchedGroupActivities = this.groupRepository.findAllByUsersWatchingGroupActivity(user).orElse(new ArrayList<>());
+        List<Group> userInGroups = this.getGroupsWhereUserIsInvolved(user);
+        List<Group> managerOfGroups = this.getGroupsToManageForUser(user);
+        List<Group> watchedGroupActivities = this.getGroupsToWatchActivity(user);
 
         groupContainerDTO.setUserInGroups(userInGroups != null ? userInGroups.stream().map(Group::getGroupName).collect(Collectors.toList()): null);
         groupContainerDTO.setManagerOfGroups( managerOfGroups.stream().map(Group::getGroupName).collect(Collectors.toList()));
@@ -156,8 +160,8 @@ public class GroupService {
         return groupContainerDTO;
     }
 
-    public GroupContainerDTO getAllGroupsForLoggedInUser(){
-        return this.getAllGroupsForUser(this.userService.getPrincipalUsername());
+    public GroupContainerDTO getAllGroupsDTOForLoggedInUser(){
+        return this.getAllGroupsDTOForUsername(this.userService.getPrincipalUsername());
     }
 
     public List<String> getAllGroups(){

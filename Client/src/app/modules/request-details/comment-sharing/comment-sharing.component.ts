@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { GroupService } from 'app/core/services/group.service';
-import { Group } from 'app/shared/models/Group';
+import { Group } from 'app/shared/models/UserGroups';
 import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/group-details.component';
 
 

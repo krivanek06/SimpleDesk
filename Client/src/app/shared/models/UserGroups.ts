@@ -14,6 +14,7 @@ export interface UserSimpleDTO{
     username: string,
     firstName: string,
     lastName: string,
+    email: string,
 }
 
 export interface GroupContainer{
@@ -36,3 +37,22 @@ interface ticketPriv{
     User : string[],
     Other: string[],
 }
+
+
+export interface User{
+    username: string,
+    firstName: string,
+    lastName: string,
+    fullname: string,
+    photo: string,
+    photoBytes: string,
+    email: string,
+    active: boolean,
+    dateCreation: string,
+    dateEnding: string,
+    groupsToManage: string[];
+    groupsActivityWatched: string[];
+    groupsInvolved: string[];
+    applicationPrivilegeDTO: ApplicationPrivilege;
+}
+

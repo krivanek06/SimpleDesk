@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnDestroy } from '@angular/core';
-import { UserSimpleDTO } from 'app/shared/models/Group';
+import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import { RequestDetails, UserSimple } from 'app/shared/models/RequestDetails';
@@ -26,9 +26,13 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   public isSolver$: Observable<boolean>;
+  public isManager$: Observable<boolean>;
+  public isManagerRightHand$: Observable<boolean>;
+  public isAdmin$: Observable<boolean>;
 
-  constructor(private http: HttpClient, private userService: UserService, 
-    private requestService: RequestModificationService, private authService: AuthenticationService) { }
+  public isSolverRightHand$: Observable<boolean>;
+
+  constructor( private userService: UserService,  private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.getAllUsers();
@@ -36,6 +40,10 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
       this.requestDetails = requestDetails;
     });
     this.isSolver$ = this.authService.isSolver();
+    this.isManager$ = this.authService.isManager();
+    this.isManagerRightHand$ = this.authService.isManagerRightHand();
+    this.isAdmin$ = this.authService.isAdmin();
+    this.isSolverRightHand$ = this.authService.isSolverRightHand();
   }
 
   ngOnDestroy(): void {
@@ -55,7 +63,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
 
     this.requestService.changePriority( this.requestDetails.id, this.priority).subscribe(() => {
       this.requestDetails.requestPriority = this.priority;
-      Swal.fire({ position: 'top-end',icon: 'success', title: 'Priorita bola zmenená', showConfirmButton: false, timer: 1500 })
+      Swal.fire({ position: 'top-end', text: 'Priorita bola zmenená', showConfirmButton: false, timer: 1500 })
     })
   }
 
@@ -66,7 +74,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
     
     this.requestService.assignSolver(this.requestDetails.id, this.userSimple).subscribe((userSimple) => {
       this.requestDetails.assigned = userSimple;
-      Swal.fire({ position: 'top-end',icon: 'success', title: 'Riešiteľ zmenený', showConfirmButton: false, timer: 1500 })
+      Swal.fire({ position: 'top-end', text: 'Riešiteľ zmenený', showConfirmButton: false, timer: 1500 })
     })
   }
 
@@ -74,9 +82,9 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
     this.requestService.changeCommenting(this.requestDetails.id).subscribe(() => {
       this.requestDetails.allowCommenting = ! this.requestDetails.allowCommenting;
       if(this.requestDetails.allowCommenting){
-        Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentovanie požiadavky sa zakázalo', showConfirmButton: false, timer: 1500 })
+        Swal.fire({ position: 'top-end', text: 'Komentovanie požiadavky sa zakázalo', showConfirmButton: false, timer: 1500 })
       }else{
-        Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentovanie požiadavky sa povolilo', showConfirmButton: false, timer: 1500 })
+        Swal.fire({ position: 'top-end', text: 'Komentovanie požiadavky sa povolilo', showConfirmButton: false, timer: 1500 })
       }
     })
 
@@ -90,7 +98,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
       this.requestService.changeState(this.requestDetails.id, true).subscribe(() =>{
         this.requestDetails.closed = this.userService.getUserSimple();
         this.requestDetails.timestampClosed = new Date();
-        Swal.fire(  '', 'Požiadavka ' + this.requestDetails.id + ". bola uzavretá.", 'success'  )
+        Swal.fire({ position: 'top-end', text: 'Požiadavka ' + this.requestDetails.id + ". bola uzavretá.", showConfirmButton: false, timer: 1200 })
       }) 
     }
   })
@@ -105,7 +113,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
         this.requestService.changeState(this.requestDetails.id, false).subscribe(() =>{
           this.requestDetails.closed = null;
           this.requestDetails.timestampClosed = null;
-          Swal.fire(  '', 'Požiadavka ' + this.requestDetails.id + ". bola otvorená.", 'success'  );
+          Swal.fire({ position: 'top-end', text: 'Požiadavka ' + this.requestDetails.id + ". bola otvorená.", showConfirmButton: false, timer: 1200 })
         }) 
       }
     })
@@ -117,7 +125,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
     }
     this.requestService.reportAddEvaluation(this.requestDetails.id, this.reportEvaluation).subscribe(() =>{
       this.reportEvaluation = undefined;
-      Swal.fire(  '', 'Nadhodnocenie reportu bolo zaznamenané', 'success'  );
+      Swal.fire({ position: 'top-end', text: 'Nadhodnocenie reportu bolo zaznamenané', showConfirmButton: false, timer: 1200 })
     }) 
   }
 
@@ -132,6 +140,17 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
 
   private addedEvaluation(evaluation: number){
     this.reportEvaluation = evaluation;
+  }
+
+  private isAssignedOnMe():boolean{
+    return this.requestDetails.assigned != null && this.requestDetails.assigned.username === this.userService.user.username;
+  }
+
+  private dropRequest(){
+    this.requestService.removeSolver(this.requestDetails.id).subscribe(() => {
+      Swal.fire({ position: 'top-end', text: 'Riešiteľ bol odstránený', showConfirmButton: false, timer: 1200 })
+      this.requestDetails.assigned = null;
+    })
   }
 
 

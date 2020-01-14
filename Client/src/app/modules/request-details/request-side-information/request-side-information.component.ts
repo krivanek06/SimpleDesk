@@ -74,7 +74,7 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
     }).then((result) => {
       if (result.value) {
         this.requestService.assignOrRemoveRequestOnMe(this.requestDetails.id, true).subscribe(result => {
-          Swal.fire({ title: 'Pridelené', icon: 'success' , position: 'top-end', timer: 1200, showConfirmButton: false,});
+          Swal.fire({ text: 'Pridelené', position: 'top-end', timer: 1200, showConfirmButton: false,});
           this.requestDetails.assigned = this.userService.getUserSimple(); 
         })
       }

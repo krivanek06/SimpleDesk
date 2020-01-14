@@ -37,7 +37,6 @@ export class RequestDetailsComponent implements OnInit {
     this.spinner.show();
     this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`).subscribe(requestDetails => {
         this.requestService.updateRequestDetails( requestDetails);
-        this.requestService.getRequestDetials().subscribe(x => console.log(x));
         this.spinner.hide();
       }, 
       error => this.spinner.hide());

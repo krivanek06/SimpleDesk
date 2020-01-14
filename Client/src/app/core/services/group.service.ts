@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Group, GroupContainer, ApplicationPrivilege } from 'app/shared/models/Group';
+import { Group, GroupContainer, ApplicationPrivilege } from 'app/shared/models/UserGroups';
 import { environment } from 'environments/environment';
 
 @Injectable({

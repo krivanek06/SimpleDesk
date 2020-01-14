@@ -2,6 +2,7 @@ package rc.bootsecurity.model.dto;
 
 import lombok.Data;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -29,5 +30,13 @@ public class UserDTO {
     private Timestamp dateEnding;
 
     private byte[] photoBytes;
+
+    private String[]  groupsToManage;
+
+    private String[]  groupsActivityWatched;
+
+    private String[]  groupsInvolved;
+
+    private ApplicationPrivilegeDTO applicationPrivilegeDTO;
 
 }

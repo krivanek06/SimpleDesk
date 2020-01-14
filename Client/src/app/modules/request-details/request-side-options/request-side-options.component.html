@@ -1,15 +1,7 @@
 <div class='content' *ngIf= 'requestDetails !== null'>
 
-<div class = 'module' *ngIf='requestDetails.closed === null && (isSolver$ | async)'>
-    <label class="switch">
-        <input class="switch-input" type="checkbox"  (click) = 'changeCommenting()' [checked] = "requestDetails.allowCommenting" />
-        <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
-        <span class="switch-handle"></span> 
-    </label>
-    <hr>
-</div>
 
-
+    
 <div class = 'module'>
     <button mat-raised-button id = 'sliderButton' color='warn' 
             class='customInput' *ngIf='requestDetails.closed === null' (click) = 'closeRequest()'> Uzatvoriť</button>
@@ -20,7 +12,25 @@
 </div>
 
 
-<div class = 'module' *ngIf = "requestDetails.closed === null && allusers !== [] && (isSolver$ | async)">
+<div class = 'module' *ngIf='requestDetails.closed === null && (isSolver$ | async)'>
+    <label class="switch">
+        <input class="switch-input" type="checkbox"  (click) = 'changeCommenting()' [checked] = "requestDetails.allowCommenting" />
+        <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
+        <span class="switch-handle"></span> 
+    </label>
+    <hr>
+</div>
+
+
+<div class = 'module'  *ngIf='requestDetails.closed === null && (isAssignedOnMe() || (isAdmin$ | async))'>
+    <button mat-raised-button id = 'sliderButton' color='warn'  class='customInput' (click) = 'dropRequest()'> 
+            Zmazať riešiteľa
+    </button>
+    <hr>
+</div>
+
+
+<div class = 'module' *ngIf = "requestDetails.closed === null && allusers !== [] &&  (isSolverRightHand$ | async)  ||  (isAdmin$ | async)">
     <mat-form-field class='customInputSmall'>
         <mat-label>Zmena riešiteľa</mat-label>
         <mat-select  (selectionChange)="selectedUser($event.value)">

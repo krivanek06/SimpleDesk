@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import rc.bootsecurity.model.dto.UserDTO;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.model.dto.UserPasswordContainer;
-import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.dto.*;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
@@ -29,6 +26,8 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private GroupService groupService;
 
     private JsonStringParser jsonStringParser = new JsonStringParser();
     private FileService fileService = new FileService();
@@ -41,12 +40,10 @@ public class UserService {
     }
 
     public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
-        return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(
-                this.userRepository.findPrivilegesForUser(username));
+        return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.userRepository.findPrivilegesForUser(username));
     }
     public List<User> getUsersInvolvedInGroup(Group group){
-        List<User> users = this.userRepository.findAllByGroupsInvolved(group);
-        return users != null ? users : new ArrayList<>();
+        return this.userRepository.findAllByGroupsInvolved(group);
     }
 
     public List<User> getUsersWatchedGroup(Group group){
@@ -73,7 +70,6 @@ public class UserService {
     }
 
     public UserDTO getLoggedInUserDetails(){
-        FileService fileService = new FileService();
         String username = this.getPrincipalUsername();
         UserDTO userDTO = this.userConverter.convertUserToUserDTO(this.loadUserByUsername(username));
         userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
@@ -117,6 +113,21 @@ public class UserService {
     public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
         return this.userRepository.findAll().stream().filter(user -> !user.getUsername().equalsIgnoreCase("admin"))
                 .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+    }
+
+    public UserDTO getUserDetails(String username){
+        User user = this.loadUserByUsername(username);
+
+        UserDTO userDTO = this.userConverter.convertUserToUserDTO(user);
+        userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
+        userDTO.setApplicationPrivilegeDTO(this.getPrivilegesForUser(username));
+
+        GroupContainerDTO groupContainerDTO = this.groupService.getAllGroupsDTOForUsername(username);
+        userDTO.setGroupsInvolved(groupContainerDTO.getUserInGroups().toArray(String[]::new));
+        userDTO.setGroupsActivityWatched(groupContainerDTO.getWatchedGroupActivity().toArray(String[]::new));
+        userDTO.setGroupsToManage(groupContainerDTO.getManagerOfGroups().toArray(String[]::new));
+
+        return userDTO;
     }
 
     public void registerUser(UserDTO userDTO){

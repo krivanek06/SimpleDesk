@@ -6,7 +6,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, Subscription } from 'rxjs';
 import { environment } from 'environments/environment';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Group } from 'app/shared/models/Group';
+import { Group } from 'app/shared/models/UserGroups';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 
@@ -61,7 +61,7 @@ export class CommentComponent implements OnInit, OnDestroy {
     if (formValues) {
       requestComment.comment = formValues[0];
       this.addComment(requestComment, true).subscribe(() => {
-       // Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol zmenený', showConfirmButton: false, timer: 1500 })
+        Swal.fire({ position: 'top-end', text: 'Komentár bol zmenený', showConfirmButton: false, timer: 1500 })
       })
     }
   }
@@ -84,7 +84,7 @@ export class CommentComponent implements OnInit, OnDestroy {
             this.requestComments.splice(index, 1);
           }
 
-          Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol zmazaný', showConfirmButton: false, timer: 1500 })
+          Swal.fire({ position: 'top-end', text: 'Komentár bol zmazaný', showConfirmButton: false, timer: 1500 })
         })
       }
     })
@@ -96,7 +96,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       if(!requestComment.isPrivate){
         requestComment.groupsToShare = [];
       }
-      Swal.fire({ position: 'top-end',icon: 'success', title: 'Viditeľnosť komentára bolo zmenené', showConfirmButton: false, timer: 1500 })
+      Swal.fire({ position: 'top-end', text: 'Viditeľnosť komentára bolo zmenené', showConfirmButton: false, timer: 1500 })
     });
   }
 
@@ -140,7 +140,6 @@ export class CommentComponent implements OnInit, OnDestroy {
 
     Swal.fire({
       title: 'Odoslať komentár ?',
-      text: commentDTO.comment,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#0077ec',
@@ -151,7 +150,7 @@ export class CommentComponent implements OnInit, OnDestroy {
         this.addComment(commentDTO, false).subscribe((addedComment: RequestComment) => {
           this.requestComments.push(addedComment);
           this.commentForm.patchValue({'commentField' : ''});
-         // Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
+          Swal.fire({ position: 'top-end', text: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
         })
       }
     })
@@ -179,7 +178,7 @@ export class CommentComponent implements OnInit, OnDestroy {
       if (result.value) {
         this.sharingComment.groupsToShare.push(group.name);
         this.http.put(environment.apiUrl + `requests/comment/share`, this.sharingComment).subscribe(() => {
-          Swal.fire({ position: 'top-end',icon: 'success', title: 'Komentár bol vyzdieľaný', showConfirmButton: false, timer: 1500 })
+          Swal.fire({ position: 'top-end', text: 'Komentár bol vyzdieľaný', showConfirmButton: false, timer: 1500 })
         })
       }
     })

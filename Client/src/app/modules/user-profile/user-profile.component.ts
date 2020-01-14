@@ -3,7 +3,7 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
 import { UserService } from 'app/core/services/user.service';
 import { GroupService } from 'app/core/services/group.service';
 import { PrivilegesComponent } from './privileges/privileges.component';
-import { GroupContainer, Group, ApplicationPrivilege } from 'app/shared/models/Group';
+import { Group, ApplicationPrivilege } from 'app/shared/models/UserGroups';
 import { GroupDetailsComponent } from './group-details/group-details.component';
 
 @Component({

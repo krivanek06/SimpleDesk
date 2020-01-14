@@ -126,8 +126,6 @@ public class BasicTest {
         Group group6 = this.groupRepository.findByGroupName("TESTGROUP6");
         Group group7 = this.groupRepository.findByGroupName("TESTGROUP7");
 
-        assertThat(this.groupRepository.findAllByUsersInGroup(user1)).containsExactlyInAnyOrder(group1,group2,group3,group4,group5,group6,group7);
-        assertThat(this.groupRepository.findAllByUsersInGroup(user3)).containsExactlyInAnyOrder(group1,group2,group3,group5,group6);
 
         assertThat(this.groupRepository.findAllByGroupManager(user3)).isEmpty();
         assertThat(this.groupRepository.findAllByGroupManager(user1).get()).containsOnly(group1,group2,group3,group4);
@@ -361,8 +359,6 @@ public class BasicTest {
        // Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
         Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        List<Group> groupsForUser12 = this.groupRepository.findAllByUsersInGroup(user12);
-        assertThat(groupsForUser12).containsExactlyInAnyOrder(group5);
 
         RequestPosition requestPosition1 = this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name());
         RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.Zatvorené.name());

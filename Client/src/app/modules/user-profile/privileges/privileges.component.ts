@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ApplicationPrivilege } from 'app/shared/models/Group';
+import { ApplicationPrivilege } from 'app/shared/models/UserGroups';
 
 @Component({
   selector: 'app-privileges',

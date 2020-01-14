@@ -1,0 +1,32 @@
+
+#contentContainer{
+    height: 100%;
+    width: calc(100% - 85px);
+    padding: 5px;
+    float: right;
+    position: relative;
+}
+
+#guardImg{
+    width: 850px;
+    height: 600px;
+    position: absolute;
+    right: 0;
+}
+
+
+#forbidden{
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    height: 100px;
+    width: 100px;
+}
+
+.text{
+    margin-top: 150px;
+    margin-left: 50px;
+    font-size: 22px;
+    color: #ff6161;
+    font-weight: bold;
+}

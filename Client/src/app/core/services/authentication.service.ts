@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { JWToken } from 'app/shared/models/JWToken';
-import { User } from 'app/shared/models/User';
-import { HttpClient, HttpParams, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { tap, mapTo, catchError, map } from 'rxjs/operators';
@@ -93,6 +91,12 @@ export class AuthenticationService {
 
   private getRefreshToken () {
     return localStorage.getItem('refresh_token');
+  }
+
+
+  /* ----------------- privileges ------------------- */
+  public isSolverRightHand(): Observable<boolean> {
+    return this.isSolver() && (this.isManagerRightHand() || this.isManager());
   }
 
   public isAdmin(): Observable<boolean> {

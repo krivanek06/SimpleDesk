@@ -26,7 +26,7 @@ public class UserPrincipalDetailsService implements UserDetailsService {
         User user =  this.userService.loadUserByUsername(username);
         ApplicationPrivilegeDTO applicationPrivilegeDTO = this.userService.getPrivilegesForUser(username);
         List<Group> groupsToManage = this.groupService.getGroupsToManageForUser(user);
-        List<Group> groupToWatchActivity = this.groupService.getGroupToWatchActivity(user);
+        List<Group> groupToWatchActivity = this.groupService.getGroupsToWatchActivity(user);
 
         // privileges
         UserPrincipal userPrincipal = new UserPrincipal();

@@ -15,8 +15,8 @@ import java.util.Optional;
 public interface GroupRepository extends CrudRepository<Group, Integer > {
     Optional<List<Group>> findAllByGroupManager(User groupManager);
     Optional<List<Group>> findAllByUsersWatchingGroupActivity(User user);
+    Optional<List<Group>> findAllByUsersInGroup(User users);
 
-    List<Group> findAllByUsersInGroup(User users);
     List<Group> findAllByGroupNameIn(List<String> groupsNames);
     Group findByGroupName(String name);
 

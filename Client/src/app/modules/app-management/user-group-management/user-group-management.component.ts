@@ -4,8 +4,9 @@ import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/gr
 import { GroupService } from 'app/core/services/group.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ApplicationPrivilege } from 'app/shared/models/Group';
+import { ApplicationPrivilege, UserSimpleDTO } from 'app/shared/models/UserGroups';
 import Swal from 'sweetalert2';
+import { UserService } from 'app/core/services/user.service';
 
 @Component({
   selector: 'app-user-group-management',
@@ -14,24 +15,32 @@ import Swal from 'sweetalert2';
 })
 export class UserGroupManagementComponent implements OnInit, OnDestroy {
   public groups: Observable<string[]>;
+  public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
 
-  constructor(private groupService: GroupService) { }
+  constructor(private groupService: GroupService, private userService: UserService) { }
 
   ngOnInit() {
     this.groups = this.groupService.getAllGroups();
+    this.users = this.userService.getAllUsers();
   }
 
   public selectGroup(groupName: string){
     this.groupService.getGroupDetailsWithUnsetPrivileges(groupName).pipe(takeUntil(this.destroy$)).subscribe(group => {
-      console.log(group)
       this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
       this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
       this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
       this.groupPrivileges.activateUnableClick = true;
+    })
+  }
+
+  public selectUser(username: string){
+    console.log(username);
+    this.userService.getUserDetials(username).subscribe(user => {
+      console.log(user);
     })
   }
 
@@ -43,7 +52,6 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   private resetGroupPrivileges(){
     this.groupService.getGroupDetailsWithUnsetPrivileges(this.groupDetails.group.name).pipe(takeUntil(this.destroy$))
     .subscribe(group => {
-      console.log(group);
       this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
       this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
     })

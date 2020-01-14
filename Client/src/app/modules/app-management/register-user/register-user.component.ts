@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { UserRegistration } from 'app/shared/models/User';
+import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
 
@@ -43,7 +43,7 @@ export class RegisterUserComponent implements OnInit {
     }
     
     const formValues = this.userRegistrationForm.value;
-    const userRegistraion: UserRegistration = {
+    const userRegistraion: UserSimpleDTO = {
       username : formValues.username,
       firstName : formValues.firstname,
       lastName : formValues.lastname,

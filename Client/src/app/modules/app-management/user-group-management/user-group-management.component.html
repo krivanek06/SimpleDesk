@@ -3,9 +3,11 @@
 
 <div class = 'container'>
     <mat-form-field >
-        <mat-label>Vyberte skupinu</mat-label>
-        <mat-select (selectionChange)= "selectGroup($event.value)">
-            <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>
+        <mat-label>Vyberte uživateľa</mat-label>
+        <mat-select (selectionChange)= "selectUser($event.value)">
+            <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'> 
+                {{ value.firstName }} {{ value.lastName }}
+            </mat-option>
         </mat-select>
 
     </mat-form-field>

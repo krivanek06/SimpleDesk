@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'app/core/services/user.service';
-import { UserSimpleDTO, ApplicationPrivilege, Group } from 'app/shared/models/Group';
+import { UserSimpleDTO, ApplicationPrivilege, Group } from 'app/shared/models/UserGroups';
 import { RequestTypeService } from 'app/core/services/request-type.service';
 import { FinanceType } from 'app/shared/models/FinanceType';
 import { TicketType } from 'app/shared/models/TicketSubtype';
