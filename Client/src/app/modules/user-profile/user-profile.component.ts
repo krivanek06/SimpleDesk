@@ -3,8 +3,10 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
 import { UserService } from 'app/core/services/user.service';
 import { GroupService } from 'app/core/services/group.service';
 import { PrivilegesComponent } from './privileges/privileges.component';
-import { Group, ApplicationPrivilege } from 'app/shared/models/UserGroups';
+import { Group, ApplicationPrivilege, GroupContainer } from 'app/shared/models/UserGroups';
 import { GroupDetailsComponent } from './group-details/group-details.component';
+import { UserDetailsComponent } from './user-details/user-details.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-profile',
@@ -13,21 +15,21 @@ import { GroupDetailsComponent } from './group-details/group-details.component';
 })
 export class UserProfileComponent implements OnInit , AfterViewInit{
   public displayAvatarts : boolean = false;
+
+  public groupContainer: Observable<GroupContainer>;
+
+  @ViewChild('userDetials',  {static: false}) userDetials: UserDetailsComponent;
   @ViewChild('userPrivileges',  {static: false}) userPrivileges: PrivilegesComponent;
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
 
   
-  constructor(private authService : AuthenticationService, private userService : UserService) { }
+  constructor(private authService : AuthenticationService, public userService : UserService, private groupService: GroupService) { }
 
-  ngOnInit() {
-    this.authService.getDecodedToken().subscribe(x => console.log(x)).unsubscribe();    
-  }
+  ngOnInit() { }
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      this.initUserPrivileges();
-    });
+    setTimeout(() => { this.initUserPrivileges(); });
   }
 
   private initUserPrivileges(): void{
@@ -47,6 +49,8 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
       };
       this.userPrivileges.disabledPrivileges = priv;
     })
+
+    this.groupContainer = this.groupService.getAllGroupsForUser();
   }
 
 

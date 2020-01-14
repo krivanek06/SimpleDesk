@@ -49,7 +49,6 @@ export class PrivilegesComponent implements OnInit {
   }
 
   private saveButtonClicked(){
-    console.log(this.enabledPrivileges)
     this.saveButton.emit(this.enabledPrivileges);
   }
 

@@ -4,9 +4,11 @@ import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/gr
 import { GroupService } from 'app/core/services/group.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ApplicationPrivilege, UserSimpleDTO } from 'app/shared/models/UserGroups';
+import { ApplicationPrivilege, UserSimpleDTO, GroupContainer } from 'app/shared/models/UserGroups';
 import Swal from 'sweetalert2';
 import { UserService } from 'app/core/services/user.service';
+import { UserDetailsComponent } from 'app/modules/user-profile/user-details/user-details.component';
+import { UserGroupsComponent } from 'app/modules/user-profile/user-groups/user-groups.component';
 
 @Component({
   selector: 'app-user-group-management',
@@ -17,6 +19,11 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   public groups: Observable<string[]>;
   public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
+
+
+  @ViewChild('userDetails',  {static: false}) userDetails: UserDetailsComponent;
+  @ViewChild('userPrivileges',  {static: false}) userPrivileges: PrivilegesComponent;
+  @ViewChild('userGroups',  {static: false}) userGroups: UserGroupsComponent;
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
 
@@ -38,9 +45,20 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   }
 
   public selectUser(username: string){
-    console.log(username);
-    this.userService.getUserDetials(username).subscribe(user => {
+    this.userService.getUserDetials(username).pipe(takeUntil(this.destroy$)).subscribe(user => {
       console.log(user);
+      this.userDetails.displayedUser = user;
+
+      this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
+      this.userPrivileges.name = 'Uživateľa';
+
+      const groupContainer: GroupContainer = {
+        managerOfGroups: user.groupsToManage,
+        watchedGroupActivity: user.groupsActivityWatched,
+        userInGroups: user.groupsInvolved
+      }
+
+      this.userGroups.groupContainer = groupContainer;
     })
   }
 

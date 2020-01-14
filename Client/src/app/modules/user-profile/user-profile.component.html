@@ -5,17 +5,21 @@
 
 <div id='contentContainer' >
     <div  class = 'windowLeft'  >
-        <app-user-details (changeWindow) = "changeFrames($event)" [displayedUser] = ""></app-user-details>
+        <app-user-details (changeWindow) = "changeFrames($event)" #userDetials 
+            [displayedUser] = "userService.user"  addImageClick = 'true' showPasswordChange = 'true'>
+        </app-user-details>
         <app-privileges #userPrivileges name = "uživateľa"></app-privileges>
     </div>
 
     <div  class = 'windowLeft'  >
-        <app-user-groups (selectedGroupEmmiter) = "initGroupPrivileges($event)"></app-user-groups>
+        <app-user-groups (selectedGroupEmmiter) = "initGroupPrivileges($event)"  
+            [groupContainer] = "groupContainer | async" elevationActivated = "true">
+        </app-user-groups>
         <app-group-details #groupDetails></app-group-details>
         <app-privileges #groupPrivileges ></app-privileges>
     </div>
 
-    <div   *ngIf="displayAvatarts" >
+    <div *ngIf="displayAvatarts" >
         <app-user-images (changeWindow) = "changeFrames($event)"></app-user-images>
     </div>
 

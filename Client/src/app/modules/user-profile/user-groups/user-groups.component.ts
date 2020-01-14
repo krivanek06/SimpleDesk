@@ -1,6 +1,8 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core';
 import { GroupService } from 'app/core/services/group.service';
 import { GroupContainer, Group } from 'app/shared/models/UserGroups';
+import { Subject, Observable } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Component({
@@ -8,28 +10,34 @@ import { GroupContainer, Group } from 'app/shared/models/UserGroups';
   templateUrl: './user-groups.component.html',
   styleUrls: ['./user-groups.component.scss']
 })
-export class UserGroupsComponent implements OnInit {
+export class UserGroupsComponent implements OnInit, OnDestroy {
+  private destroy$: Subject<boolean> = new Subject<boolean>();
+  
   @Output() selectedGroupEmmiter: EventEmitter<Group> = new EventEmitter<Group>();
 
-  groupContainer: GroupContainer;
+  @Input() groupContainer: GroupContainer;
+  @Input() elevationActivated: boolean = false;
 
   constructor(public groupService: GroupService) { }
 
-  ngOnInit() {
-    this.getAllGroupsForUser();
+  ngOnInit() {}
+
+  ngOnDestroy(): void {
+    this.destroy$.next(true);
+    this.destroy$.unsubscribe();
   }
 
-  private getAllGroupsForUser(): void{
-    if(this.groupContainer !== undefined){
-      return;
-    }
-    this.groupService.getAllGroupsForUser().subscribe(result => this.groupContainer = result);
-  }
 
   private getGroupDetails(groupName: string){
-    this.groupService.getGroupDetails(groupName).subscribe(group => {
-      this.selectedGroupEmmiter.emit(group);
-    })
+    if(!this.elevationActivated){
+      return;
+    }
+
+    this.groupService.getGroupDetails(groupName)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(group => {
+        this.selectedGroupEmmiter.emit(group);
+      })
   }
 
 }

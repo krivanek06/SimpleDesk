@@ -1,5 +1,5 @@
 
-<div class='rightContainer'>  
+<div class='rightContainer' *ngIf = "groupContainer !== undefined">  
     <div class = 'formInformationContainerSubcontent smallerContent'>
 
         <span class='formTitleSmall' >
@@ -10,7 +10,7 @@
         <li class='informationsContainer topspace'  *ngIf="groupContainer && groupContainer.managerOfGroups.length > 0"> 
             <div class='informationTitle'>Manažér skupín</div>
             <ul class='informationsHolder'>
-                <li class='elevation'  *ngFor="let name of groupContainer.managerOfGroups" (click)="getGroupDetails(name)"> 
+                <li [ngClass] = '{ "elevation" : elevationActivated}'  *ngFor="let name of groupContainer.managerOfGroups" (click)="getGroupDetails(name)"> 
                     {{ name }}  
                 </li>
             </ul>
@@ -19,7 +19,7 @@
         <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.watchedGroupActivity.length > 0">
             <div class='informationTitle'>Sledované skupiny</div>
             <ul class='informationsHolder'>
-                <li div class='elevation'  *ngFor="let name of groupContainer.watchedGroupActivity" (click)="getGroupDetails(name)"> 
+                <li [ngClass] = '{ "elevation" : elevationActivated}'   *ngFor="let name of groupContainer.watchedGroupActivity" (click)="getGroupDetails(name)"> 
                     {{ name }}
                 </li> 
             </ul>
@@ -28,7 +28,7 @@
         <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.userInGroups.length > 0">
             <div class='informationTitle' >Člen skupín</div>
             <ul class='informationsHolder'> 
-                <li class='elevation'  *ngFor="let name of groupContainer.userInGroups" (click)="getGroupDetails(name)">
+                <li [ngClass] = '{ "elevation" : elevationActivated}'   *ngFor="let name of groupContainer.userInGroups" (click)="getGroupDetails(name)">
                     {{ name }} 
                 </li>
             </ul>

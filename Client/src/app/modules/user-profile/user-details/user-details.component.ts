@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, Input } from '@angular/core';
-import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
 import { PasswordContainer } from 'app/shared/models/PasswordContainer';
 import { Title } from '@angular/platform-browser';
@@ -9,7 +8,6 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Router } from '@angular/router';
 import { EventEmitter } from '@angular/core';
 import { User } from 'app/shared/models/UserGroups';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-user-details',
@@ -17,10 +15,13 @@ import { Observable } from 'rxjs';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
-  @Input() displayedUser: User;
+
+  @Input() addImageClick = false;
+  @Input() showPasswordChange = false;
+  @Input() public displayedUser: User;
   @Output() changeWindow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
 
-  constructor(public userService: UserService, private http : HttpClient, private spinner: NgxSpinnerService, private router: Router) { }
+  constructor( private http : HttpClient, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
   }

@@ -1,4 +1,4 @@
-<div class='rightContainer'>   
+<div class='rightContainer' *ngIf = "displayedUser !== undefined">   
     <div class = 'formInformationContainerSubcontent smallerContent'>
 
         <span class='formTitleSmall' >
@@ -11,27 +11,28 @@
             <div class='informationTitle'>Avatar</div>
             <ul class='informationsHolder'>
                 <li>
-                    <img [src]="'data:image/jpeg;base64,'+userService.user.photoBytes" class='avatar' (click)="changeFrames()"/>
+                    <img [src]="'data:image/jpeg;base64,'+ displayedUser.photoBytes" class='avatar' 
+                    (click)="changeFrames()"  [ngClass] = '{"avatarReactive" : addImageClick }' />
                 </li>
             </ul> 
         </li>
         
         <li class='informationsContainer topspace'>
             <div class='informationTitle'>Meno</div>
-            <ul class='informationsHolder'><li > {{ userService.user.firstName }}</li> </ul>
+            <ul class='informationsHolder'><li > {{ displayedUser.firstName }}</li> </ul>
         </li>
 
         <li class='informationsContainer topspace'>
             <div class='informationTitle'>Priezvisko</div>
-            <ul class='informationsHolder'> <li>{{ userService.user.lastName }}  </li></ul>
+            <ul class='informationsHolder'> <li>{{ displayedUser.lastName }}  </li></ul>
         </li>
 
         <li class='informationsContainer topspace'>
             <div class='informationTitle'>Email</div>
-            <ul class='informationsHolder'> <li>{{ userService.user.email }}  </li></ul>
+            <ul class='informationsHolder'> <li>{{ displayedUser.email }}  </li></ul>
         </li>
 
-        <li class='informationsContainer topspace'>
+        <li class='informationsContainer topspace' *ngIf = 'showPasswordChange'>
             <div class='informationTitle'>Heslo</div>
             <ul class='informationsHolder'> <li class='passwordChange' (click) = "changePassword()">zmeniť  </li></ul>
         </li>
