@@ -12,10 +12,16 @@ export class NavigationComponent implements OnInit {
 
   public hasPrivilegeAccess$: Observable<boolean>;
 
+  public isAdmin$: Observable<boolean>;
+
+  public isGhost$: Observable<boolean>;
+
   constructor( private authService: AuthenticationService) { }
 
   ngOnInit() { 
     this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
+    this.isAdmin$ = this.authService.isAdmin();
+    this.isGhost$ = this.authService.isGhost();
   }
 
 }

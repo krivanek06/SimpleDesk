@@ -11,7 +11,11 @@ export class GroupService {
 
   constructor(private http: HttpClient) { }
 
-  public getAllGroupsForUser():Observable<GroupContainer>{
+  public getAllGroupNamesForUser():Observable<string[]>{
+    return this.http.get<string[]>(environment.apiUrl + "group/available");
+  }
+
+  public getAllGroupContainersForUser():Observable<GroupContainer>{
     return this.http.get<GroupContainer>(environment.apiUrl + "group");
   }
 

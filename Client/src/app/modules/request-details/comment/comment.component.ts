@@ -23,6 +23,9 @@ export class CommentComponent implements OnInit, OnDestroy {
   private sharingComment: RequestComment;
 
   public isSolver$: Observable<boolean>;
+  public isGhost$: Observable<boolean>;
+  public isAdmin$: Observable<boolean>;
+
   @Input() public requestComments:RequestComment[];
 
   constructor(public userService: UserService, private http: HttpClient, private formBuilder: FormBuilder, 
@@ -39,6 +42,8 @@ export class CommentComponent implements OnInit, OnDestroy {
     });
 
     this.isSolver$ = this.authService.isSolver();
+    this.isGhost$ = this.authService.isGhost();
+    this.isAdmin$ = this.authService.isAdmin();
   }
 
   ngOnDestroy(): void {

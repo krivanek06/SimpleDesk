@@ -34,7 +34,8 @@
     </div>
     <app-group-details #groupDetails></app-group-details>
     <app-privileges #groupPrivileges (resetButton) = "resetGroupPrivileges()" 
-                (saveButton) = "saveGroupPrivileges($event)">
+                (saveButton) = "saveGroupPrivileges($event)"
+                [activateUnableClick] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" >
     </app-privileges>
 </div>
 

@@ -5,8 +5,14 @@
 <div id='contentContainer'>
     <div class="windowButtonChangers">
         <span class='formTitleSmall'>Správa systému</span>
-        <a mat-raised-button class="requestFormButton" routerLink="/app_management/register_user" >Registrovať uživateĺa</a>
-        <a mat-raised-button class="requestFormButton" routerLink="/app_management/register_group">Registrovať skupinu</a>      
+        <a mat-raised-button class="requestFormButton" routerLink="/app_management/register_user"
+        *ngIf =  "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)"  >
+            Registrovať uživateĺa
+        </a>
+        <a mat-raised-button class="requestFormButton" routerLink="/app_management/register_group"
+        *ngIf =  "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)">
+            Registrovať skupinu
+        </a>      
     </div>
     <router-outlet></router-outlet>
 </div>

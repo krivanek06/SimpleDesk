@@ -13,6 +13,7 @@ import rc.bootsecurity.model.dto.*;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.enums.USER_TYPE;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
@@ -67,6 +68,11 @@ public class UserService {
             LOGGER.error("SecurityContextHolder does not found principal, error : " + e.getMessage());
         }
         return username;
+    }
+
+    public boolean isAdminOrGhost(){
+        String username = this.getPrincipalUsername();
+        return username.equalsIgnoreCase(USER_TYPE.Admin.name()) || username.equalsIgnoreCase(USER_TYPE.Ghost.name());
     }
 
     public UserDTO getLoggedInUserDetails(){

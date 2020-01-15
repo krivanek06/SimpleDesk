@@ -23,6 +23,7 @@ import rc.bootsecurity.utils.service.JsonStringParser;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class GroupService {
@@ -158,6 +159,15 @@ public class GroupService {
         groupContainerDTO.setWatchedGroupActivity( watchedGroupActivities.stream().map(Group::getGroupName).collect(Collectors.toList()));
 
         return groupContainerDTO;
+    }
+
+    public List<String> getAllGroupsNamesForLoggedInUser(){
+        if(this.userService.isAdminOrGhost())
+            return this.getAllGroups();
+
+        GroupContainerDTO groupContainerDTO = this.getAllGroupsDTOForLoggedInUser();
+        return Stream.of(groupContainerDTO.getManagerOfGroups(), groupContainerDTO.getUserInGroups(),
+                groupContainerDTO.getWatchedGroupActivity()).flatMap(Collection::stream).distinct().collect(Collectors.toList());
     }
 
     public GroupContainerDTO getAllGroupsDTOForLoggedInUser(){

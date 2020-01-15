@@ -12,6 +12,7 @@ import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
+import rc.bootsecurity.model.enums.USER_TYPE;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
@@ -63,7 +64,10 @@ public class RequestService {
 
     public RequestDashboardDTO getRequestOnDashboard(){
         String username = this.userService.getPrincipalUsername();
-        String rawJson = this.requestRepository.findOpenRequestOnDashboard(username);
+
+        String rawJson = (username.equalsIgnoreCase(USER_TYPE.Ghost.name()) || username.equalsIgnoreCase(USER_TYPE.Admin.name())) ?
+                      this.requestRepository.findAllOpenRequestOnDashboard() : this.requestRepository.findOpenRequestOnDashboard(username);
+
         RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestDashboardDTO(rawJson);
 
         this.setImageForRequestTableDTO(requestDashboardDTO.getMyOpen());
@@ -77,7 +81,10 @@ public class RequestService {
 
     public List<RequestTableDTO> getClosedRequests(String dateClosed1, String dateClosed2){
         User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
-        String rawJson = this.requestRepository.findClosedRequestsBetweenDate(user.getId(), user.getUsername(), dateClosed1, dateClosed2);
+        String rawJson = (user.getUsername().equalsIgnoreCase(USER_TYPE.Ghost.name()) || user.getUsername().equalsIgnoreCase(USER_TYPE.Admin.name())) ?
+                 this.requestRepository.findAllClosedRequestsBetweenDate(dateClosed1, dateClosed2) :
+                    this.requestRepository.findClosedRequestsBetweenDate(user.getId(), user.getUsername(), dateClosed1, dateClosed2);
+
         JSONObject requestJsonObject = new JSONObject(rawJson);
         List<RequestTableDTO> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(requestJsonObject,"closed_requests" );
         this.setImageForRequestTableDTO(requestTableDTOS);

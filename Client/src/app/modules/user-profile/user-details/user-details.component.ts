@@ -67,9 +67,8 @@ export class UserDetailsComponent implements OnInit {
       this.spinner.show();
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
       this.http.put(environment.apiUrl + "user/changePassword" ,password, {headers : headers}).subscribe(result =>{
-          this.spinner.hide();
-          Swal.fire({ position: 'top-end', icon: 'success', title: 'Heslo bolo zmenené',  showConfirmButton: false,timer: 1500 })
-      })
+          Swal.fire({ position: 'top-end',  title: 'Heslo bolo zmenené',  showConfirmButton: false,timer: 1500 })
+      }, () => this.spinner.hide())
     }
   }
 

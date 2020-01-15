@@ -50,7 +50,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit{
       this.userPrivileges.disabledPrivileges = priv;
     })
 
-    this.groupContainer = this.groupService.getAllGroupsForUser();
+    this.groupContainer = this.groupService.getAllGroupContainersForUser();
   }
 
 

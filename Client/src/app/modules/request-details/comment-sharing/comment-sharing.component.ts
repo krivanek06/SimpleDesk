@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild } from '@angular/core';
 import { GroupService } from 'app/core/services/group.service';
-import { Group } from 'app/shared/models/UserGroups';
+import { Group, GroupContainer } from 'app/shared/models/UserGroups';
 import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/group-details.component';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -15,14 +16,12 @@ export class CommentSharingComponent implements OnInit {
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
   public clickedGroup: Group;
 
-  public memberOfGroups: string[];
+  public involvedInGroups$: Observable<string[]>;
 
   constructor(public groupService: GroupService) { }
 
   ngOnInit() {
-    this.groupService.getAllGroupsForUser().subscribe(groups => {
-      this.memberOfGroups = groups.userInGroups;
-    });
+    this.involvedInGroups$ =  this.groupService.getAllGroupNamesForUser();
   }
 
   private closeWindow(){

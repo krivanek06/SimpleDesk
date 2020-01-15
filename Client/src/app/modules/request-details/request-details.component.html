@@ -3,9 +3,11 @@
 
     <ng-sidebar [opened]="sideBarBoolean" mode="over" [keyClose]="deny" position="right" [dock]="deny" [dockedSize]="'50px'"
         autoCollapseHeight="null" autoCollapseWidth="null"  [closeOnClickOutside]="deny" [showBackdrop]="deny"
-         [ariaLabel]="'My sidebar'">
+         [ariaLabel]="'My sidebar'"  *ngIf = "!(isGhost$ | async)">
 
-        <div id = 'sliderDiv1'  (click)='openSideBar()'> <i class="material-icons sliderButton" > reorder</i></div>
+        <div id = 'sliderDiv1'  (click)='openSideBar()' > 
+                <i class="material-icons sliderButton" > reorder</i>
+        </div>
         <hr>
 
         <app-request-side-options  #sideBar >
@@ -20,9 +22,11 @@
        
        
 
-        <div id='contentContainer' >
-        <div id=requestRightSide>
-            <div id = 'sliderDiv2'  (click)='openSideBar()'> <i class="material-icons sliderButton" > reorder</i></div>
+    <div id='contentContainer' >
+        <div id=requestRightSide >
+            <div id = 'sliderDiv2'  (click)='openSideBar()' *ngIf = "!(isGhost$ | async)"> 
+                <i class="material-icons sliderButton" > reorder</i>
+            </div>
             <app-request-side-information #sideDetails></app-request-side-information>
         </div>
 

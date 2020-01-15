@@ -12,6 +12,8 @@ import { UserService } from 'app/core/services/user.service';
 })
 export class LoginFormComponent implements OnInit {
   form: FormGroup;
+  public loggingIn: boolean = false;
+
   constructor(private fb:FormBuilder,  private router: Router, 
     private authService: AuthenticationService, private userService: UserService) { }
 
@@ -26,8 +28,10 @@ export class LoginFormComponent implements OnInit {
   private login(): void{
     const val = this.form.value;
     if (val.username && val.password) {
+      this.loggingIn = true;
         this.authService.login(val.username, val.password).subscribe((result) => {
           this.userService.loadLoggedInUser().subscribe(subs =>{
+            this.loggingIn = false;
             if(result &&subs ){
               this.router.navigateByUrl('/dashboard');
              }

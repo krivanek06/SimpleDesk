@@ -1,5 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ApplicationPrivilege } from 'app/shared/models/UserGroups';
+import { UserService } from 'app/core/services/user.service';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-privileges',
@@ -11,11 +14,13 @@ export class PrivilegesComponent implements OnInit {
   @Output() public resetButton: EventEmitter<any> = new EventEmitter();
   @Output() public saveButton: EventEmitter<ApplicationPrivilege> = new EventEmitter();
 
-  public activateUnableClick = false;
+  @Input() activateUnableClick = false;
   public enabledPrivileges: ApplicationPrivilege;
   public disabledPrivileges: ApplicationPrivilege;
+
   
   constructor() { 
+
     this.enabledPrivileges = {
       moduleTypesToUse : [],
       requestTypesToSolve : [],

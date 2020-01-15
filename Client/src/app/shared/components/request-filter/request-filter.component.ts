@@ -36,7 +36,7 @@ export class RequestFilterComponent implements OnInit {
     let today = new Date()
     this.dateTo = this.datepipe.transform(today, 'dd.MM.yyyy');
 
-    today.setDate(today.getDate() - 7);
+    today.setDate(today.getDate() - 30);
     this.dateFrom = this.datepipe.transform(today, 'dd.MM.yyyy');
   }
 

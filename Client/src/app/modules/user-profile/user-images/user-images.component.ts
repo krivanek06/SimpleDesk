@@ -54,7 +54,7 @@ export class UserImagesComponent implements OnInit {
           this.spinner.show();
           this.changeImage(imageDTO).subscribe(res => {
               this.userService.changeUserImage(imageDTO);
-              Swal.fire({ position: 'top-end', icon: 'success', title: 'Váš obrázok bol zmenený',showConfirmButton: false,timer: 1500 })
+              Swal.fire({ position: 'top-end', title: 'Váš obrázok bol zmenený',showConfirmButton: false,timer: 1500 })
               
           })
         }

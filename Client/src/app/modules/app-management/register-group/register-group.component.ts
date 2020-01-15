@@ -80,7 +80,7 @@ export class RegisterGroupComponent implements OnInit {
         const group = this.consructGroup();
         console.log(group);
         this.groupService.registerGroup(group).subscribe(() => {
-          Swal.fire({ position: 'top-end',icon: 'success', text: 'Skupina ' + group.name + " bola vytvorená   ", showConfirmButton: false, timer: 1500 })
+          Swal.fire({ position: 'top-end', text: 'Skupina ' + group.name + " bola vytvorená   ", showConfirmButton: false, timer: 1500 })
         })
       }
     });

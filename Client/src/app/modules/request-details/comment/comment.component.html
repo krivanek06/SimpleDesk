@@ -18,7 +18,7 @@
             </div>     
         </div>
 
-        <div *ngIf='requestComment.creator.username === userService.user.username && requestDetails.closed === null'>
+        <div *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && requestDetails.closed === null'>
 
         
             <img src="../../../../assets/images_design/delete_bin_icon.png" 
@@ -38,7 +38,7 @@
                 matTooltipClass="custom-tooltip-icon"
                 matTooltipShowDelay="200"/>
 
-            <img *ngIf='!requestComment.isPrivate && (isSolver$ | async)' 
+            <img *ngIf='!requestComment.isPrivate &&  ((isSolver$ | async) || (isAdmin$ | async))' 
                  src="../../../../assets/images_design/lock_open_icon.png" 
                  class = 'icon' 
                  id='lockOpen'
@@ -48,7 +48,7 @@
                 matTooltipClass="custom-tooltip-icon"
                 matTooltipShowDelay="200" />
             
-            <img *ngIf='requestComment.isPrivate  && (isSolver$ | async)' 
+            <img *ngIf='requestComment.isPrivate  && ((isSolver$ | async) || (isAdmin$ | async))' 
                   src="../../../../assets/images_design/lock_closed_icon.png" 
                   class = 'icon' 
                   id='lockClosed'
@@ -58,7 +58,7 @@
                     matTooltipClass="custom-tooltip-icon"
                     matTooltipShowDelay="200"/>
             
-            <img *ngIf='requestComment.isPrivate  && (isSolver$ | async)' 
+            <img *ngIf='requestComment.isPrivate  &&  ((isSolver$ | async) || (isAdmin$ | async))' 
                   src="../../../../assets/images_design/share_icon.png" 
                   class = 'icon' 
                   id='share'
@@ -77,13 +77,14 @@
 
 
 
-<form [formGroup] = "commentForm" (ngSubmit)="submit()" *ngIf = "requestDetails !== null && requestDetails.closed === null">
+<form [formGroup] = "commentForm" (ngSubmit)="submit()" 
+    *ngIf = "requestDetails !== null && requestDetails.closed === null && !(isGhost$ | async)">
     <mat-form-field class='ticketInlineParameters' >
         <textarea  matInput placeholder="Napíšte komentár" id="commentField" formControlName = "commentField"></textarea>
         <!--<mat-error *ngIf="commentField.invalid"> Prosím zadajte komentár</mat-error>-->
     </mat-form-field>
     <div class='ticketInlineParameters' >
-        <mat-checkbox (change) = "changeToPrivate($event.checked)" *ngIf = 'isSolver$ | async'>Privátny</mat-checkbox>
+        <mat-checkbox (change) = "changeToPrivate($event.checked)" *ngIf = '((isSolver$ | async) || (isAdmin$ | async))'>Privátny</mat-checkbox>
         <button mat-raised-button color="primary" id="sendingButton" type="submit"> Odoslať </button>
     </div>
 </form>

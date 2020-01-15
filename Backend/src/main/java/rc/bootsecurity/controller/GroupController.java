@@ -37,7 +37,16 @@ public class GroupController {
         return this.groupService.getAllGroupsDTOForLoggedInUser();
     }
 
-
+    @GetMapping("/available")
+    public ResponseEntity<?> getAllAvailableGroupsForUSer(){
+        try {
+            List<String> groups =  this.groupService.getAllGroupsNamesForLoggedInUser();
+            return new ResponseEntity<>(groups, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed method getAllAvailableGroupsForUSer,  error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní mien skupín, kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 
     @PutMapping("manage/{name}/modifyUsers")
     public ResponseEntity<?> modifyUsers(@PathVariable String name , @RequestBody List<UserSimpleDTO> users){

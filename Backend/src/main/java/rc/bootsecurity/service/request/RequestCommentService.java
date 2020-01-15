@@ -88,7 +88,11 @@ public class RequestCommentService {
      * filters out private comment which are not shared with my groups
      */
     public List<RequestComment> getRequestCommentsForRequest(Request request, String username){
-        List<RequestComment> requestComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(request).orElseGet(ArrayList::new);;
+        List<RequestComment> requestComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(request).orElseGet(ArrayList::new);
+        if(username.equalsIgnoreCase(USER_TYPE.Admin.name()) || username.equalsIgnoreCase(USER_TYPE.Ghost.name())){
+            return requestComments;
+        }
+
         List<RequestComment> filtered = new ArrayList<>();
 
         GroupContainerDTO groupContainerDTO = this.groupService.getAllGroupsDTOForLoggedInUser();

@@ -1,7 +1,7 @@
 
 <!--Login form -->
-<div class="login-box">
-    <h1>Helpdesk 2.0</h1>
+<div class="login-box" *ngIf='!loggingIn'>
+    <h1>Helpdesk</h1>
     <form  [formGroup]="form">
       <fieldset>
 
@@ -19,6 +19,10 @@
       <input type="submit" class="btn" (click)="login()"  value="Prihlásiť sa">
     </form>
 </div> 
+
+
+<!-- spinner -->
+<app-dot-loader *ngIf='loggingIn' class ='spinner'></app-dot-loader>
 
 
 

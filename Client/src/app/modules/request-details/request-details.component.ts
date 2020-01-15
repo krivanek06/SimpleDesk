@@ -6,6 +6,8 @@ import { RequestSideInformationComponent } from './request-side-information/requ
 import { RequestSideOptionsComponent } from './request-side-options/request-side-options.component';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { AuthenticationService } from 'app/core/services/authentication.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-request-details',
@@ -17,10 +19,17 @@ export class RequestDetailsComponent implements OnInit {
   public deny = false;
   public allow = true;
 
+  public isGhost$: Observable<boolean>;
+  public isAdmin$: Observable<boolean>;
+
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
 
 
-  constructor(private http: HttpClient, public requestService: RequestModificationService, private spinner: NgxSpinnerService) { }
+  constructor(private http: HttpClient, public requestService: RequestModificationService, 
+    private spinner: NgxSpinnerService, private authService: AuthenticationService) {
+      this.isGhost$ = this.authService.isGhost();
+      this.isAdmin$ = this.authService.isAdmin();
+    }
 
   private openSideBar(){
     this.sideBarBoolean = !this.sideBarBoolean;

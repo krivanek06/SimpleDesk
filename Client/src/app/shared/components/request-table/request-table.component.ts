@@ -46,7 +46,7 @@ export class RequestTableComponent implements OnInit {
      }).then((result) => {
        if (result.value) {
          this.requestService.assignOrRemoveRequestOnMe(requestId, true).subscribe(result => {
-           Swal.fire( 'Pridelené', 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId,'success' );
+           Swal.fire({ position: 'top-end', text: 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId, showConfirmButton: false, timer: 1200 })
          })
        }
      });   
@@ -65,7 +65,7 @@ export class RequestTableComponent implements OnInit {
       }).then((result) => {
         if (result.value) {
           this.requestService.assignOrRemoveRequestOnMe(requestId, false).subscribe(result => {
-            Swal.fire( 'Odstranené', 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId,'success' );
+            Swal.fire({ position: 'top-end', text: 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId, showConfirmButton: false, timer: 1200 })
           })
         }
       })

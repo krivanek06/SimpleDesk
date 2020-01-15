@@ -70,7 +70,7 @@ export class RequestFinanceFormComponent implements OnInit {
         this.sendFinanceFormToAPI().subscribe((id : number) => 
           this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
               this.spinner.hide();
-              Swal.fire(  '', 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", 'success'  )
+              Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.'", showConfirmButton: false, timer: 1200 })
         }))
       }
     })

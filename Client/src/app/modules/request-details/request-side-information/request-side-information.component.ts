@@ -19,6 +19,7 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
   public requestDetails: RequestDetails;
   private subscription: Subscription;
   public isSolver$: Observable<boolean>;
+  public isGhost$: Observable<boolean>;
 
   constructor( private fileService: FileServiceService, private userService: UserService, 
     private requestService: RequestModificationService , private authService: AuthenticationService) { }
@@ -29,6 +30,7 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
     });
 
     this.isSolver$ = this.authService.isSolver();
+    this.isGhost$ = this.authService.isGhost();
   }
   ngOnDestroy(): void {
     this.subscription.unsubscribe();

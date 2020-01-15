@@ -56,7 +56,7 @@ export class RegisterUserComponent implements OnInit {
       if(res.value){
         Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie uživateľa bolo zaslané', showConfirmButton: false, timer: 1500 })
         this.userService.registerUser(userRegistraion).subscribe(x => {
-          Swal.fire({ position: 'top-end',icon: 'success', text: 'Uživateľ bol zaregistrovaný, emailom sa bude notifikovať', showConfirmButton: false, timer: 1500 })
+          Swal.fire({ position: 'top-end',text: 'Uživateľ bol zaregistrovaný, emailom sa bude notifikovať', showConfirmButton: false, timer: 1500 })
           this.userRegistrationForm.reset();
         })
       }

@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-app-management',
@@ -6,8 +8,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./app-management.component.scss']
 })
 export class AppManagementComponent implements OnInit {
-
-  constructor() { }
+  public isAdmin$: Observable<boolean>;
+  public hasPrivilegeAccess$: Observable<boolean>;
+  constructor(private authService: AuthenticationService) {
+    this.isAdmin$ = this.authService.isAdmin();
+    this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
+   }
 
   ngOnInit() {
   }

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { UserService } from 'app/core/services/user.service';
 import { UserDetailsComponent } from 'app/modules/user-profile/user-details/user-details.component';
 import { UserGroupsComponent } from 'app/modules/user-profile/user-groups/user-groups.component';
+import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-user-group-management',
@@ -20,6 +21,8 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
+  public isAdmin$: Observable<boolean>;
+  public hasPrivilegeAccess$: Observable<boolean>;
 
   @ViewChild('userDetails',  {static: false}) userDetails: UserDetailsComponent;
   @ViewChild('userPrivileges',  {static: false}) userPrivileges: PrivilegesComponent;
@@ -27,7 +30,10 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
 
-  constructor(private groupService: GroupService, private userService: UserService) { }
+  constructor(private groupService: GroupService, private userService: UserService, private authService: AuthenticationService) { 
+    this.isAdmin$ = this.authService.isAdmin();
+    this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
+  }
 
   ngOnInit() {
     this.groups = this.groupService.getAllGroups();
@@ -40,7 +46,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
       this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
       this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
-      this.groupPrivileges.activateUnableClick = true;
+      //this.groupPrivileges.activateUnableClick = true;
     })
   }
 

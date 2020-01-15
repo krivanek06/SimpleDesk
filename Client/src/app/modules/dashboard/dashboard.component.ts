@@ -48,7 +48,9 @@ export class DashboardComponent implements OnInit {
   private getRequestOnDashboard(){
       this.spinner.show();
       this.http.get<RequestDashboard>(environment.apiUrl + this.dashboardRequestURL).subscribe(requests =>{
-        this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
+        if(this.myOpenRequests !== undefined){
+          this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
+        }
         this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
         
 

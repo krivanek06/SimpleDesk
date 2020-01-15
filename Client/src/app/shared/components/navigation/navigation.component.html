@@ -26,6 +26,7 @@
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
             matTooltipShowDelay="200"
+            *ngIf = "!(isGhost$ | async)"
          >
             <img src="./../../../../assets/images_design/request_new_icon.png" 
                 alt="dashboard navigation icon" 
@@ -65,13 +66,12 @@
             matTooltip="Správa aplikácie"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
-            matTooltipShowDelay="200">
+            matTooltipShowDelay="200"
+            *ngIf='(hasPrivilegeAccess$ | async) || (isAdmin$ | async) || (isGhost$ | async)'>
             <img src="./../../../../assets/images_design/team_icon.png" 
                 alt="dashboard navigation icon" 
                 id='appManagementIcon'
-                class='navigationIcon'
-                *ngIf='hasPrivilegeAccess$ | async'
-                >
+                class='navigationIcon'>
         </a>
 
 </div>

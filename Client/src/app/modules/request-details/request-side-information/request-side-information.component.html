@@ -189,7 +189,7 @@
         </li>
 
          <!-- uploader -->
-        <div class='uploaderContainer' *ngIf = 'requestDetails.closed === null'> 
+        <div class='uploaderContainer' *ngIf = 'requestDetails.closed === null && !(isGhost$  | async)'> 
             <app-file-upload id='uploader' 
                             [uploaderHeight] = '45' 
                             #fileUploader 
