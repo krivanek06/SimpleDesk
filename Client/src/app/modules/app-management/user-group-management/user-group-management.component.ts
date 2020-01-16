@@ -3,7 +3,7 @@ import { PrivilegesComponent } from 'app/modules/user-profile/privileges/privile
 import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/group-details.component';
 import { GroupService } from 'app/core/services/group.service';
 import { Observable, Subscription, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { takeUntil, filter, map } from 'rxjs/operators';
 import { ApplicationPrivilege, UserSimpleDTO, GroupContainer } from 'app/shared/models/UserGroups';
 import Swal from 'sweetalert2';
 import { UserService } from 'app/core/services/user.service';
@@ -52,7 +52,6 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
 
   public selectUser(username: string){
     this.userService.getUserDetials(username).pipe(takeUntil(this.destroy$)).subscribe(user => {
-      console.log(user);
       this.userDetails.displayedUser = user;
 
       this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
@@ -84,8 +83,29 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   private saveGroupPrivileges(priv: ApplicationPrivilege){
     Swal.fire({ position: 'top-end', text: 'Požiadavka o zmenu právomoci skupiny bola odoslaná',showConfirmButton: false,timer: 1500 })  
     this.groupService.modifyPrivileges(this.groupDetails.group.name, priv).subscribe(() =>{
-      Swal.fire({ position: 'top-end', text: 'Pŕava skupiny boli zmenené',showConfirmButton: false,timer: 1500 })  
+      Swal.fire({ position: 'top-end', text: 'Práva skupiny boli zmenené',showConfirmButton: false,timer: 1500 })  
     })
+  }
+
+  private deleteGroup(): void{
+    Swal.fire({ text: "Naozaj chcetete vymazať skupinu ? ", icon: 'warning', showCancelButton: true,
+      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
+    }).then((result) => {
+      if(result.value){
+          Swal.fire({ position: 'top-end',  title: 'Požiadavka zmazania skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
+          this.groupService.deleteGroup(this.groupDetails.group.name).subscribe(() => {
+            
+            const grouName = this.groupDetails.group.name;
+            this.groups = this.groups.pipe(map(group => group.filter( name => name !== grouName)));
+            this.groupPrivileges.enabledPrivileges = undefined;
+            this.groupPrivileges.disabledPrivileges = undefined;
+            this.groupPrivileges.name = undefined;
+            this.groupDetails.group = undefined;
+
+            Swal.fire({ position: 'top-end',  title: 'Skupina bola zmazaná',  showConfirmButton: false,timer: 1200 })
+          })   
+        }
+      });
   }
 
 }

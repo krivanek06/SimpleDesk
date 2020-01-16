@@ -91,9 +91,10 @@ export class RequestTicketFormComponent implements OnInit {
         this.spinner.show();
         this.sendTicketFormToAPI().subscribe(id => {
             this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+              this.initFormGroup();
               this.spinner.hide();
               Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", showConfirmButton: false, timer: 1200 })
-           });
+           }, err => this.spinner.hide());
         });
       }
     })

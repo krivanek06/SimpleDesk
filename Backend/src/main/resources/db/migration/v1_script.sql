@@ -531,7 +531,7 @@ select json_build_object(
     where r.creator_uid in (
     select distinct user_id from  tbl_user_groups
     cross join (select id as request_making_user_id from tbl_users where tbl_users.username = searching_name) as tmp
-    where user_id != tmp.request_making_user_id and group_id in
+    where user_id != tmp.request_making_user_id and (  assigned.username is null or  assigned.username != searching_name ) and group_id in
     (select id from  tbl_groups where manager_id = tmp.request_making_user_id
     union
     select distinct group_id as id from tbl_group_activity_watched_by_user where user_id = tmp.request_making_user_id))

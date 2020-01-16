@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { RequestTable } from 'app/shared/models/RequestTable';
 import { UserService } from 'app/core/services/user.service';
@@ -20,6 +20,9 @@ export class RequestTableComponent implements OnInit {
   @Input() public displayAssignToMe: boolean = false;
   @Input() public tableTitle: string;
 
+  @Output() assignOnMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
+  @Output() removeFromMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
+
   public dataSource = new MatTableDataSource<RequestTable>();
   public dateFrom: string;
   public dateTo: string;
@@ -34,41 +37,13 @@ export class RequestTableComponent implements OnInit {
   }
 
 
-  public assignOnMe(requestId: number): void{
-    Swal.fire({
-       text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestId + " ? ",
-       icon: 'warning',
-       showCancelButton: true,
-       confirmButtonColor: '#3085d6',
-       cancelButtonColor: '#d33',
-       cancelButtonText: "Zrušiť",
-       confirmButtonText: 'Ano'
-     }).then((result) => {
-       if (result.value) {
-         this.requestService.assignOrRemoveRequestOnMe(requestId, true).subscribe(result => {
-           Swal.fire({ position: 'top-end', text: 'Úspešne ste na seba pridelili požiadavku s id: ' + requestId, showConfirmButton: false, timer: 1200 })
-         })
-       }
-     });   
+  public assignOnMe(request: RequestTable): void{
+    this.assignOnMeEmitter.emit(request);
   }
 
 
-   public removeFromMe(requestId: number): void{
-      Swal.fire({
-        text: "Naozaj chcetete odstrániť zo seba požiadavku s id : " + requestId + " ? ",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        cancelButtonText: "Zrušiť",
-        confirmButtonText: 'Ano'
-      }).then((result) => {
-        if (result.value) {
-          this.requestService.assignOrRemoveRequestOnMe(requestId, false).subscribe(result => {
-            Swal.fire({ position: 'top-end', text: 'Úspešne ste odstránili zo seba požiadavku s id : ' + requestId, showConfirmButton: false, timer: 1200 })
-          })
-        }
-      })
+   public removeFromMe(request: RequestTable): void{
+      this.removeFromMeEmitter.emit(request);
   }
 
   private navigateToDetails(id : number){

@@ -51,7 +51,7 @@
                     <img [src]="'data:image/jpeg;base64,'+element.assignedImageByte" class='userIcon'/> 
                     {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}
                 </div>  
-                <div *ngIf = "element.assigned === ' ' && displayAssignToMe" class='assignOnMe' (click) = "assignOnMe(element.id)">
+                <div *ngIf = "element.assigned === ' ' && displayAssignToMe" class='assignOnMe' (click) = "assignOnMe(element)">
                     pridelit mne
                 </div>
             </mat-cell>
@@ -60,7 +60,7 @@
         <ng-container matColumnDef="userAction" >
             <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" > Zahodit </mat-header-cell>
             <mat-cell *matCellDef="let element" > 
-                <div *ngIf = "element.assigned === userService.user.fullname " class='removeFromMe' (click) = "removeFromMe(element.id)">
+                <div *ngIf = "element.assigned === userService.user.fullname " class='removeFromMe' (click) = "removeFromMe(element)">
                     Zahodiť
                 </div>
             </mat-cell>

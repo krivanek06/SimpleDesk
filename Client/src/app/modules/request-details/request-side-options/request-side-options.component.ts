@@ -32,7 +32,7 @@ export class RequestSideOptionsComponent implements OnInit, OnDestroy {
 
   public isSolverRightHand$: Observable<boolean>;
 
-  constructor( private userService: UserService,  private requestService: RequestModificationService, private authService: AuthenticationService) { }
+  constructor( public userService: UserService,  private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {
     this.getAllUsers();

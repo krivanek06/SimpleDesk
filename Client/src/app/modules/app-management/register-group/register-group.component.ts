@@ -78,7 +78,6 @@ export class RegisterGroupComponent implements OnInit {
       if(res.value){
         Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie skupiny bolo zaslané', showConfirmButton: false, timer: 1500 })
         const group = this.consructGroup();
-        console.log(group);
         this.groupService.registerGroup(group).subscribe(() => {
           Swal.fire({ position: 'top-end', text: 'Skupina ' + group.name + " bola vytvorená   ", showConfirmButton: false, timer: 1500 })
         })

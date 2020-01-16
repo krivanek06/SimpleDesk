@@ -16,6 +16,7 @@ import rc.bootsecurity.model.enums.TICKET_TYPE;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.ModuleTypeRepository;
 import rc.bootsecurity.repository.finance.FinanceTypeRepository;
+import rc.bootsecurity.repository.request.RequestCommentRepository;
 import rc.bootsecurity.repository.ticket.TicketPrivilegesRepository;
 import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.utils.converter.GroupConverter;
@@ -42,6 +43,8 @@ public class GroupService {
     private TicketPrivilegesRepository ticketPrivilegesRepository;
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
+    @Autowired
+    private RequestCommentRepository requestCommentRepository;
 
 
     public List<Group> getGroupsToManageForUser(User user){
@@ -83,8 +86,10 @@ public class GroupService {
         this.groupRepository.save(group);
     }
 
+    @Transactional
     public void removeGroup(String groupName){
         Group group = this.groupRepository.findByGroupName(groupName);
+        this.requestCommentRepository.deleteAllByGroupsToViewRequestComment(group);
         this.groupRepository.delete(group);
     }
 

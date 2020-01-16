@@ -32,7 +32,10 @@
             </mat-select>
         </mat-form-field>
     </div>
-    <app-group-details #groupDetails></app-group-details>
+    <app-group-details #groupDetails [activeButtons] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)"
+        (deleteGroupActivation) = "deleteGroup()">
+
+    </app-group-details>
     <app-privileges #groupPrivileges (resetButton) = "resetGroupPrivileges()" 
                 (saveButton) = "saveGroupPrivileges($event)"
                 [activateUnableClick] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" >

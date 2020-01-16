@@ -6,7 +6,13 @@
     <div class = 'formInformationContainerSubcontent smallerContent'>
         <span class='formTitleSmall' >
             <img src="../../../../assets/images_design/group_icon_details.png" class="icon"/>
-            Skupina {{ group.name }} 
+            <span class='formTitleSmallText'>  Skupina {{ group.name }} </span>
+
+            <button mat-button color="warn" 
+                    (click) = 'deleteGroup()' 
+                    *ngIf='activeButtons '>
+                Vymazať skupinu
+            </button>
         </span>
 
         <li class='informationsContainer topspace'>

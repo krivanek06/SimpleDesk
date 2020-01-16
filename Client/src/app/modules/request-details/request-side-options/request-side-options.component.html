@@ -4,7 +4,11 @@
     
 <div class = 'module'>
     <button mat-raised-button id = 'sliderButton' color='warn' 
-            class='customInput' *ngIf='requestDetails.closed === null' (click) = 'closeRequest()'> Uzatvoriť</button>
+            class='customInput' (click) = 'closeRequest()'
+            *ngIf='requestDetails.closed === null && (isAdmin$ | async) || (requestDetails.assigned 
+                && requestDetails.assigned.username === userService.user.username)' > 
+                Uzatvoriť
+            </button>
             
     <button mat-raised-button id = 'sliderButton' color='warn' 
             class='customInput openInput'  *ngIf='requestDetails.closed !== null' (click) = 'reopenRequest()'>Otvoriť</button>

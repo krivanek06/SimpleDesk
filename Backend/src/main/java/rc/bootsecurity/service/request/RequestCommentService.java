@@ -96,7 +96,8 @@ public class RequestCommentService {
         List<RequestComment> filtered = new ArrayList<>();
 
         GroupContainerDTO groupContainerDTO = this.groupService.getAllGroupsDTOForLoggedInUser();
-        Set<String> groups  =  Stream.of(groupContainerDTO.getManagerOfGroups(), groupContainerDTO.getUserInGroups(), groupContainerDTO.getWatchedGroupActivity()).flatMap(Collection::stream).collect(Collectors.toSet());
+        Set<String> groups  =  Stream.of(groupContainerDTO.getManagerOfGroups(), groupContainerDTO.getUserInGroups(),
+                groupContainerDTO.getWatchedGroupActivity()).flatMap(Collection::stream).collect(Collectors.toSet());
 
         for(RequestComment requestComment : requestComments){
             if(requestComment.getIsPrivate()){
@@ -104,7 +105,9 @@ public class RequestCommentService {
                         username.equalsIgnoreCase(USER_TYPE.Admin.name()) || username.equalsIgnoreCase(USER_TYPE.Ghost.name())){
                     filtered.add(requestComment);
                 }else {
-                    List<String> requestCommentGroupNames = requestComment.getGroupsToViewRequestComment().stream().map(Group::getGroupName).collect(Collectors.toList());
+                    List<String> requestCommentGroupNames = requestComment.getGroupsToViewRequestComment().stream()
+                            .map(Group::getGroupName).collect(Collectors.toList());
+
                     requestCommentGroupNames.retainAll(groups);
                     if (requestCommentGroupNames.size() > 0) {
                         filtered.add(requestComment);
