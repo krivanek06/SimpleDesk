@@ -16,6 +16,10 @@ li {
     font-size: 17px;
 }
 
+
+
+
+
 .informationAnswer{
     flex: 0 0 150px;
     font-weight: bold;
@@ -33,6 +37,7 @@ li {
 
 
 .content{
+    margin-top: 15px;
     margin-bottom: 15px;
     position: relative;
 }
@@ -61,3 +66,16 @@ li {
     width: 350px;
 }
 
+
+@media(min-width:1919px) {
+    .detailTitle{
+        font-size: 19px;
+    }
+
+    li {
+        font-size: 14px;
+      }
+    .titleIcon{
+        width: 26px;
+    }
+}

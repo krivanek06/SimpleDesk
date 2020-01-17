@@ -183,7 +183,7 @@
             <div class='informationAnswer clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
             <ul>
                 <li class='information'>
-                    {{ document.lastModified  | date }}
+                    {{ document.lastModified  |  date:'MMM d, y, HH:mm:ss ' }}
                 </li>
             </ul>
         </li>

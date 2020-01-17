@@ -118,3 +118,13 @@ mat-row:nth-child(even){
     min-height: 40px !important;
     max-height: 40px !important;
   }
+
+
+
+@media(min-width:1360px) {
+    .headerTitle{
+      font-size: 19px;
+        
+    }
+
+}

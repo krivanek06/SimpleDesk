@@ -14,7 +14,7 @@
                     Informácie skupiny
                 </span>
                 
-                <mat-form-field  class='inlineParameters'>
+                <mat-form-field  class='inlineParameters extraSpace'>
                     <input matInput placeholder="Meno skupiny" formControlName = "groupName">
                     <mat-error *ngIf="groupName.invalid">  Prosím zadefinujte meno skupiny</mat-error>
                 </mat-form-field>
@@ -37,7 +37,7 @@
                     Uživatelia skupiny
                 </span>
 
-                <mat-form-field class='inlineParameters' >
+                <mat-form-field class='inlineParameters extraSpace' >
                     <mat-label>Menežér skupiny</mat-label>
                     <mat-select formControlName="groupManager"   >
                         <mat-option *ngFor = "let user of allAvailableUsers" [value] = "user">
@@ -85,7 +85,7 @@
                     Právomoc skupiny
                 </span>
 
-                <mat-form-field class='inlineParameters' >
+                <mat-form-field class='inlineParameters extraSpace' >
                     <mat-label>Moduly na používanie</mat-label>
                     <mat-select formControlName="moduleTypesToUse" multiple (selectionChange)= "changeModuleTypesToUse()">
                         <mat-option value = "Ticket"> Tikety </mat-option>
@@ -165,7 +165,7 @@
 
 <div class = 'rightContainer'>
     <div class = 'formInformationContainerSubcontent smallerContent'>
-        <span class='formTitleSmall' id='detailTitle'>
+        <span class='formTitleSmall'>
             <img src = '../../../../assets/images_design/research.png' class='icon'/>
             Detaily skupiny
         </span>

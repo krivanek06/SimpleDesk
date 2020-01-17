@@ -25,7 +25,7 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
     private requestService: RequestModificationService , private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {
+    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {  
       this.requestDetails = requestDetails;
     });
 
@@ -54,8 +54,9 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
     this.fileService.postFileForRequest(this.requestDetails.id, [file]).subscribe(result => {
       let document: CustomDocument = {
         name: file.name,
-        lastModified: new Date().getMilliseconds()
+        lastModified: new Date().getTime()
       }
+      console.log(document)
       this.requestDetails.documents.push(document);
     });
   }

@@ -20,23 +20,27 @@
     position: absolute;
     top:125px;
     width: 325px;
-    left: 50%;
+    left: 55%;
     -webkit-transition: -webkit-transform .8s ease-in-out;
     transition:  transform .8s ease-in-out;
 }
-#ticketFormImage:hover {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
 
+
+
+mat-form-field{
+    margin-left: 20px;;
+}
 
 textarea{
     height: 175px;
 }
 
-.formTitle{
-    margin-top: -20px;
-    margin-left: -10px;
-    margin-bottom: 20px;
-    font-weight: bold;
+
+
+@media(min-width:1919px) {
+    #FormImage{
+        width: 400px;
+        
+    }
+
 }

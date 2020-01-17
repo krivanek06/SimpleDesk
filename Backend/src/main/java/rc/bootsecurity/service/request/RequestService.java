@@ -147,9 +147,12 @@ public class RequestService {
         List<Group> closedGroups  = this.groupService.getGroupsWhereUserIsInvolved(request.getClosed());
         Set<Group> groups  =  Stream.of(creatorGroups, assignedGroups, closedGroups).flatMap(Collection::stream).collect(Collectors.toSet());
 
-        List<Group> myGroupsToManage = this.groupService.getGroupsToManageForUser(this.userService.loadUserByUsername(username));
+        User user = this.userService.loadUserByUsername(username);
+        List<Group> myGroupsToManage = this.groupService.getGroupsToManageForUser(user);
+        List<Group> groupsToWatch = this.groupService.getGroupsToWatchActivity(user);
+        Set<Group> availableGroups  =  Stream.of(myGroupsToManage, groupsToWatch).flatMap(Collection::stream).collect(Collectors.toSet());
 
-        if(groups.stream().anyMatch(myGroupsToManage::contains)){
+        if(groups.stream().anyMatch(availableGroups::contains)){
             return true;
         }
 

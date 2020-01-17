@@ -21,6 +21,20 @@
 }
 
 .requestForm{
-    padding: 10px 40px;
+    padding: 20px 40px;
+} 
+
+@media(min-width:1919px) {
+    .requestForm{
+        padding: 40px 100px;
+    } 
+
 }
+
+.formTitle{
+    margin-top: -20px;
+    margin-left: -10px;
+    font-weight: bold;
+}
+
 
