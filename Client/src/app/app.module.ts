@@ -58,6 +58,7 @@ import { RequestSideOptionsComponent } from './modules/request-details/request-s
 import { RequestFilterComponent } from './shared/components/request-filter/request-filter.component';
 import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
 import { DotLoaderComponent } from './shared/components/dot-loader/dot-loader.component';
+import { SERDButtonsComponent } from './shared/components/serdbuttons/serdbuttons.component';
 
 @NgModule({
   declarations: [
@@ -95,7 +96,8 @@ import { DotLoaderComponent } from './shared/components/dot-loader/dot-loader.co
     RequestSideOptionsComponent,
     RequestFilterComponent,
     UnauthorizedComponent,
-    DotLoaderComponent
+    DotLoaderComponent,
+    SERDButtonsComponent
   ],
   imports: [
     BrowserModule,

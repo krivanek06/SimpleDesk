@@ -33,14 +33,22 @@
             </mat-select>
         </mat-form-field>
     </div>
-    <app-group-details #groupDetails [activeButtons] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)"
-        (deleteGroupActivation) = "deleteGroup()">
+
+    <app-serdbuttons #serdbuttons id='serdbuttons' *ngIf="groupDetails.group" 
+        (editEmittter) = "editGroup()" 
+        (resetEmittter) = "resetGroup()"
+        (saveEmittter) = "saveGroup()"
+        (deleteEmittter) = "deleteGroup()"></app-serdbuttons>
+
+    <app-group-details 
+        #groupDetails 
+        >
+        <!-- [activeButtons] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" -->
 
     </app-group-details>
-    <app-privileges #groupPrivileges (resetButton) = "resetGroupPrivileges()" 
-                (saveButton) = "saveGroupPrivileges($event)"
-                [activateUnableClick] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" >
+    <app-privileges #groupPrivileges >
     </app-privileges>
+    <!--   [activateUnableClick] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" -->
 </div>
 
 

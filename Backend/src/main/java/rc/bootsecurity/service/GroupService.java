@@ -59,7 +59,7 @@ public class GroupService {
         return this.groupRepository.findAllByUsersInGroup(user).orElseGet(ArrayList::new);
     }
 
-    public void modifyGroupDescription(String groupName, String description){
+    /*public void modifyGroupDescription(String groupName, String description){
         Group group = this.groupRepository.findByGroupName(groupName);
         group.setDescription(description);
         this.groupRepository.save(group);
@@ -84,7 +84,7 @@ public class GroupService {
         List<User> users = this.userService.loadUsersByUsername(userDTO.stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList()));
         group.setUsersWatchingGroupActivity(new HashSet<>(users));
         this.groupRepository.save(group);
-    }
+    }*/
 
     @Transactional
     public void removeGroup(String groupName){
@@ -100,9 +100,7 @@ public class GroupService {
    // @Async
    // cannot be transactional because we delete same entity which will be pushed there
     @Transactional
-    public void modifyGroupPrivileges(String name, ApplicationPrivilegeDTO applicationPrivilegeDTO){
-        Group group = this.groupRepository.findByGroupName(name);
-
+    public void modifyGroupPrivileges(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
         if(!applicationPrivilegeDTO.getModuleTypesToUse().contains(MODULE_TYPE.Financie.name())){
             this.financeTypeRepository.deleteGroupAssociation(group.getId());
         }
@@ -122,6 +120,31 @@ public class GroupService {
         this.ticketPrivilegesRepository.deleteAll(ticketPrivilegesOld);
         this.ticketPrivilegesRepository.saveAll(save);
         this.groupRepository.save(group);
+    }
+
+    @Transactional
+    public void modifyGroup(String name, GroupDTO groupDTO){
+        Group group = this.groupRepository.findByGroupName(name);
+        group.setGroupName(groupDTO.getName());
+        group.setEmail(groupDTO.getEmail());
+        groupDTO.setDescription(groupDTO.getDescription());
+
+        if(!group.getGroupManager().getUsername().equalsIgnoreCase(groupDTO.getGroupManager().getUsername()))
+            group.setGroupManager(this.userService.loadUserByUsername(groupDTO.getGroupManager().getUsername()));
+
+        // check if any new user was added to the group, if yes, reaload all members
+        List<String> userNamesInGroup = groupDTO.getUsersInGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList());
+        if(!group.getUsersInGroup().stream().map(User::getUsername).collect(Collectors.toList()).equals(userNamesInGroup))
+            group.setUsersInGroup(new HashSet<>(this.userService.loadUsersByUsername(userNamesInGroup)));
+
+        // check if any new user was added to watch group, if yes, reaload all members
+        List<String> userNamesWatchedGroup = groupDTO.getUsersWatchGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList());
+        if(!group.getUsersWatchingGroupActivity().stream().map(User::getUsername).collect(Collectors.toList()).equals(userNamesWatchedGroup))
+            group.setUsersWatchingGroupActivity(new HashSet<>(this.userService.loadUsersByUsername(userNamesWatchedGroup)));
+
+        this.modifyGroupPrivileges(group, groupDTO.getApplicationPrivilegeDTO());
+        this.groupRepository.save(group);
+
     }
 
     public GroupDTO getGroupDetails(String groupName){

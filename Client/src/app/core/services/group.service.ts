@@ -18,13 +18,12 @@ export class GroupService {
   public getAllGroupContainersForUser():Observable<GroupContainer>{
     return this.http.get<GroupContainer>(environment.apiUrl + "group");
   }
-
-  
-
   public getGroupDetails(groupName: string):Observable<Group>{
     let params = new HttpParams().set('groupName' , groupName) ;
     return this.http.get<Group>(environment.apiUrl + "group/details", {params: params});
   }
+
+
 
   // accessed only user containing module privilege
   public getGroupDetailsWithUnsetPrivileges(groupName: string):Observable<Group>{
@@ -41,8 +40,8 @@ export class GroupService {
     return this.http.post<Group>(environment.apiUrl + "group/secure/manage/registration", group, {headers: headers});
   }
 
-  public modifyPrivileges(name: string, priv: ApplicationPrivilege): Observable<any>{
-    return this.http.put(`${environment.apiUrl}group/secure/manage/${name}/modifyPrivileges`, priv);
+  public modifyGroup( group: Group): Observable<any>{
+    return this.http.put(`${environment.apiUrl}group/secure/manage/${group.name}/modifyGroup`, group);
   }
 
   public deleteGroup(name: string): Observable<any>{

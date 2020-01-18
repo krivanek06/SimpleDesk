@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { PrivilegesComponent } from 'app/modules/user-profile/privileges/privileges.component';
 import { GroupDetailsComponent } from 'app/modules/user-profile/group-details/group-details.component';
 import { GroupService } from 'app/core/services/group.service';
@@ -10,13 +10,14 @@ import { UserService } from 'app/core/services/user.service';
 import { UserDetailsComponent } from 'app/modules/user-profile/user-details/user-details.component';
 import { UserGroupsComponent } from 'app/modules/user-profile/user-groups/user-groups.component';
 import { AuthenticationService } from 'app/core/services/authentication.service';
+import { SERDButtonsComponent } from 'app/shared/components/serdbuttons/serdbuttons.component';
 
 @Component({
   selector: 'app-user-group-management',
   templateUrl: './user-group-management.component.html',
   styleUrls: ['./user-group-management.component.scss']
 })
-export class UserGroupManagementComponent implements OnInit, OnDestroy {
+export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterViewInit {
   public groups: Observable<string[]>;
   public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
@@ -29,6 +30,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   @ViewChild('userGroups',  {static: false}) userGroups: UserGroupsComponent;
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
+  @ViewChild('serdbuttons',  {static: false}) serdbuttons: SERDButtonsComponent;
 
   constructor(private groupService: GroupService, private userService: UserService, private authService: AuthenticationService) { 
     this.isAdmin$ = this.authService.isAdmin();
@@ -38,32 +40,40 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.groups = this.groupService.getAllGroups();
     this.users = this.userService.getAllUsers();
+
+  }
+
+  ngAfterViewInit(): void {
+    this.groupPrivileges.hideUnassignedPriv = true;
   }
 
   public selectGroup(groupName: string){
-    this.groupService.getGroupDetailsWithUnsetPrivileges(groupName).pipe(takeUntil(this.destroy$)).subscribe(group => {
-      this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
-      this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
-      this.groupPrivileges.name = 'Skupiny';
-      this.groupDetails.group = group;
-      //this.groupPrivileges.activateUnableClick = true;
+    this.groupService.getGroupDetailsWithUnsetPrivileges(groupName)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(group => {
+        this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
+        this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
+        this.groupPrivileges.name = 'Skupiny';
+        this.groupDetails.group = group;
     })
   }
 
   public selectUser(username: string){
-    this.userService.getUserDetials(username).pipe(takeUntil(this.destroy$)).subscribe(user => {
-      this.userDetails.displayedUser = user;
+    this.userService.getUserDetials(username)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(user => {
+        this.userDetails.displayedUser = user;
 
-      this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
-      this.userPrivileges.name = 'Uživateľa';
+        this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
+        this.userPrivileges.name = 'Uživateľa';
 
-      const groupContainer: GroupContainer = {
-        managerOfGroups: user.groupsToManage,
-        watchedGroupActivity: user.groupsActivityWatched,
-        userInGroups: user.groupsInvolved
-      }
+        const groupContainer: GroupContainer = {
+          managerOfGroups: user.groupsToManage,
+          watchedGroupActivity: user.groupsActivityWatched,
+          userInGroups: user.groupsInvolved
+        }
 
-      this.userGroups.groupContainer = groupContainer;
+        this.userGroups.groupContainer = groupContainer;
     })
   }
 
@@ -72,19 +82,31 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
     this.destroy$.unsubscribe();
   }
 
-  private resetGroupPrivileges(){
-    this.groupService.getGroupDetailsWithUnsetPrivileges(this.groupDetails.group.name).pipe(takeUntil(this.destroy$))
-    .subscribe(group => {
-      this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
-      this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
-    })
+  private editGroup(){
+    this.groupDetails.editGroup();  
+    this.groupPrivileges.editGroup();
   }
 
-  private saveGroupPrivileges(priv: ApplicationPrivilege){
-    Swal.fire({ position: 'top-end', text: 'Požiadavka o zmenu právomoci skupiny bola odoslaná',showConfirmButton: false,timer: 1500 })  
-    this.groupService.modifyPrivileges(this.groupDetails.group.name, priv).subscribe(() =>{
-      Swal.fire({ position: 'top-end', text: 'Práva skupiny boli zmenené',showConfirmButton: false,timer: 1500 })  
-    })
+  private resetGroup(){
+    this.groupDetails.resetGroup();
+    this.groupPrivileges.resetGroup();
+  }
+
+  private saveGroup(){
+    Swal.fire({ text: "Naozaj chcetete editovať skupinu ? ", icon: 'warning', showCancelButton: true,
+      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
+    }).then((result) => {
+      if(result.value){
+        Swal.fire({ position: 'top-end',  text: 'Požiadavka editovanie skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
+        this.groupService.modifyGroup(this.groupDetails.group).subscribe(() => {
+          Swal.fire({ position: 'top-end',  text: 'Skupina bola editovaná',  showConfirmButton: false,timer: 1200 })
+          this.groupDetails.editGroupActivated = false;
+          this.groupPrivileges.activateUnableClick = false;
+          this.groupPrivileges.hideUnassignedPriv = true;
+          this.serdbuttons.editActivated = false;
+        })
+      }
+    });
   }
 
   private deleteGroup(): void{
@@ -92,7 +114,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
       if(result.value){
-          Swal.fire({ position: 'top-end',  title: 'Požiadavka zmazania skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
+          Swal.fire({ position: 'top-end',  text: 'Požiadavka zmazania skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
           this.groupService.deleteGroup(this.groupDetails.group.name).subscribe(() => {
             
             const grouName = this.groupDetails.group.name;
@@ -101,8 +123,9 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy {
             this.groupPrivileges.disabledPrivileges = undefined;
             this.groupPrivileges.name = undefined;
             this.groupDetails.group = undefined;
-
-            Swal.fire({ position: 'top-end',  title: 'Skupina bola zmazaná',  showConfirmButton: false,timer: 1200 })
+            this.serdbuttons.editActivated = false;
+            
+            Swal.fire({ position: 'top-end',  text: 'Skupina bola zmazaná',  showConfirmButton: false,timer: 1200 })
           })   
         }
       });

@@ -8,6 +8,7 @@
 #fileUploader{
     float: left;
     width: 100%;
+    margin-left: 20px;
 }
 
 #ticketSendingButton{
@@ -27,7 +28,7 @@
 
 
 
-mat-form-field{
+mat-form-field, mat-checkbox, .movedError{
     margin-left: 20px;;
 }
 

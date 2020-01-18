@@ -581,12 +581,12 @@ select json_build_object(
     cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
     where r.closed_uid is null and (
         -- get privileges if I can solve reports or tickets
-            (rt.name != 'TICKET' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
+            (rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
                                        from get_all_privileges_for_user_varchar( searching_name)) )
             OR
             -- get privileges on ticket types
-            (rt.name = 'TICKET' AND (select case
-                                    when  tbl_ticket_types.name = 'USER' or tbl_ticket_types.name = 'OTHER' then (
+            (rt.name = 'Ticket' AND (select case
+                                    when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
                                         select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
                                                     like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar( searching_name))
                                     else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'

@@ -29,7 +29,7 @@
      <!-- uploader -->
     <div class='InlineParameters'> 
         <app-file-upload id='fileUploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
-        <mat-error *ngIf="fileInput && fileInput.isEmpty()"> Prosím vyberte súbor</mat-error>
+        <mat-error *ngIf="fileInput && fileInput.isEmpty()" class='movedError'> Prosím vyberte súbor</mat-error>
     </div>
 
     <!-- submit button -->

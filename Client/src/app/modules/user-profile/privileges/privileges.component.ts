@@ -1,8 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { ApplicationPrivilege } from 'app/shared/models/UserGroups';
-import { UserService } from 'app/core/services/user.service';
-import { Observable } from 'rxjs';
-import { AuthenticationService } from 'app/core/services/authentication.service';
 
 @Component({
   selector: 'app-privileges',
@@ -11,12 +8,13 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
 })
 export class PrivilegesComponent implements OnInit {
   @Input() public name;
-  @Output() public resetButton: EventEmitter<any> = new EventEmitter();
-  @Output() public saveButton: EventEmitter<ApplicationPrivilege> = new EventEmitter();
-
-  @Input() activateUnableClick = false;
+  public activateUnableClick = false; // true if editing privileges
+  public hideUnassignedPriv = false; // true only want to print assigned privileges
   public enabledPrivileges: ApplicationPrivilege;
+  private enabledPrivilegesCopy: ApplicationPrivilege;
+
   public disabledPrivileges: ApplicationPrivilege;
+  private disabledPrivilegesCopy: ApplicationPrivilege;
 
   
   constructor() { 
@@ -49,15 +47,21 @@ export class PrivilegesComponent implements OnInit {
 
   }
 
-  private resetButtonClicked(){
-    this.resetButton.emit();
-  }
-
-  private saveButtonClicked(){
-    this.saveButton.emit(this.enabledPrivileges);
-  }
-
   ngOnInit() {
+  }
+
+  public editGroup(){   
+    this.enabledPrivilegesCopy = JSON.parse(JSON.stringify(this.enabledPrivileges));
+    this.disabledPrivilegesCopy = JSON.parse(JSON.stringify(this.disabledPrivileges));
+    this.activateUnableClick = true;
+    this.hideUnassignedPriv = false;
+  }
+
+  public resetGroup(){
+    this.enabledPrivileges = JSON.parse(JSON.stringify(this.enabledPrivilegesCopy));
+    this.disabledPrivileges = JSON.parse(JSON.stringify(this.disabledPrivilegesCopy));
+    this.activateUnableClick = false;
+    this.hideUnassignedPriv = true;
   }
 
   public changeModuleTypeToUse(name: string){

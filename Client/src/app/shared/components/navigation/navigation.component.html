@@ -12,7 +12,7 @@
         matTooltip="Dashboard"
         matTooltipPosition="right"
         matTooltipClass="custom-tooltip"
-        matTooltipShowDelay="200">
+        matTooltipShowDelay="150">
             <img src="./../../../../assets/images_design/dashboard_2.png" 
                 alt="dashboard navigation icon" 
                 id='dashboardIcon'
@@ -25,7 +25,7 @@
             matTooltip="Nová požiadavka"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
-            matTooltipShowDelay="200"
+            matTooltipShowDelay="150"
             *ngIf = "!(isGhost$ | async)"
          >
             <img src="./../../../../assets/images_design/request_new_icon.png" 
@@ -40,7 +40,7 @@
             matTooltip="Zatvorené požiadavky"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
-            matTooltipShowDelay="200">
+            matTooltipShowDelay="150">
             <img src="./../../../../assets/images_design/request_closed_icon.png" 
                 alt="dashboard navigation icon" 
                 id='requestClosedIcon'
@@ -53,7 +53,7 @@
             matTooltip="Profil"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
-            matTooltipShowDelay="200">
+            matTooltipShowDelay="150">
             <img src="./../../../../assets/images_design/user_profile_icon.png" 
                 alt="dashboard navigation icon" 
                 id='userProfileIcon'
@@ -66,7 +66,7 @@
             matTooltip="Správa aplikácie"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
-            matTooltipShowDelay="200"
+            matTooltipShowDelay="150"
             *ngIf='(hasPrivilegeAccess$ | async) || (isAdmin$ | async) || (isGhost$ | async)'>
             <img src="./../../../../assets/images_design/team_icon.png" 
                 alt="dashboard navigation icon" 

@@ -47,44 +47,12 @@ public class GroupController {
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní mien skupín, kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
-    @PutMapping("manage/{name}/modifyUsers")
-    public ResponseEntity<?> modifyUsers(@PathVariable String name , @RequestBody List<UserSimpleDTO> users){
+    
+    /* Available only for authorized solvers -> authorization type privilege management */
+    @PutMapping("secure/manage/{name}/modifyGroup")
+    public ResponseEntity<?> modifyDescription(@PathVariable String name , @RequestBody GroupDTO groupDTO){
         try {
-            this.groupService.modifyUsersInvolvedInGroupAndSave(name, users);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
-    }
-
-    @PutMapping("manage/{name}/modifyWatchedUsers")
-    public ResponseEntity<?> modifyWatchedUsers(@PathVariable String name , @RequestBody List<UserSimpleDTO> users){
-        try {
-            this.groupService.modifyUsersWatchGroupActivityAndSave(name, users);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
-    }
-
-    @PutMapping("manage/{name}/modifyManager")
-    public ResponseEntity<?> modifyManager(@PathVariable String name , @RequestBody UserSimpleDTO manager){
-        try {
-            this.groupService.modifyManagerInGroupAndSave(name, manager);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
-    }
-
-    @PutMapping("manage/{name}/description")
-    public ResponseEntity<?> modifyDescription(@PathVariable String name , @RequestBody String description){
-        try {
-            this.groupService.modifyGroupDescription(name, description);
+            this.groupService.modifyGroup(name, groupDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to modify group description, error : " + e.getMessage());
@@ -92,6 +60,7 @@ public class GroupController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani opisu skupny",HttpStatus.BAD_REQUEST);
     }
 
+    /* Available only for authorized solvers -> authorization type privilege management */
     @GetMapping("secure/manage/getAll")
     public List<String> getAllGroups(){
         try {
@@ -101,19 +70,7 @@ public class GroupController {
         }
         return new ArrayList<>();
     }
-    /* returns also privileges which groups does not have yet*/
-    @GetMapping("secure/manage/details")
-    public ResponseEntity<?> getGroupDetailsAll(@RequestParam("groupName") String groupName){
-        try {
-            GroupDTO groupDTO =  this.groupService.getGroupDetails(groupName);
-            groupDTO.setUnsetApplicationPrivilegeDTO(this.groupService.getUnsetPrivilegesForGroup(groupDTO));
-            return new ResponseEntity<>(groupDTO, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed method getGroupDetails for group: " + groupName+ ", error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní detailov skupiny " +
-                groupName + ", kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+
 
     /* Available only for authorized solvers -> authorization type privilege management */
     @PostMapping("secure/manage/registration")
@@ -128,15 +85,17 @@ public class GroupController {
     }
 
     /* Available only for authorized solvers -> authorization type privilege management */
-    @PutMapping("secure/manage/{name}/modifyPrivileges")
-    public ResponseEntity<?> modifyPrivileges(@PathVariable String name , @RequestBody ApplicationPrivilegeDTO applicationPrivilegeDTO){
+    @GetMapping("secure/manage/details")
+    public ResponseEntity<?> getGroupDetailsAll(@RequestParam("groupName") String groupName){
         try {
-            this.groupService.modifyGroupPrivileges(name, applicationPrivilegeDTO);
-            return new ResponseEntity<>(HttpStatus.OK);
+            GroupDTO groupDTO =  this.groupService.getGroupDetails(groupName);
+            groupDTO.setUnsetApplicationPrivilegeDTO(this.groupService.getUnsetPrivilegesForGroup(groupDTO));
+            return new ResponseEntity<>(groupDTO, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to modify group privileges, error : " + e.getMessage());
+            LOGGER.error("Failed method getGroupDetails for group: " + groupName+ ", error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani pravomoci skupny",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zmene detailov skupiny " +
+                groupName + ", kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /* Available only for authorized solvers -> authorization type privilege management */
@@ -148,7 +107,7 @@ public class GroupController {
         } catch (Exception e) {
             LOGGER.error("Failed to remove users into group, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani uživateľa do skupny",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o zmazani skupny",HttpStatus.BAD_REQUEST);
     }
 
 
