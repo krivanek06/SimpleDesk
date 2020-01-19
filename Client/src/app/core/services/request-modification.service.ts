@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 import { HttpParams, HttpClient } from '@angular/common/http';
-import Swal from 'sweetalert2';
-import { UserSimple, RequestDetails, TicketDetails, ReportDetails, FinanceDetails } from 'app/shared/models/RequestDetails';
+import { UserSimple, RequestDetails, TicketDetails, ReportDetails, FinanceDetails, RequestComment } from 'app/shared/models/RequestDetails';
 import { mapTo, map } from 'rxjs/operators';
 
 @Injectable({
@@ -67,7 +66,10 @@ export class RequestModificationService {
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`,null );
   }
 
-
+  
+  /*public setSolution(requestid: number, solution: string): Observable<RequestComment>{
+    return this.http.put<RequestComment>(environment.apiUrl + `requests/modification/${requestid}/solution`,solution );
+  }*/
 
 
   /**

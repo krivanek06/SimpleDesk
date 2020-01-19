@@ -42,23 +42,19 @@ public class RequestService {
     @Autowired
     private GroupService groupService;
 
-    public List<RequestLog> getLogsForRequest(Request request){
+  /*  public List<RequestLog> getLogsForRequest(Request request){
         return this.requestLogRepository.findAllByRequestOrderByTimestampAsc(request);
     }
 
-    /**
-     * @param request which will be changed
-     * @param user who initialise some changing on request
-     * @param changingObject which column in tbl_request is updated
-     * @param oldState what value was present in that column
-     * @param newState what value will be present in that column
-     */
     protected void logRequestModification(Request request, User user, String changingObject, String oldState, String newState){
         String log =  "Stav " + changingObject + " sa zmenil z " + oldState + " na " + newState + ". "+ "Požiadavka bola inicializovaná uživateľom : " + user.getFullName();
         this.requestLogRepository.save(Creator.createRequestLog(log, user, request));
+    }*/
+    public void saveRequest(Request request){
+        this.requestRepository.save(request);
     }
 
-    private Request loadRequestById(Integer requestId){
+    public Request loadRequestById(Integer requestId){
         return this.requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Could not found request with id : " + requestId));
     }
 
@@ -157,6 +153,17 @@ public class RequestService {
         }
 
         return this.requestRepository.hasAccessForRequest(request.getId(), request.getModuleType().getName(), username);
+   }
+
+
+   public String[] getEngagedUsersEmails(Request request){
+      /* String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+       String solver = request.getSolver() != null ? request.getSolver().getEmail() : "";
+       String closed = request.getClosed() != null ? request.getClosed().getEmail() : "";
+       List<String> watched = request.getUserWhoWatchThisRequest().stream().map(User::getEmail).collect(Collectors.toList());
+
+       return Stream.of(assigned, solver,closed,watched ).distinct().toArray(String[]::new);*/
+      return null;
    }
 
 

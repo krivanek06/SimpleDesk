@@ -59,6 +59,7 @@ import { RequestFilterComponent } from './shared/components/request-filter/reque
 import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
 import { DotLoaderComponent } from './shared/components/dot-loader/dot-loader.component';
 import { SERDButtonsComponent } from './shared/components/serdbuttons/serdbuttons.component';
+import { CommentFormComponent } from './modules/request-details/comment-form/comment-form.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +98,8 @@ import { SERDButtonsComponent } from './shared/components/serdbuttons/serdbutton
     RequestFilterComponent,
     UnauthorizedComponent,
     DotLoaderComponent,
-    SERDButtonsComponent
+    SERDButtonsComponent,
+    CommentFormComponent
   ],
   imports: [
     BrowserModule,

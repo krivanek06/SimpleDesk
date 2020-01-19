@@ -18,7 +18,7 @@
             </div>     
         </div>
 
-        <div *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && requestDetails.closed === null'>
+        <div *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && (requestDetails$ | async).closed === null'>
 
         
             <img src="../../../../assets/images_design/delete_bin_icon.png" 
@@ -75,19 +75,6 @@
 
 </div>
 
-
-
-<form [formGroup] = "commentForm" (ngSubmit)="submit()" 
-    *ngIf = "requestDetails !== null && requestDetails.closed === null && !(isGhost$ | async)">
-    <mat-form-field class='ticketInlineParameters' >
-        <textarea  matInput placeholder="Napíšte komentár" id="commentField" formControlName = "commentField"></textarea>
-        <!--<mat-error *ngIf="commentField.invalid"> Prosím zadajte komentár</mat-error>-->
-    </mat-form-field>
-    <div class='ticketInlineParameters' >
-        <mat-checkbox (change) = "changeToPrivate($event.checked)" *ngIf = '((isSolver$ | async) || (isAdmin$ | async))'>Privátny</mat-checkbox>
-        <button mat-raised-button color="primary" id="sendingButton" type="submit"> Odoslať </button>
-    </div>
-</form>
 
 <div  class = 'displayCommentSharing' *ngIf="changeFramws" >
     <app-comment-sharing  (changeWindow) = "changeFrames(undefined)" (shareWithGroup) = "shareWith($event)"></app-comment-sharing>

@@ -52,7 +52,6 @@ public class UserConverter {
     public User generateFreshUser(UserDTO userDTO){
         User user = new User();
         RandomGenerator randomGenerator = new RandomGenerator();
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
         user.setUsername(userDTO.getUsername());
         user.setPhoto("user.png");
@@ -61,7 +60,7 @@ public class UserConverter {
         user.setLastName(userDTO.getLastName());
         user.setActive(true);
         user.setDateCreation(new Timestamp(System.currentTimeMillis()));
-        user.setPassword(encoder.encode(randomGenerator.generateString(10)));
+        user.setPassword(randomGenerator.generateString(10));
         return user;
     }
 }

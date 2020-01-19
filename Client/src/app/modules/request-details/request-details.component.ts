@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { RequestDetails, TicketDetails, FinanceDetails, ReportDetails } from 'app/shared/models/RequestDetails';
+import { RequestDetails,  RequestComment } from 'app/shared/models/RequestDetails';
 import { environment } from 'environments/environment';
 import { RequestSideInformationComponent } from './request-side-information/request-side-information.component';
-import { RequestSideOptionsComponent } from './request-side-options/request-side-options.component';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
+import { CommentComponent } from './comment/comment.component';
 
 @Component({
   selector: 'app-request-details',
@@ -23,10 +23,11 @@ export class RequestDetailsComponent implements OnInit {
   public isAdmin$: Observable<boolean>;
 
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
+  @ViewChild('requestComments', {static: false}) requestComments: CommentComponent;
 
 
-  constructor(private http: HttpClient, public requestService: RequestModificationService, 
-    private spinner: NgxSpinnerService, private authService: AuthenticationService) {
+  constructor(private http: HttpClient, public requestService: RequestModificationService, private spinner: NgxSpinnerService,
+     private authService: AuthenticationService) {
       this.isGhost$ = this.authService.isGhost();
       this.isAdmin$ = this.authService.isAdmin();
     }
@@ -51,6 +52,10 @@ export class RequestDetailsComponent implements OnInit {
       }, 
       error => this.spinner.hide());
     
+  }
+
+  private addCommentToArray(requestComment: RequestComment){
+    this.requestComments.requestComments.push(requestComment);
   }
 
 

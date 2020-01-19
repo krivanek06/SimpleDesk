@@ -24,9 +24,8 @@ public class RequestConverter {
         requestDTO.setRequestType(request.getModuleType().getName());
         requestDTO.setCreator( this.userConverter.convertUserToSimpleDTO(request.getCreator()));
         requestDTO.setAssigned(request.getAssigned() != null ?  this.userConverter.convertUserToSimpleDTO(request.getAssigned()) : null);
-        requestDTO.setSolver(request.getSolver() != null ?  this.userConverter.convertUserToSimpleDTO(request.getSolver()) : null);
-        requestDTO.setSolution(request.getSolution());
         requestDTO.setClosed(request.getClosed() != null ? this.userConverter.convertUserToSimpleDTO(request.getClosed()) : null);
+        requestDTO.setSolutionComment(request.getSolutionComment());
         requestDTO.setAllowCommenting(request.getAllowCommenting());
         requestDTO.setId(request.getId());
         requestDTO.setName(request.getName());

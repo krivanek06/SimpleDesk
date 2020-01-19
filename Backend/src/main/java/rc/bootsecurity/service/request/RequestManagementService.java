@@ -3,16 +3,20 @@ package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.dto.request.RequestDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.converter.UserConverter;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 
@@ -78,14 +82,6 @@ public class RequestManagementService{
     }
 
 
-    public void setSolverUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO, String solution){
-        User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
-        Request request = this.findRequest(requestId);
-        request.setSolver(user);
-        request.setSolution(solution);
-        this.saveOrUpdateRequest(request);
-    }
-
     public void setWatchRequestAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         Request request = this.findRequest(requestId);
         request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
@@ -101,7 +97,35 @@ public class RequestManagementService{
         this.saveOrUpdateRequest(request);
     }
 
+    /**
+     * @return if solution already exists, transform it as a comment and add new solution
+     */
+    /*@Transactional
+    public RequestComment setSolution(Integer requestId, String solution){
+        Request request = this.findRequest(requestId);
 
+        if(request.getSolutionComment() != null){
+            RequestComment requestComment = new RequestComment();
+            requestComment.setUser(request.getSolver());
+            requestComment.setRequest(request);
+            requestComment.setTimestamp(request.getTimestampSolved());
+            requestComment.setComment(request.getSolution());
+
+          //  this.requestCommentService.saveOrUpdateComment(requestComment);
+          //  this.setSolverUserAndSave(request, solution);
+            return requestComment;
+        }
+      //  this.setSolverUserAndSave(request, solution);
+        return null;
+    }
+
+    private void setSolverUserAndSave(Request request, String solution){
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        request.setSolver(user);
+        request.setSolution(solution);
+        request.setTimestampSolved(new Timestamp(System.currentTimeMillis()));
+        this.saveOrUpdateRequest(request);
+    }*/
 
 
 }

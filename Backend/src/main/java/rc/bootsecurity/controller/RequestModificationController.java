@@ -7,21 +7,34 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.dto.request.RequestDTO;
+import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.service.request.RequestManagementService;
 import rc.bootsecurity.service.request.RequestStateService;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/requests/modification")
 public class RequestModificationController {
     private static final Logger LOGGER =  LoggerFactory.getLogger(RequestModificationController.class);
-
-
     @Autowired
     private RequestStateService requestStateService;
     @Autowired
     private RequestManagementService requestManagementService;
 
 
+    /*@PutMapping("{id}/solution")
+    public ResponseEntity<?> addSolution(@PathVariable("id") Integer id, @RequestBody String solution) {
+        try {
+            RequestComment requestComment = this.requestManagementService.setSolution(id, solution);
+            return new ResponseEntity<>(requestComment, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+        }
+
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní riešenia pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
+    }*/
     /**
      * Assign or remove myself as solver
      */
@@ -38,7 +51,7 @@ public class RequestModificationController {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
         }
 
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -57,7 +70,7 @@ public class RequestModificationController {
         } catch (Exception e) {
             LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní stavu, pre požiadavku s id : " + id ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní stavu, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -71,7 +84,7 @@ public class RequestModificationController {
         } catch (Exception e) {
             LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní priority, pre požiadavku s id : " + id ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní priority, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -85,7 +98,7 @@ public class RequestModificationController {
         } catch (Exception e) {
             LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní komentovania, pre požiadavku s id : " + id ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní komentovania, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
 
@@ -108,7 +121,10 @@ public class RequestModificationController {
         } catch (Exception e) {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+
+
 
 }

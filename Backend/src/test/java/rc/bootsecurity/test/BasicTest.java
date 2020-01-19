@@ -364,39 +364,6 @@ public class BasicTest {
         RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.Zatvorené.name());
         RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
-        Ticket ticket1 = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2).get(0);
-
-        assertThat(ticket1.getTicketType()).isEqualTo(ticketTypeSoftware);
-        ticket1.setSolver(user12);
-        ticket1.setRequestPosition(requestPosition1);
-        this.requestRepository.save(ticket1);
-        assertThat(this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition1)).contains(ticket1);
-
-        ticket1.setRequestPosition(requestPosition2);
-        this.requestRepository.save(ticket1);
-        List<Ticket> tickets = this.ticketRepository.findAllByCreatorAndRequestPosition(user1, requestPosition2);
-        assertThat(tickets).contains(ticket1);
-        assertThat(tickets.size()).isEqualTo(2);
-
-        // add comments -> hardware
-        Request hardwareRequest = this.requestRepository.findAllByCreatorAndRequestPositionAndRequestPriority(
-                user1, requestPosition2, requestPriority2).get(0);
-        RequestComment comment1 = Creator.createRequestComment(hardwareRequest, user1, "COMMENT1");
-        RequestComment comment2 = Creator.createRequestComment(hardwareRequest, user12, "COMMENT2");
-        RequestComment comment3 = Creator.createRequestComment(hardwareRequest, user1, "COMMENT3");
-        this.requestCommentRepository.save(comment1);
-        this.requestCommentRepository.save(comment2);
-        this.requestCommentRepository.save(comment3);
-
-        List<RequestComment> savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest).get();
-        assertThat(savedComments).containsSequence(comment1, comment2,comment3);
-        assertThat(savedComments).containsExactly(comment1, comment2, comment3);
-
-        this.requestCommentRepository.delete(comment2);
-        savedComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(hardwareRequest).get();
-        assertThat(savedComments).containsSequence(comment1, comment3);
-        assertThat(savedComments).containsExactly(comment1,  comment3);
 
     }
 

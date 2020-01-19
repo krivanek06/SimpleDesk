@@ -47,7 +47,7 @@ public class GroupController {
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní mien skupín, kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
+
     /* Available only for authorized solvers -> authorization type privilege management */
     @PutMapping("secure/manage/{name}/modifyGroup")
     public ResponseEntity<?> modifyDescription(@PathVariable String name , @RequestBody GroupDTO groupDTO){

@@ -37,9 +37,6 @@ public abstract class Request {
     @Column(name = "subject")
     private String name;
 
-    @Column(name = "solution")
-    private String solution;
-
     @Column(name = "allow_commenting")
     private Boolean allowCommenting;
 
@@ -72,13 +69,12 @@ public abstract class Request {
     private User assigned;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "solved_uid")
-    private User solver;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_uid")
     private User closed;
     // -------------------------
+
+    @EqualsAndHashCode.Exclude
+    private Integer solutionComment;
 
     /**
      * comments to request

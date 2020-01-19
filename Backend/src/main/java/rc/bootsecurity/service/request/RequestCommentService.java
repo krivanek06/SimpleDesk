@@ -2,6 +2,7 @@ package rc.bootsecurity.service.request;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.exception.CommentNotFoundException;
 import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.exception.UserNotFoundException;
@@ -9,6 +10,7 @@ import rc.bootsecurity.model.dto.GroupContainerDTO;
 import rc.bootsecurity.model.dto.GroupDTO;
 import rc.bootsecurity.model.dto.request.RequestCommentDTO;
 import rc.bootsecurity.model.entity.Group;
+import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.enums.USER_TYPE;
@@ -17,6 +19,9 @@ import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.RequestCommentRepository;
 import rc.bootsecurity.repository.request.RequestRepository;
 import rc.bootsecurity.service.GroupService;
+import rc.bootsecurity.service.UserService;
+import rc.bootsecurity.utils.converter.RequestConverter;
+import rc.bootsecurity.utils.service.EmailService;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -26,14 +31,17 @@ import java.util.stream.Stream;
 @Service
 public class RequestCommentService {
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
     @Autowired
     private RequestCommentRepository requestCommentRepository;
     @Autowired
-    private RequestRepository requestRepository;
+    private RequestService requestService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private EmailService emailService;
 
+    private RequestConverter requestConverter = new RequestConverter();
 
     public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
     public void saveOrUpdateComment(List<RequestComment> requestComments){ this.requestCommentRepository.saveAll(requestComments); }
@@ -44,8 +52,11 @@ public class RequestCommentService {
     }
 
     private RequestComment getRequestComment(RequestCommentDTO requestCommentDTO){
-        return this.requestCommentRepository.findById(requestCommentDTO.getId())
-                .orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + requestCommentDTO.getId()));
+        return this.requestCommentRepository.findById(requestCommentDTO.getId()).orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + requestCommentDTO.getId()));
+    }
+
+    private RequestComment getRequestComment(Integer id){
+        return this.requestCommentRepository.findById(id).orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + id));
     }
 
     public RequestComment createRequestComment(RequestCommentDTO requestCommentDTO){
@@ -53,13 +64,36 @@ public class RequestCommentService {
         requestComment.setComment(requestCommentDTO.getComment());
         requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
 
-        requestComment.setUser(this.userRepository.findByUsername(requestCommentDTO.getCreator().getUsername())
-                .orElseThrow(() -> new UserNotFoundException("Not found user when creating request comment : " + requestCommentDTO.getCreator().getUsername())));
-        requestComment.setRequest(this.requestRepository.findById(requestCommentDTO.getRequestId())
-                .orElseThrow(() -> new RequestNotFoundException("Not found request when creating comment : " + requestCommentDTO.getRequestId())));
+        requestComment.setUser(this.userService.loadUserByUsername(requestCommentDTO.getCreator().getUsername()));
+        requestComment.setRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
 
         requestComment.setTimestamp(new Timestamp(new Date().getTime()));
         return requestComment;
+    }
+
+    @Transactional
+    public RequestCommentDTO addRequestComment(RequestCommentDTO requestCommentDTO, boolean sendEmail, boolean solution){
+        RequestComment requestComment = this.createRequestComment(requestCommentDTO);
+        this.saveOrUpdateComment(requestComment);
+
+        if(solution) {
+            requestComment.getRequest().setSolutionComment(requestComment.getId());
+            this.requestService.saveRequest(requestComment.getRequest());
+        }
+        //getting nested exception
+        if(sendEmail || solution)
+            this.informUsersAboutComment(requestComment);
+
+        requestCommentDTO.setId(requestComment.getId());
+        return requestCommentDTO;
+    }
+
+    public void informUsersAboutComment(RequestComment requestComment){
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        String assignedEmail  = requestComment.getRequest().getAssigned() != null ? requestComment.getRequest().getAssigned().getEmail() : "";
+        String creatorEmail  = requestComment.getRequest().getCreator() != null ? requestComment.getRequest().getCreator().getEmail() : "";
+        this.emailService.sendRequestCommentEmail(requestComment.getRequest(), user, requestComment.getComment(), assignedEmail,creatorEmail);
+
     }
 
     public void modifyComment(RequestCommentDTO requestCommentDTO){

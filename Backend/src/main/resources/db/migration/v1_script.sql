@@ -78,10 +78,9 @@ create table tbl_requests(
    priority_id Integer NOT NULL,
    creator_uid Integer NOT NULL,
    assigned_uid Integer,
-   solved_uid Integer,
    closed_uid Integer,
    subject varchar NOT NULL,
-   solution varchar,
+   solution_comment_id integer,
    allow_commenting boolean default True,
    position_id Integer,
    type_id Integer NOT NULL
@@ -330,7 +329,7 @@ ALTER TABLE tbl_reports ADD FOREIGN KEY (r_type_id) REFERENCES tbl_report_types(
 ALTER TABLE tbl_requests ADD FOREIGN KEY (priority_id) REFERENCES tbl_request_priorities(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (creator_uid) REFERENCES tbl_users(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (assigned_uid) REFERENCES tbl_users(id);
-ALTER TABLE tbl_requests ADD FOREIGN KEY (solved_uid) REFERENCES tbl_users(id);
+ALTER TABLE tbl_requests ADD FOREIGN KEY (solution_comment_id) REFERENCES tbl_request_comments(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (closed_uid) REFERENCES tbl_users(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (position_id) REFERENCES tbl_request_positions(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (type_id) REFERENCES tbl_module_type(id);

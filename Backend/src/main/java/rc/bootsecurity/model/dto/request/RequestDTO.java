@@ -23,8 +23,6 @@ public abstract class RequestDTO {
 
     private String name;
 
-    private String solution;
-
     private Boolean allowCommenting;
 
     private String requestPriority;
@@ -37,9 +35,9 @@ public abstract class RequestDTO {
 
     private UserSimpleDTO assigned;
 
-    private UserSimpleDTO solver;
-
     private UserSimpleDTO closed;
+
+    private Integer solutionComment;
 
     private List<UserSimpleDTO> userToWatchRequest;
 

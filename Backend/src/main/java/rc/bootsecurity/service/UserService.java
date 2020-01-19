@@ -15,6 +15,7 @@ import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.enums.USER_TYPE;
 import rc.bootsecurity.repository.UserRepository;
+import rc.bootsecurity.utils.service.EmailService;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 import rc.bootsecurity.utils.converter.UserConverter;
@@ -29,6 +30,8 @@ public class UserService {
     private UserRepository userRepository;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private EmailService emailService;
 
     private JsonStringParser jsonStringParser = new JsonStringParser();
     private FileService fileService = new FileService();
@@ -137,7 +140,10 @@ public class UserService {
     }
 
     public void registerUser(UserDTO userDTO){
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = this.userConverter.generateFreshUser(userDTO);
+        this.emailService.sendUserRegistrationEmail(this.loadUserByUsername(this.getPrincipalUsername()), user);
+        user.setPassword(encoder.encode(user.getPassword()));
         this.userRepository.save(user);
     }
 

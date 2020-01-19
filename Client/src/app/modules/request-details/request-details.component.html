@@ -15,7 +15,9 @@
 
     </ng-sidebar>
     
-    <div ng-sidebar-content>      
+    <div ng-sidebar-content>    
+        
+        
         <app-header></app-header>
         <app-navigation></app-navigation>
 
@@ -80,7 +82,8 @@
 
 
 
-            <app-comment [requestComments] = "(requestService.getRequestDetials() | async)?.requestCommentDTOS"></app-comment>
+            <app-comment #requestComments  [requestComments] = "(requestService.getRequestDetials() | async)?.requestCommentDTOS"></app-comment>
+            <app-comment-form (addedCommentEmitter)="addCommentToArray($event)"></app-comment-form>
 
         </div>
     </div>
