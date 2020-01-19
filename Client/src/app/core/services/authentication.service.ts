@@ -20,7 +20,7 @@ export class AuthenticationService {
 
   public getDecodedToken():Observable<JWToken>{
     if(this.JWToken$ === undefined){
-      this.JWToken$= new BehaviorSubject<JWToken>(this.jwtHelper.decodeToken(this.getAccessToken()));
+      this.JWToken$ = new BehaviorSubject<JWToken>(this.jwtHelper.decodeToken(this.getAccessToken()));
     }
     return this.JWToken$.asObservable();
   }
@@ -44,6 +44,7 @@ export class AuthenticationService {
   public logout () {
     this.setAccessToken(null);
     this.setRefreshToken(null);
+    this.JWToken$.next(null);
   }
 
   public isAuthenticated(): boolean {

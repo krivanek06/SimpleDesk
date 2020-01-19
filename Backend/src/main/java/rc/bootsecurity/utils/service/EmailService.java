@@ -19,6 +19,10 @@ public class EmailService {
     @Autowired
     private JavaMailSender javaMailSender;
 
+    private String getEmailFooter(User whoInitiated){
+        return "\n\n" + "Email bol zaslaný od uživateľa : " + whoInitiated.getFullName();
+    }
+
     private SimpleMailMessage composeEmail(String ...sendToEmails) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(sendToEmails);
@@ -56,7 +60,7 @@ public class EmailService {
     public void sendRequestCommentEmail(Request request, User whoInitiated, String comment,String ...sendToEmails ){
         SimpleMailMessage message = this.composeEmail(sendToEmails);
         message.setSubject("Požiadavka " + request.getId());
-        message.setText("Komentár bol pridaný na požiadavku: " + request.getName() + "\n\n" + comment  + "\n\n" + "Email bol zaslaný od uživateľa : " + whoInitiated );
+        message.setText("Komentár bol pridaný na požiadavku: " + request.getName() + "\n\n" + comment  + this.getEmailFooter(whoInitiated));
 
       //  javaMailSender.send(message);
     }
@@ -67,8 +71,8 @@ public class EmailService {
         message.setText("Boli ste zaregistrovaný do systemu helpdesk. \n" +
                 "prihlasovanie údaje sú nasledovné \n" +
                 "prihlasovacie meno : " + newUser.getUsername() + "\n" +
-                "prihlasovacie heslo : " + newUser.getPassword() + "\n\n" +
-                "Email bol zaslaný od uživateľa : " + whoInitiated );
+                "prihlasovacie heslo : " + newUser.getPassword() +
+                 this.getEmailFooter(whoInitiated) );
 
       //  javaMailSender.send(message);
     }

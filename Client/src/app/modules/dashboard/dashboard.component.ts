@@ -1,8 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'environments/environment';
-import { RequestTable, RequestDashboard } from 'app/shared/models/RequestTable';
+import { RequestTable } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
 import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from 'rxjs';
@@ -34,14 +32,14 @@ export class DashboardComponent implements OnInit {
   public isManagerRightHand$: Observable<boolean>;
 
 
-  constructor( private http: HttpClient, private spinner: NgxSpinnerService, private authService: AuthenticationService,
+  constructor(private spinner: NgxSpinnerService, private authService: AuthenticationService,
     private userService: UserService, private requestService: RequestModificationService ) { }
 
   ngOnInit() {
     this.getRequestOnDashboard();
 
     this.isAdmin$ = this.authService.isAdmin();
-    this.isGhost$ = this.authService.isGhost();
+    this.isGhost$ = this.authService.isGhost(); 
     this.isSolver$ = this.authService.isSolver();
     this.isManager$ = this.authService.isManager();
     this.isManagerRightHand$ = this.authService.isManagerRightHand();
@@ -49,7 +47,7 @@ export class DashboardComponent implements OnInit {
 
   private getRequestOnDashboard(){
       this.spinner.show();
-      this.http.get<RequestDashboard>(`${environment.apiUrl}requests/dashboard`).subscribe(requests =>{
+      this.requestService.getRequestOnDashboard().subscribe(requests =>{
         if(this.myOpenRequests !== undefined){
           this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
         }

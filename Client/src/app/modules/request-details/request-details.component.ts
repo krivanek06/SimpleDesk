@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { RequestDetails,  RequestComment } from 'app/shared/models/RequestDetails';
 import { environment } from 'environments/environment';
@@ -14,22 +14,20 @@ import { CommentComponent } from './comment/comment.component';
   templateUrl: './request-details.component.html',
   styleUrls: ['./request-details.component.scss']
 })
-export class RequestDetailsComponent implements OnInit {
+export class RequestDetailsComponent implements OnInit, OnDestroy {
   public sideBarBoolean = false;
-  public deny = false;
-  public allow = true;
-
   public isGhost$: Observable<boolean>;
   public isAdmin$: Observable<boolean>;
+  public requestDetail$: Observable<RequestDetails>;
 
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
   @ViewChild('requestComments', {static: false}) requestComments: CommentComponent;
 
 
-  constructor(private http: HttpClient, public requestService: RequestModificationService, private spinner: NgxSpinnerService,
-     private authService: AuthenticationService) {
+  constructor(private requestService: RequestModificationService, private spinner: NgxSpinnerService, private authService: AuthenticationService) {
       this.isGhost$ = this.authService.isGhost();
       this.isAdmin$ = this.authService.isAdmin();
+      this.requestDetail$ = this.requestService.getRequestDetials();
     }
 
   private openSideBar(){
@@ -37,21 +35,15 @@ export class RequestDetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getRequstDetails();
-  }
-
-  private getRequstDetails(): void{
     let url = window.location.pathname;
     let id = url.substring(url.lastIndexOf('/') + 1);
 
     this.spinner.show();
-    this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`).subscribe(requestDetails => {
-        console.log(requestDetails)
-        this.requestService.updateRequestDetails( requestDetails);
-        this.spinner.hide();
-      }, 
-      error => this.spinner.hide());
-    
+    this.requestService.loadRequestDetails(id).subscribe(complete => this.spinner.hide());
+  }
+
+  ngOnDestroy(): void {
+    this.requestService.removeRequestDetails();
   }
 
   private addCommentToArray(requestComment: RequestComment){

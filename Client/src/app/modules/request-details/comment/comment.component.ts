@@ -26,7 +26,7 @@ export class CommentComponent implements OnInit {
 
   @Input() public requestComments:RequestComment[];
 
-  constructor(public userService: UserService, private http: HttpClient, private commentHttp: CommentHttpService,
+  constructor(public userService: UserService, private commentHttp: CommentHttpService,
     private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {

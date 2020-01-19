@@ -40,6 +40,10 @@ public abstract class Request {
     @Column(name = "allow_commenting")
     private Boolean allowCommenting;
 
+    @EqualsAndHashCode.Exclude
+    @Column(name = "solution_comment_id")
+    private Integer solutionComment;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "priority_id")
     private RequestPriority requestPriority;
@@ -73,8 +77,7 @@ public abstract class Request {
     private User closed;
     // -------------------------
 
-    @EqualsAndHashCode.Exclude
-    private Integer solutionComment;
+
 
     /**
      * comments to request

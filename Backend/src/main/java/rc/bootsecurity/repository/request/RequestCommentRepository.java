@@ -1,5 +1,6 @@
 package rc.bootsecurity.repository.request;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import rc.bootsecurity.model.entity.Group;
@@ -14,4 +15,5 @@ public interface RequestCommentRepository extends CrudRepository<RequestComment,
     Optional<List<RequestComment>> findAllByRequestOrderByTimestampAsc(Request request);
 
     void deleteAllByGroupsToViewRequestComment(Group group);
+
 }

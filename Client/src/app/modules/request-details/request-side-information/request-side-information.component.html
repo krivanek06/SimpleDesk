@@ -1,4 +1,4 @@
-<div class='content' *ngIf ='requestDetails !== null'>   
+<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/information_icon.png" class="titleIcon"/>
         Všeobecné informácie
@@ -40,7 +40,7 @@
             <div class='informationAnswer'>Typ ticketu</div>
             <ul ><li div class='information'> {{ $any(requestDetails).ticketType }}</li> </ul>
         </li>
-        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '> 
             <div class='informationAnswer'>{{ $any(requestDetails).ticketType }}</div>
             <ul ><li div class='information'> {{ $any(requestDetails).ticketSubtypeName }}</li> </ul>
         </li>
@@ -79,7 +79,7 @@
 </div>
 
 
-<div class='content' *ngIf ='requestDetails !== null'>   
+<div class='content'  *ngIf ='requestDetails$ | async as requestDetails'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/user_infomatio_icon.png" class="titleIcon"/>
         Ľudia
@@ -105,7 +105,7 @@
                 </li>
             </ul>
             <ul *ngIf = 'requestDetails.closed === null &&requestDetails.assigned === null && ( isSolver$ | async )'> 
-                <li class='information clicable' (click) = "assignOnMe()"> prideliť mne  </li>
+                <li class='information clicable' (click) = "assignOnMe(requestDetails)"> prideliť mne  </li>
             </ul>
         </li>
 
@@ -134,7 +134,7 @@
 
 
 
-<div class='content' *ngIf ='requestDetails !== null'>   
+<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/clock_icon.png" class="titleIcon"/>
         Sledovanie času
@@ -163,7 +163,7 @@
             <div class='informationAnswer'>Čas otvorenia</div>
             <ul> 
                 <li class='information'>
-                    {{ calculateOpenDays() }} dni
+                    {{ calculateOpenDays(requestDetails) }} dni
                 </li>
             </ul>
         </li>
@@ -172,7 +172,7 @@
 
 
 
-<div class='content' *ngIf ='requestDetails !== null'>   
+<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>   
     <h3 class='detailTitle'>
         <img src="../../../../assets/images_design/download_document_icon.png" class="titleIcon"/>
         Dokumenty
@@ -180,7 +180,7 @@
 
     <ul class='userInformations'>
         <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
-            <div class='informationAnswer clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
+            <div class='informationAnswer clicable' (click) = "downloadFile(requestDetails ,document.name)"> {{ document.name }}</div>
             <ul>
                 <li class='information'>
                     {{ document.lastModified  |  date:'MMM d, y, HH:mm:ss ' }}
@@ -193,7 +193,7 @@
             <app-file-upload id='uploader' 
                             [uploaderHeight] = '45' 
                             #fileUploader 
-                            (fileInserted) = "uploadFile($event)"
+                            (fileInserted) = "uploadFile( requestDetails,$event)"
                             hideIt = true>
             </app-file-upload>
         </div>

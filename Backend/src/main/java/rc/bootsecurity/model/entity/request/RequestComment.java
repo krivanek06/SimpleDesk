@@ -25,16 +25,12 @@ public class RequestComment {
     @Column(name = "comment")
     private String comment;
 
-    //@CreationTimestamp
     @Column(name = "timestamp", columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private Timestamp timestamp;
 
     @Column(name = "is_private", columnDefinition = "boolean default false")
     private Boolean isPrivate;
-
-    /**
-     * User who submitted the comment
-     */
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;

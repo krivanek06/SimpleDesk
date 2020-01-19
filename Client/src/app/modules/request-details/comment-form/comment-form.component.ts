@@ -36,8 +36,7 @@ export class CommentFormComponent implements OnInit {
     this.isSolver$ = this.authService.isSolver();
     this.isGhost$ = this.authService.isGhost();
     this.isAdmin$ = this.authService.isAdmin();
-
-
+    
   }
    
   private onChange(event: any) {
@@ -47,24 +46,20 @@ export class CommentFormComponent implements OnInit {
 
   
   private submit(): void{
-    console.log(this.commentInput)
     if(this.commentInput === ''){ 
       return;
     }
-    
+   
     // send solution
     if(this.isChecked &&  this.isCheckedName === "Solution"){
-
       this.constructRequestComment(this.userService.getUserSimple())
-          .subscribe(commentDTO => this.commentService.addComment(commentDTO, false, true).subscribe((comment) =>{
-              console.log(comment);
-          }))
-      
+          .subscribe(commentDTO => this.sendComment(commentDTO, false, true));
+        
       return;
     }
-    //send comment
+    // send simple comment
     this.constructRequestComment(this.userService.getUserSimple())
-          .subscribe(commentDTO => this.sendComment(commentDTO, this.isChecked && this.isCheckedName === "Notification"));
+          .subscribe(commentDTO => this.sendComment(commentDTO, this.isChecked && this.isCheckedName === "Notification", false));
   }
 
   private constructRequestComment(userSimple: UserSimple): Observable<RequestComment>{
@@ -82,7 +77,10 @@ export class CommentFormComponent implements OnInit {
     }));
   }
 
-  private sendComment(commentDTO: RequestComment, sendEmail: boolean){
+  private sendComment(commentDTO: RequestComment, sendEmail: boolean, solution: boolean){
+    if(this.commentInput === '')
+      return;
+
     Swal.fire({
       title: 'Odoslať komentár ?',
       icon: 'warning',
@@ -92,9 +90,12 @@ export class CommentFormComponent implements OnInit {
       confirmButtonText: 'Odoslať'
     }).then((result) => {
       if (result.value) {
-        this.commentService.addComment(commentDTO,  sendEmail).subscribe((addedComment: RequestComment) => {
+        this.commentService.addComment(commentDTO,  sendEmail, solution).subscribe((addedComment: RequestComment) => {
           this.addedCommentEmitter.emit(addedComment);
           this.commentInput = '';
+          if(solution){
+            this.requestDetails$.subscribe(requst => requst.solutionComment = addedComment.id)
+          }
           Swal.fire({ position: 'top-end', text: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
         })
       }

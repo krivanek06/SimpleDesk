@@ -3,25 +3,45 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 import { HttpParams, HttpClient } from '@angular/common/http';
 import { UserSimple, RequestDetails, TicketDetails, ReportDetails, FinanceDetails, RequestComment } from 'app/shared/models/RequestDetails';
-import { mapTo, map } from 'rxjs/operators';
+import { mapTo, map, tap } from 'rxjs/operators';
+import { RequestDashboard } from 'app/shared/models/RequestTable';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RequestModificationService {
-  private requestDetails: BehaviorSubject<RequestDetails> = new BehaviorSubject(null);
+  private requestDetails: BehaviorSubject<RequestDetails>  = new BehaviorSubject(null);
 
   constructor(private http: HttpClient) { }
 
-  public updateRequestDetails(details : RequestDetails){
-    this.requestDetails.next(details);
+
+  public loadRequestDetails(id: any):Observable<RequestDetails>{
+    
+    return this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`).pipe(
+      tap(requestDetails => {
+          console.log(requestDetails)
+          this.requestDetails.next(requestDetails)
+      })
+    )
   }
+  public removeRequestDetails(): void{
+    this.requestDetails.next(null);
+  }
+
+  /*public completeRequestDetails(): void{
+    this.requestDetails.next(null);
+    this.requestDetails.complete();
+  }*/
 
   public getRequestDetials():Observable<RequestDetails>{
     return this.requestDetails.asObservable();
   }
 
-  public getTicketDetials():Observable<TicketDetails>{
+  public getRequestOnDashboard():Observable<RequestDashboard>{
+    return this.http.get<RequestDashboard>(`${environment.apiUrl}requests/dashboard`);
+  }
+
+ /* public getTicketDetials():Observable<TicketDetails>{
     return this.requestDetails.pipe(
       map( detials => <TicketDetails> detials)
     );
@@ -37,7 +57,7 @@ export class RequestModificationService {
     return this.requestDetails.pipe(
       map( detials => <FinanceDetails> detials)
     );
-  }
+  }*/
 
   public assignOrRemoveRequestOnMe(requestid: number, assign: boolean): Observable<any>{
     let params = new HttpParams().set('assign' , String(assign)) ;
@@ -65,11 +85,6 @@ export class RequestModificationService {
   public removeSolver(requestid: number): Observable<any>{
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`,null );
   }
-
-  
-  /*public setSolution(requestid: number, solution: string): Observable<RequestComment>{
-    return this.http.put<RequestComment>(environment.apiUrl + `requests/modification/${requestid}/solution`,solution );
-  }*/
 
 
   /**

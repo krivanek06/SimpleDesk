@@ -7,6 +7,8 @@
     font-size: 14px;
     border-bottom: 1px solid #bdbdbd;
     white-space: pre-wrap;
+    margin-left: 25px;
+    margin-right: 25px;
 }
 
 .floatLeft{
@@ -48,14 +50,14 @@
 
 p{
     margin-bottom: 0px;
+    word-break: break-all;
 }
 
 .icon{
     z-index: 1;
-    top: -10px;
+    margin-right: 2px;
     width: 18px;
     height: 18px;
-    position: absolute;
     cursor: pointer;
 
     -webkit-transition:  0.4s ease-out;
@@ -72,27 +74,25 @@ p{
     }
 }
 
-
-#deleteBin{
+.commentIcons{
+    position: absolute;
+    top: -10px;
     right: 0px;
 }
 
-#editIcon{
-    right: 22px;
+
+#solutionImg{
+    position: absolute;
+    left: 10px;
 }
 
-#lockOpen{
-    right: 44px;
+#solutionText{
+    position: relative;
+    color: white;
+    font-size: 19px;
+    left: 68px;
+    top: 2px;
 }
-
-#lockClosed{
-    right: 44px;
-}
-
-#share{
-    right: 66px;
-}
-
 
 .displayCommentSharing{
     width: 90%;

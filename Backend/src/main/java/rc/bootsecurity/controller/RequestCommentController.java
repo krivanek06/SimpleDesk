@@ -42,7 +42,7 @@ public class RequestCommentController {
             this.requestCommentService.modifyComment(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed method addComment, to add comment: " + e.getMessage());
+            LOGGER.error("Failed method editComment, to add comment: " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri editovaní komentára pre požiadavku s id : " + requestCommentDTO.getRequestId() ,HttpStatus.BAD_REQUEST);
     }
@@ -53,7 +53,7 @@ public class RequestCommentController {
             this.requestCommentService.deleteComment(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed method addComment, to add comment: " + e.getMessage());
+            LOGGER.error("Failed method deleteComment, to add comment: " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse z zmazanie komentára", HttpStatus.BAD_REQUEST);
     }
@@ -64,7 +64,7 @@ public class RequestCommentController {
             this.requestCommentService.modifyComment(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed method addComment, to add comment: " + e.getMessage());
+            LOGGER.error("Failed method changeCommentPrivacy, to add comment: " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse z zmazanie komentára", HttpStatus.BAD_REQUEST);
     }

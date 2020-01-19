@@ -4,11 +4,14 @@
     class="commentBox " >
 
     <div class='flex'>
+        <!-- comment info -->
         <div class="commentBoxName" >
             <img [src]="'data:image/jpeg;base64,'+requestComment.creator.photoBytes" class='avatar' />
                 {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>
               <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>            
         </div>
+
+        <!-- private comment info -->
         <div class="commentBoxName" *ngIf='requestComment.isPrivate' >
             <div class='light bigBold'> 
                 Privátny komentár, zdieľané s : <br>
@@ -18,12 +21,46 @@
             </div>     
         </div>
 
-        <div *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && (requestDetails$ | async).closed === null'>
+        <!-- solution flag -->
+        <div class="commentBoxName" *ngIf='requestComment.id === (requestDetails$ | async).solutionComment' >
+            <img src="../../../../assets/images_design/request_solution.png" id='solutionImg'/>
+            <span id='solutionText'>Riešenie</span>   
+        </div>
 
+        <div class = 'commentIcons' 
+            *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && 
+                  (requestDetails$ | async).closed === null'>
+
+
+            <img *ngIf='requestComment.isPrivate  &&  
+                ((isSolver$ | async) || (isAdmin$ | async)) && 
+                requestComment.id !== (requestDetails$ | async).solutionComment' 
+                src="../../../../assets/images_design/share_icon.png" 
+                class = 'icon'
+                (click) = "changeFrames(requestComment)"
+                matTooltip="Zdieľať"
+                matTooltipPosition="right"
+                matTooltipClass="custom-tooltip-icon"
+                matTooltipShowDelay="200"/>
+
+            <img *ngIf='requestComment.isPrivate  && 
+                ((isSolver$ | async) || (isAdmin$ | async)) && 
+                requestComment.id !== (requestDetails$ | async).solutionComment' 
+                src="../../../../assets/images_design/lock_closed_icon.png" 
+                class = 'icon' 
+                (click) = "changeCommentPrivacy(requestComment)"
+                matTooltip="Otvoriť"
+                matTooltipPosition="right"
+                matTooltipClass="custom-tooltip-icon"
+                matTooltipShowDelay="200"/>
         
-            <img src="../../../../assets/images_design/delete_bin_icon.png" 
-                class = 'icon' id='deleteBin' (click)='deleteComment(requestComment)'
-                matTooltip="Vymazať"
+            <img *ngIf='!requestComment.isPrivate &&  
+                ((isSolver$ | async) || (isAdmin$ | async)) && 
+                requestComment.id !== (requestDetails$ | async).solutionComment' 
+                src="../../../../assets/images_design/lock_open_icon.png" 
+                class = 'icon' 
+                (click) = "changeCommentPrivacy(requestComment)"
+                matTooltip="Uzamknúť"
                 matTooltipPosition="right"
                 matTooltipClass="custom-tooltip-icon"
                 matTooltipShowDelay="200" />
@@ -31,42 +68,21 @@
 
             <img src="../../../../assets/images_design/edit_icon.png" 
                 class = 'icon' 
-                id='editIcon'
                 (click) = "editComment(requestComment)" 
                 matTooltip="Editovať"
                 matTooltipPosition="right"
                 matTooltipClass="custom-tooltip-icon"
                 matTooltipShowDelay="200"/>
 
-            <img *ngIf='!requestComment.isPrivate &&  ((isSolver$ | async) || (isAdmin$ | async))' 
-                 src="../../../../assets/images_design/lock_open_icon.png" 
-                 class = 'icon' 
-                 id='lockOpen'
-                 (click) = "changeCommentPrivacy(requestComment)"
-                matTooltip="Uzamknúť"
+            <img src="../../../../assets/images_design/delete_bin_icon.png" 
+                class = 'icon'  
+                (click)='deleteComment(requestComment)'
+                matTooltip="Vymazať"
                 matTooltipPosition="right"
                 matTooltipClass="custom-tooltip-icon"
                 matTooltipShowDelay="200" />
-            
-            <img *ngIf='requestComment.isPrivate  && ((isSolver$ | async) || (isAdmin$ | async))' 
-                  src="../../../../assets/images_design/lock_closed_icon.png" 
-                  class = 'icon' 
-                  id='lockClosed'
-                  (click) = "changeCommentPrivacy(requestComment)"
-                  matTooltip="Otvoriť"
-                    matTooltipPosition="right"
-                    matTooltipClass="custom-tooltip-icon"
-                    matTooltipShowDelay="200"/>
-            
-            <img *ngIf='requestComment.isPrivate  &&  ((isSolver$ | async) || (isAdmin$ | async))' 
-                  src="../../../../assets/images_design/share_icon.png" 
-                  class = 'icon' 
-                  id='share'
-                  (click) = "changeFrames(requestComment)"
-                  matTooltip="Zdieľať"
-                matTooltipPosition="right"
-                matTooltipClass="custom-tooltip-icon"
-                matTooltipShowDelay="200"/>
+
+           
         </div>
     </div>
 

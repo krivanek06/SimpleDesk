@@ -42,14 +42,7 @@ public class RequestService {
     @Autowired
     private GroupService groupService;
 
-  /*  public List<RequestLog> getLogsForRequest(Request request){
-        return this.requestLogRepository.findAllByRequestOrderByTimestampAsc(request);
-    }
 
-    protected void logRequestModification(Request request, User user, String changingObject, String oldState, String newState){
-        String log =  "Stav " + changingObject + " sa zmenil z " + oldState + " na " + newState + ". "+ "Požiadavka bola inicializovaná uživateľom : " + user.getFullName();
-        this.requestLogRepository.save(Creator.createRequestLog(log, user, request));
-    }*/
     public void saveRequest(Request request){
         this.requestRepository.save(request);
     }
@@ -154,17 +147,5 @@ public class RequestService {
 
         return this.requestRepository.hasAccessForRequest(request.getId(), request.getModuleType().getName(), username);
    }
-
-
-   public String[] getEngagedUsersEmails(Request request){
-      /* String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
-       String solver = request.getSolver() != null ? request.getSolver().getEmail() : "";
-       String closed = request.getClosed() != null ? request.getClosed().getEmail() : "";
-       List<String> watched = request.getUserWhoWatchThisRequest().stream().map(User::getEmail).collect(Collectors.toList());
-
-       return Stream.of(assigned, solver,closed,watched ).distinct().toArray(String[]::new);*/
-      return null;
-   }
-
 
 }

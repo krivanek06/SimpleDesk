@@ -143,7 +143,8 @@ public class UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         User user = this.userConverter.generateFreshUser(userDTO);
         this.emailService.sendUserRegistrationEmail(this.loadUserByUsername(this.getPrincipalUsername()), user);
-        user.setPassword(encoder.encode(user.getPassword()));
+
+        user.setPassword(encoder.encode(user.getPassword())); // encrypt password
         this.userRepository.save(user);
     }
 

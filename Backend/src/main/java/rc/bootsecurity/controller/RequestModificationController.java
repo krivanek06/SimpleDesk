@@ -23,18 +23,6 @@ public class RequestModificationController {
     @Autowired
     private RequestManagementService requestManagementService;
 
-
-    /*@PutMapping("{id}/solution")
-    public ResponseEntity<?> addSolution(@PathVariable("id") Integer id, @RequestBody String solution) {
-        try {
-            RequestComment requestComment = this.requestManagementService.setSolution(id, solution);
-            return new ResponseEntity<>(requestComment, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
-        }
-
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní riešenia pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
     /**
      * Assign or remove myself as solver
      */

@@ -15,9 +15,8 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
   templateUrl: './request-side-information.component.html',
   styleUrls: ['./request-side-information.component.scss']
 })
-export class RequestSideInformationComponent implements OnInit, OnDestroy {
-  public requestDetails: RequestDetails;
-  private subscription: Subscription;
+export class RequestSideInformationComponent implements OnInit {
+  public requestDetails$: Observable<RequestDetails>;
   public isSolver$: Observable<boolean>;
   public isGhost$: Observable<boolean>;
 
@@ -25,49 +24,44 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
     private requestService: RequestModificationService , private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.subscription = this.requestService.getRequestDetials().subscribe( requestDetails => {  
-      this.requestDetails = requestDetails;
-    });
-
+    this.requestDetails$ =  this.requestService.getRequestDetials();
     this.isSolver$ = this.authService.isSolver();
     this.isGhost$ = this.authService.isGhost();
   }
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
-  }
-  private calculateOpenDays(): number{
-    let open = new Date(this.requestDetails.timestampCreation);
+
+  private calculateOpenDays(requestDetails: RequestDetails): number{
+    let open = new Date(requestDetails.timestampCreation);
     let result = 0;
     let one_day=1000*60*60*24; //Get 1 day in milliseconds
 
-    if(this.requestDetails.timestampClosed === null){
+    if(requestDetails.timestampClosed === null){
       let today = new Date();
       result = today.getTime() - open.getTime() ;
     }else{
-      let closed = new Date(this.requestDetails.timestampClosed);
+      let closed = new Date(requestDetails.timestampClosed);
       result = closed.getTime() - open.getTime() ;
     }
     return Math.round(result/one_day); 
   }
 
-  public uploadFile(file: File){
-    this.fileService.postFileForRequest(this.requestDetails.id, [file]).subscribe(result => {
+  public uploadFile(requestDetails: RequestDetails, file: File){
+    this.fileService.postFileForRequest(requestDetails.id, [file]).subscribe(result => {
       let document: CustomDocument = {
         name: file.name,
         lastModified: new Date().getTime()
       }
       console.log(document)
-      this.requestDetails.documents.push(document);
+      requestDetails.documents.push(document);
     });
   }
 
-  private downloadFile(name: string){
-    this.fileService.downloadFileForRequest(this.requestDetails.id, name);
+  private downloadFile(requestDetails: RequestDetails, name: string){
+    this.fileService.downloadFileForRequest(requestDetails.id, name);
   }
 
-  private assignOnMe(){
+  private assignOnMe(requestDetails: RequestDetails){
     Swal.fire({
-      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + this.requestDetails.id + " ? ",
+      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestDetails.id + " ? ",
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -76,9 +70,9 @@ export class RequestSideInformationComponent implements OnInit, OnDestroy {
       confirmButtonText: 'Ano'
     }).then((result) => {
       if (result.value) {
-        this.requestService.assignOrRemoveRequestOnMe(this.requestDetails.id, true).subscribe(result => {
+        this.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(result => {
           Swal.fire({ text: 'Pridelené', position: 'top-end', timer: 1200, showConfirmButton: false,});
-          this.requestDetails.assigned = this.userService.getUserSimple(); 
+          requestDetails.assigned = this.userService.getUserSimple(); 
         })
       }
     });   

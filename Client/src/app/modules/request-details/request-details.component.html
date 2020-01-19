@@ -1,30 +1,24 @@
 
 <ng-sidebar-container>
 
-    <ng-sidebar [opened]="sideBarBoolean" mode="over" [keyClose]="deny" position="right" [dock]="deny" [dockedSize]="'50px'"
-        autoCollapseHeight="null" autoCollapseWidth="null"  [closeOnClickOutside]="deny" [showBackdrop]="deny"
+    <ng-sidebar [opened]="sideBarBoolean" mode="over" keyClose="false" position="right" [dock]='false' [dockedSize]="'50px'"
+        autoCollapseHeight="null" autoCollapseWidth="null"  [closeOnClickOutside]='false' [showBackdrop]='true'
          [ariaLabel]="'My sidebar'"  *ngIf = "!(isGhost$ | async)">
 
         <div id = 'sliderDiv1'  (click)='openSideBar()' > 
-                <i class="material-icons sliderButton" > reorder</i>
+            <i class="material-icons sliderButton" > reorder</i>
         </div>
         <hr>
 
-        <app-request-side-options  #sideBar >
-        </app-request-side-options>
-
+        <app-request-side-options #sideBar ></app-request-side-options>
     </ng-sidebar>
     
     <div ng-sidebar-content>    
-        
-        
         <app-header></app-header>
         <app-navigation></app-navigation>
 
-       
-       
 
-    <div id='contentContainer' >
+    <div id='contentContainer' *ngIf = 'requestDetail$ | async as requestDetail' >
         <div id=requestRightSide >
             <div id = 'sliderDiv2'  (click)='openSideBar()' *ngIf = "!(isGhost$ | async)"> 
                 <i class="material-icons sliderButton" > reorder</i>
@@ -36,32 +30,32 @@
 
 
             <!-- TICKET -->
-            <div  *ngIf = "(requestService.getRequestDetials() | async)?.requestType === 'Ticket'" class='customRow mainInformationContainer' >
+            <div  *ngIf = " requestDetail.requestType === 'Ticket'" class='customRow mainInformationContainer' >
                     <div class="raisedbox customCol" [style.width.%] = 75>
                         <p class="raisedboxName" >
-                            <img [src]="'data:image/jpeg;base64,'+(requestService.getRequestDetials() | async)?.creator.photoBytes" class='avatar' />
-                                {{ (requestService.getRequestDetials() | async)?.creator.firstName }} {{ (requestService.getRequestDetials() | async)?.creator.lastName }}<br>
-                                {{ (requestService.getRequestDetials() | async)?.timestampCreation | date:'MMM d, y, h:mm:ss a'}}            
+                            <img [src]="'data:image/jpeg;base64,'+ requestDetail.creator.photoBytes" class='avatar' />
+                                {{ requestDetail.creator.firstName }} {{ requestDetail.creator.lastName }}<br>
+                                {{ requestDetail.timestampCreation | date:'MMM d, y, h:mm:ss a'}}            
                         </p>
-                        <p > {{(requestService.getRequestDetials() | async)?.name}} </p>
+                        <p > {{ requestDetail.name}} </p>
                     </div>
             </div>
             <!-- ------------------- -->
 
             <!-- REPORT -->
-            <div  *ngIf = "(requestService.getRequestDetials() | async)?.requestType === 'Report'" class='mainInformationContainer'>
+            <div  *ngIf = " requestDetail.requestType === 'Report'" class='mainInformationContainer'>
                 <div class='customRow'>
                         <div class="raisedbox customCol" [style.width.%] = 45>
                             <p class="raisedboxName">Účeľ reportu</p>
-                            <p *ngIf = "(requestService.getReportDetails() | async)?.purpose"   class='test'>
-                                {{(requestService.getReportDetails() | async)?.purpose}} 
+                            <p class='test'>
+                                {{ $any(requestDetail).purpose}} 
                             </p>
                         </div>
 
                         <div class="raisedbox customCol" [style.width.%] = 45>
                             <p class="raisedboxName">Kritériá reportu</p>
                             <p  class='test'> 
-                                {{(requestService.getReportDetails() | async)?.criteria}} 
+                                {{ $any(requestDetail).criteria}} 
                             </p>
                         </div>
                     </div>
@@ -69,12 +63,12 @@
                         <div class="raisedbox customCol" [style.width.%] = 45>
                             <p class="raisedboxName">Viditeľné údaje</p>
                             <p   class='test'>
-                                {{(requestService.getReportDetails() | async)?.visibleData}} 
+                                {{ $any(requestDetail).visibleData}} 
                             </p>
                         </div>
-                        <div class="raisedbox customCol" [style.width.%] = 45 *ngIf="(requestService.getReportDetails() | async)?.otherInformation !== '' ">
+                        <div class="raisedbox customCol" [style.width.%] = 45 *ngIf=" $any(requestDetail).otherInformation !== '' ">
                             <p class="raisedboxName">Dodatočné informácie</p>
-                            <p class='test'> {{(requestService.getReportDetails() | async)?.otherInformation}} </p>
+                            <p class='test'> {{ $any(requestDetail).otherInformation}} </p>
                         </div>
                     </div>
             </div>
@@ -82,7 +76,7 @@
 
 
 
-            <app-comment #requestComments  [requestComments] = "(requestService.getRequestDetials() | async)?.requestCommentDTOS"></app-comment>
+            <app-comment #requestComments  [requestComments] = "requestDetail.requestCommentDTOS"></app-comment>
             <app-comment-form (addedCommentEmitter)="addCommentToArray($event)"></app-comment-form>
 
         </div>

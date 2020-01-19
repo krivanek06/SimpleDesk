@@ -12,9 +12,12 @@ import rc.bootsecurity.repository.request.RequestPositionRepository;
 import rc.bootsecurity.repository.request.RequestPriorityRepository;
 import rc.bootsecurity.repository.request.RequestRepository;
 import rc.bootsecurity.service.UserService;
+import rc.bootsecurity.utils.service.EmailService;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class RequestStateService {
@@ -28,16 +31,18 @@ public class RequestStateService {
     private RequestRepository requestRepository;
     @Autowired
     protected UserService userService;
+    @Autowired
+    private EmailService emailService;
+    @Autowired
+    private RequestCommentService requestCommentService;
 
     protected Request findRequest(Integer requestId){
-        return this.requestRepository.findById(requestId)
-                .orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
+        return this.requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
     }
 
     public void saveOrUpdateRequest(Request request){
         this.requestRepository.save(request);
     }
-    public void saveOrUpdateRequest(List<Request> requests){ this.requestRepository.saveAll(requests); }
 
     protected void setAttributesForRequest(Request request,String requestType, String name,  String priority ){
         request.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
@@ -55,14 +60,22 @@ public class RequestStateService {
         request.setClosed(user);
         request.setTimestampClosed(new Timestamp(System.currentTimeMillis()));
         this.saveOrUpdateRequest(request);
+
+        // send information email
+        String[] emails = this.getEngagedUsersEmails(request);
+        this.emailService.sendClosedRequestEmail(request, user, emails);
     }
 
     public void reopenRequest(Integer requestId){
         Request request = this.findRequest(requestId);
-        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         request.setClosed(null);
         request.setTimestampClosed(null);
         this.saveOrUpdateRequest(request);
+
+        // send information email
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        String[] emails = this.getEngagedUsersEmails(request);
+        this.emailService.sendReopenRequestEmail(request, user, emails);
     }
 
     public void changePriority(Integer requestId, String priority){
@@ -79,4 +92,16 @@ public class RequestStateService {
         this.saveOrUpdateRequest(request);
     }
 
+
+    public String[] getEngagedUsersEmails(Request request){
+       String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+       String solver = "";
+       if(request.getSolutionComment() != null)
+           solver = this.requestCommentService.getRequestComment(request.getSolutionComment()).getUser().getEmail();
+
+       String closed = request.getClosed() != null ? request.getClosed().getEmail() : "";
+       List<String> watched = request.getUserWhoWatchThisRequest().stream().map(User::getEmail).collect(Collectors.toList());
+
+       return Stream.of(assigned, solver,closed,watched ).distinct().toArray(String[]::new);
+    }
 }
