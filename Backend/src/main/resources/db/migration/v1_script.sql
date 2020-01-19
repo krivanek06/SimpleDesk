@@ -265,7 +265,8 @@ create table tbl_request_comments_shared(
 DROP TABLE IF EXISTS tbl_finance_types CASCADE;
 create table tbl_finance_types(
   id serial primary key,
-  name varchar(500) not null
+  name varchar(500) not null,
+  active boolean default true
 );
 
 DROP TABLE IF EXISTS tbl_finances CASCADE;

@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import rc.bootsecurity.model.entity.Group;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,13 +18,11 @@ public class FinanceType {
     @Column(name = "name")
     private String name;
 
-   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "financeType")
-   // private List<Finance> financeList;
+    @Column(name = "active")
+    private Boolean active;
+
     @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "financeTypes")
-   /* @JoinTable(name = "tbl_finance_type_privileges",
-            joinColumns = { @JoinColumn(name = "finance_type_id")},
-            inverseJoinColumns = { @JoinColumn(name = "group_id")})*/
     private Set<Group> groupsToSubmitSpecificFinanceType;
 }
 
