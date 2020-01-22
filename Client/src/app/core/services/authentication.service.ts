@@ -125,7 +125,15 @@ export class AuthenticationService {
   }
 
   public hasFinanceModuleAccess(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Financie")));
+    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Finance")));
+  }
+
+  public hasTicketModuleAccess(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Ticket")));
+  }
+
+  public hasReportModuleAccess(): Observable<boolean> {
+    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Report")));
   }
 
 

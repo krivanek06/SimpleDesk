@@ -36,7 +36,7 @@ export class RequestFinanceFormComponent implements OnInit {
         Validators.required,
       ]],
       name: [''  ],
-      requestPriority: ['malá' ],
+      requestPriority: ['nízka' ],
     })
   }
 
@@ -44,7 +44,7 @@ export class RequestFinanceFormComponent implements OnInit {
       if(checked){
         this.financeForm.patchValue({'requestPriority' : 'vysoká'});
       }else{
-        this.financeForm.patchValue({'requestPriority' : 'malá'});
+        this.financeForm.patchValue({'requestPriority' : 'nízka'});
       }
   }
 

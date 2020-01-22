@@ -9,6 +9,8 @@ import { FileServiceService } from 'app/core/services/file-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { Observable } from 'rxjs';
+import { ReportAccessStoredDTO } from 'app/shared/models/RequestDetails';
+import { ReportAccess } from 'app/shared/Enums/ReportEnum';
 
 @Component({
   selector: 'app-request-report-form',
@@ -17,18 +19,14 @@ import { Observable } from 'rxjs';
 })
 export class RequestReportFormComponent implements OnInit {
   reportForm: FormGroup;
-  deadlineReport: string;
-  accessByPeopleArray:any[] = [];
+  accessByPeopleArray:any[] = []; // people who can access report
+
+  ReportAccess : typeof ReportAccess = ReportAccess;
   @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
 
-  constructor(private formBuilder: FormBuilder, private http : HttpClient, 
-    private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
+  constructor(private formBuilder: FormBuilder, private http : HttpClient, private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.initFormGroup();
-  }
-
-  private initFormGroup(){
     this.reportForm = this.formBuilder.group({
       name: ['' , [
         Validators.required,
@@ -55,23 +53,33 @@ export class RequestReportFormComponent implements OnInit {
       visibleData: ['' , [
         Validators.required,
       ]],
-      otherInformation: '',
+      otherInformation: '', 
+      reportAccessStored: ['' , [
+        Validators.required
+      ]],
       accessBy:['', [ accessValidator(this.accessByPeopleArray)]],
       deadline: ['' , [
         Validators.required,
       ]],
-    })
+    });
+
   }
 
   private sendReportFormToAPI(): Observable<any>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     this.reportForm.patchValue({'accessBy' : this.accessByPeopleArray.join(",")});
+    this.reportForm.patchValue({'reportAccessStored' : [{  path: this.reportForm.get("reportAccessStored").value, 
+                                                          reportAccess: this.ReportAccess.Mail 
+                                                      }]
+    });
+    console.log( this.reportForm)
     return this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers});
   }
   private submit(): void{
     if(this.reportForm.invalid){
       return;
     }
+
     Swal.fire({ text: "Naozaj chcetete odoslať report ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
@@ -86,6 +94,7 @@ export class RequestReportFormComponent implements OnInit {
       }
     })
   }
+
 
   private addPeopleToAccess(){
     const value = this.reportForm.get("accessBy").value;
@@ -144,6 +153,11 @@ export class RequestReportFormComponent implements OnInit {
   get deadline(){
     return this.reportForm.get("deadline");
   }
+
+  get reportAccessStored(){
+    return this.reportForm.get("reportAccessStored");
+  }
+
   
 
 }

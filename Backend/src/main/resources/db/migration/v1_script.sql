@@ -115,9 +115,9 @@ create table tbl_report_refreshes(
 DROP TABLE IF EXISTS tbl_report_access_stored CASCADE;
 create table tbl_report_access_stored(
    id serial primary key,
-   report_id Integer NOT NULL,
+   request_id Integer NOT NULL unique ,
    access_id Integer NOT NULL,
-   path varchar(512) NOT NULL
+   path varchar NOT NULL
 );
 DROP TABLE IF EXISTS tbl_report_access CASCADE;
 create table tbl_report_access(
@@ -320,7 +320,7 @@ ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (user_id) REFERENCES tbl_users
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 
-ALTER TABLE tbl_report_access_stored ADD FOREIGN KEY (report_id) REFERENCES tbl_reports(id);
+ALTER TABLE tbl_report_access_stored ADD FOREIGN KEY (request_id) REFERENCES tbl_reports(request_id);
 ALTER TABLE tbl_report_access_stored ADD FOREIGN KEY (access_id) REFERENCES tbl_report_access(id);
 
 ALTER TABLE tbl_reports ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
@@ -473,6 +473,28 @@ group by tbl_ticket_types.name) as tbl) ,
 $$ LANGUAGE sql;
 
 
+-- decide on request type [ticket, report, finance] what additional information to return
+drop function if exists get_additional_information_for_request(searching_id integer);
+CREATE FUNCTION get_additional_information_for_request(searching_id integer)
+    RETURNS varchar AS $$
+select
+    case
+        when rt.name = 'Ticket' then tbl_tickets.t_application_name
+        when rt.name = 'Report' then tbl_report_types.name
+        when rt.name = 'Financie' then tbl_finance_types.name
+        else null
+        end as additional_info
+
+from tbl_requests r
+         inner join tbl_module_type rt on rt.id = r.type_id
+         left join tbl_tickets on tbl_tickets.request_id = r.id
+         left join tbl_reports on tbl_reports.request_id = r.id
+         left join tbl_report_types on tbl_report_types.id = tbl_reports.r_type_id
+         left join tbl_finances on tbl_finances.request_id = r.id
+         left join tbl_finance_types on tbl_finance_types.id = tbl_finances.finance_type_id
+where r.id = searching_id
+order by r.id asc;
+$$ LANGUAGE sql;
 
 
 
@@ -629,31 +651,6 @@ select json_build_object(
    ))::varchar;
 $$ LANGUAGE sql;
 
-
-
-
--- decide on request type [ticket, report, finance] what additional information to return
-drop function if exists get_additional_information_for_request(searching_id integer);
-CREATE FUNCTION get_additional_information_for_request(searching_id integer)
-    RETURNS varchar AS $$
-select
-    case
-        when rt.name = 'Ticket' then tbl_tickets.t_application_name
-        when rt.name = 'Report' then tbl_report_types.name
-        when rt.name = 'Financie' then tbl_finance_types.name
-        else null
-        end as additional_info
-
-from tbl_requests r
-         inner join tbl_module_type rt on rt.id = r.type_id
-         left join tbl_tickets on tbl_tickets.request_id = r.id
-         left join tbl_reports on tbl_reports.request_id = r.id
-         left join tbl_report_types on tbl_report_types.id = tbl_reports.r_type_id
-         left join tbl_finances on tbl_finances.request_id = r.id
-         left join tbl_finance_types on tbl_finance_types.id = tbl_finances.finance_type_id
-where r.id = searching_id
-order by r.id asc;
-$$ LANGUAGE sql;
 
 
 drop function if exists get_finance_types_to_submit_for_user(varchar);

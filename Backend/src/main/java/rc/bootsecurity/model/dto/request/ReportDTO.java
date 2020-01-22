@@ -6,6 +6,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -31,4 +33,6 @@ public class ReportDTO extends RequestDTO {
     private String reportRefresh;
 
     private String reportType;
+
+    private List<ReportAccessStoredDTO> reportAccessStored;
 }

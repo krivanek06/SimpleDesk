@@ -104,12 +104,12 @@
             <version>1.5.0</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.flywaydb.flyway-test-extensions</groupId>
             <artifactId>flyway-spring-test</artifactId>
             <version>6.0.0</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
         <!-- to support json fetching from database
         <dependency>
             <groupId>com.vladmihalcea</groupId>
@@ -143,10 +143,10 @@
                    <groupId>org.springframework.boot</groupId>
                    <artifactId>spring-boot-maven-plugin</artifactId>
                </plugin>
-               <plugin>
+              <!-- <plugin>
                    <groupId>org.flywaydb</groupId>
                    <artifactId>flyway-maven-plugin</artifactId>
-               </plugin>
+               </plugin> -->
                <plugin>
                    <groupId>org.apache.maven.plugins</groupId>
                    <artifactId>maven-compiler-plugin</artifactId>
@@ -155,7 +155,7 @@
                        <target>11</target>
                    </configuration>
                </plugin>
-               <plugin>
+              <!-- <plugin>
                    <groupId>org.hibernate.orm.tooling</groupId>
                    <artifactId>hibernate-enhance-maven-plugin</artifactId>
                    <version>${hibernate.version}</version>
@@ -169,7 +169,7 @@
                            </goals>
                        </execution>
                    </executions>
-               </plugin>
+               </plugin> -->
            </plugins>
        </build>
     </project>

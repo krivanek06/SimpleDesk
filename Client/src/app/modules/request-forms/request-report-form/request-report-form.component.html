@@ -42,10 +42,10 @@
             <mat-form-field >
                 <mat-label>Frekvencia obnovenia:</mat-label>
                 <mat-select formControlName="reportRefresh">
-                    <mat-option value="jendorázové">jendorázové</mat-option>
-                    <mat-option value="denne">denne</mat-option>
-                    <mat-option value="týždenne">týždenne</mat-option>
-                    <mat-option value="mesačne">mesačne</mat-option>
+                    <mat-option value="Jednorázové">jendorázové</mat-option>
+                    <mat-option value="Denne">denne</mat-option>
+                    <mat-option value="Týždenne">týždenne</mat-option>
+                    <mat-option value="Mesačne">mesačne</mat-option>
                 </mat-select>
 
                 <mat-error *ngIf="reportRefresh.invalid">
@@ -58,7 +58,7 @@
             <mat-form-field >
                 <mat-label>Priorita</mat-label>
                 <mat-select formControlName="requestPriority">
-                    <mat-option value="malá">malá</mat-option>
+                    <mat-option value="nízka">nízka</mat-option>
                     <mat-option value="stredná">stredná</mat-option>
                     <mat-option value="vysoká">vysoká</mat-option>
                 </mat-select>
@@ -138,6 +138,18 @@
                 </ul>
             </div>
         </div>
+
+         <!-- access -->
+        <div class = 'reportInlineParameters'>
+            <mat-form-field >
+                <input  matInput placeholder="Sprístupniť cez mail" formControlName = "reportAccessStored">
+                <mat-error *ngIf="reportAccessStored.invalid" >
+                    Prosím zadefinujte email vyzdielania dokumentu
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+
 
          <!-- uploader -->
         <div class = 'reportInlineParameters'>

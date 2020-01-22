@@ -9,11 +9,15 @@ import { Observable } from 'rxjs';
 })
 export class RequestFormsComponent implements OnInit {
   public hasFinanceModuleAccess$: Observable<boolean>;
+  public hasTicketModuleAccess$: Observable<boolean>;
+  public hasReportModuleAccess$: Observable<boolean>;
 
   constructor( private authService: AuthenticationService ) { }
 
   ngOnInit() {
     this.hasFinanceModuleAccess$ = this.authService.hasFinanceModuleAccess();
+    this.hasTicketModuleAccess$ = this.authService.hasTicketModuleAccess();
+    this.hasReportModuleAccess$ = this.authService.hasReportModuleAccess();
   }
 
 }

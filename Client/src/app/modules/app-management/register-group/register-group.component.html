@@ -127,7 +127,7 @@
                 </mat-form-field>
 
                 <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Software')" multiple>
-                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-label>Riešenie softvéru</mat-label>
                     <mat-select formControlName="solveSoftware"  multiple>
                         <mat-option *ngFor="let software of softwares" [value] = "software.name"> 
                             {{ software.name }} 
@@ -136,7 +136,7 @@
                 </mat-form-field>
 
                 <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Hardware')" multiple>
-                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-label>Riešenie hardvéru</mat-label>
                     <mat-select formControlName="solveHardware"  multiple>
                         <mat-option *ngFor="let hardware of hardwares" [value] = "hardware.name"> 
                             {{ hardware.name }} 
@@ -145,7 +145,7 @@
                 </mat-form-field>
 
                 <mat-form-field class='inlineParameters' *ngIf = "solveTickets.value !== null && solveTickets.value.includes('Server')" multiple>
-                    <mat-label>Posielanie finančných typov</mat-label>
+                    <mat-label>Riešenie serverov</mat-label>
                     <mat-select formControlName="solveServer"  multiple>
                         <mat-option *ngFor="let server of servers" [value] = "server.name"> 
                             {{ server.name }} 

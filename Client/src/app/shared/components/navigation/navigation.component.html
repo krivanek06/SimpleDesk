@@ -21,7 +21,9 @@
         </a>
 
         <!-- request new -->
-        <a class='navigationIconContainer'  routerLink="/request_new" *ngIf = "!(isGhost$ | async)" >
+        <a class='navigationIconContainer'  routerLink="/request_new" 
+            *ngIf = "!(isGhost$ | async) && 
+                ((hasFinanceModuleAccess$ | async) || (hasTicketModuleAccess$ | async) || (hasReportModuleAccess$ | async))" >
             <img src="./../../../../assets/images_design/request_new_icon.png" 
                 alt="dashboard navigation icon" 
                 id='requestNewIcon'

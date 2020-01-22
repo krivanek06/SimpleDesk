@@ -2,6 +2,7 @@ package rc.bootsecurity.model.entity.report;
 
 import lombok.Data;
 import org.hibernate.engine.profile.Fetch;
+import rc.bootsecurity.model.entity.request.Request;
 
 import javax.persistence.*;
 
@@ -28,7 +29,7 @@ public class ReportAccessStored {
     private ReportAccess reportAccess;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "report_id")
-    private Report report;
+    @JoinColumn(name = "request_id")
+    private Request request;
 
 }

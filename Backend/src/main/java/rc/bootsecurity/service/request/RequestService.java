@@ -10,9 +10,11 @@ import rc.bootsecurity.model.dto.request.RequestDashboardDTO;
 import rc.bootsecurity.model.dto.request.RequestTableDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
+import rc.bootsecurity.model.entity.report.Report;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestLog;
 import rc.bootsecurity.model.enums.USER_TYPE;
+import rc.bootsecurity.repository.report.ReportAccessStoredRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.UserService;
@@ -41,6 +43,8 @@ public class RequestService {
     private RequestCommentService requestCommentService;
     @Autowired
     private GroupService groupService;
+    @Autowired
+    private ReportAccessStoredRepository reportAccessStoredRepository;
 
 
     public void saveRequest(Request request){

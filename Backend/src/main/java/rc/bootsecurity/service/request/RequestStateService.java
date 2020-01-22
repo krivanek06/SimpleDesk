@@ -15,6 +15,9 @@ import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.service.EmailService;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -100,8 +103,8 @@ public class RequestStateService {
            solver = this.requestCommentService.getRequestComment(request.getSolutionComment()).getUser().getEmail();
 
        String closed = request.getClosed() != null ? request.getClosed().getEmail() : "";
-       List<String> watched = request.getUserWhoWatchThisRequest().stream().map(User::getEmail).collect(Collectors.toList());
-
-       return Stream.of(assigned, solver,closed,watched ).distinct().toArray(String[]::new);
+       List<String> watched = new ArrayList<>(this.userService.getUsersWatchedRequest(request).stream().map(User::getEmail).collect(Collectors.toList()));
+       watched.addAll(new ArrayList<>(Arrays.asList(closed, solver, assigned)));
+       return (String[]) new HashSet(watched).toArray(String[]::new);
     }
 }

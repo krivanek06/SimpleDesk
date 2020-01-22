@@ -7,6 +7,8 @@ import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.finance.Finance;
 import rc.bootsecurity.model.entity.finance.FinanceType;
 import rc.bootsecurity.model.entity.report.Report;
+import rc.bootsecurity.model.entity.report.ReportAccess;
+import rc.bootsecurity.model.entity.report.ReportAccessStored;
 import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
@@ -14,6 +16,8 @@ import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -72,6 +76,13 @@ public class RequestConverter {
     private ReportDTO convertReportToReportDTO(Report report){
         ReportDTO reportDTO = new ReportDTO();
         this.setRequestDTOValuesFromRequest(reportDTO,report);
+
+        reportDTO.setReportAccessStored(report.getReportAccessStoredList().stream().map(reportAccessStored -> {
+            ReportAccessStoredDTO reportAccessStoredDTO = new ReportAccessStoredDTO();
+            reportAccessStoredDTO.setPath(reportAccessStored.getPath());
+            reportAccessStoredDTO.setReportAccess(reportAccessStored.getReportAccess().getName());
+            return reportAccessStoredDTO;
+        }).collect(Collectors.toList()));
 
         reportDTO.setAccessBy(report.getAccessBy());
         reportDTO.setCriteria(report.getCriteria());

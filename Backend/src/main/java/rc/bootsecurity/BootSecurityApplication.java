@@ -8,10 +8,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
+import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
+
+import java.util.List;
 
 //@EnableJpaRepositories("rc.bootsecurity.repository.*")
 //@EntityScan("rc.bootsecurity.*")
@@ -41,12 +45,13 @@ public class BootSecurityApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-      //  this.inserterRequestsSimulation.mainInserter();
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
-        userSimpleDTO.setId(2);
-        userSimpleDTO.setFirstName("user2");
-        userSimpleDTO.setLastName("user2");
-        this.userService.getPrivilegesForUser(userSimpleDTO);
+        List<User> users=  this.userRepository.findAll();
+        for(User user : users){
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            user.setPassword(encoder.encode(user.getPassword()));
+
+        }
+        this.userRepository.saveAll(users);
     }
 }
 */

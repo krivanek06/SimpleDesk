@@ -2,22 +2,7 @@
     <div class = ' smallerContent'>
         <span class='formTitleSmall' >
             <img src="../../../../assets/images_design/privilege_icon.png" class="icon"/>
-               <span class='formTitleSmallText'> Oprávnenia {{ name }} </span>
-            
-            <!--<button mat-button color="primary" 
-                    (click) = 'saveButtonClicked()' 
-                    class = 'rightButton'
-                    *ngIf='activateUnableClick '>
-                Uložiť
-            </button>
-
-            <button mat-button color="warn" 
-                    (click) = 'resetButtonClicked()' 
-                    class = 'rightButton'
-                    *ngIf='activateUnableClick '>
-                Resetovať
-            </button>-->
-            
+               <span class='formTitleSmallText'> Oprávnenia {{ name }} </span>       
         </span>
 
     
@@ -35,7 +20,7 @@
         </li>
         <li class='informationsContainer topspace' 
         *ngIf ='enabledPrivileges.submitFinanceRequests.length > 0 || disabledPrivileges.submitFinanceRequests.length > 0' 
-        [ngClass] = '{"unableClick" : activateUnableClick &&  !enabledPrivileges.moduleTypesToUse.includes("Financie") }'>
+        [ngClass] = '{"unableClick" : activateUnableClick &&  !enabledPrivileges.moduleTypesToUse.includes("Finance") }'>
             <div class='informationTitle'>Zasielanie financií</div>
             <ul class='informationsHolder'> 
                 <li *ngFor='let type of enabledPrivileges.submitFinanceRequests' class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'
@@ -44,7 +29,7 @@
                 <li *ngFor='let type of disabledPrivileges.submitFinanceRequests'  
                     [hidden] = "!activateUnableClick && hideUnassignedPriv"  
                     (click) = 'changesubmitFinanceRequests(type)'
-                    [ngClass] = '{ "ableClick" :  activateUnableClick  && enabledPrivileges.moduleTypesToUse.includes("Financie")}'> {{ type }} </li>  
+                    [ngClass] = '{ "ableClick" :  activateUnableClick  && enabledPrivileges.moduleTypesToUse.includes("Finance")}'> {{ type }} </li>  
             </ul>
         </li>
         <li class='informationsContainer topspace' *ngIf ='enabledPrivileges.requestTypesToSolve.length > 0 || disabledPrivileges.requestTypesToSolve.length > 0'>

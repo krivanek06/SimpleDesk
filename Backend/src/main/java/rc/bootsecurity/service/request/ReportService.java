@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.dto.request.ReportDTO;
 import rc.bootsecurity.model.entity.report.Report;
+import rc.bootsecurity.model.entity.report.ReportAccess;
+import rc.bootsecurity.model.entity.report.ReportAccessStored;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
-import rc.bootsecurity.repository.report.ReportRefreshRepository;
-import rc.bootsecurity.repository.report.ReportRepository;
-import rc.bootsecurity.repository.report.ReportTypeRepository;
+import rc.bootsecurity.repository.report.*;
+
+import java.util.stream.Collectors;
 
 @Service
 public class ReportService extends RequestStateService{
@@ -17,6 +19,8 @@ public class ReportService extends RequestStateService{
     private ReportTypeRepository reportTypeRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;
+    @Autowired
+    private ReportAccessRepository reportAccessRepository;
 
     public Report createReport(ReportDTO reportDTO){
         Report report = new Report();
@@ -24,6 +28,16 @@ public class ReportService extends RequestStateService{
 
         report.setReportType(this.reportTypeRepository.findByName(reportDTO.getReportType()));
         report.setReportRefresh(this.reportRefreshRepository.findByName(reportDTO.getReportRefresh()));
+
+        // set report access
+        report.setReportAccessStoredList(reportDTO.getReportAccessStored().stream().map(reportAccessStoredDTO -> {
+            ReportAccessStored reportAccessStored = new ReportAccessStored();
+            reportAccessStored.setReportAccess(this.reportAccessRepository.findByName(reportAccessStoredDTO.getReportAccess()));
+            reportAccessStored.setPath(reportAccessStoredDTO.getPath());
+            return reportAccessStored;
+        }).collect(Collectors.toList()));
+
+        
         report.setAccessBy(reportDTO.getAccessBy());
         report.setOtherInformation(reportDTO.getOtherInformation());
         report.setVisibleData(reportDTO.getVisibleData());

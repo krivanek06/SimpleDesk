@@ -20,7 +20,7 @@
             <ul> 
                 <li class='information'>
                     <img src="../../../../assets/images_design/priority_low_icon_2.png" class="avatar" 
-                            *ngIf='requestDetails.requestPriority === "malá"'/>
+                            *ngIf='requestDetails.requestPriority === "nízka"'/>
                     <img src="../../../../assets/images_design/priority_medium_icon_2.png" class="avatar"
                              *ngIf='requestDetails.requestPriority === "stredná"'/>
                     <img src="../../../../assets/images_design/priority_high_icon_2.png" class="avatar"
@@ -65,6 +65,12 @@
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
             <div class='informationAnswer'>Prístup pre</div>
             <ul ><li div class='information'> {{ $any(requestDetails).accessBy }}</li> </ul>
+        </li>
+        <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
+             <ng-container *ngFor = 'let store of $any(requestDetails).reportAccessStored'>
+                <div class='informationAnswer'>{{ store.reportAccess }}</div>
+                <ul ><li div class='information'> {{  store.path }}</li> </ul>
+             </ng-container>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
             <div class='informationAnswer'>Vyhodnotenie v dňoch</div>

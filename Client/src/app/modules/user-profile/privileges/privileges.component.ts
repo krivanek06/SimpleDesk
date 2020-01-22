@@ -78,7 +78,7 @@ export class PrivilegesComponent implements OnInit {
       this.disabledPrivileges.moduleTypesToUse.splice(index , 1);
       this.enabledPrivileges.moduleTypesToUse.push(name);
     }
-    if(name === 'Financie'){
+    if(name === 'Finance'){
       this.changesubmitFinanceRequestsAll();
     }
   }
@@ -124,7 +124,7 @@ export class PrivilegesComponent implements OnInit {
   }
 
   public changesubmitFinanceRequests(name: string){
-    if(!this.activateUnableClick || !this.enabledPrivileges.moduleTypesToUse.includes("Financie")){
+    if(!this.activateUnableClick || !this.enabledPrivileges.moduleTypesToUse.includes("Finance")){
       return;
     }
 

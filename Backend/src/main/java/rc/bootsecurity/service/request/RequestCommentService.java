@@ -40,7 +40,8 @@ public class RequestCommentService {
     @Transactional
     public void deleteComment(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        if(requestComment.getRequest().getSolutionComment().equals(requestComment.getId())){
+        Integer solutionCommentId = requestComment.getRequest().getSolutionComment();
+        if( solutionCommentId != null && solutionCommentId.equals(requestComment.getId())){
             requestComment.getRequest().setSolutionComment(null);
             this.requestService.saveRequest(requestComment.getRequest());
         }

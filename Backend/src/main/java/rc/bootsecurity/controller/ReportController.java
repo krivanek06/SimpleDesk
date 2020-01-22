@@ -26,7 +26,7 @@ public class ReportController {
             this.reportService.saveOrUpdateRequest(report);
             return new ResponseEntity<>(report.getId(), HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to save report into database, error : " + e.getMessage());
         }
 
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní reportu, kontaktujte administrátora." ,HttpStatus.BAD_REQUEST);
@@ -38,7 +38,7 @@ public class ReportController {
             this.reportService.addEvaluation(id, days);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to addEvaluation, error : " + e.getMessage());
         }
 
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri nadhodnocovaní reportu, kontaktujte administrátora.", HttpStatus.BAD_REQUEST);

@@ -9,7 +9,9 @@ import { Observable } from 'rxjs';
   styleUrls: ['./navigation.component.scss']
 })
 export class NavigationComponent implements OnInit {
-
+  public hasFinanceModuleAccess$: Observable<boolean>;
+  public hasTicketModuleAccess$: Observable<boolean>;
+  public hasReportModuleAccess$: Observable<boolean>;
   public hasPrivilegeAccess$: Observable<boolean>;
 
   public isAdmin$: Observable<boolean>;
@@ -22,6 +24,9 @@ export class NavigationComponent implements OnInit {
     this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
     this.isAdmin$ = this.authService.isAdmin();
     this.isGhost$ = this.authService.isGhost();
+    this.hasFinanceModuleAccess$ = this.authService.hasFinanceModuleAccess();
+    this.hasTicketModuleAccess$ = this.authService.hasTicketModuleAccess();
+    this.hasReportModuleAccess$ = this.authService.hasReportModuleAccess();
   }
 
 }

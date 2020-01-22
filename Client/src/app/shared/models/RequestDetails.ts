@@ -33,7 +33,14 @@ export interface ReportDetails extends RequestDetails {
     evaluation: number,
     reportRefresh: string,
     reportType: string,
+    reportAccessStored: ReportAccessStoredDTO[],
 }
+
+export interface ReportAccessStoredDTO{
+    reportAccess: string,
+    path: string,
+}
+
 
 export interface FinanceDetails extends RequestDetails {
     financeType: string

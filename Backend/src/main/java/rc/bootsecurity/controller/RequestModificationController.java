@@ -36,7 +36,7 @@ public class RequestModificationController {
             }
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to modifyMeAsSolver, error : " + e.getMessage());
         }
 
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
@@ -56,7 +56,7 @@ public class RequestModificationController {
             }
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
+            LOGGER.error("Failed to changeState for request, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní stavu, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -70,7 +70,7 @@ public class RequestModificationController {
             this.requestStateService.changePriority(id, priority);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
+            LOGGER.error("Failed to changePriority for request, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní priority, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -84,7 +84,7 @@ public class RequestModificationController {
             this.requestStateService.changeCommenting(id);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to upload files for request, error : " + e.getMessage());
+            LOGGER.error("Failed to changeCommenting for request, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní komentovania, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -96,7 +96,7 @@ public class RequestModificationController {
         try {
             return this.requestManagementService.setAssignUserAndSave(id, userSimpleDTO);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to addSolver, error : " + e.getMessage());
         }
         return null;
     }
@@ -107,7 +107,7 @@ public class RequestModificationController {
             this.requestManagementService.removeAssignUserAndSave(id);
             return new ResponseEntity<>(id, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to removeSolver, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }

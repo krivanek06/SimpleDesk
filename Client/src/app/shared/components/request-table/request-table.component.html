@@ -37,7 +37,7 @@
             <ng-container matColumnDef="priority">
             <mat-header-cell *matHeaderCellDef  [ngStyle]="{'background-color': headerColor}" > Priorita </mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <img *ngIf="element.requestPriority === 'malá' " src="../../../../assets/images_design/priority_low_icon_2.png"  class ='userIcon'/>
+                <img *ngIf="element.requestPriority === 'nízka' " src="../../../../assets/images_design/priority_low_icon_2.png"  class ='userIcon'/>
                 <img  *ngIf="element.requestPriority === 'stredná' " src="../../../../assets/images_design/priority_medium_icon_2.png"  class ='userIcon'/>
                 <img *ngIf="element.requestPriority === 'vysoká' " src="../../../../assets/images_design/priority_high_icon_2.png"  class ='userIcon'/>
                  {{ element.requestPriority}} 

@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface ReportAccessStoredRepository extends CrudRepository<ReportAccessStored, Integer> {
-    List<ReportAccessStored> findAllByReport(Report report);
+
 }
