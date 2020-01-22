@@ -175,11 +175,6 @@ public class Creator {
         return reportType;
     }
 
-    public static ReportAccess createReportAccess(String name){
-        ReportAccess reportAccess = new ReportAccess();
-        reportAccess.setName(name);
-        return reportAccess;
-    }
 
     public static ReportRefresh createReportRefresh(String name){
         ReportRefresh reportRefresh = new ReportRefresh();
@@ -187,12 +182,6 @@ public class Creator {
         return reportRefresh;
     }
 
-    public static ReportAccessStored createReportAccessStored(String path, ReportAccess reportAccess){
-        ReportAccessStored reportAccessStored = new ReportAccessStored();
-        reportAccessStored.setPath(path);
-        reportAccessStored.setReportAccess(reportAccess);
-        return reportAccessStored;
-    }
     private static UserSimpleDTO createUserSimpleDto(String username){
         UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
         userSimpleDTO.setUsername(username);
@@ -224,7 +213,7 @@ public class Creator {
         report.setCriteria("CRITERIA");
         report.setVisibleData("VISIBLE_DATA");
         report.setOtherInformation("OTHER_INFORMATION");
-        report.setAccessBy("ACCESS_BY");
+        report.setAccessByPeople("ACCESS_BY");
         report.setDeadline(new Timestamp(System.currentTimeMillis()));
         report.setReportRefresh(reportRefresh);
         report.setReportType(reportType);

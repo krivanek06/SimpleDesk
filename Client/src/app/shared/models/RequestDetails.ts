@@ -28,18 +28,14 @@ export interface ReportDetails extends RequestDetails {
     criteria: string,
     visibleData: string,
     otherInformation: string,
-    accessBy: string,
+    accessByPeople: string,
     deadline: Date,
     evaluation: number,
     reportRefresh: string,
     reportType: string,
-    reportAccessStored: ReportAccessStoredDTO[],
+    accessMethods: string,
 }
 
-export interface ReportAccessStoredDTO{
-    reportAccess: string,
-    path: string,
-}
 
 
 export interface FinanceDetails extends RequestDetails {

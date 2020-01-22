@@ -9,8 +9,6 @@ import { FileServiceService } from 'app/core/services/file-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
 import { Observable } from 'rxjs';
-import { ReportAccessStoredDTO } from 'app/shared/models/RequestDetails';
-import { ReportAccess } from 'app/shared/Enums/ReportEnum';
 
 @Component({
   selector: 'app-request-report-form',
@@ -20,8 +18,8 @@ import { ReportAccess } from 'app/shared/Enums/ReportEnum';
 export class RequestReportFormComponent implements OnInit {
   reportForm: FormGroup;
   accessByPeopleArray:any[] = []; // people who can access report
+  accessByMethodArray:any[] = [];
 
-  ReportAccess : typeof ReportAccess = ReportAccess;
   @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
 
   constructor(private formBuilder: FormBuilder, private http : HttpClient, private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
@@ -54,10 +52,10 @@ export class RequestReportFormComponent implements OnInit {
         Validators.required,
       ]],
       otherInformation: '', 
-      reportAccessStored: ['' , [
-        Validators.required
+      accessMethods: ['' , [
+         accessValidator(this.accessByMethodArray)
       ]],
-      accessBy:['', [ accessValidator(this.accessByPeopleArray)]],
+      accessByPeople:['', [ accessValidator(this.accessByPeopleArray)]],
       deadline: ['' , [
         Validators.required,
       ]],
@@ -67,11 +65,9 @@ export class RequestReportFormComponent implements OnInit {
 
   private sendReportFormToAPI(): Observable<any>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.reportForm.patchValue({'accessBy' : this.accessByPeopleArray.join(",")});
-    this.reportForm.patchValue({'reportAccessStored' : [{  path: this.reportForm.get("reportAccessStored").value, 
-                                                          reportAccess: this.ReportAccess.Mail 
-                                                      }]
-    });
+    this.reportForm.patchValue({'accessByPeople' : this.accessByPeopleArray.join(",")});
+    this.reportForm.patchValue({'accessMethods' : this.accessByMethodArray.join(",")});
+
     console.log( this.reportForm)
     return this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers});
   }
@@ -97,16 +93,29 @@ export class RequestReportFormComponent implements OnInit {
 
 
   private addPeopleToAccess(){
-    const value = this.reportForm.get("accessBy").value;
+    const value = this.reportForm.get("accessByPeople").value;
     if(value === ""){
       return;
     }
     this.accessByPeopleArray.push(value);
-    this.reportForm.patchValue({accessBy : ''});
+    this.reportForm.patchValue({accessByPeople : ''});
   }
 
-  private deleteItem(index: number){
+  private addMethodToAccess(){
+    const value = this.reportForm.get("accessMethods").value;
+    if(value === ""){
+      return;
+    }
+    this.accessByMethodArray.push(value);
+    this.reportForm.patchValue({accessMethods : ''});
+  }
+
+  private deletePeopleItem(index: number){
     this.accessByPeopleArray.splice(index,1);
+  }
+
+  private deleteMethodItem(index: number){
+    this.accessByMethodArray.splice(index,1);
   }
  
 
@@ -146,16 +155,16 @@ export class RequestReportFormComponent implements OnInit {
     return this.reportForm.get("otherInformation");
   }
 
-  get accessBy(){
-    return this.reportForm.get("accessBy");
+  get accessByPeople(){
+    return this.reportForm.get("accessByPeople");
   }
 
   get deadline(){
     return this.reportForm.get("deadline");
   }
 
-  get reportAccessStored(){
-    return this.reportForm.get("reportAccessStored");
+  get accessMethods(){
+    return this.reportForm.get("accessMethods");
   }
 
   

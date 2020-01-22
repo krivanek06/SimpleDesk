@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.ModuleType;
 import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.entity.report.ReportAccess;
 import rc.bootsecurity.model.entity.report.ReportRefresh;
 import rc.bootsecurity.model.entity.report.ReportType;
 import rc.bootsecurity.model.entity.request.*;
@@ -32,7 +30,6 @@ import rc.bootsecurity.repository.ticket.TicketTypeRepository;
 import rc.bootsecurity.service.GroupService;
 import rc.bootsecurity.service.request.RequestService;
 import rc.bootsecurity.service.UserService;
-import rc.bootsecurity.test.creator.Creator;
 import rc.bootsecurity.test.inserter.Inserter;
 import rc.bootsecurity.test.inserter.InserterRequests;
 
@@ -90,15 +87,10 @@ public class BasicTest {
 
     @Autowired
     private RequestService requestService;
-
-    @Autowired
-    private ReportAccessRepository reportAccessRepository;
     @Autowired
     private ReportTypeRepository reportTypeRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;
-    @Autowired
-    private ReportAccessStoredRepository reportAccessStoredRepository;
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
@@ -282,68 +274,8 @@ public class BasicTest {
     }
 
 
-    @Test
-    public void testUserPrivilegesToRequestsAndTickets() {
-        inserter.insertUsersWithGroups();
-        inserter.insertRequestTypesPrivilegesForGroups();
-        inserterTickets.insertRequestTickets();
-        inserterTickets.insertTicketsForUsers();
-        inserterTickets.insertPrivilegesForSolvers();
-
-        User user1 = this.userRepository.findByUsername("user1").get();
-        User user2 = this.userRepository.findByUsername("user2").get();
-        User user12 = this.userRepository.findByUsername("user12").get();
-
-        Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
-        Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
-        Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
-
-        ModuleType ticket = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Ticket.name());
-        ModuleType report = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Report.name());
-        ModuleType finance = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Financie.name());
-
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
-        List<TicketSubtype> ticketSubtypeSoftware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware);
-        List<TicketSubtype> ticketSubtypesHardware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware);
-
-     //   assertThat(group5.getUsersInGroup()).isEmpty();
-        List<TicketPrivileges> ticketPrivileges = this.ticketPrivilegesRepository.findAllByGroup(group5).get();
-        assertThat(ticketPrivileges.stream().map(TicketPrivileges::getApplicationName).collect(Collectors.toSet()))
-                .containsExactlyInAnyOrder(ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(this.ticketPrivilegesRepository.findAllByGroup(group1).get().stream().map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
-                .containsExactlyInAnyOrder(ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(this.ticketPrivilegesRepository.findAllByGroup(group2).get().stream().map(TicketPrivileges::getApplicationName).collect(Collectors.toList()))
-                .containsExactlyInAnyOrder(ticketSubtypesHardware.get(0).getName(), ticketSubtypesHardware.get(1).getName());
-        assertThat(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group5).get()).containsExactlyInAnyOrder(ticket);
-        assertThat(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(group5)).isEmpty();
-        assertThat(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group1).get()).containsExactlyInAnyOrder(ticket,report,finance);
-         //   assertThat(group5.getUsersInGroup()).isEmpty();
-
-       /* ApplicationPrivilegeDTO applicationPrivilegeDTO = this.userService.getPrivilegesForUser(user1.getUsername());
-
-        assertThat(applicationPrivilegeDTO.getRequestTypesToSolve())
-                .containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name());
-        assertThat(applicationPrivilegeDTO.getModuleTypesToUse())
-                .containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name(), MODULE_TYPE.Report.name(), MODULE_TYPE.Financie.name());
-        assertThat(applicationPrivilegeDTO.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName(), ticketTypeHardware.getName());
-        assertThat(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
-                ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeHardware.getName())).containsExactlyInAnyOrder(
-                ticketSubtypesHardware.get(0).getName(), ticketSubtypesHardware.get(1).getName());
 
 
-        ApplicationPrivilegeDTO applicationPrivilegeDTO5 = this.userService.getPrivilegesForUser(user12.getUsername());
-
-        assertThat(applicationPrivilegeDTO5.getRequestTypesToSolve()).containsExactlyInAnyOrder(MODULE_TYPE.Ticket.name());
-        assertThat(applicationPrivilegeDTO5.getModuleTypesToUse().size()).isEqualTo(0);
-        assertThat(applicationPrivilegeDTO5.getSolveTickets()).containsOnlyKeys(ticketTypeSoftware.getName());
-        assertThat(applicationPrivilegeDTO5.getSolveTickets()).doesNotContainKeys(ticketTypeHardware.getName());
-        assertThat(applicationPrivilegeDTO5.getSolveTickets().get(ticketTypeSoftware.getName())).containsExactlyInAnyOrder(
-                ticketSubtypeSoftware.get(0).getName(), ticketSubtypeSoftware.get(1).getName());
-        assertThat(applicationPrivilegeDTO5.getSolveTickets().get(ticketTypeHardware.getName())).isNullOrEmpty();*/
-
-    }
 
     @Test
     public void testSolvingTicketsChangingSolverAndCommenting(){
@@ -365,25 +297,6 @@ public class BasicTest {
         RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
 
 
-    }
-
-    @Test
-    public void testReportTypes(){
-        inserter.insertUsersWithGroups();
-        inserter.insertRequestTypesPrivilegesForGroups();
-        inserterRequests.insertRequestReports();
-
-        ReportType reportType3 = this.reportTypeRepository.findByName("REPORT_TYPE_3");
-        assertThat(reportType3).isNotNull();
-        assertThat(reportType3.getName()).isEqualToIgnoringCase("REPORT_TYPE_3");
-
-        ReportRefresh reportRefresh3 = this.reportRefreshRepository.findByName("REPORT_REFRESH_3");
-        assertThat(reportRefresh3).isNotNull();
-        assertThat(reportRefresh3.getName()).isEqualToIgnoringCase("REPORT_REFRESH_3");
-
-        ReportAccess reportAccess1 = this.reportAccessRepository.findByName("REPORT_ACCESS_1");
-        assertThat(reportAccess1).isNotNull();
-        assertThat(reportAccess1.getName()).isEqualToIgnoringCase("REPORT_ACCESS_1");
     }
 
 

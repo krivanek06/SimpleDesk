@@ -24,7 +24,9 @@ public class ReportDTO extends RequestDTO {
 
     private String otherInformation;
 
-    private String accessBy;
+    private String accessByPeople;
+
+    private String accessMethods;
 
     private Timestamp deadline;
 
@@ -34,5 +36,4 @@ public class ReportDTO extends RequestDTO {
 
     private String reportType;
 
-    private List<ReportAccessStoredDTO> reportAccessStored;
 }

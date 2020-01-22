@@ -97,6 +97,7 @@ create table tbl_reports(
   r_other_info varchar,
   r_refresh_id Integer NOT NULL,
   r_access_people varchar,
+  r_access_method varchar,
   r_deadline date,
   r_evaluation double precision,
   r_type_id Integer NOT NULL
@@ -112,18 +113,8 @@ create table tbl_report_refreshes(
    id serial primary key,
    name varchar(255) NOT NULL
 );
-DROP TABLE IF EXISTS tbl_report_access_stored CASCADE;
-create table tbl_report_access_stored(
-   id serial primary key,
-   request_id Integer NOT NULL unique ,
-   access_id Integer NOT NULL,
-   path varchar NOT NULL
-);
-DROP TABLE IF EXISTS tbl_report_access CASCADE;
-create table tbl_report_access(
-  id serial primary key,
-  name varchar NOT NULL
-);
+
+
 DROP TABLE IF EXISTS tbl_request_positions CASCADE;
 create table tbl_request_positions(
   id serial primary key,
@@ -319,9 +310,6 @@ ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (user_id) REFERENCES tbl_users
 
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 ALTER TABLE tbl_request_comments ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
-
-ALTER TABLE tbl_report_access_stored ADD FOREIGN KEY (request_id) REFERENCES tbl_reports(request_id);
-ALTER TABLE tbl_report_access_stored ADD FOREIGN KEY (access_id) REFERENCES tbl_report_access(id);
 
 ALTER TABLE tbl_reports ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 ALTER TABLE tbl_reports ADD FOREIGN KEY (r_refresh_id) REFERENCES tbl_report_refreshes(id);

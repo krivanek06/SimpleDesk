@@ -86,13 +86,9 @@ public class RequestSimulationTest {
     @Autowired
     private TicketRepository ticketRepository;
     @Autowired
-    private ReportAccessRepository reportAccessRepository;
-    @Autowired
     private ReportTypeRepository reportTypeRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;
-    @Autowired
-    private ReportAccessStoredRepository reportAccessStoredRepository;
     @Autowired
     private ReportRepository reportRepository;
     @Autowired

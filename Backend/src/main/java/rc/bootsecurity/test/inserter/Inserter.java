@@ -55,10 +55,6 @@ public class Inserter {
     private TicketRepository ticketRepository;
 
     @Autowired
-    private ReportAccessStoredRepository reportAccessStoredRepository;
-    @Autowired
-    private ReportAccessRepository reportAccessRepository;
-    @Autowired
     private ReportRepository reportRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;

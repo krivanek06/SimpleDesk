@@ -117,8 +117,8 @@
         <div class = 'reportInlineParameters'>
             <!--access -->
             <mat-form-field >
-                <input  matInput placeholder="Sprístupniť pre" formControlName = "accessBy">
-                <mat-error *ngIf="accessBy.errors?.accessValid">
+                <input  matInput placeholder="Sprístupniť pre" formControlName = "accessByPeople">
+                <mat-error *ngIf="accessByPeople.errors?.accessValid">
                         Prosím zadefinujte pre koho má byť report sprístupnený
                 </mat-error>
                 
@@ -132,21 +132,38 @@
                     <li *ngFor="let item of accessByPeopleArray; let i = index" class="oneLineLI">
                         <img src="../../../../assets/images_design/delete_icon.png" 
                             class='formdeleteButton'  
-                            (click)="deleteItem(i)">
+                            (click)="deletePeopleItem(i)">
                             {{item}}
                     </li>
                 </ul>
             </div>
         </div>
 
-         <!-- access -->
+
+
+
         <div class = 'reportInlineParameters'>
+            <!--access method -->
             <mat-form-field >
-                <input  matInput placeholder="Sprístupniť cez mail" formControlName = "reportAccessStored">
-                <mat-error *ngIf="reportAccessStored.invalid" >
-                    Prosím zadefinujte email vyzdielania dokumentu
+                <input  matInput placeholder="Sprístupniť cez" formControlName = "accessMethods">
+                <mat-error *ngIf="accessMethods.errors?.accessValid">
+                        Prosím zadefinujte spôsob sprístupnenia reportu
                 </mat-error>
+                
             </mat-form-field>
+          <img src="../../../../assets/images_design/add_icon.png" class='formAssignedButton'  (click)="addMethodToAccess()">
+
+          <!-- display added people / remove them -->
+            <div class = 'printingResults'> 
+                <ul> 
+                    <li *ngFor="let item of accessByMethodArray; let i = index" class="oneLineLI">
+                        <img src="../../../../assets/images_design/delete_icon.png" 
+                            class='formdeleteButton'  
+                            (click)="deleteMethodItem(i)">
+                            {{item}}
+                    </li>
+                </ul>
+            </div>
         </div>
 
 

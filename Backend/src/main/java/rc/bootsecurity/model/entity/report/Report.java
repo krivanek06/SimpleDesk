@@ -34,7 +34,10 @@ public class Report extends Request {
     private String otherInformation;
 
     @Column(name = "r_access_people")
-    private String accessBy;
+    private String accessByPeople;
+
+    @Column(name = "r_access_method")
+    private String accessMethods;
 
     @Column(name = "r_deadline")
     private Timestamp deadline;
@@ -50,11 +53,5 @@ public class Report extends Request {
     @JoinColumn(name = "r_type_id")
     private ReportType reportType;
 
-    /**
-     * all access for reports - SFTP, email, etc.
-     */
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "request_id")
-    private List<ReportAccessStored> reportAccessStoredList;
 
 }

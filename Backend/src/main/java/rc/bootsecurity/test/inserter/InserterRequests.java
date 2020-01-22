@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.FinanceType;
-import rc.bootsecurity.model.entity.report.ReportAccess;
 import rc.bootsecurity.model.entity.report.ReportRefresh;
 import rc.bootsecurity.model.entity.report.ReportType;
 import rc.bootsecurity.model.entity.request.RequestPosition;
@@ -56,13 +55,9 @@ public class InserterRequests {
     @Autowired
     private TicketRepository ticketRepository;
     @Autowired
-    private ReportAccessRepository reportAccessRepository;
-    @Autowired
     private ReportTypeRepository reportTypeRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;
-    @Autowired
-    private ReportAccessStoredRepository reportAccessStoredRepository;
     @Autowired
     private ReportRepository reportRepository;
     @Autowired
@@ -89,13 +84,8 @@ public class InserterRequests {
         ReportRefresh reportRefresh2 = Creator.createReportRefresh(NAMES.REPORT_REFRESH_2);
         ReportRefresh reportRefresh3 = Creator.createReportRefresh(NAMES.REPORT_REFRESH_3);
 
-        ReportAccess reportAccess1 = Creator.createReportAccess(NAMES.REPORT_ACCESS_1);
-        ReportAccess reportAccess2 = Creator.createReportAccess(NAMES.REPORT_ACCESS_2);
-        ReportAccess reportAccess3 = Creator.createReportAccess(NAMES.REPORT_ACCESS_3);
-
         this.reportTypeRepository.saveAll(List.of(reportType1, reportType2, reportType3));
         this.reportRefreshRepository.saveAll(List.of(reportRefresh1, reportRefresh2, reportRefresh3));
-        this.reportAccessRepository.saveAll(List.of(reportAccess1, reportAccess2, reportAccess3));
 
     }
 
