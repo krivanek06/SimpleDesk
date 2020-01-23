@@ -18,22 +18,8 @@
         (removeFromMeEmitter) = "removeFromMe($event)">
     </app-request-table> 
 
-    <app-request-table #teamRequests headerColor="#B5D7FF" 
-        *ngIf = '(isManager$ | async) || (isManagerRightHand$ | async)'
-        [displayedColumns]= "viewTable"  
-        [displayAssignToMe] ='(isSolver$ | async)'
-        tableTitle="Požiadavky poslané členmi môjho tímu"
-        (assignOnMeEmitter) = "assignOnMe($event)">
-    </app-request-table>  
-
-    <app-request-table #teamAssignedRequests headerColor="#B5D7FF" 
-        *ngIf = '(isManager$ | async) || (isManagerRightHand$ | async)'
-        [displayedColumns]= "viewTable"  
-        tableTitle="Požiadavky pridelené členom môjho tímu">
-    </app-request-table>   
-
     <app-request-table #otherOpenRequests 
-        *ngIf = '(isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async)'
+        [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async) ||  otherOpenRequests.dataSource.data.length > 0)'
         headerColor="#E8F3FF" 
         [displayedColumns]= "viewTable" 
         [displayAssignToMe] ='(isSolver$ | async)'
@@ -41,5 +27,7 @@
         (assignOnMeEmitter) = "assignOnMe($event)">
     </app-request-table>   
 
-    <ngx-spinner  >  <p style="font-size: 20px; color: white">Načítavam požiadavky...</p> </ngx-spinner>
+    <ngx-spinner  >  
+        <p style="font-size: 20px; color: white">Načítavam požiadavky...</p> 
+    </ngx-spinner>
 </div>

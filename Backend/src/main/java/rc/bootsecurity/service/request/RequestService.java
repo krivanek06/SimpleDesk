@@ -59,8 +59,6 @@ public class RequestService {
 
         this.setImageForRequestTableDTO(requestDashboardDTO.getMyOpen());
         this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMe());
-        this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMyTeam());
-        this.setImageForRequestTableDTO(requestDashboardDTO.getSentByMyTeam());
         this.setImageForRequestTableDTO(requestDashboardDTO.getOtherOpen());
 
         return requestDashboardDTO;

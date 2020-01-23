@@ -1,8 +1,6 @@
 export interface RequestDashboard{
     myOpen: RequestTable[],
     assignedOnMe: RequestTable[],
-    sentByMyTeam: RequestTable[],
-    assignedOnMyTeam: RequestTable[],
     otherOpen: RequestTable[],
 }
 

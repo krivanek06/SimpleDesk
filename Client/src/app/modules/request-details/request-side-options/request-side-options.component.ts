@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'environments/environment';
-import { RequestDetails, UserSimple } from 'app/shared/models/RequestDetails';
+import { RequestDetails, UserSimple, ReportDetails } from 'app/shared/models/RequestDetails';
 import { UserService } from 'app/core/services/user.service';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
 import Swal from 'sweetalert2';
@@ -104,11 +104,12 @@ export class RequestSideOptionsComponent implements OnInit {
     })
   }
 
-  private addEvaluationForReport(requestDetails : RequestDetails){
+  private addEvaluationForReport(requestDetails : ReportDetails){
     if(this.reportEvaluation === undefined){
       return;
     }
     this.requestService.reportAddEvaluation(requestDetails.id, this.reportEvaluation).subscribe(() =>{
+      requestDetails.evaluation =  this.reportEvaluation ;
       this.reportEvaluation = undefined;
       Swal.fire({ position: 'top-end', text: 'Nadhodnocenie reportu bolo zaznamenané', showConfirmButton: false, timer: 1200 })
     }) 

@@ -34,7 +34,8 @@
     </div>
 
 
-    <div class = 'module' *ngIf = "requestDetails.closed === null &&  ((isSolverRightHand$ | async)  ||  (isAdmin$ | async))">
+    <div class = 'module' *ngIf = "requestDetails.closed === null &&  
+                        (((isSolverRightHand$ | async) && (isSolver$ | async))  ||  (isAdmin$ | async))">
         <mat-form-field class='customInputSmall'>
             <mat-label>Zmena riešiteľa</mat-label>
             <mat-select  (selectionChange)="selectedUser($event.value)">
@@ -58,7 +59,10 @@
         <hr>
     </div>
 
-    <div class = 'module'  *ngIf='requestDetails.closed === null && requestDetails.requestType === "Report" && ((isSolver$ | async) || (isAdmin$ | async))'>
+    <div class = 'module'  
+        *ngIf='requestDetails.closed === null && 
+                requestDetails.requestType === "Report" && 
+                ((isAssignedOnMe(requestDetails)) || (isAdmin$ | async))'>
         <mat-form-field class='customInputSmall'>
             <input  matInput placeholder="Nahodnocenie v dňoch" (keyup)="addedEvaluation($event.target.value)"  type="number">
         </mat-form-field>

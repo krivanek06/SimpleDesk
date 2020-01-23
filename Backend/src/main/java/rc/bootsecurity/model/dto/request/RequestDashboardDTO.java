@@ -8,7 +8,5 @@ import java.util.List;
 public class RequestDashboardDTO {
     List<RequestTableDTO> myOpen;
     List<RequestTableDTO> assignedOnMe;
-    List<RequestTableDTO> sentByMyTeam;
-    List<RequestTableDTO> assignedOnMyTeam;
     List<RequestTableDTO> otherOpen;
 }

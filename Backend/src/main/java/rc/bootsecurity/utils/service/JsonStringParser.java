@@ -90,8 +90,6 @@ public class JsonStringParser {
 
         requestDashboardDTO.setMyOpen(this.convertRawJsonToRequestTableDTO(requestJsonObject,"my_open_requests" ));
         requestDashboardDTO.setAssignedOnMe(this.convertRawJsonToRequestTableDTO(requestJsonObject,"assigned_on_me" ));
-        requestDashboardDTO.setSentByMyTeam(this.convertRawJsonToRequestTableDTO(requestJsonObject,"sent_by_my_team" ));
-        requestDashboardDTO.setAssignedOnMyTeam(this.convertRawJsonToRequestTableDTO(requestJsonObject,"assigned_on_my_team" ));
         requestDashboardDTO.setOtherOpen(this.convertRawJsonToRequestTableDTO(requestJsonObject,"all_open_requests" ));
 
         return requestDashboardDTO;

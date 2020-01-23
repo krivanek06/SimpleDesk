@@ -64,7 +64,7 @@
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
             <div class='informationAnswer'>Prístup pre</div>
-            <ul >
+            <ul *ngIf = '$any(requestDetails).accessByPeople != null'>
                 <li div class='information' *ngFor = "let access of $any(requestDetails).accessByPeople.split(',')"> 
                     {{ access }}
                 </li> 
@@ -72,7 +72,7 @@
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
             <div class='informationAnswer'>Prístup cez</div>
-            <ul >
+            <ul *ngIf = '$any(requestDetails).accessMethods != null'>
                 <li div class='information' *ngFor = "let access of $any(requestDetails).accessMethods.split(',')"> 
                     {{ access }}
                 </li> 

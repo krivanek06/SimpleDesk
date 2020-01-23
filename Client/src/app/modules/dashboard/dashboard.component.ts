@@ -21,8 +21,6 @@ export class DashboardComponent implements OnInit {
 
   @ViewChild('myOpenRequests',  {static: false}) myOpenRequests: RequestTableComponent;
   @ViewChild('meAssignedRequests',  {static: false}) meAssignedRequests: RequestTableComponent;
-  @ViewChild('teamAssignedRequests',  {static: false}) teamAssignedRequests: RequestTableComponent;
-  @ViewChild('teamRequests',  {static: false}) teamRequests: RequestTableComponent;
   @ViewChild('otherOpenRequests',  {static: false}) otherOpenRequests: RequestTableComponent;
 
   public isAdmin$: Observable<boolean>;
@@ -48,21 +46,18 @@ export class DashboardComponent implements OnInit {
   private getRequestOnDashboard(){
       this.spinner.show();
       this.requestService.getRequestOnDashboard().subscribe(requests =>{
+        console.log(requests);
         if(this.myOpenRequests !== undefined){
           this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
         }
-        this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
-        
 
-        if(this.teamAssignedRequests !== undefined){
-          this.teamAssignedRequests.dataSource.data = requests.assignedOnMyTeam as RequestTable[];
-        }
-        if(this.teamRequests !== undefined){
-          this.teamRequests.dataSource.data = requests.sentByMyTeam as RequestTable[];
-        }
-        if(this.otherOpenRequests !== undefined){
+        //if(this.meAssignedRequests !== undefined){
+          this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
+       // }
+
+      //  if(this.otherOpenRequests !== undefined){
           this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
-        }
+       // }
 
         this.spinner.hide();
       })
@@ -89,10 +84,8 @@ export class DashboardComponent implements OnInit {
 
     this.meAssignedRequests.dataSource.data.push(request)
     this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id );
-    this.teamRequests.dataSource.data = this.teamRequests.dataSource.data.filter(req => req.id !== request.id );
 
     this.meAssignedRequests.dataSource._updateChangeSubscription();
-    this.teamRequests.dataSource._updateChangeSubscription();
     this.otherOpenRequests.dataSource._updateChangeSubscription();
   }
 

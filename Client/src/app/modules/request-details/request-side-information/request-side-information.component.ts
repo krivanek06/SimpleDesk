@@ -46,12 +46,10 @@ export class RequestSideInformationComponent implements OnInit {
 
   public uploadFile(requestDetails: RequestDetails, file: File){
     this.fileService.postFileForRequest(requestDetails.id, [file]).subscribe(result => {
-      let document: CustomDocument = {
+      requestDetails.documents.push({
         name: file.name,
         lastModified: new Date().getTime()
-      }
-      console.log(document)
-      requestDetails.documents.push(document);
+      });
     });
   }
 
