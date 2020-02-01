@@ -3,17 +3,25 @@
 
 
 <div id='contentContainer'>
-
+    <!-- filter -->
     <div class='filterContent'>
-        <app-request-filter #requestFilter (changedDate) = "loadClosedRequests()"></app-request-filter>
+        <app-request-filter 
+            #requestFilter 
+            (changedDate) = "loadClosedRequests()"
+            (changedFormFilter) = "filterClosedRequests($event)">
+        </app-request-filter>
     </div>
 
+    <!-- table with requests -->
+    <app-request-table 
+        #closedRequests 
+        headerColor="#E8F3FF" 
+        [displayedColumns]= "viewTable" 
+        displayAssignToMe='true'
+        tableTitle="Uzatvorené požiadavky">
+    </app-request-table>   
 
-    <app-request-table #closedRequests 
-            headerColor="#E8F3FF" 
-            [displayedColumns]= "viewTable" 
-            displayAssignToMe='true'
-            tableTitle="Uzatvorené požiadavky">
-        </app-request-table>   
-
+    <ngx-spinner  >  
+        <p style="font-size: 20px; color: white">Načítavam požiadavky...</p> 
+    </ngx-spinner>
 </div>

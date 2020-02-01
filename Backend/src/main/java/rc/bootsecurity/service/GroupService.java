@@ -101,7 +101,7 @@ public class GroupService {
    // cannot be transactional because we delete same entity which will be pushed there
     @Transactional
     public void modifyGroupPrivileges(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
-        if(!applicationPrivilegeDTO.getModuleTypesToUse().contains(MODULE_TYPE.Financie.name())){
+        if(!applicationPrivilegeDTO.getModuleTypesToUse().contains(MODULE_TYPE.Finance.name())){
             this.financeTypeRepository.deleteGroupAssociation(group.getId());
         }
         group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByNameIn(applicationPrivilegeDTO.getModuleTypesToUse())));
@@ -164,6 +164,7 @@ public class GroupService {
         ApplicationPrivilegeDTO applicationPrivilegeDTO = this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.groupRepository.findAllExistingPrivileges());
         applicationPrivilegeDTO.getModuleTypesToUse().removeAll(groupDTO.getApplicationPrivilegeDTO().getModuleTypesToUse());
         applicationPrivilegeDTO.getRequestTypesToSolve().removeAll(groupDTO.getApplicationPrivilegeDTO().getRequestTypesToSolve());
+        applicationPrivilegeDTO.getRequestTypesToSolve().remove(MODULE_TYPE.Privilege.name());
         applicationPrivilegeDTO.getSubmitFinanceRequests().removeAll(groupDTO.getApplicationPrivilegeDTO().getSubmitFinanceRequests());
         for(String key : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().keySet()) {
             for(String value : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().get(key)){
@@ -211,9 +212,9 @@ public class GroupService {
     @Transactional
     public void registerGroup(GroupDTO groupDTO){
         // add manager as member of group
-        if(!groupDTO.getUsersInGroup().contains(groupDTO.getGroupManager())){
+        /*if(!groupDTO.getUsersInGroup().contains(groupDTO.getGroupManager())){
             groupDTO.getUsersInGroup().add(groupDTO.getGroupManager());
-        }
+        }*/
 
         Group group = new Group();
         group.setEmail(groupDTO.getEmail());

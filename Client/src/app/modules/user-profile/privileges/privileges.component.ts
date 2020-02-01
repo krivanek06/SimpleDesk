@@ -12,7 +12,6 @@ export class PrivilegesComponent implements OnInit {
   public hideUnassignedPriv = false; // true only want to print assigned privileges
   public enabledPrivileges: ApplicationPrivilege;
   private enabledPrivilegesCopy: ApplicationPrivilege;
-
   public disabledPrivileges: ApplicationPrivilege;
   private disabledPrivilegesCopy: ApplicationPrivilege;
 
@@ -48,6 +47,7 @@ export class PrivilegesComponent implements OnInit {
   }
 
   ngOnInit() {
+   
   }
 
   public editGroup(){   
@@ -64,7 +64,7 @@ export class PrivilegesComponent implements OnInit {
     this.hideUnassignedPriv = true;
   }
 
-  public changeModuleTypeToUse(name: string){
+  changeModuleTypeToUse(name: string){
     if(!this.activateUnableClick){
       return;
     }
@@ -83,7 +83,7 @@ export class PrivilegesComponent implements OnInit {
     }
   }
 
-  public changeRequestTypeToSolve(name: string){
+  changeRequestTypeToSolve(name: string){
     if(!this.activateUnableClick){
       return;
     }

@@ -39,13 +39,13 @@ export class CommentFormComponent implements OnInit {
     
   }
    
-  private onChange(event: any) {
+  onChange(event: any) {
     this.isChecked = !this.isChecked;
     this.isCheckedName = event.source.name;
   }
 
   
-  private submit(): void{
+  submit(): void{
     if(this.commentInput === ''){ 
       return;
     }

@@ -3,6 +3,8 @@ import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { RequestTable } from 'app/shared/models/RequestTable';
 import { UserService } from 'app/core/services/user.service';
 import { Router } from '@angular/router';
+import { RequestDetails } from '../../models/RequestDetails';
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-request-table',
@@ -10,7 +12,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./request-table.component.scss']
 })
 export class RequestTableComponent implements OnInit {
-  @Input() public displayedColumns = []; // table columne to diplay
+  @Input() public displayedColumns = []; // table columns to diplay
   @Input() public headerColor:string; // table header color
   @Input() public displayAssignToMe: boolean = false; 
   @Input() public tableTitle: string;
@@ -20,12 +22,12 @@ export class RequestTableComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  public dataSource = new MatTableDataSource<RequestTable>();
-  public dateFrom: string;
-  public dateTo: string;
+  public dataSource:MatTableDataSource<RequestTable> = new MatTableDataSource<RequestTable>();
+  dateFrom: string;
+  dateTo: string;
   
   
-  constructor(public userService: UserService, private router:Router) { }
+  constructor(public userService: UserService, private router:Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {  }
 
@@ -34,17 +36,23 @@ export class RequestTableComponent implements OnInit {
   }
 
 
-  public assignOnMe(request: RequestTable): void{
+  assignOnMe(request: RequestTable){
     this.assignOnMeEmitter.emit(request);
   }
 
 
-   public removeFromMe(request: RequestTable): void{
+  removeFromMe(request: RequestTable){
       this.removeFromMeEmitter.emit(request);
   }
 
-  private navigateToDetails(id : number){
+  navigateToDetails(id : number){
     this.router.navigateByUrl(`request_details/${id}`);
   }
+
+  getImage(bytes: string): SafeUrl{
+    let objectURL = 'data:image/png;base64,' + bytes;
+    return this.sanitizer.bypassSecurityTrustUrl(objectURL);
+  }
+
 
 }

@@ -80,7 +80,7 @@ export class RequestTicketFormComponent implements OnInit {
     return this.http.post(environment.apiUrl + 'requests/ticket', this.ticketForm.value, {headers});
   }
 
-  private submit() : void{
+  submit() : void{
     if(this.ticketForm.invalid){ 
       return;
     }
@@ -100,7 +100,7 @@ export class RequestTicketFormComponent implements OnInit {
     })
   }
 
-  private changeTicketType(value: string): void{
+  changeTicketType(value: string): void{
     this.loadTicketSubtype(value);
     this.ticketForm.patchValue({'ticketSubtypeName' : ''});
   }

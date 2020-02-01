@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 // redirects user from http to https
+/*
 @Configuration
 public class ConnectorConfig  {
 
@@ -38,4 +39,4 @@ public class ConnectorConfig  {
         connector.setRedirectPort(8443);
         return connector;
     }
-}
+}*/

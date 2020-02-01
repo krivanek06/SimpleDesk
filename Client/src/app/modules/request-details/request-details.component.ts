@@ -30,7 +30,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
       this.requestDetail$ = this.requestService.getRequestDetials();
     }
 
-  private openSideBar(){
+  openSideBar(){
     this.sideBarBoolean = !this.sideBarBoolean;
   }
 
@@ -39,14 +39,17 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     let id = url.substring(url.lastIndexOf('/') + 1);
 
     this.spinner.show();
-    this.requestService.loadRequestDetails(id).subscribe(complete => this.spinner.hide());
+    this.requestService.loadRequestDetails(id).subscribe(
+        value => this.spinner.hide(),
+        err =>  this.spinner.hide()
+    );
   }
 
   ngOnDestroy(): void {
     this.requestService.removeRequestDetails();
   }
 
-  private addCommentToArray(requestComment: RequestComment){
+  addCommentToArray(requestComment: RequestComment){
     this.requestComments.requestComments.push(requestComment);
   }
 

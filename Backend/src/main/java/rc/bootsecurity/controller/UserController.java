@@ -101,4 +101,14 @@ public class UserController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri získavaní údajov uživateľa",HttpStatus.BAD_REQUEST);
     }
 
+    @PutMapping("/secure/resetPassword/{username}")
+    public ResponseEntity<?> resetUserPassword(@PathVariable("username") String username){
+        try {
+            this.userService.resetPassword(username);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to resetUserPassword, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri resetovaní hesla uživateľa" + username,HttpStatus.BAD_REQUEST);
+    }
 }

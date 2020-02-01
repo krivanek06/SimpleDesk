@@ -193,7 +193,7 @@ public class Creator {
         FinanceDTO financeDTO = new FinanceDTO();
         financeDTO.setCreator(createUserSimpleDto(creator));
         financeDTO.setRequestPriority(requestPriority);
-        financeDTO.setRequestType(MODULE_TYPE.Financie.name());
+        financeDTO.setRequestType(MODULE_TYPE.Finance.name());
         financeDTO.setName("FINANCE_NAME");
         financeDTO.setFinanceType(financeType);
 

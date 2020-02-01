@@ -67,8 +67,8 @@ public class EmailService {
 
     public void sendUserRegistrationEmail(User whoInitiated, User newUser){
         SimpleMailMessage message = this.composeEmail(newUser.getEmail());
-        message.setSubject("Registracia na helpdesk");
-        message.setText("Boli ste zaregistrovaný do systemu helpdesk. \n" +
+        message.setSubject("Konto na helpdesk");
+        message.setText("Môžete vstúpiť do systemu helpdesk. \n" +
                 "prihlasovanie údaje sú nasledovné \n" +
                 "prihlasovacie meno : " + newUser.getUsername() + "\n" +
                 "prihlasovacie heslo : " + newUser.getPassword() +

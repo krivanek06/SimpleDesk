@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { environment } from 'environments/environment';
 import { HttpParams, HttpClient } from '@angular/common/http';
-import { UserSimple, RequestDetails, TicketDetails, ReportDetails, FinanceDetails, RequestComment } from 'app/shared/models/RequestDetails';
+import { UserSimple, RequestDetails} from 'app/shared/models/RequestDetails';
 import { mapTo, map, tap } from 'rxjs/operators';
-import { RequestDashboard } from 'app/shared/models/RequestTable';
+import { RequestDashboard, RequestTable } from 'app/shared/models/RequestTable';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +19,7 @@ export class RequestModificationService {
     
     return this.http.get<RequestDetails>(environment.apiUrl + `requests/requestDetails/${id}`).pipe(
       tap(requestDetails => {
-          console.log(requestDetails)
+          //console.log(requestDetails)
           this.requestDetails.next(requestDetails)
       })
     )
@@ -39,6 +39,11 @@ export class RequestModificationService {
 
   public getRequestOnDashboard():Observable<RequestDashboard>{
     return this.http.get<RequestDashboard>(`${environment.apiUrl}requests/dashboard`);
+  }
+
+  public getClosedRequests(dateFrom: string, dateTo: string):Observable<RequestTable[]>{
+    let params = new HttpParams().set('dateFrom' , dateFrom).set('dateTo' , dateTo) ;
+    return  this.http.get<RequestTable[]>(environment.apiUrl + "requests/closed", {params: params});
   }
 
  /* public getTicketDetials():Observable<TicketDetails>{

@@ -23,7 +23,7 @@ export class UserImagesComponent implements OnInit {
 
   }
 
-  private closeWindow(){
+  closeWindow(){
     this.changeWindow.emit(false);
   }
 
@@ -41,7 +41,7 @@ export class UserImagesComponent implements OnInit {
     return this.http.put(environment.apiUrl + "user/changeImage", null , {params: params});
   }
 
-  private selectImage(imageDTO: ImageDTO): void{
+  selectImage(imageDTO: ImageDTO): void{
     Swal.fire({
       title: "Potvrďte zmenu obrázku",
       html: "<img src='data:image/jpeg;base64, "+ imageDTO.imageBytes + "' style='width:350px' />",

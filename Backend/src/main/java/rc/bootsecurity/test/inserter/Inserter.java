@@ -118,20 +118,7 @@ public class Inserter {
     }
 
     public void insertRequestTypes(){
-        RequestPosition requestPosition1 = Creator.createRequestPosition(REQUEST_POSITION.Vytvorené.name());
-        RequestPosition requestPosition2 = Creator.createRequestPosition(REQUEST_POSITION.Zatvorené.name());
-        RequestPosition requestPosition3 = Creator.createRequestPosition(REQUEST_POSITION.Pridelené.name());
-        this.requestPositionRepository.saveAll(List.of(requestPosition1, requestPosition2,requestPosition3));
 
-        RequestPriority requestPriority1 = Creator.createRequestPriority(REQUEST_PRIORITY.SMALL.name());
-        RequestPriority requestPriority2 = Creator.createRequestPriority(REQUEST_PRIORITY.MEDIUM.name());
-        RequestPriority requestPriority3 = Creator.createRequestPriority(REQUEST_PRIORITY.LARGE.name());
-        this.requestPriorityRepository.saveAll(List.of(requestPriority1, requestPriority2, requestPriority3));
-
-        ModuleType moduleType1 = Creator.createRequestType(MODULE_TYPE.Ticket.name());
-        ModuleType moduleType2 = Creator.createRequestType(MODULE_TYPE.Report.name());
-        ModuleType moduleType3 = Creator.createRequestType(MODULE_TYPE.Financie.name());
-        this.moduleTypeRepository.saveAll(List.of(moduleType1, moduleType2, moduleType3));
     }
 
 
@@ -146,7 +133,7 @@ public class Inserter {
 
         ModuleType moduleType1 = this.moduleTypeRepository.findByName(MODULE_TYPE.Ticket.name()); // Set.of(group1, group5), Set.of(group1 , group2,group3,group4)
         ModuleType moduleType2 = this.moduleTypeRepository.findByName(MODULE_TYPE.Report.name()); // Set.of(group1), Set.of(group1,group2,group3)
-        ModuleType moduleType3 = this.moduleTypeRepository.findByName(MODULE_TYPE.Financie.name()); // Set.of(group1), Set.of(group2,group3)
+        ModuleType moduleType3 = this.moduleTypeRepository.findByName(MODULE_TYPE.Finance.name()); // Set.of(group1), Set.of(group2,group3)
 
 
         group1.setModuleTypesToUse(new HashSet<>(Arrays.asList(moduleType1, moduleType2)));

@@ -25,7 +25,7 @@ export class LoginFormComponent implements OnInit {
   }
 
 
-  private login(): void{
+ login(): void{
     const val = this.form.value;
     if (val.username && val.password) {
       this.loggingIn = true;

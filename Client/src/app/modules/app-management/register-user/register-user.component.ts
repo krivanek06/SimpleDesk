@@ -37,7 +37,7 @@ export class RegisterUserComponent implements OnInit {
     })
   }
 
-  private submit(){
+  submit(){
     if(this.userRegistrationForm.invalid){
       return;
     }

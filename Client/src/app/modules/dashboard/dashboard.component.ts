@@ -45,26 +45,17 @@ export class DashboardComponent implements OnInit {
 
   private getRequestOnDashboard(){
       this.spinner.show();
-      this.requestService.getRequestOnDashboard().subscribe(requests =>{
-        console.log(requests);
-        if(this.myOpenRequests !== undefined){
+      this.requestService.getRequestOnDashboard().subscribe(requests => {
           this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
-        }
-
-        //if(this.meAssignedRequests !== undefined){
           this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
-       // }
-
-      //  if(this.otherOpenRequests !== undefined){
           this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
-       // }
 
-        this.spinner.hide();
+          this.spinner.hide();
       })
   }
 
 
-  private assignOnMe(request: RequestTable){
+  public assignOnMe(request: RequestTable){
     Swal.fire({
       text: "Naozaj chcetete prideliť na seba požiadavku s id : " + request.id + " ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', cancelButtonText: "Zrušiť", confirmButtonText: 'Ano'

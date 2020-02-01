@@ -1,6 +1,6 @@
 
 
-
+<!-- user management -->
 <div class = 'container'>
     <div class = 'contanierTitle'>
         <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>
@@ -13,16 +13,22 @@
             </mat-select>
 
         </mat-form-field>
+    </div>   
+    
+    <!-- modifycation buttons -->
+    <app-serdbuttons id='serdbuttonsUser'
+        *ngIf="userDetails.displayedUser" 
+        (resetEmittter) = "resetUserPassword()"
+        displayOnlyReset='true'>
+    </app-serdbuttons>
 
-        <app-user-details  #userDetails ></app-user-details>
-        <app-privileges #userPrivileges ></app-privileges>
-        <app-user-groups #userGroups ></app-user-groups>
-    </div>
-
+    <app-user-details  #userDetails ></app-user-details>
+    <app-privileges #userPrivileges ></app-privileges>
+    <app-user-groups #userGroups ></app-user-groups>
 </div>
 
 
-
+<!-- group management -->
 <div class = 'container leftLine'>
     <div class = 'contanierTitle'>
         <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>
@@ -33,22 +39,18 @@
             </mat-select>
         </mat-form-field>
     </div>
-
-    <app-serdbuttons #serdbuttons id='serdbuttons' *ngIf="groupDetails.group" 
+    <!-- modifycation buttons -->
+    <app-serdbuttons #serdbuttonsGroup 
+        id='serdbuttonsGroup' 
+        *ngIf="groupDetails.group" 
         (editEmittter) = "editGroup()" 
         (resetEmittter) = "resetGroup()"
         (saveEmittter) = "saveGroup()"
-        (deleteEmittter) = "deleteGroup()"></app-serdbuttons>
+        (deleteEmittter) = "deleteGroup()">
+    </app-serdbuttons>
 
-    <app-group-details 
-        #groupDetails 
-        >
-        <!-- [activeButtons] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" -->
-
-    </app-group-details>
-    <app-privileges #groupPrivileges >
-    </app-privileges>
-    <!--   [activateUnableClick] = "(isAdmin$ | async) || (hasPrivilegeAccess$ | async)" -->
+    <app-group-details #groupDetails ></app-group-details>
+    <app-privileges #groupPrivileges ></app-privileges>
 </div>
 
 

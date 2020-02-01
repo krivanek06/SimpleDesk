@@ -103,7 +103,7 @@ public class RequestConverter {
         if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Report.name())){
             return this.convertReportToReportDTO((Report) request);
         }
-        if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Financie.name())){
+        if(request.getModuleType().getName().equalsIgnoreCase(MODULE_TYPE.Finance.name())){
             return this.convertFinanceToFinanceDTO((Finance) request);
         }
         return null;

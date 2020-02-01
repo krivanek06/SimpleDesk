@@ -21,7 +21,6 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   public groups: Observable<string[]>;
   public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
-
   public isAdmin$: Observable<boolean>;
   public hasPrivilegeAccess$: Observable<boolean>;
 
@@ -30,7 +29,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   @ViewChild('userGroups',  {static: false}) userGroups: UserGroupsComponent;
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
-  @ViewChild('serdbuttons',  {static: false}) serdbuttons: SERDButtonsComponent;
+  @ViewChild('serdbuttonsGroup',  {static: false}) serdbuttonsGroup: SERDButtonsComponent;
 
   constructor(private groupService: GroupService, private userService: UserService, private authService: AuthenticationService) { 
     this.isAdmin$ = this.authService.isAdmin();
@@ -49,8 +48,9 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
 
   public selectGroup(groupName: string){
     this.groupService.getGroupDetailsWithUnsetPrivileges(groupName)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(group => {
+      .pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(group => {
         this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
         this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
         this.groupPrivileges.name = 'Skupiny';
@@ -60,10 +60,10 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
 
   public selectUser(username: string){
     this.userService.getUserDetials(username)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
+      .pipe(
+        takeUntil(this.destroy$)
+      ).subscribe(user => {
         this.userDetails.displayedUser = user;
-
         this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
         this.userPrivileges.name = 'Uživateľa';
 
@@ -82,17 +82,23 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
     this.destroy$.unsubscribe();
   }
 
-  private editGroup(){
+  editGroup(){
     this.groupDetails.editGroup();  
     this.groupPrivileges.editGroup();
   }
 
-  private resetGroup(){
+  resetGroup(){
     this.groupDetails.resetGroup();
     this.groupPrivileges.resetGroup();
   }
 
-  private saveGroup(){
+  resetUserPassword(){
+    this.userService.resetUserPassword(this.userDetails.displayedUser.username).subscribe(() => {
+      Swal.fire({ position: 'top-end',  text: 'Heslo uživateľa bolo resetované',  showConfirmButton: false,timer: 1200 })
+    })
+  }
+
+  saveGroup(){
     Swal.fire({ text: "Naozaj chcetete editovať skupinu ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
@@ -103,13 +109,13 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
           this.groupDetails.editGroupActivated = false;
           this.groupPrivileges.activateUnableClick = false;
           this.groupPrivileges.hideUnassignedPriv = true;
-          this.serdbuttons.editActivated = false;
+          this.serdbuttonsGroup.editActivated = false;
         })
       }
     });
   }
 
-  private deleteGroup(): void{
+  deleteGroup(): void{
     Swal.fire({ text: "Naozaj chcetete vymazať skupinu ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
     }).then((result) => {
@@ -123,7 +129,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
             this.groupPrivileges.disabledPrivileges = undefined;
             this.groupPrivileges.name = undefined;
             this.groupDetails.group = undefined;
-            this.serdbuttons.editActivated = false;
+            this.serdbuttonsGroup.editActivated = false;
             
             Swal.fire({ position: 'top-end',  text: 'Skupina bola zmazaná',  showConfirmButton: false,timer: 1200 })
           })   

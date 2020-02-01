@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --ssl --ssl-key 'C:\\Users\\Eduard\\Desktop\\projekty\\SimpleDesk\\SimpleDesk\\Backend\\src\\main\\keystore.key'  --ssl-cert 'C:\\Users\\Eduard\\Desktop\\projekty\\SimpleDesk\\SimpleDesk\\Backend\\src\\main\\keystore.crt'",
+    "start": "ng serve --ssl-key /node_modules/browser-sync/lib/server/certs/server.key --ssl-cert /node_modules/browser-sync/lib/server/certs/server.crt ",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -50,6 +50,7 @@
     "@types/jasmine": "~3.3.8",
     "@types/jasminewd2": "^2.0.8",
     "@types/node": "~8.9.4",
+    "browser-sync": "^2.26.7",
     "codelyzer": "^5.2.1",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",

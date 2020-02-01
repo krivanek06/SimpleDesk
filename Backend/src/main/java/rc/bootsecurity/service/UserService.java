@@ -19,6 +19,7 @@ import rc.bootsecurity.utils.service.EmailService;
 import rc.bootsecurity.utils.service.FileService;
 import rc.bootsecurity.utils.service.JsonStringParser;
 import rc.bootsecurity.utils.converter.UserConverter;
+import rc.bootsecurity.utils.service.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class UserService {
 
 
     public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
-        return this.userRepository.findAll().stream().filter(user -> !user.getUsername().equalsIgnoreCase("admin"))
+        return this.userRepository.findAllByActiveTrue().stream().filter(user -> !user.getUsername().equalsIgnoreCase("admin"))
                 .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
     }
 
@@ -139,12 +140,24 @@ public class UserService {
         return userDTO;
     }
 
+    public void resetPassword(String username){
+        User user = this.loadUserByUsername(username);
+        user.setPassword(new RandomGenerator().generateString(10));
+        this.modifyPassword( user);
+    }
+
+
     public void registerUser(UserDTO userDTO){
+        this.modifyPassword(this.userConverter.generateFreshUser(userDTO));
+    }
+
+    private void modifyPassword(User user){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        User user = this.userConverter.generateFreshUser(userDTO);
+        // send information email
         this.emailService.sendUserRegistrationEmail(this.loadUserByUsername(this.getPrincipalUsername()), user);
 
-        user.setPassword(encoder.encode(user.getPassword())); // encrypt password
+        // encrypt password
+        user.setPassword(encoder.encode(user.getPassword()));
         this.userRepository.save(user);
     }
 

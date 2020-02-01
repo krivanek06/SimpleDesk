@@ -26,11 +26,11 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private changeFrames(): void{
+  changeFrames(): void{
     this.changeWindow.emit(true);
   }
 
-  private async changePassword(){
+  async changePassword(){
     const { value: formValues } = await Swal.fire({
       title: 'Zmena hesla',
       html:

@@ -8,8 +8,9 @@ import { AuthenticationService } from 'app/core/services/authentication.service'
   styleUrls: ['./app-management.component.scss']
 })
 export class AppManagementComponent implements OnInit {
-  public isAdmin$: Observable<boolean>;
-  public hasPrivilegeAccess$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
+  hasPrivilegeAccess$: Observable<boolean>;
+  
   constructor(private authService: AuthenticationService) {
     this.isAdmin$ = this.authService.isAdmin();
     this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();

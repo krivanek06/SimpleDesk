@@ -62,6 +62,8 @@ public class RequestStateService {
         Request request = this.findRequest(requestId);
         request.setClosed(user);
         request.setTimestampClosed(new Timestamp(System.currentTimeMillis()));
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Uzatvorené.name()));
+
         this.saveOrUpdateRequest(request);
 
         // send information email
@@ -73,6 +75,7 @@ public class RequestStateService {
         Request request = this.findRequest(requestId);
         request.setClosed(null);
         request.setTimestampClosed(null);
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
 
         // send information email
@@ -95,7 +98,9 @@ public class RequestStateService {
         this.saveOrUpdateRequest(request);
     }
 
-
+    /**
+     * @return emails of assigned / creator / closed / watched users
+     */
     public String[] getEngagedUsersEmails(Request request){
        String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
        String solver = "";

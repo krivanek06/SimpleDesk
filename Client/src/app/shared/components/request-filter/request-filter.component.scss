@@ -5,7 +5,22 @@
     font-weight: lighter;
   }
 
-  .filterContainer{
-      position: relative;
-      display: inline-grid;
+.filterContainer{
+    position: relative;
+    display: inline-grid;
+    margin-right: 20px;
+}
+
+.filterOptions{
+  margin-left: 15px;
+}
+
+form{
+    display: contents;
   }
+
+.formdeleteButton{
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}

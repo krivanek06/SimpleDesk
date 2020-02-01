@@ -68,10 +68,9 @@ export class RequestReportFormComponent implements OnInit {
     this.reportForm.patchValue({'accessByPeople' : this.accessByPeopleArray.join(",")});
     this.reportForm.patchValue({'accessMethods' : this.accessByMethodArray.join(",")});
 
-    console.log( this.reportForm)
     return this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers});
   }
-  private submit(): void{
+  submit(): void{
     if(this.reportForm.invalid){
       return;
     }
@@ -92,7 +91,7 @@ export class RequestReportFormComponent implements OnInit {
   }
 
 
-  private addPeopleToAccess(){
+  addPeopleToAccess(){
     const value = this.reportForm.get("accessByPeople").value;
     if(value === ""){
       return;
@@ -101,7 +100,7 @@ export class RequestReportFormComponent implements OnInit {
     this.reportForm.patchValue({accessByPeople : ''});
   }
 
-  private addMethodToAccess(){
+  addMethodToAccess(){
     const value = this.reportForm.get("accessMethods").value;
     if(value === ""){
       return;
@@ -110,11 +109,11 @@ export class RequestReportFormComponent implements OnInit {
     this.reportForm.patchValue({accessMethods : ''});
   }
 
-  private deletePeopleItem(index: number){
+  deletePeopleItem(index: number){
     this.accessByPeopleArray.splice(index,1);
   }
 
-  private deleteMethodItem(index: number){
+  deleteMethodItem(index: number){
     this.accessByMethodArray.splice(index,1);
   }
  

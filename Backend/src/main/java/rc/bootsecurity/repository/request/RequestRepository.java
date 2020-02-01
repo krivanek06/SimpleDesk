@@ -14,17 +14,8 @@ import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
-    List<Request> findAllByRequestPriority(RequestPriority requestPriority);
-    List<Request> findAllByCreator(User user);
-    List<Request> findAllByCreatorAndRequestPosition(User user, RequestPosition requestPosition);
-    List<Request> findAllByCreatorAndRequestPositionAndRequestPriority(User user, RequestPosition requestPosition, RequestPriority requestPriority);
-    List<Request> findAllByCreatorAndRequestPriority(User user, RequestPriority requestPriority);
-
     Optional<List<Request>> findAllByNameStartingWithOrderByIdAsc(String subject);
 
-
-    List<Request> findAllByRequestPosition(RequestPosition requestPosition);
-    List<Request> findAllByRequestPriorityAndRequestPosition(RequestPriority requestPriority, RequestPosition requestPosition);
 
     @Query(nativeQuery = true, value = "select * from get_requests_on_dashboard_for_user_varchar(?1);")
     String findOpenRequestOnDashboard(String searching_name);

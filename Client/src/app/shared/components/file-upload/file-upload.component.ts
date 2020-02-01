@@ -17,11 +17,11 @@ export class FileUploadComponent {
 
   public files: File[]  = [];
 
-  private uploadFile(files: FileList ) {
+  uploadFile(files: FileList ) {
     this.files.push(files.item(0));
     this.fileInserted.emit(files.item(0));
   }
-  private deleteAttachment(index) {
+  deleteAttachment(index) {
     this.files.splice(index, 1)
   }
   public isEmpty(): boolean{

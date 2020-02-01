@@ -24,15 +24,15 @@ export class CommentSharingComponent implements OnInit {
     this.involvedInGroups$ =  this.groupService.getAllGroupNamesForUser();
   }
 
-  private closeWindow(){
+  closeWindow(){
     this.changeWindow.emit(false);
   }
 
-  private shareWith(){
+  shareWith(){
     this.shareWithGroup.emit( this.clickedGroup);
   }
 
-  private getGroupDetails(groupName: string){
+  public getGroupDetails(groupName: string){
     this.groupService.getGroupDetails(groupName).subscribe(group => {
       this.groupDetails.group = group;
       this.clickedGroup = group;

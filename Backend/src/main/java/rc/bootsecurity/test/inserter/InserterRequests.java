@@ -117,56 +117,11 @@ public class InserterRequests {
     }
 
     public void insertTicketsForUsers(){
-        User user1 = this.userRepository.findByUsername("user1").get();
-        User user2 = this.userRepository.findByUsername("user2").get();
-        RequestPriority requestPriority1 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.SMALL.name());
-        RequestPriority requestPriority2 = this.requestPriorityRepository.findByName(REQUEST_PRIORITY.MEDIUM.name());
-        RequestPosition requestPosition1 = this.requestPositionRepository.findByName(REQUEST_POSITION.Vytvorené.name());
-        RequestPosition requestPosition2 = this.requestPositionRepository.findByName(REQUEST_POSITION.Zatvorené.name());
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
-
-        Ticket ticket1 = Creator.createTicket(ticketTypeSoftware,requestPriority1,requestPosition1, user1);
-        Ticket ticket2 = Creator.createTicket(ticketTypeSoftware,requestPriority2,requestPosition1, user1);
-        Ticket ticket3 = Creator.createTicket(ticketTypeSoftware,requestPriority1,requestPosition2, user1);
-
-        Ticket ticket4 = Creator.createTicket(ticketTypeHardware,requestPriority1,requestPosition1, user1);
-        Ticket ticket5 = Creator.createTicket(ticketTypeHardware,requestPriority2,requestPosition2, user1);
-
-        Ticket ticket6 = Creator.createTicket(ticketTypeSoftware,requestPriority1,requestPosition1, user2);
-        Ticket ticket7 = Creator.createTicket(ticketTypeSoftware,requestPriority2,requestPosition1, user2);
-        Ticket ticket8 = Creator.createTicket(ticketTypeSoftware,requestPriority1,requestPosition2, user2);
-
-        Ticket ticket9 = Creator.createTicket(ticketTypeHardware,requestPriority1,requestPosition1, user2);
-        Ticket ticket10 = Creator.createTicket(ticketTypeHardware,requestPriority2,requestPosition2, user2);
-
-        this.ticketRepository.saveAll(List.of(ticket1, ticket2, ticket3, ticket4, ticket5, ticket6, ticket7, ticket8, ticket9, ticket10));
     }
 
     public void insertPrivilegesForSolvers(){
-        Group group1 = this.groupRepository.findByGroupName("TESTGROUP1");
-        Group group2 = this.groupRepository.findByGroupName("TESTGROUP2");
-        Group group5 = this.groupRepository.findByGroupName("TESTGROUP5");
 
-        TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
-        TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
-
-        List<TicketSubtype> ticketSubtypeSoftware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeSoftware);
-        List<TicketSubtype> ticketSubtypesHardware = this.ticketSubtypeRepository.findAllByTicketType(ticketTypeHardware);
-
-        TicketPrivileges ticketPrivilegesSoftware1 = Creator.creatTicketPrivileges(group1 , ticketTypeSoftware , ticketSubtypeSoftware.get(0).getName());
-        TicketPrivileges ticketPrivilegesSoftware2 = Creator.creatTicketPrivileges(group1 , ticketTypeSoftware , ticketSubtypeSoftware.get(1).getName());
-
-        TicketPrivileges ticketPrivilegesHardware1 = Creator.creatTicketPrivileges(group2 , ticketTypeHardware , ticketSubtypesHardware.get(0).getName());
-        TicketPrivileges ticketPrivilegesHardware2 = Creator.creatTicketPrivileges(group2 , ticketTypeHardware , ticketSubtypesHardware.get(1).getName());
-
-        TicketPrivileges ticketPrivilegesSoftware3 = Creator.creatTicketPrivileges(group5 , ticketTypeSoftware , ticketSubtypeSoftware.get(0).getName());
-        TicketPrivileges ticketPrivilegesSoftware4 = Creator.creatTicketPrivileges(group5 , ticketTypeSoftware , ticketSubtypeSoftware.get(1).getName());
-
-        this.ticketPrivilegesRepository.saveAll(List.of(ticketPrivilegesHardware1, ticketPrivilegesHardware2,
-                ticketPrivilegesSoftware1, ticketPrivilegesSoftware2,
-                ticketPrivilegesSoftware3, ticketPrivilegesSoftware4));
 
     }
 

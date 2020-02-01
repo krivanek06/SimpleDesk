@@ -2,9 +2,9 @@ package rc.bootsecurity.model.enums;
 
 public enum REQUEST_POSITION {
     Vytvorené("Vytvorené"),
-    Pridelené("Pridelené"),
-    Zatvorené("Zatvorené"),
-    Otvorené("Otvorené"),
+    Priradené("Priradené"),
+    Uzatvorené("Uzatvorené"),
+    Nepriradené("Nepriradené"),
     Vyriešené("Vyriešené");
 
     private final String text;

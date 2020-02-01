@@ -1,15 +1,18 @@
-<button mat-button color="primary"  (click) = "save()"  *ngIf='editActivated '>
+
+
+
+<button mat-button color="primary"  (click) = "save()"  *ngIf='!displayOnlyReset && editActivated '>
     Uložiť
 </button>
 
-<button mat-button color="warn"   (click) = 'reset()' *ngIf='editActivated '>
+<button mat-button color="warn"   (click) = 'reset()' *ngIf='displayOnlyReset || editActivated '>
     Resetovať
 </button>
 
-<button mat-button class='editButton'  (click) = 'edit()'  *ngIf='!editActivated '>
+<button mat-button class='editButton'  (click) = 'edit()'  *ngIf='!displayOnlyReset && !editActivated '>
     Editovať
 </button>
 
-<button mat-button color="warn"  (click) = 'delete()'  *ngIf='!editActivated'>
+<button mat-button color="warn"  (click) = 'delete()'  *ngIf='!displayOnlyReset && !editActivated'>
     Vymazať
 </button>

@@ -28,7 +28,7 @@ export class UserGroupsComponent implements OnInit, OnDestroy {
   }
 
 
-  private getGroupDetails(groupName: string){
+  getGroupDetails(groupName: string){
     if(!this.elevationActivated){
       return;
     }

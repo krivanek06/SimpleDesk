@@ -1,11 +1,9 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { MatTableDataSource, MatPaginator } from '@angular/material';
-import { RequestTable } from 'app/shared/models/RequestTable';
+import { RequestTable, FilterRequests } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from 'environments/environment';
 import { RequestFilterComponent } from 'app/shared/components/request-filter/request-filter.component';
+import { RequestModificationService } from 'app/core/services/request-modification.service';
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -18,6 +16,7 @@ export interface SatDatepickerRangeValue<D> {
   styleUrls: ['./request-closed.component.scss']
 })
 export class RequestClosedComponent implements OnInit, AfterViewInit {
+  private loadedRequests: RequestTable[] = [];
   public viewTable = ['id',   'additionalInformation',  'creator',  'name',
                       'priority', 'closed' ,'timeCreated' ,'timeClosed' ,'details'];
   @ViewChild('closedRequests',  {static: false}) closedRequests: RequestTableComponent;
@@ -25,7 +24,7 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
   
   
-  constructor(private http: HttpClient ,private spinner: NgxSpinnerService) { }
+  constructor(private spinner: NgxSpinnerService, private requestService: RequestModificationService) { }
 
   ngOnInit() {
     
@@ -35,15 +34,48 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
     this.loadClosedRequests();
   }
 
-  private loadClosedRequests(){
+  loadClosedRequests(){
     this.spinner.show();
     
-    let params = new HttpParams().set('dateFrom' , this.requestFilter.dateFrom).set('dateTo' , this.requestFilter.dateTo) ;
-    this.http.get<RequestTable[]>(environment.apiUrl + "requests/closed", {params: params}).subscribe(requests =>{
-      console.log(requests);
+    this.requestService.getClosedRequests(this.requestFilter.dateFrom, this.requestFilter.dateTo)
+    .subscribe(requests => {
       this.closedRequests.dataSource.data = requests  as RequestTable[];
+      this.loadedRequests = requests;
+      this.filterClosedRequests(this.requestFilter.filterForm.value);
       this.spinner.hide();
     });
+  }
+
+  filterClosedRequests(filter: FilterRequests){
+    
+    // copy back original requests
+    this.closedRequests.dataSource.data = [...this.loadedRequests];
+
+    // filter requests
+    this.loadedRequests.forEach(request => {
+        if(filter.closed !== '' && filter.closed !== request.closed ){
+          this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
+        }
+
+        else if(filter.creator !== '' && filter.creator !== request.creator ){
+          this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
+        }
+
+        else if(filter.type !== '' && filter.type !== request.requestType ){
+          this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
+        }
+
+        else if(filter.priority !== '' && filter.priority !== request.requestPriority ){
+          this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
+        }
+
+        else if(!request.name.includes(filter.name) ){
+          this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
+        }
+    });
+    
+    // re-render table with data
+    this.closedRequests.dataSource.data = this.closedRequests.dataSource.data  as RequestTable[]
   }
 
 

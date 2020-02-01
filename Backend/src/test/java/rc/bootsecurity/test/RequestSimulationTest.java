@@ -10,15 +10,9 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.test.context.junit4.SpringRunner;
-import rc.bootsecurity.model.dto.GroupDTO;
-import rc.bootsecurity.model.dto.TicketPrivilegeDTO;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.model.dto.request.RequestCommentDTO;
-import rc.bootsecurity.model.dto.request.TicketDTO;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.finance.FinanceType;
-import rc.bootsecurity.model.entity.request.Request;
 import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.request.RequestPosition;
 import rc.bootsecurity.model.entity.ModuleType;
@@ -46,7 +40,6 @@ import rc.bootsecurity.test.inserter.InserterRequestsSimulation;
 import rc.bootsecurity.utils.converter.UserConverter;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -161,7 +154,7 @@ public class RequestSimulationTest {
     public void testPrivilegesToRequests(){
         ModuleType ticket = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Ticket.name());
         ModuleType report = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Report.name());
-        ModuleType finance = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Financie.name());
+        ModuleType finance = this.moduleTypeRepository.findRequestTypesByName(MODULE_TYPE.Finance.name());
 
         Group groupBasic = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_BASIC_GROUP);
         Group groupSolver1 = this.groupRepository.findByGroupName(NAMES.TEST_GROUP_SOLVER_1);
@@ -216,7 +209,6 @@ public class RequestSimulationTest {
 
     private void initGroupAttributes(Group group){
         group.setTicketPrivilegesList(this.ticketPrivilegesRepository.findAllByGroup(group).orElse(new ArrayList<>()));
-        group.setFinanceTypes(new HashSet<>(this.financeTypeRepository.findAllByGroupsToSubmitSpecificFinanceType(group).orElse(new ArrayList<>())));
         group.setModuleTypesToUse(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToSubmitDifferentRequests(group).orElse(new ArrayList<>())));
         group.setRequestTypesToSolve(new HashSet<>(this.moduleTypeRepository.findAllByGroupsToManageDifferentModules(group).orElse(new ArrayList<>())));
     }
@@ -233,7 +225,7 @@ public class RequestSimulationTest {
         TicketType ticketTypeHardware = this.ticketTypeRepository.findByName(TICKET_TYPE.Hardware.name());
         TicketType ticketTypeSoftware = this.ticketTypeRepository.findByName(TICKET_TYPE.Software.name());
         TicketType ticketTypeOther = this.ticketTypeRepository.findByName(TICKET_TYPE.Other.name());
-        ModuleType moduleTypeFinance = this.moduleTypeRepository.findByName(MODULE_TYPE.Financie.name());
+        ModuleType moduleTypeFinance = this.moduleTypeRepository.findByName(MODULE_TYPE.Finance.name());
         ModuleType moduleTypeReport = this.moduleTypeRepository.findByName(MODULE_TYPE.Report.name());
         ModuleType moduleTypeTicket = this.moduleTypeRepository.findByName(MODULE_TYPE.Ticket.name());
 

@@ -25,3 +25,11 @@ export interface RequestTable{
  watched: boolean,
 
 }
+
+export interface FilterRequests {
+    type: string,
+    creator: string,
+    closed: string,
+    name: string,
+    priority: string,
+}

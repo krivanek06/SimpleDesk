@@ -39,20 +39,22 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-              //  .and().authorizeRequests()
-              //  .and().requiresChannel().anyRequest().requiresSecure() // i do not know
 
+              /*  .and() // allow https
+                    .requiresChannel()
+                    .anyRequest()
+                    .requiresSecure()*/
                 .and()
                     // add jwt filters (1. authentication, 2. authorization)
                     .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager()))
+                    .addFilter(new JwtAuthorizationFilter(authenticationManager()));
 
                     // configure access rules
-                    .authorizeRequests()
+                   /* .authorizeRequests()
                     .antMatchers( "/login").permitAll()
                     .antMatchers("/api/user/**").authenticated()
                     .antMatchers("/api/requests/dashboard").authenticated()
-                    .anyRequest().authenticated();
+                    .anyRequest().authenticated();*/
     }
 
     @Bean

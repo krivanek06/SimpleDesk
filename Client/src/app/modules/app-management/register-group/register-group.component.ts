@@ -67,7 +67,7 @@ export class RegisterGroupComponent implements OnInit {
     })
   }
 
-  private submit(){
+ submit(){
     if(this.groupRegistrationForm.invalid){
         return;
     }
@@ -121,13 +121,13 @@ export class RegisterGroupComponent implements OnInit {
     return group;
   }
 
-  private changeModuleTypesToUse(){
+  changeModuleTypesToUse(){
     if( !this.moduleTypesToUse.value.includes("Finance")){
       this.submitFinanceRequests.reset();
     }
   }
 
-  private changeTicketTypeToSolve(){
+  changeTicketTypeToSolve(){
     if(!this.requestTypesToSolve.value.includes("Ticket")){
       this.solveSoftware.reset();
       this.solveHardware.reset();

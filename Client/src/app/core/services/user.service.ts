@@ -80,4 +80,8 @@ export class UserService {
     return this.http.get<User>(environment.apiUrl + `user/secure/${username}`);
   }
 
+  public resetUserPassword(username: string): Observable<any>{
+    return this.http.put(environment.apiUrl + `user/secure/resetPassword/${username}`, null);
+  }
+
 }

@@ -6,9 +6,8 @@ import { PrivilegesComponent } from './privileges/privileges.component';
 import { Group, ApplicationPrivilege, GroupContainer } from 'app/shared/models/UserGroups';
 import { GroupDetailsComponent } from './group-details/group-details.component';
 import { UserDetailsComponent } from './user-details/user-details.component';
-import { Observable, Subject, Subscription } from 'rxjs';
-import { JWToken } from 'app/shared/models/JWToken';
-import { takeWhile, takeUntil } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,7 +18,6 @@ export class UserProfileComponent implements OnInit , AfterViewInit, OnDestroy{
   
   public displayAvatarts : boolean = false;
   public groupContainer: Observable<GroupContainer>;
-
   private destroy$: Subject<boolean> = new Subject<boolean>();
   @ViewChild('userDetials',  {static: false}) userDetials: UserDetailsComponent;
   @ViewChild('userPrivileges',  {static: false}) userPrivileges: PrivilegesComponent;
@@ -61,13 +59,13 @@ export class UserProfileComponent implements OnInit , AfterViewInit, OnDestroy{
   }
 
 
-  private initGroupPrivileges(group: Group):void{
+  initGroupPrivileges(group: Group):void{
       this.groupPrivileges.disabledPrivileges = group.applicationPrivilegeDTO;
       this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
   }
 
-  private changeFrames(change: boolean): void{
+  public changeFrames(change: boolean): void{
     this.displayAvatarts = change;
   }
 

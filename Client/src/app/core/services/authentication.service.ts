@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
 import { JWToken } from 'app/shared/models/JWToken';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
@@ -97,7 +97,12 @@ export class AuthenticationService {
 
   /* ----------------- privileges ------------------- */
   public isSolverRightHand(): Observable<boolean> {
-    return this.isSolver() && (this.isManagerRightHand() || this.isManager());
+    return combineLatest(
+      this.isSolver(),
+      this.isManagerRightHand(), 
+      this.isManager() , 
+      (one,two,three ) => (one && (two ||  three))
+    );
   }
 
   public isAdmin(): Observable<boolean> {
@@ -136,6 +141,15 @@ export class AuthenticationService {
     return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Report")));
   }
 
+  public isMoreThanNormalUser(): Observable<boolean>{
+    return combineLatest(
+      this.isAdmin(), 
+      this.isGhost(), 
+      this.isSolver(), 
+      this.isManager(), 
+      this.isManagerRightHand(),
+      (one,two,three, four, five ) => (one || two ||  three || four || five));
+  }
 
 
 }

@@ -7,7 +7,7 @@
         headerColor="#358BF0" 
         [displayedColumns]= "viewTable"
         tableTitle="Moje požiadávky"
-        *ngIf = " !(isGhost$ | async) && !(isAdmin$ | async) ">
+        [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
     </app-request-table>   
 
     <app-request-table #meAssignedRequests 

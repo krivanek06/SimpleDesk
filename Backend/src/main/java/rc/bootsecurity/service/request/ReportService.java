@@ -12,8 +12,6 @@ import java.util.stream.Collectors;
 @Service
 public class ReportService extends RequestStateService{
     @Autowired
-    private ReportRepository reportRepository;
-    @Autowired
     private ReportTypeRepository reportTypeRepository;
     @Autowired
     private ReportRefreshRepository reportRefreshRepository;

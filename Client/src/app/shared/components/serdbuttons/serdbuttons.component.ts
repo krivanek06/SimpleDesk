@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 @Component({
   selector: 'app-serdbuttons',
@@ -10,6 +10,7 @@ export class SERDButtonsComponent implements OnInit {
   @Output() saveEmittter: EventEmitter<any> = new EventEmitter();
   @Output() resetEmittter: EventEmitter<any> = new EventEmitter();
   @Output() editEmittter: EventEmitter<any> = new EventEmitter();
+  @Input() displayOnlyReset: boolean = false;
 
   public editActivated: boolean = false;
   constructor() { }
@@ -17,21 +18,21 @@ export class SERDButtonsComponent implements OnInit {
   ngOnInit() {
   }
 
-  private save(){
+  save(){
     this.saveEmittter.emit();
   }
 
-  private reset(){
+  reset(){
     this.editActivated = false;
     this.resetEmittter.emit();
   }
 
-  private edit(){
+  edit(){
     this.editActivated = true;
     this.editEmittter.emit();
   }
 
-  private delete(){
+  delete(){
     this.deleteEmittter.emit();
   }
 

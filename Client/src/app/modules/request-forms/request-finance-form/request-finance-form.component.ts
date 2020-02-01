@@ -40,7 +40,7 @@ export class RequestFinanceFormComponent implements OnInit {
     })
   }
 
-  public changeToUrgent(checked){
+  changeToUrgent(checked){
       if(checked){
         this.financeForm.patchValue({'requestPriority' : 'vysoká'});
       }else{
@@ -58,7 +58,7 @@ export class RequestFinanceFormComponent implements OnInit {
     return this.http.post(environment.apiUrl + 'requests/finance', this.financeForm.value, {headers})
   }
 
-  private submit() : void{
+  submit() : void{
     if(this.financeForm.invalid || this.fileInput.isEmpty()){ 
       return;
     }

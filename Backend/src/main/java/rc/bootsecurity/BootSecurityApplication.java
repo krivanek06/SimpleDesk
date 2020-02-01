@@ -31,11 +31,6 @@ public class BootSecurityApplication {
 /*
 @SpringBootApplication
 public class BootSecurityApplication implements CommandLineRunner {
-
-    @Autowired
-    private InserterRequestsSimulation inserterRequestsSimulation;
-    @Autowired
-    private UserService userService;
     @Autowired
     private UserRepository userRepository;
 

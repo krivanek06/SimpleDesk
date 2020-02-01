@@ -7,6 +7,7 @@ import rc.bootsecurity.exception.RequestNotFoundException;
 import rc.bootsecurity.model.dto.UserSimpleDTO;
 import rc.bootsecurity.model.entity.User;
 import rc.bootsecurity.model.entity.request.Request;
+import rc.bootsecurity.model.enums.REQUEST_POSITION;
 import rc.bootsecurity.repository.GroupRepository;
 import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.*;
@@ -21,11 +22,13 @@ public class RequestManagementService{
     @Autowired
     private RequestRepository requestRepository;
     @Autowired
-    protected UserService userService;
+    private UserService userService;
+    /*@Autowired
+    private GroupRepository groupRepository;
     @Autowired
-    protected GroupRepository groupRepository;
+    private UserRepository userRepository;*/
     @Autowired
-    protected UserRepository userRepository;
+    private RequestPositionRepository requestPositionRepository;
 
 
     private UserConverter userConverter = new UserConverter();
@@ -48,6 +51,7 @@ public class RequestManagementService{
         String username = this.userService.getPrincipalUsername();
         if(request.getAssigned().getUsername().equalsIgnoreCase(username)) {
             request.setAssigned(null);
+            request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Nepriradené.name()));
             this.saveOrUpdateRequest(request);
         }
     }
@@ -55,6 +59,7 @@ public class RequestManagementService{
     public void removeAssignUserAndSave(Integer requestId){
         Request request = this.findRequest(requestId);
         request.setAssigned(null);
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Nepriradené.name()));
         this.saveOrUpdateRequest(request);
     }
 
@@ -62,6 +67,7 @@ public class RequestManagementService{
         User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
     }
 
@@ -69,6 +75,7 @@ public class RequestManagementService{
         User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
+        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
         return this.userConverter.convertUserToSimpleDTO(user);
     }

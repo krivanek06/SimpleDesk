@@ -9,6 +9,7 @@ import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
 import { Subscription, Observable } from 'rxjs';
 import { AuthenticationService } from 'app/core/services/authentication.service';
+import { RequestPosition } from 'app/shared/enums/request-position.enum';
 
 @Component({
   selector: 'app-request-side-information',
@@ -29,7 +30,7 @@ export class RequestSideInformationComponent implements OnInit {
     this.isGhost$ = this.authService.isGhost();
   }
 
-  private calculateOpenDays(requestDetails: RequestDetails): number{
+  calculateOpenDays(requestDetails: RequestDetails): number{
     let open = new Date(requestDetails.timestampCreation);
     let result = 0;
     let one_day=1000*60*60*24; //Get 1 day in milliseconds
@@ -44,8 +45,8 @@ export class RequestSideInformationComponent implements OnInit {
     return Math.round(result/one_day); 
   }
 
-  public uploadFile(requestDetails: RequestDetails, file: File){
-    this.fileService.postFileForRequest(requestDetails.id, [file]).subscribe(result => {
+  uploadFile(requestDetails: RequestDetails, file: File){
+    this.fileService.postFileForRequest(requestDetails.id, [file]).subscribe(() => {
       requestDetails.documents.push({
         name: file.name,
         lastModified: new Date().getTime()
@@ -53,11 +54,11 @@ export class RequestSideInformationComponent implements OnInit {
     });
   }
 
-  private downloadFile(requestDetails: RequestDetails, name: string){
+  downloadFile(requestDetails: RequestDetails, name: string){
     this.fileService.downloadFileForRequest(requestDetails.id, name);
   }
 
-  private assignOnMe(requestDetails: RequestDetails){
+  assignOnMe(requestDetails: RequestDetails){
     Swal.fire({
       text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestDetails.id + " ? ",
       icon: 'warning',
@@ -71,6 +72,7 @@ export class RequestSideInformationComponent implements OnInit {
         this.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(result => {
           Swal.fire({ text: 'Pridelené', position: 'top-end', timer: 1200, showConfirmButton: false,});
           requestDetails.assigned = this.userService.getUserSimple(); 
+          requestDetails.requestPosition = RequestPosition.Assigned;
         })
       }
     });   

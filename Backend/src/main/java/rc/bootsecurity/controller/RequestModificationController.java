@@ -90,7 +90,9 @@ public class RequestModificationController {
     }
 
 
-
+    /**
+     * add chosen solver
+     */
     @PutMapping("/secure/{id}/addSolver")
     public UserSimpleDTO addSolver(@PathVariable("id") Integer id, @RequestBody UserSimpleDTO userSimpleDTO){
         try {
@@ -101,6 +103,9 @@ public class RequestModificationController {
         return null;
     }
 
+    /**
+     * remove solver
+     */
     @PutMapping("/secure/{id}/removeSolver")
     public ResponseEntity<?> removeSolver(@PathVariable("id") Integer id){
         try {

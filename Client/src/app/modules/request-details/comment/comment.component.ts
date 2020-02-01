@@ -36,7 +36,7 @@ export class CommentComponent implements OnInit {
     this.isAdmin$ = this.authService.isAdmin();
   }
 
-  private async editComment(requestComment: RequestComment){
+  async editComment(requestComment: RequestComment){
     const { value: formValues } = await Swal.fire({
       html:
         '<label for="commentText">Zmente komentár a potvrdte</label>' +
@@ -53,7 +53,7 @@ export class CommentComponent implements OnInit {
     }
   }
 
-  private deleteComment(requestComment: RequestComment){
+  deleteComment(requestComment: RequestComment){
     Swal.fire({
       title: 'Naozaj chcete zmazať komentár ?',
       text: requestComment.comment,
@@ -77,7 +77,7 @@ export class CommentComponent implements OnInit {
     })
   }
 
-  private changeCommentPrivacy(requestComment: RequestComment){
+  changeCommentPrivacy(requestComment: RequestComment){
     requestComment.isPrivate = !requestComment.isPrivate;
     this.commentHttp.changePrivacy(requestComment).subscribe(() => {
       if(!requestComment.isPrivate){
@@ -87,12 +87,12 @@ export class CommentComponent implements OnInit {
     });
   }
 
-  private changeFrames(requestComment: RequestComment){
+  changeFrames(requestComment: RequestComment){
     this.changeFramws = !this.changeFramws;
     this.sharingComment = requestComment;
   }
 
-  private shareWith(group: Group){
+  shareWith(group: Group){
     Swal.fire({
       text: `Naozaj chcete vyzdieľať komentár so skupinou : ${group.name} ?`,
       icon: 'warning',
