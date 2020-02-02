@@ -72,6 +72,10 @@ export class UserService {
     return this.http.post(environment.apiUrl + "user/registration", user , {headers: headers});
   } 
 
+  public getAllActiveUsers(): Observable<UserSimpleDTO[]>{
+    return this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/allActive");
+  }
+
   public getAllUsers(): Observable<UserSimpleDTO[]>{
     return this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/all");
   }
@@ -83,5 +87,10 @@ export class UserService {
   public resetUserPassword(username: string): Observable<any>{
     return this.http.put(environment.apiUrl + `user/secure/resetPassword/${username}`, null);
   }
+
+  public modifyUserState(username: string): Observable<any>{
+    return this.http.put(environment.apiUrl + `user/secure/modifyState/${username}`, null);
+  }
+
 
 }

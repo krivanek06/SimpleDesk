@@ -120,8 +120,15 @@ public class UserService {
     }
 
 
+    public List<UserSimpleDTO> getAllActiveUsersWithoutPhoto(){
+        return this.userRepository.findAllByActiveTrueOrderById().stream().filter(user ->
+                !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
+                .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+    }
+
     public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
-        return this.userRepository.findAllByActiveTrue().stream().filter(user -> !user.getUsername().equalsIgnoreCase("admin"))
+        return this.userRepository.findAllByOrderByIdAsc().stream().filter(user ->
+                !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
                 .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
     }
 
@@ -161,8 +168,12 @@ public class UserService {
         this.userRepository.save(user);
     }
 
-
-
+    // enable / disable user
+    public void modifyUserState(String username){
+        User user = this.loadUserByUsername(username);
+        user.setActive(!user.getActive());
+        this.userRepository.save(user);
+    }
 
 
 

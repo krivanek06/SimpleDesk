@@ -16,11 +16,46 @@
     </div>   
     
     <!-- modifycation buttons -->
-    <app-serdbuttons id='serdbuttonsUser'
-        *ngIf="userDetails.displayedUser" 
-        (resetEmittter) = "resetUserPassword()"
-        displayOnlyReset='true'>
-    </app-serdbuttons>
+    <ng-container  *ngIf='userDetails.displayedUser'>
+        <button mat-button 
+                color="primary" 
+                class='modificationButton' 
+                id='resetButton'  
+                (click) = 'resetUserPassword()'
+                matTooltip="Resetovaním uživateľa sa vygeneruje nové heslo, ktoré mu bude zaslané emailom"
+                matTooltipPosition="right"
+                matTooltipClass="custom-tooltip"
+                matTooltipShowDelay="150">
+            Resetovať
+        </button>
+
+        <button mat-button 
+                color="success" 
+                class='modificationButton' 
+                id='ActivateDisableBUtton' 
+                *ngIf='!userDetails.displayedUser.active'
+                (click) = 'modifyUserState()'
+                matTooltip="Aktiváciou uživateľa povolíte prihlásenie do systému"
+                matTooltipPosition="right"
+                matTooltipClass="custom-tooltip"
+                matTooltipShowDelay="150">
+            Aktivovať
+        </button>
+
+        <button mat-button 
+                color="warn"  
+                class='modificationButton' 
+                id='ActivateDisableBUtton'  
+                *ngIf='userDetails.displayedUser.active'
+                (click) = 'modifyUserState()'
+                matTooltip="Zablokovaním uživateľa zakážete prihlásenie do systému"
+                matTooltipPosition="right"
+                matTooltipClass="custom-tooltip"
+                matTooltipShowDelay="150">
+            Zablokovať
+        </button>
+    </ng-container>
+
 
     <app-user-details  #userDetails ></app-user-details>
     <app-privileges #userPrivileges ></app-privileges>

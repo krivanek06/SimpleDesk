@@ -32,7 +32,7 @@ export class RequestSideOptionsComponent implements OnInit {
   constructor( public userService: UserService,  private requestService: RequestModificationService, private authService: AuthenticationService) { }
 
   ngOnInit() {
-    this.allusers$ = this.userService.getAllUsers();
+    this.allusers$ = this.userService.getAllActiveUsers();
     this.requestDetail$ = this.requestService.getRequestDetials();
     this.isSolver$ = this.authService.isSolver();
     this.isManager$ = this.authService.isManager();

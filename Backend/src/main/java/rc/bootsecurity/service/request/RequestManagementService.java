@@ -13,6 +13,8 @@ import rc.bootsecurity.repository.UserRepository;
 import rc.bootsecurity.repository.request.*;
 import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.converter.UserConverter;
+import rc.bootsecurity.utils.service.EmailService;
+
 import java.util.HashSet;
 import java.util.List;
 
@@ -23,21 +25,16 @@ public class RequestManagementService{
     private RequestRepository requestRepository;
     @Autowired
     private UserService userService;
-    /*@Autowired
-    private GroupRepository groupRepository;
-    @Autowired
-    private UserRepository userRepository;*/
     @Autowired
     private RequestPositionRepository requestPositionRepository;
+    @Autowired
+    private EmailService emailService;
 
 
     private UserConverter userConverter = new UserConverter();
 
     public void saveOrUpdateRequest(Request request){
         this.requestRepository.save(request);
-    }
-    public void saveOrUpdateRequest(List<Request> requests){
-        this.requestRepository.saveAll(requests);
     }
 
 
@@ -73,10 +70,12 @@ public class RequestManagementService{
 
     public UserSimpleDTO setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
+        User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
         request.setAssigned(user);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
+        this.emailService.sendAssignRequestEmail(request, principal,user.getEmail() );
         return this.userConverter.convertUserToSimpleDTO(user);
     }
 

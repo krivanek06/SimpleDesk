@@ -53,10 +53,6 @@ public class EmailService {
      //   javaMailSender.send(this.composeRequestEmail(request, whoInitiated, REOPEN_EMAIL, sendToEmails));
     }
 
-    public void sendSolutionRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, SOLUTION_EMAIL  , sendToEmails));
-    }
-
     public void sendRequestCommentEmail(Request request, User whoInitiated, String comment,String ...sendToEmails ){
         SimpleMailMessage message = this.composeEmail(sendToEmails);
         message.setSubject("Požiadavka " + request.getId());

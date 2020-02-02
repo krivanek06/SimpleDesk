@@ -41,17 +41,20 @@ export class DashboardComponent implements OnInit {
     this.isSolver$ = this.authService.isSolver();
     this.isManager$ = this.authService.isManager();
     this.isManagerRightHand$ = this.authService.isManagerRightHand();
+
+    setInterval(() => this.getRequestOnDashboard() , 600000); // 10minutes
   }
 
   private getRequestOnDashboard(){
-      this.spinner.show();
-      this.requestService.getRequestOnDashboard().subscribe(requests => {
-          this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
-          this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
-          this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
+    this.spinner.show();
 
-          this.spinner.hide();
-      })
+    this.requestService.getRequestOnDashboard().subscribe(requests => {
+        this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
+        this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
+        this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
+
+        this.spinner.hide();
+    });
   }
 
 

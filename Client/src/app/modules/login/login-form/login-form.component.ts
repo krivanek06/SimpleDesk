@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule, FormBuilder, Validators  } from '@angular/forms';
+import { FormGroup,  FormBuilder, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { UserService } from 'app/core/services/user.service';
+import { Location } from '@angular/common';
+import { environment } from 'environments/environment';
 
 
 @Component({
@@ -15,7 +17,7 @@ export class LoginFormComponent implements OnInit {
   public loggingIn: boolean = false;
 
   constructor(private fb:FormBuilder,  private router: Router, 
-    private authService: AuthenticationService, private userService: UserService) { }
+    private authService: AuthenticationService, private userService: UserService, private location: Location) { }
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -32,8 +34,12 @@ export class LoginFormComponent implements OnInit {
         this.authService.login(val.username, val.password).subscribe((result) => {
           this.userService.loadLoggedInUser().subscribe(subs =>{
             this.loggingIn = false;
-            if(result &&subs ){
-              this.router.navigateByUrl('/dashboard');
+            if(result && subs ){ 
+              //this.router.navigateByUrl('/dashboard');
+             // this.location.replaceState('/'); // clears browser history so they can't navigate with back button
+             // this.router.navigate(['/dashboard']); // tells them they've been logged out (somehow)
+              window.location.href = `${environment.dashboard}dashboard`;
+             // this.router.navigate(['dashboard'], {relativeTo: this.route});
              }
           })
         }

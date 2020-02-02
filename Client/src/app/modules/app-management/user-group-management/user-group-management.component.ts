@@ -58,7 +58,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
     })
   }
 
-  public selectUser(username: string){
+  selectUser(username: string){
     this.userService.getUserDetials(username)
       .pipe(
         takeUntil(this.destroy$)
@@ -95,6 +95,13 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   resetUserPassword(){
     this.userService.resetUserPassword(this.userDetails.displayedUser.username).subscribe(() => {
       Swal.fire({ position: 'top-end',  text: 'Heslo uživateľa bolo resetované',  showConfirmButton: false,timer: 1200 })
+    })
+  }
+
+  modifyUserState(){
+    this.userService.modifyUserState(this.userDetails.displayedUser.username).subscribe(() => {
+      this.userDetails.displayedUser.active = !this.userDetails.displayedUser.active;
+      Swal.fire({ position: 'top-end',  text: 'Stav uživateľa bol zmeneý',  showConfirmButton: false,timer: 1200 })
     })
   }
 

@@ -21,7 +21,7 @@
             Riešenie
         </mat-checkbox>
 
-        <mat-checkbox  *ngIf = '((isSolver$ | async) || (isAdmin$ | async))'
+        <mat-checkbox 
             name='Private'
             (change)="onChange($event)" 
             [disabled]="isChecked && (isCheckedName!=='Private')"
@@ -36,7 +36,7 @@
             name='Notification' 
             (change)="onChange($event)" 
             [disabled]="isChecked && (isCheckedName!=='Notification')"
-            matTooltip="Komentárom notifikujete priradeného riešiteľia a výtvorcu požiadavky"
+            matTooltip="Zaškrnutím emailovo notifikujete priradeného riešiteľia a výtvorcu požiadavky"
             matTooltipPosition="right"
             matTooltipClass="custom-tooltip"
             matTooltipShowDelay="150">

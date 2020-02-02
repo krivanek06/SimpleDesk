@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   loginUrl: 'http://localhost:8081/',
-  apiUrl: 'http://localhost:8081/api/'
+  apiUrl: 'http://localhost:8081/api/',
+  dashboard: 'http://localhost:4200/',
 };
 
 

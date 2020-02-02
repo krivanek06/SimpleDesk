@@ -36,7 +36,7 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initDateFilter();
     this.isMoreThanNormalUser$ = this.authService.isMoreThanNormalUser();
-    this.allUsers$ = this.userService.getAllUsers();
+    this.allUsers$ = this.userService.getAllActiveUsers();
 
 
     this.filterForm = this.formBuilder.group({

@@ -16,7 +16,7 @@ export class GroupDetailsComponent implements OnInit {
   public allUsers$: Observable<UserSimpleDTO[]>;
 
   constructor(private userService: UserService) {
-    this.allUsers$ = this.userService.getAllUsers();
+    this.allUsers$ = this.userService.getAllActiveUsers();
   }
 
   ngOnInit() {

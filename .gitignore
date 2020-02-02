@@ -2,10 +2,10 @@
 Client/node_modules/
 
 Backend/target
-Backend/uploadedFiles
-Backend/src/main/resources/images
-Backend/src/main/webapp
-Backend/src/main/resources/static
+Backend/uploadedFiles/*
+Backend/src/main/resources/images/*
+Backend/src/main/webapp/*
+Backend/src/main/resources/static/*
 foto
 # Compiled source #
 ###################

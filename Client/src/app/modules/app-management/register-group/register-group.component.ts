@@ -30,7 +30,7 @@ export class RegisterGroupComponent implements OnInit {
   ngOnInit() {
     this.initFormGroup();
 
-    this.userService.getAllUsers().subscribe(users => this.allAvailableUsers = users);
+    this.userService.getAllActiveUsers().subscribe(users => this.allAvailableUsers = users);
     this.requestTypeService.getFinanceTypesAll().subscribe(types => this.financeTypes = types);
     this.requestTypeService.getTicketSubtype("Software").subscribe(x => this.softwares = x);
     this.requestTypeService.getTicketSubtype("Hardware").subscribe(x => this.hardwares = x);

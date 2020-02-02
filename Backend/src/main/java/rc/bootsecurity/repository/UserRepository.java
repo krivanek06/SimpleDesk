@@ -16,7 +16,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     Optional<User> findByUsername(String username);
     List<User> findAllByUsernameIn(List<String> username);
 
-    List<User> findAllByActiveTrue();
+    List<User> findAllByActiveTrueOrderById();
+    List<User> findAllByOrderByIdAsc();
 
     List<User> findAllByGroupsInvolved(Group group);
     Optional<List<User>> findAllByGroupsActivityWatched(Group group);

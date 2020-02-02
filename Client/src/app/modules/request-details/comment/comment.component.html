@@ -33,7 +33,6 @@
 
 
             <img *ngIf='requestComment.isPrivate  &&  
-                ((isSolver$ | async) || (isAdmin$ | async)) && 
                 requestComment.id !== (requestDetails$ | async).solutionComment' 
                 src="../../../../assets/images_design/share_icon.png" 
                 class = 'icon'
@@ -44,7 +43,6 @@
                 matTooltipShowDelay="200"/>
 
             <img *ngIf='requestComment.isPrivate  && 
-                ((isSolver$ | async) || (isAdmin$ | async)) && 
                 requestComment.id !== (requestDetails$ | async).solutionComment' 
                 src="../../../../assets/images_design/lock_closed_icon.png" 
                 class = 'icon' 
@@ -55,7 +53,6 @@
                 matTooltipShowDelay="200"/>
         
             <img *ngIf='!requestComment.isPrivate &&  
-                ((isSolver$ | async) || (isAdmin$ | async)) && 
                 requestComment.id !== (requestDetails$ | async).solutionComment' 
                 src="../../../../assets/images_design/lock_open_icon.png" 
                 class = 'icon' 

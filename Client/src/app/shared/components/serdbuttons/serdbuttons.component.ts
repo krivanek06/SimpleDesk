@@ -10,7 +10,6 @@ export class SERDButtonsComponent implements OnInit {
   @Output() saveEmittter: EventEmitter<any> = new EventEmitter();
   @Output() resetEmittter: EventEmitter<any> = new EventEmitter();
   @Output() editEmittter: EventEmitter<any> = new EventEmitter();
-  @Input() displayOnlyReset: boolean = false;
 
   public editActivated: boolean = false;
   constructor() { }

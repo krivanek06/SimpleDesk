@@ -506,7 +506,7 @@ inner join tbl_request_priorities trp on trp.id = r.priority_id
 cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
 left join tbl_users assigned on assigned.id = r.assigned_uid
 where r.creator_uid = (select id from tbl_users where tbl_users.username = searching_name) and closed_uid is null
-order by id asc)
+order by id desc)
 as t ),
 -- assigned on me and still open
 'assigned_on_me', (
@@ -522,7 +522,7 @@ from tbl_requests r
       cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
       left join tbl_users assigned on assigned.id = r.assigned_uid
 where r.assigned_uid = (select id from tbl_users where tbl_users.username = searching_name) and closed_uid is null
-order by id asc)
+order by id desc)
 as t ),
 -- open requests assigned by members of my team
 'all_open_requests', (
@@ -583,7 +583,7 @@ where r.closed_uid is null and
     (r.assigned_uid is null or  r.assigned_uid  != (select id from tbl_users where tbl_users.username = searching_name)) and
         r.creator_uid != (select id from tbl_users where tbl_users.username = searching_name)
 
-order by id asc
+order by id desc
 ) as t
 ))::varchar;
 $$ LANGUAGE sql;
@@ -610,7 +610,7 @@ select json_build_object(
               cross join lateral (select get_additional_information_for_request as additionalInformation
                     from get_additional_information_for_request(r.id)) as t1
               left join tbl_users assigned on assigned.id = r.assigned_uid
-     where closed_uid is null order by id asc) as t
+     where closed_uid is null order by id desc) as t
    ))::varchar;
 $$ LANGUAGE sql;
 

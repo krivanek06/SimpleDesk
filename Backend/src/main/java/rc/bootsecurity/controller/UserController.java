@@ -85,6 +85,11 @@ public class UserController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie uživateľa",HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/secure/allActive")
+    public List<UserSimpleDTO> getAllActiveUsers(){
+        return this.userService.getAllActiveUsersWithoutPhoto();
+    }
+
     @GetMapping("/secure/all")
     public List<UserSimpleDTO> getAllUsers(){
         return this.userService.getAllUsersWithoutPhoto();
@@ -111,4 +116,18 @@ public class UserController {
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri resetovaní hesla uživateľa" + username,HttpStatus.BAD_REQUEST);
     }
+
+    // enable or disable user
+    @PutMapping("/secure/modifyState/{username}")
+    public ResponseEntity<?> modifyState(@PathVariable("username") String username){
+        try {
+            this.userService.modifyUserState(username);
+            return new ResponseEntity<>( HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to modifyState, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní stavu uživateľa" + username,HttpStatus.BAD_REQUEST);
+    }
+
+
 }
