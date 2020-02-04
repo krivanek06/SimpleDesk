@@ -79,7 +79,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<app-header></app-header>\n<app-navigation></app-navigation>\n\n\n<div id='contentContainer'>\n    <div class=\"windowButtonChangers\">\n        <span class='formTitleSmall'>Správa systému</span>\n        <a mat-raised-button class=\"requestFormButton\" routerLink=\"/app_management/register_user\"\n        *ngIf =  \"(isAdmin$ | async) || (hasPrivilegeAccess$ | async)\"  >\n            Registrovať uživateĺa\n        </a>\n        <a mat-raised-button class=\"requestFormButton\" routerLink=\"/app_management/register_group\"\n        *ngIf =  \"(isAdmin$ | async) || (hasPrivilegeAccess$ | async)\">\n            Registrovať skupinu\n        </a>      \n    </div>\n    <router-outlet></router-outlet>\n</div>";
+    __webpack_exports__["default"] = "<app-header></app-header>\n<app-navigation></app-navigation>\n\n\n<div id='contentContainer'>\n    <div class=\"windowButtonChangers\">\n        <span class='formTitleSmall'>Správa aplikácie</span>\n        <a mat-raised-button class=\"requestFormButton\" routerLink=\"/app_management/register_user\"\n        *ngIf =  \"(isAdmin$ | async) || (hasPrivilegeAccess$ | async)\"  >\n            Registrovať uživateĺa\n        </a>\n        <a mat-raised-button class=\"requestFormButton\" routerLink=\"/app_management/register_group\"\n        *ngIf =  \"(isAdmin$ | async) || (hasPrivilegeAccess$ | async)\">\n            Registrovať skupinu\n        </a>      \n    </div>\n    <router-outlet></router-outlet>\n</div>";
     /***/
   },
 
@@ -99,7 +99,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div class = 'leftContainer'>\n    <form [formGroup] = \"groupRegistrationForm\" (ngSubmit)=\"submit()\">\n        <div class='inlineParameters formTitleContainer'>\n            <img src = \"../../../../assets/images_design/registeru_user_icon.png\" class='registerUserIcon'>\n            <span class='formTitle'>Registrovanie skupiny</span>\n        </div>\n\n       \n        <div class = 'formInformationContainer'>\n             <!-- information -->\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/info.png' class='icon'/>\n                    Informácie skupiny\n                </span>\n                \n                <mat-form-field  class='inlineParameters extraSpace'>\n                    <input matInput placeholder=\"Meno skupiny\" formControlName = \"groupName\">\n                    <mat-error *ngIf=\"groupName.invalid\">  Prosím zadefinujte meno skupiny</mat-error>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters'>\n                    <input  matInput placeholder=\"Email skupiny\" formControlName = \"groupEmail\">\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters'>\n                    <textarea  matInput placeholder=\"Popis skupiny\" formControlName = \"groupDescription\"></textarea>\n                    <mat-error *ngIf=\"groupDescription.invalid\">  Prosím zadefinujte krátky popis skupiny, minimálne 10 znakov</mat-error>\n                </mat-form-field>\n                <hr>\n            </div>\n\n            <!-- user selection -->\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/groups_icon_2.png' class='icon'/>\n                    Uživatelia skupiny\n                </span>\n\n                <mat-form-field class='inlineParameters extraSpace' >\n                    <mat-label>Manežér skupiny</mat-label>\n                    <mat-select formControlName=\"groupManager\"   >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n\n                        <mat-error *ngIf=\"groupManager.invalid\">  Prosím vyberte menežéra skupiny</mat-error>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Sledovatelia skupiny</mat-label>\n                    <mat-select formControlName=\"usersWatchGroup\" multiple >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Členovia skupiny</mat-label>\n                    <mat-select formControlName=\"usersInGroup\"  multiple >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n\n                        <mat-error *ngIf=\"usersInGroup.invalid\">  Prosím vyberte členov do skupiny</mat-error>\n                    </mat-select>\n                </mat-form-field>\n                <hr>\n            </div>\n        </div>\n\n\n\n\n\n\n\n        <!-- privileges -->\n        <div class = 'formInformationContainer'>\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/checkmark.png' class='icon'/>\n                    Právomoc skupiny\n                </span>\n\n                <mat-form-field class='inlineParameters extraSpace' >\n                    <mat-label>Moduly na používanie</mat-label>\n                    <mat-select formControlName=\"moduleTypesToUse\" multiple (selectionChange)= \"changeModuleTypesToUse()\">\n                        <mat-option value = \"Ticket\"> Tikety </mat-option>\n                        <mat-option value = \"Report\"> Reporty </mat-option>\n                        <mat-option value = \"Finance\"> Financie </mat-option>\n                        <mat-option value = \"Privilege\"> Privilege </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"moduleTypesToUse.value !== null && moduleTypesToUse.value.includes('Finance')\" multiple>\n                    <mat-label>Posielanie finančných typov</mat-label>\n                    <mat-select formControlName=\"submitFinanceRequests\" multiple>\n                        <mat-option *ngFor=\"let financeType of financeTypes\" [value] = \"financeType.name\"> \n                            {{ financeType.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                \n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Požiadavky na riešenie</mat-label>\n                    <mat-select formControlName=\"requestTypesToSolve\" multiple (selectionChange)= \"changeTicketTypeToSolve()\">\n                        <mat-option value = \"Ticket\"> Tikety </mat-option>\n                        <mat-option value = \"Report\"> Reporty </mat-option>\n                        <mat-option value = \"Finance\"> Financie </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n\n                <mat-form-field class='inlineParameters' *ngIf = \"requestTypesToSolve.value != null && requestTypesToSolve.value.includes('Ticket')\">\n                    <mat-label>Tikety na riešenie</mat-label>\n                    <mat-select  formControlName=\"solveTickets\" multiple (selectionChange)= \"changeTicketTypeToSolve()\">\n                        <mat-option value = \"Software\"> Software </mat-option>\n                        <mat-option value = \"Hardware\"> Hardware </mat-option>\n                        <mat-option value = \"Server\"> Server </mat-option>\n                        <mat-option value = \"Užívateľ\"> Užívateľ </mat-option>\n                        <mat-option value = \"Iné\"> Iné </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Software')\" multiple>\n                    <mat-label>Riešenie softvéru</mat-label>\n                    <mat-select formControlName=\"solveSoftware\"  multiple>\n                        <mat-option *ngFor=\"let software of softwares\" [value] = \"software.name\"> \n                            {{ software.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Hardware')\" multiple>\n                    <mat-label>Riešenie hardvéru</mat-label>\n                    <mat-select formControlName=\"solveHardware\"  multiple>\n                        <mat-option *ngFor=\"let hardware of hardwares\" [value] = \"hardware.name\"> \n                            {{ hardware.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Server')\" multiple>\n                    <mat-label>Riešenie serverov</mat-label>\n                    <mat-select formControlName=\"solveServer\"  multiple>\n                        <mat-option *ngFor=\"let server of servers\" [value] = \"server.name\"> \n                            {{ server.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n                <hr>\n            </div>   \n        </div>\n\n        <button mat-raised-button color=\"primary\" class=\"sendingButton\"  type=\"submit\">\n            Odoslať\n        </button>\n    </form>\n</div>\n\n\n<div class = 'rightContainer'>\n    <div class = 'formInformationContainerSubcontent smallerContent'>\n        <span class='formTitleSmall'>\n            <img src = '../../../../assets/images_design/research.png' class='icon'/>\n            Detaily skupiny\n        </span>\n\n        <li class='informationsContainer topspace' *ngIf=\"groupName.value !== '' \">\n            <div class='informationTitle'>Meno skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupName.value}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"groupEmail.value !== '' \">\n            <div class='informationTitle'>Email skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupEmail.value}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"groupDescription.value !== '' \">\n            <div class='informationTitle'>Popis skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupDescription.value}} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"groupManager.value !== null \">\n            <div class='informationTitle'>Manažér</div>\n            <ul class='informationsHolder'>\n                <li > {{groupManager.value.firstName}} {{groupManager.value.lastName}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"usersWatchGroup.value !== null \">\n            <div class='informationTitle'>Sledovatelia</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let user of usersWatchGroup.value'> {{user.firstName}} {{user.lastName}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"usersInGroup.value !== null \">\n            <div class='informationTitle'>Členovia</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let user of usersInGroup.value'> {{user.firstName}} {{user.lastName}} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"moduleTypesToUse.value !== null \">\n            <div class='informationTitle'>Používanie modulov</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of moduleTypesToUse.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"submitFinanceRequests.value !== null \">\n            <div class='informationTitle'>Zasielanie financií</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of submitFinanceRequests.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"requestTypesToSolve.value !== null \">\n            <div class='informationTitle'>Riešenie požiadaviek</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of requestTypesToSolve.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveTickets.value !== null \">\n            <div class='informationTitle'>Riešenie typov tiketov</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveTickets.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveSoftware.value !== null \">\n            <div class='informationTitle'>Riešenie typov software</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveSoftware.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveHardware.value !== null \">\n            <div class='informationTitle'>Riešenie typov hardware</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveHardware.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveServer.value !== null \">\n            <div class='informationTitle'>Riešenie typov server</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveServer.value'> {{ type }} </li> \n            </ul>\n        </li>\n\n    </div>\n</div>";
+    __webpack_exports__["default"] = "<div class = 'leftContainer'>\n    <form [formGroup] = \"groupRegistrationForm\" (ngSubmit)=\"submit()\" #groupFormViewChild=\"ngForm\">\n        <div class='inlineParameters formTitleContainer'>\n            <img src = \"../../../../assets/images_design/registeru_user_icon.png\" class='registerUserIcon'>\n            <span class='formTitle'>Registrovanie skupiny</span>\n        </div>\n\n       \n        <div class = 'formInformationContainer'>\n             <!-- information -->\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/info.png' class='icon'/>\n                    Informácie skupiny\n                </span>\n                \n                <mat-form-field  class='inlineParameters extraSpace'>\n                    <input matInput placeholder=\"Meno skupiny\" formControlName = \"groupName\">\n                    <mat-error *ngIf=\"groupName.invalid\">  Prosím zadefinujte meno skupiny</mat-error>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters'>\n                    <input  matInput placeholder=\"Email skupiny\" formControlName = \"groupEmail\">\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters'>\n                    <textarea  matInput placeholder=\"Popis skupiny\" formControlName = \"groupDescription\"></textarea>\n                    <mat-error *ngIf=\"groupDescription.invalid\">  Prosím zadefinujte krátky popis skupiny, minimálne 10 znakov</mat-error>\n                </mat-form-field>\n                <hr>\n            </div>\n\n            <!-- user selection -->\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/groups_icon_2.png' class='icon'/>\n                    Uživatelia skupiny\n                </span>\n\n                <mat-form-field class='inlineParameters extraSpace' >\n                    <mat-label>Manežér skupiny</mat-label>\n                    <mat-select formControlName=\"groupManager\"   >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n\n                        <mat-error *ngIf=\"groupManager.invalid\">  Prosím vyberte menežéra skupiny</mat-error>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Sledovatelia skupiny</mat-label>\n                    <mat-select formControlName=\"usersWatchGroup\" multiple >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Členovia skupiny</mat-label>\n                    <mat-select formControlName=\"usersInGroup\"  multiple >\n                        <mat-option *ngFor = \"let user of allAvailableUsers\" [value] = \"user\">\n                                {{ user.firstName }}  {{ user.lastName }}\n                        </mat-option>\n\n                        <mat-error *ngIf=\"usersInGroup.invalid\">  Prosím vyberte členov do skupiny</mat-error>\n                    </mat-select>\n                </mat-form-field>\n                <hr>\n            </div>\n        </div>\n\n\n\n\n\n\n\n        <!-- privileges -->\n        <div class = 'formInformationContainer'>\n            <div class = 'formInformationContainerSubcontent'>\n                <span class='formTitleSmall'>\n                    <img src = '../../../../assets/images_design/checkmark.png' class='icon'/>\n                    Právomoc skupiny\n                </span>\n\n                <mat-form-field class='inlineParameters extraSpace' >\n                    <mat-label>Moduly na používanie</mat-label>\n                    <mat-select formControlName=\"moduleTypesToUse\" multiple (selectionChange)= \"changeModuleTypesToUse()\">\n                        <mat-option value = \"Ticket\"> Tikety </mat-option>\n                        <mat-option value = \"Report\"> Reporty </mat-option>\n                        <mat-option value = \"Finance\"> Financie </mat-option>\n                        <mat-option value = \"Privilege\"\n                                    matTooltip=\"Vybertu možnosť ak chcete spístupniť sekciu 'Správa aplikácie' pre uživateľov v danej skupine\"\n                                    matTooltipPosition=\"right\"\n                                    matTooltipClass=\"custom-tooltip\"\n                                    matTooltipShowDelay=\"150\"> \n                                        Privilege \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"moduleTypesToUse.value !== null && moduleTypesToUse.value.includes('Finance')\" multiple>\n                    <mat-label>Posielanie finančných typov</mat-label>\n                    <mat-select formControlName=\"submitFinanceRequests\" multiple>\n                        <mat-option *ngFor=\"let financeType of financeTypes\" [value] = \"financeType.name\"> \n                            {{ financeType.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                \n                <mat-form-field class='inlineParameters' >\n                    <mat-label>Požiadavky na riešenie</mat-label>\n                    <mat-select formControlName=\"requestTypesToSolve\" multiple (selectionChange)= \"changeTicketTypeToSolve()\">\n                        <mat-option value = \"Ticket\"> Tikety </mat-option>\n                        <mat-option value = \"Report\"> Reporty </mat-option>\n                        <mat-option value = \"Finance\"> Financie </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n\n                <mat-form-field class='inlineParameters' *ngIf = \"requestTypesToSolve.value != null && requestTypesToSolve.value.includes('Ticket')\">\n                    <mat-label>Tikety na riešenie</mat-label>\n                    <mat-select  formControlName=\"solveTickets\" multiple (selectionChange)= \"changeTicketTypeToSolve()\">\n                        <mat-option value = \"Software\"> Software </mat-option>\n                        <mat-option value = \"Hardware\"> Hardware </mat-option>\n                        <mat-option value = \"Server\"> Server </mat-option>\n                        <mat-option value = \"Užívateľ\"> Užívateľ </mat-option>\n                        <mat-option value = \"Iné\"> Iné </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Software')\" multiple>\n                    <mat-label>Riešenie softvéru</mat-label>\n                    <mat-select formControlName=\"solveSoftware\"  multiple>\n                        <mat-option *ngFor=\"let software of softwares\" [value] = \"software.name\"> \n                            {{ software.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Hardware')\" multiple>\n                    <mat-label>Riešenie hardvéru</mat-label>\n                    <mat-select formControlName=\"solveHardware\"  multiple>\n                        <mat-option *ngFor=\"let hardware of hardwares\" [value] = \"hardware.name\"> \n                            {{ hardware.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n\n                <mat-form-field class='inlineParameters' *ngIf = \"solveTickets.value !== null && solveTickets.value.includes('Server')\" multiple>\n                    <mat-label>Riešenie serverov</mat-label>\n                    <mat-select formControlName=\"solveServer\"  multiple>\n                        <mat-option *ngFor=\"let server of servers\" [value] = \"server.name\"> \n                            {{ server.name }} \n                        </mat-option>\n                    </mat-select>\n                </mat-form-field>\n                <hr>\n            </div>   \n        </div>\n\n        <button mat-raised-button color=\"primary\" class=\"sendingButton\"  type=\"submit\">\n            Odoslať\n        </button>\n    </form>\n</div>\n\n\n<div class = 'rightContainer'>\n    <div class = 'formInformationContainerSubcontent smallerContent'>\n        <span class='formTitleSmall'>\n            <img src = '../../../../assets/images_design/research.png' class='icon'/>\n            Detaily skupiny\n        </span>\n\n        <li class='informationsContainer topspace' *ngIf=\"groupName.value !== '' \">\n            <div class='informationTitle'>Meno skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupName.value}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"groupEmail.value !== '' \">\n            <div class='informationTitle'>Email skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupEmail.value}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"groupDescription.value !== '' \">\n            <div class='informationTitle'>Popis skupiny</div>\n            <ul class='informationsHolder'>\n                <li > {{groupDescription.value}} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"groupManager.value !== null \">\n            <div class='informationTitle'>Manažér</div>\n            <ul class='informationsHolder'>\n                <li > {{groupManager.value.firstName}} {{groupManager.value.lastName}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"usersWatchGroup.value !== null \">\n            <div class='informationTitle'>Sledovatelia</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let user of usersWatchGroup.value'> {{user.firstName}} {{user.lastName}} </li> \n            </ul>\n        </li>\n\n        <li class='informationsContainer' *ngIf=\"usersInGroup.value !== null \">\n            <div class='informationTitle'>Členovia</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let user of usersInGroup.value'> {{user.firstName}} {{user.lastName}} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"moduleTypesToUse.value !== null \">\n            <div class='informationTitle'>Používanie modulov</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of moduleTypesToUse.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"submitFinanceRequests.value !== null \">\n            <div class='informationTitle'>Zasielanie financií</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of submitFinanceRequests.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"requestTypesToSolve.value !== null \">\n            <div class='informationTitle'>Riešenie požiadaviek</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of requestTypesToSolve.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveTickets.value !== null \">\n            <div class='informationTitle'>Riešenie typov tiketov</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveTickets.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveSoftware.value !== null \">\n            <div class='informationTitle'>Riešenie typov software</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveSoftware.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveHardware.value !== null \">\n            <div class='informationTitle'>Riešenie typov hardware</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveHardware.value'> {{ type }} </li> \n            </ul>\n        </li>\n        <li class='informationsContainer' *ngIf=\"solveServer.value !== null \">\n            <div class='informationTitle'>Riešenie typov server</div>\n            <ul class='informationsHolder'>\n                <li *ngFor='let type of solveServer.value'> {{ type }} </li> \n            </ul>\n        </li>\n\n    </div>\n</div>";
     /***/
   },
 
@@ -119,7 +119,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n<div class = 'leftContainer'>\n    <form [formGroup] = \"userRegistrationForm\" (ngSubmit)=\"submit()\">\n        <div class='inlineParameters formTitleContainer'>\n            <img src = \"../../../../assets/images_design/registeru_user_icon.png\" class='registerUserIcon'>\n            <span class='formTitle'>Registrovanie uživateľa</span>\n        </div>\n\n        <mat-form-field  class='inlineParameters'>\n            <input matInput placeholder=\"Meno uživateľa\" formControlName = \"firstname\">\n            <mat-error *ngIf=\"firstname.invalid\">  Prosím zadefinujte meno uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Priezvisko uživateľa\" formControlName = \"lastname\">\n            <mat-error *ngIf=\"lastname.invalid\">  Prosím zadefinujte priezvisko uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Prihlasovacie meno (username) uživateľa\" formControlName = \"username\">\n            <mat-error *ngIf=\"username.invalid\">  Prosím zadefinujte prihlasovacie meno uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Email uživateľa\" formControlName = \"email\">\n            <mat-error *ngIf=\"email.invalid\">  Prosím zadefinujte email uživateľa</mat-error>\n        </mat-form-field>\n    \n        <!-- submit button -->\n        <div class='inlineParameters'>\n            <button mat-raised-button color=\"primary\" class=\"sendingButton\"  type=\"submit\">\n                    Odoslať\n            </button>\n        </div>\n    </form>\n</div>\n";
+    __webpack_exports__["default"] = "\n<div class = 'leftContainer'>\n    <form [formGroup] = \"userRegistrationForm\" (ngSubmit)=\"submit()\" #userFormViewChild=\"ngForm\">\n        <div class='inlineParameters formTitleContainer'>\n            <img src = \"../../../../assets/images_design/registeru_user_icon.png\" class='registerUserIcon'>\n            <span class='formTitle'>Registrovanie uživateľa</span>\n        </div>\n\n        <mat-form-field  class='inlineParameters'>\n            <input matInput placeholder=\"Meno uživateľa\" formControlName = \"firstname\">\n            <mat-error *ngIf=\"firstname.invalid\">  Prosím zadefinujte meno uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Priezvisko uživateľa\" formControlName = \"lastname\">\n            <mat-error *ngIf=\"lastname.invalid\">  Prosím zadefinujte priezvisko uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Prihlasovacie meno (username) uživateľa\" formControlName = \"username\">\n            <mat-error *ngIf=\"username.invalid\">  Prosím zadefinujte prihlasovacie meno uživateľa</mat-error>\n        </mat-form-field>\n\n        <mat-form-field class='inlineParameters'>\n            <input  matInput placeholder=\"Email uživateľa\" formControlName = \"email\">\n            <mat-error *ngIf=\"email.invalid\">  Prosím zadefinujte email uživateľa</mat-error>\n        </mat-form-field>\n    \n        <!-- submit button -->\n        <div class='inlineParameters'>\n            <button mat-raised-button color=\"primary\" class=\"sendingButton\"  type=\"submit\">\n                    Odoslať\n            </button>\n        </div>\n    </form>\n</div>\n";
     /***/
   },
 
@@ -139,7 +139,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n\n<!-- user management -->\n<div class = 'container'>\n    <div class = 'contanierTitle'>\n        <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>\n        <mat-form-field >\n            <mat-label>Vyberte uživateľa</mat-label>\n            <mat-select (selectionChange)= \"selectUser($event.value)\">\n                <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'> \n                    {{ value.firstName }} {{ value.lastName }}\n                </mat-option>\n            </mat-select>\n\n        </mat-form-field>\n    </div>   \n    \n    <!-- modifycation buttons -->\n    <app-serdbuttons id='serdbuttonsUser'\n        *ngIf=\"userDetails.displayedUser\" \n        (resetEmittter) = \"resetUserPassword()\"\n        displayOnlyReset='true'>\n    </app-serdbuttons>\n\n    <app-user-details  #userDetails ></app-user-details>\n    <app-privileges #userPrivileges ></app-privileges>\n    <app-user-groups #userGroups ></app-user-groups>\n</div>\n\n\n<!-- group management -->\n<div class = 'container leftLine'>\n    <div class = 'contanierTitle'>\n        <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>\n        <mat-form-field >\n            <mat-label>Vyberte skupinu</mat-label>\n            <mat-select (selectionChange)= \"selectGroup($event.value)\">\n                <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>\n            </mat-select>\n        </mat-form-field>\n    </div>\n    <!-- modifycation buttons -->\n    <app-serdbuttons #serdbuttonsGroup \n        id='serdbuttonsGroup' \n        *ngIf=\"groupDetails.group\" \n        (editEmittter) = \"editGroup()\" \n        (resetEmittter) = \"resetGroup()\"\n        (saveEmittter) = \"saveGroup()\"\n        (deleteEmittter) = \"deleteGroup()\">\n    </app-serdbuttons>\n\n    <app-group-details #groupDetails ></app-group-details>\n    <app-privileges #groupPrivileges ></app-privileges>\n</div>\n\n\n";
+    __webpack_exports__["default"] = "\n\n<!-- user management -->\n<div class = 'container'>\n    <div class = 'contanierTitle'>\n        <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>\n        <mat-form-field >\n            <mat-label>Vyberte uživateľa</mat-label>\n            <mat-select (selectionChange)= \"selectUser($event.value)\">\n                <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'> \n                    {{ value.firstName }} {{ value.lastName }}\n                </mat-option>\n            </mat-select>\n\n        </mat-form-field>\n    </div>   \n    \n    <!-- modifycation buttons -->\n    <ng-container  *ngIf='userDetails.displayedUser'>\n        <button mat-button \n                color=\"primary\" \n                class='modificationButton' \n                id='resetButton'  \n                (click) = 'resetUserPassword()'\n                matTooltip=\"Resetovaním uživateľa sa vygeneruje nové heslo, ktoré mu bude zaslané emailom\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip\"\n                matTooltipShowDelay=\"150\">\n            Resetovať\n        </button>\n\n        <button mat-button \n                color=\"success\" \n                class='modificationButton' \n                id='ActivateDisableBUtton' \n                *ngIf='!userDetails.displayedUser.active'\n                (click) = 'modifyUserState()'\n                matTooltip=\"Aktiváciou uživateľa povolíte prihlásenie do systému\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip\"\n                matTooltipShowDelay=\"150\">\n            Aktivovať\n        </button>\n\n        <button mat-button \n                color=\"warn\"  \n                class='modificationButton' \n                id='ActivateDisableBUtton'  \n                *ngIf='userDetails.displayedUser.active'\n                (click) = 'modifyUserState()'\n                matTooltip=\"Zablokovaním uživateľa zakážete prihlásenie do systému\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip\"\n                matTooltipShowDelay=\"150\">\n            Zablokovať\n        </button>\n    </ng-container>\n\n\n    <app-user-details  #userDetails ></app-user-details>\n    <app-privileges #userPrivileges ></app-privileges>\n    <app-user-groups #userGroups ></app-user-groups>\n</div>\n\n\n<!-- group management -->\n<div class = 'container leftLine'>\n    <div class = 'contanierTitle'>\n        <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>\n        <mat-form-field >\n            <mat-label>Vyberte skupinu</mat-label>\n            <mat-select (selectionChange)= \"selectGroup($event.value)\">\n                <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>\n            </mat-select>\n        </mat-form-field>\n    </div>\n    <!-- modifycation buttons -->\n    <app-serdbuttons #serdbuttonsGroup \n        id='serdbuttonsGroup' \n        *ngIf=\"groupDetails.group\" \n        (editEmittter) = \"editGroup()\" \n        (resetEmittter) = \"resetGroup()\"\n        (saveEmittter) = \"saveGroup()\"\n        (deleteEmittter) = \"deleteGroup()\">\n    </app-serdbuttons>\n\n    <app-group-details #groupDetails ></app-group-details>\n    <app-privileges #groupPrivileges ></app-privileges>\n</div>\n\n\n";
     /***/
   },
 
@@ -159,7 +159,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n<app-header></app-header>\n<app-navigation></app-navigation>\n\n<div id='contentContainer'>\n    <app-request-table #myOpenRequests \n        headerColor=\"#358BF0\" \n        [displayedColumns]= \"viewTable\"\n        tableTitle=\"Moje požiadávky\"\n        [hidden] = \" (isGhost$ | async) || (isAdmin$ | async) \">\n    </app-request-table>   \n\n    <app-request-table #meAssignedRequests \n        [hidden] = '!(isSolver$ | async) &&  meAssignedRequests.dataSource.data.length === 0'\n        headerColor=\"#56A3FF\" \n        [displayedColumns]= \"modifyTable\"\n        tableTitle=\"Požiadavky pridelené na mňa\"\n        (removeFromMeEmitter) = \"removeFromMe($event)\">\n    </app-request-table> \n\n    <app-request-table #otherOpenRequests \n        [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async) ||  otherOpenRequests.dataSource.data.length > 0)'\n        headerColor=\"#E8F3FF\" \n        [displayedColumns]= \"viewTable\" \n        [displayAssignToMe] ='(isSolver$ | async)'\n        tableTitle=\"Ostatné otvorené požiadavky\"\n        (assignOnMeEmitter) = \"assignOnMe($event)\">\n    </app-request-table>   \n\n    <ngx-spinner  >  \n        <p style=\"font-size: 20px; color: white\">Načítavam požiadavky...</p> \n    </ngx-spinner>\n</div>";
+    __webpack_exports__["default"] = "\n<app-header></app-header>\n<app-navigation></app-navigation>\n\n<div id='contentContainer'>\n    <app-request-table #myOpenRequests \n        headerColor=\"#358BF0\" \n        [displayedColumns]= \"viewTable\"\n        tableTitle=\"Moje požiadávky\"\n        [hidden] = \" (isGhost$ | async) || (isAdmin$ | async) \">\n    </app-request-table>   \n\n    <app-request-table #meAssignedRequests \n        [hidden] = '!(isSolver$ | async) &&  meAssignedRequests.dataSource.data.length === 0'\n        headerColor=\"#56A3FF\" \n        [displayedColumns]= \"modifyTable\"\n        tableTitle=\"Požiadavky pridelené na mňa\"\n        (removeFromMeEmitter) = \"removeFromMe($event)\">\n    </app-request-table> \n\n    <app-request-table #otherOpenRequests \n        [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async) ||  otherOpenRequests.dataSource.data.length > 0)'\n        headerColor=\"#E8F3FF\" \n        [displayedColumns]= \"viewTable\" \n        [displayAssignToMe] ='(isSolver$ | async)'\n        tableTitle=\"Ostatné otvorené požiadavky\"\n        (assignOnMeEmitter) = \"assignOnMe($event)\">\n    </app-request-table> \n\n    <ngx-spinner  >  \n        <p style=\"font-size: 20px; color: white\">Načítavam požiadavky...</p> \n    </ngx-spinner>\n</div>";
     /***/
   },
 
@@ -259,7 +259,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n\n<div *ngIf = \"(requestDetails$ | async)?.closed === null && !(isGhost$ | async)\">\n\n    <mat-form-field class='inlineParameters' >\n        <textarea  matInput placeholder=\"Napíšte komentár\" id=\"commentField\" [(ngModel)]=\"commentInput\" ></textarea>\n        <!--<mat-error *ngIf=\"commentField.invalid\"> Prosím zadajte komentár</mat-error>-->\n    </mat-form-field>\n\n    <div class='inlineParameters' >\n\n        <mat-checkbox   \n            name='Solution'  \n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Solution')\"\n            matTooltip=\"Označiť komentár ako riešenie požiadavky, \n                        prebehne automatická emailová notifikácia riešiteľovi a výtvorcovi požiadavky\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Riešenie\n        </mat-checkbox>\n\n        <mat-checkbox  *ngIf = '((isSolver$ | async) || (isAdmin$ | async))'\n            name='Private'\n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Private')\"\n            matTooltip=\"Označiť komentár ako privátny\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Privátny\n        </mat-checkbox>\n\n        <mat-checkbox  \n            name='Notification' \n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Notification')\"\n            matTooltip=\"Komentárom notifikujete priradeného riešiteľia a výtvorcu požiadavky\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Notifikovať\n        </mat-checkbox> \n    </div>\n\n    <button mat-raised-button color=\"primary\" id=\"sendingButton\" (click)=\"submit()\"> Odoslať </button>\n</div>\n\n\n";
+    __webpack_exports__["default"] = "\n\n<div *ngIf = \"(requestDetails$ | async)?.closed === null && !(isGhost$ | async)\">\n\n    <mat-form-field class='inlineParameters' >\n        <textarea  matInput placeholder=\"Napíšte komentár\" id=\"commentField\" [(ngModel)]=\"commentInput\" ></textarea>\n        <!--<mat-error *ngIf=\"commentField.invalid\"> Prosím zadajte komentár</mat-error>-->\n    </mat-form-field>\n\n    <div class='inlineParameters' >\n\n        <mat-checkbox   \n            name='Solution'  \n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Solution')\"\n            matTooltip=\"Označiť komentár ako riešenie požiadavky, \n                        prebehne automatická emailová notifikácia riešiteľovi a výtvorcovi požiadavky\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Riešenie\n        </mat-checkbox>\n\n        <mat-checkbox \n            name='Private'\n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Private')\"\n            matTooltip=\"Označiť komentár ako privátny\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Privátny\n        </mat-checkbox>\n\n        <mat-checkbox  \n            name='Notification' \n            (change)=\"onChange($event)\" \n            [disabled]=\"isChecked && (isCheckedName!=='Notification')\"\n            matTooltip=\"Zaškrnutím emailovo notifikujete priradeného riešiteľia a výtvorcu požiadavky\"\n            matTooltipPosition=\"right\"\n            matTooltipClass=\"custom-tooltip\"\n            matTooltipShowDelay=\"150\">\n            Notifikovať\n        </mat-checkbox> \n    </div>\n\n    <button mat-raised-button color=\"primary\" id=\"sendingButton\" (click)=\"submit()\"> Odoslať </button>\n</div>\n\n\n";
     /***/
   },
 
@@ -299,7 +299,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n<div *ngFor = \"let requestComment of requestComments\" \n    [ngClass] = \"requestComment.creator.username === userService.user.username ? 'floatRight' : 'floatLeft'\"\n    class=\"commentBox \" >\n\n    <div class='flex'>\n        <!-- comment info -->\n        <div class=\"commentBoxName\" >\n            <img [src]=\"'data:image/jpeg;base64,'+requestComment.creator.photoBytes\" class='avatar' />\n                {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>\n              <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>            \n        </div>\n\n        <!-- private comment info -->\n        <div class=\"commentBoxName\" *ngIf='requestComment.isPrivate' >\n            <div class='light bigBold'> \n                Privátny komentár, zdieľané s : <br>\n            </div>\n            <div class='light'> \n                <span *ngFor='let groupName of requestComment.groupsToShare'> {{ groupName  }} </span>\n            </div>     \n        </div>\n\n        <!-- solution flag -->\n        <div class=\"commentBoxName\" *ngIf='requestComment.id === (requestDetails$ | async).solutionComment' >\n            <img src=\"../../../../assets/images_design/request_solution.png\" id='solutionImg'/>\n            <span id='solutionText'>Riešenie</span>   \n        </div>\n\n        <div class = 'commentIcons' \n            *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && \n                  (requestDetails$ | async).closed === null'>\n\n\n            <img *ngIf='requestComment.isPrivate  &&  \n                ((isSolver$ | async) || (isAdmin$ | async)) && \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/share_icon.png\" \n                class = 'icon'\n                (click) = \"changeFrames(requestComment)\"\n                matTooltip=\"Zdieľať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n\n            <img *ngIf='requestComment.isPrivate  && \n                ((isSolver$ | async) || (isAdmin$ | async)) && \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/lock_closed_icon.png\" \n                class = 'icon' \n                (click) = \"changeCommentPrivacy(requestComment)\"\n                matTooltip=\"Otvoriť\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n        \n            <img *ngIf='!requestComment.isPrivate &&  \n                ((isSolver$ | async) || (isAdmin$ | async)) && \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/lock_open_icon.png\" \n                class = 'icon' \n                (click) = \"changeCommentPrivacy(requestComment)\"\n                matTooltip=\"Uzamknúť\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\" />\n    \n\n            <img src=\"../../../../assets/images_design/edit_icon.png\" \n                class = 'icon' \n                (click) = \"editComment(requestComment)\" \n                matTooltip=\"Editovať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n\n            <img src=\"../../../../assets/images_design/delete_bin_icon.png\" \n                class = 'icon'  \n                (click)='deleteComment(requestComment)'\n                matTooltip=\"Vymazať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\" />\n\n           \n        </div>\n    </div>\n\n\n    <p > {{requestComment.comment}} </p>\n\n</div>\n\n\n<div  class = 'displayCommentSharing' *ngIf=\"changeFramws\" >\n    <app-comment-sharing  (changeWindow) = \"changeFrames(undefined)\" (shareWithGroup) = \"shareWith($event)\"></app-comment-sharing>\n</div>";
+    __webpack_exports__["default"] = "\n<div *ngFor = \"let requestComment of requestComments\" \n    [ngClass] = \"requestComment.creator.username === userService.user.username ? 'floatRight' : 'floatLeft'\"\n    class=\"commentBox \" >\n\n    <div class='flex'>\n        <!-- comment info -->\n        <div class=\"commentBoxName\" >\n            <img [src]=\"'data:image/jpeg;base64,'+requestComment.creator.photoBytes\" class='avatar' />\n                {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>\n              <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>            \n        </div>\n\n        <!-- private comment info -->\n        <div class=\"commentBoxName\" *ngIf='requestComment.isPrivate' >\n            <div class='light bigBold'> \n                Privátny komentár, zdieľané s : <br>\n            </div>\n            <div class='light'> \n                <span *ngFor='let groupName of requestComment.groupsToShare'> {{ groupName  }} </span>\n            </div>     \n        </div>\n\n        <!-- solution flag -->\n        <div class=\"commentBoxName\" *ngIf='requestComment.id === (requestDetails$ | async).solutionComment' >\n            <img src=\"../../../../assets/images_design/request_solution.png\" id='solutionImg'/>\n            <span id='solutionText'>Riešenie</span>   \n        </div>\n\n        <div class = 'commentIcons' \n            *ngIf='(requestComment.creator.username === userService.user.username || (isAdmin$ | async)) && \n                  (requestDetails$ | async).closed === null'>\n\n\n            <img *ngIf='requestComment.isPrivate  &&  \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/share_icon.png\" \n                class = 'icon'\n                (click) = \"changeFrames(requestComment)\"\n                matTooltip=\"Zdieľať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n\n            <img *ngIf='requestComment.isPrivate  && \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/lock_closed_icon.png\" \n                class = 'icon' \n                (click) = \"changeCommentPrivacy(requestComment)\"\n                matTooltip=\"Otvoriť\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n        \n            <img *ngIf='!requestComment.isPrivate &&  \n                requestComment.id !== (requestDetails$ | async).solutionComment' \n                src=\"../../../../assets/images_design/lock_open_icon.png\" \n                class = 'icon' \n                (click) = \"changeCommentPrivacy(requestComment)\"\n                matTooltip=\"Uzamknúť\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\" />\n    \n\n            <img src=\"../../../../assets/images_design/edit_icon.png\" \n                class = 'icon' \n                (click) = \"editComment(requestComment)\" \n                matTooltip=\"Editovať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\"/>\n\n            <img src=\"../../../../assets/images_design/delete_bin_icon.png\" \n                class = 'icon'  \n                (click)='deleteComment(requestComment)'\n                matTooltip=\"Vymazať\"\n                matTooltipPosition=\"right\"\n                matTooltipClass=\"custom-tooltip-icon\"\n                matTooltipShowDelay=\"200\" />\n\n           \n        </div>\n    </div>\n\n\n    <p > {{requestComment.comment}} </p>\n\n</div>\n\n\n<div  class = 'displayCommentSharing' *ngIf=\"changeFramws\" >\n    <app-comment-sharing  (changeWindow) = \"changeFrames(undefined)\" (shareWithGroup) = \"shareWith($event)\"></app-comment-sharing>\n</div>";
     /***/
   },
 
@@ -379,7 +379,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n\n<h2 class='formTitle'>Požiadavka na Financie</h2>\n\n<form [formGroup] = \"financeForm\" (ngSubmit)=\"submit()\">\n    <!-- finance type -->\n    <mat-form-field class='InlineParameters'>\n        <mat-label>Typ Financie</mat-label>\n\n        <mat-select formControlName=\"financeType\">\n            <mat-option  *ngFor=\"let type of financeTypeArray\" [value]=\"type.name\"  >{{ type.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"financeType.invalid\"> Prosím vyberte kategóriu pre Finančný typ</mat-error>\n    </mat-form-field>\n\n    <!--name -->\n    <mat-form-field class='InlineParameters'>\n        <input  matInput placeholder=\"Číslo zmluvy\" formControlName = \"name\" >\n\n        <mat-error *ngIf=\"name.invalid\"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>\n    </mat-form-field>\n\n    <!--Priority -->\n    <div class='InlineParameters' >\n        <mat-checkbox (change) = \"changeToUrgent($event.checked)\">Urgent</mat-checkbox>\n    </div>\n\n     <!-- uploader -->\n    <div class='InlineParameters'> \n        <app-file-upload id='fileUploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n        <mat-error *ngIf=\"fileInput && fileInput.isEmpty()\" class='movedError'> Prosím vyberte súbor</mat-error>\n    </div>\n\n    <!-- submit button -->\n    <div class='InlineParameters'>\n        <button mat-raised-button color=\"primary\" id=\"ticketSendingButton\" type=\"submit\"> Odoslať </button>\n    </div>\n\n</form>\n\n<ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>\n<img id='FormImage' src=\"../../../../assets/images_design/finance_form.png\"/>";
+    __webpack_exports__["default"] = "\n\n<h2 class='formTitle'>Požiadavka na Financie</h2>\n\n<form [formGroup] = \"financeForm\" (ngSubmit)=\"submit()\" #financeFormViewChild=\"ngForm\">\n    <!-- finance type -->\n    <mat-form-field class='InlineParameters'>\n        <mat-label>Typ Financie</mat-label>\n\n        <mat-select formControlName=\"financeType\">\n            <mat-option  *ngFor=\"let type of financeTypeArray\" [value]=\"type.name\"  >{{ type.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"financeType.invalid\"> Prosím vyberte kategóriu pre Finančný typ</mat-error>\n    </mat-form-field>\n\n    <!--name -->\n    <mat-form-field class='InlineParameters'>\n        <input  matInput placeholder=\"Číslo zmluvy\" formControlName = \"name\" >\n\n        <mat-error *ngIf=\"name.invalid\"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>\n    </mat-form-field>\n\n    <!--Priority -->\n    <div class='InlineParameters' >\n        <mat-checkbox (change) = \"changeToUrgent($event.checked)\">Urgent</mat-checkbox>\n    </div>\n\n     <!-- uploader -->\n    <div class='InlineParameters'> \n        <app-file-upload id='fileUploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n        <mat-error *ngIf=\"fileInput && fileInput.isEmpty()\" class='movedError'> Prosím vyberte súbor</mat-error>\n    </div>\n\n    <!-- submit button -->\n    <div class='InlineParameters'>\n        <button mat-raised-button color=\"primary\" id=\"ticketSendingButton\" type=\"submit\"> Odoslať </button>\n    </div>\n\n</form>\n\n<ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>\n<img id='FormImage' src=\"../../../../assets/images_design/finance_form.png\"/>";
     /***/
   },
 
@@ -419,7 +419,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<h2 class='formTitle'>Požiadavka na Report</h2>\n\n<form [formGroup] = \"reportForm\" (ngSubmit)=\"submit()\">\n      <!--  Values : {{ reportForm.value | json }}\n        <hr> -->\n\n        <div class = 'reportInlineParameters'>\n            <!--name -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Názov reportu\" formControlName = \"name\">\n\n                <mat-error *ngIf=\"name.invalid\">\n                        Prosím zadefinujte meno reportu v dĺžke od 5 po 254 znakov\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--nazov -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Vlastník reportu\" formControlName = \"owner\">\n\n                <mat-error *ngIf=\"owner.invalid\">\n                        Prosím zadefinujte vlastníka reportu v dĺžke od 5 po 254 znakov\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--deadline -->\n            <mat-form-field>\n                <input matInput [matDatepicker]=\"picker\" placeholder=\"Deadline\" formControlName = \"deadline\">\n                <mat-datepicker-toggle matSuffix [for]=\"picker\" ></mat-datepicker-toggle>\n                <mat-datepicker #picker></mat-datepicker>\n                \n                <mat-error *ngIf=\"deadline.invalid\">\n                    Prosím zadefinujte deadline reportu\n                </mat-error>\n            </mat-form-field>\n        </div>\n\n        <div class = 'reportInlineParameters'>\n            <!--refresh -->\n            <mat-form-field >\n                <mat-label>Frekvencia obnovenia:</mat-label>\n                <mat-select formControlName=\"reportRefresh\">\n                    <mat-option value=\"Jednorázové\">jendorázové</mat-option>\n                    <mat-option value=\"Denne\">denne</mat-option>\n                    <mat-option value=\"Týždenne\">týždenne</mat-option>\n                    <mat-option value=\"Mesačne\">mesačne</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportRefresh.invalid\">\n                        Prosím zadefinujte frekvenciu obnovenia\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--Priority -->\n            <mat-form-field >\n                <mat-label>Priorita</mat-label>\n                <mat-select formControlName=\"requestPriority\">\n                    <mat-option value=\"nízka\">nízka</mat-option>\n                    <mat-option value=\"stredná\">stredná</mat-option>\n                    <mat-option value=\"vysoká\">vysoká</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportRefresh.invalid\">\n                        Prosím vyberte prioritu reportu\n                </mat-error>\n            </mat-form-field>\n\n\n            <!--report type -->\n            <mat-form-field >\n                <mat-label>Typ reportu</mat-label>\n                <mat-select formControlName=\"reportType\">\n                    <mat-option value=\"Nový report\">Nový report</mat-option>\n                    <mat-option value=\"Existujúci report\">Existujúci report</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportType.invalid\">\n                        Prosím vyberte typ reportu\n                </mat-error>\n            </mat-form-field>\n        </div>\n    \n        <div class='reportInlineParameters'>\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Účeľ reportu\" formControlName = \"purpose\"></textarea>\n\n                <mat-error *ngIf=\"purpose.invalid\">\n                        Prosím zadefinujte účeľ reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Kritéria reportu\" formControlName = \"criteria\"></textarea>\n\n                <mat-error *ngIf=\"criteria.invalid\">\n                        Prosím zadefinujte kritéria reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Viditeľne údaje\" formControlName = \"visibleData\"></textarea>\n\n                <mat-error *ngIf=\"visibleData.invalid\">\n                        Prosím zadefinujte viditeľné údaje reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Iné Informácie\" formControlName = \"otherInformation\"></textarea>\n            </mat-form-field>\n        </div>\n\n\n        <div class = 'reportInlineParameters'>\n            <!--access -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Sprístupniť pre\" formControlName = \"accessByPeople\">\n                <mat-error *ngIf=\"accessByPeople.errors?.accessValid\">\n                        Prosím zadefinujte pre koho má byť report sprístupnený\n                </mat-error>\n                \n            </mat-form-field>\n          <!--  <button mat-raised-button type = \"button\" color=\"primary\" class='formAssignedButton'>Pridať</button>-->\n          <img src=\"../../../../assets/images_design/add_icon.png\" class='formAssignedButton'  (click)=\"addPeopleToAccess()\">\n\n          <!-- display added people / remove them -->\n            <div class = 'printingResults'> \n                <ul> \n                    <li *ngFor=\"let item of accessByPeopleArray; let i = index\" class=\"oneLineLI\">\n                        <img src=\"../../../../assets/images_design/delete_icon.png\" \n                            class='formdeleteButton'  \n                            (click)=\"deletePeopleItem(i)\">\n                            {{item}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n\n\n\n\n        <div class = 'reportInlineParameters'>\n            <!--access method -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Sprístupniť cez\" formControlName = \"accessMethods\">\n                <mat-error *ngIf=\"accessMethods.errors?.accessValid\">\n                        Prosím zadefinujte spôsob sprístupnenia reportu\n                </mat-error>\n                \n            </mat-form-field>\n          <img src=\"../../../../assets/images_design/add_icon.png\" class='formAssignedButton'  (click)=\"addMethodToAccess()\">\n\n          <!-- display added people / remove them -->\n            <div class = 'printingResults'> \n                <ul> \n                    <li *ngFor=\"let item of accessByMethodArray; let i = index\" class=\"oneLineLI\">\n                        <img src=\"../../../../assets/images_design/delete_icon.png\" \n                            class='formdeleteButton'  \n                            (click)=\"deleteMethodItem(i)\">\n                            {{item}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n\n\n\n         <!-- uploader -->\n        <div class = 'reportInlineParameters'>\n            <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n        </div>\n\n         <!-- submit button -->\n        <div class = 'reportInlineParameters'>\n            <button mat-raised-button color=\"primary\" id=\"reportSendingButton\" type=\"submit\">Odoslať</button>\n        </div>\n   \n\n    </form>\n\n    <ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>";
+    __webpack_exports__["default"] = "<h2 class='formTitle'>Požiadavka na Report</h2>\n\n<form [formGroup] = \"reportForm\" (ngSubmit)=\"submit()\" #reportFormViewChild=\"ngForm\">\n      <!--  Values : {{ reportForm.value | json }}\n        <hr> -->\n\n        <div class = 'reportInlineParameters'>\n            <!--name -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Názov reportu\" formControlName = \"name\">\n\n                <mat-error *ngIf=\"name.invalid\">\n                        Prosím zadefinujte meno reportu v dĺžke od 5 po 254 znakov\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--nazov -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Vlastník reportu\" formControlName = \"owner\">\n\n                <mat-error *ngIf=\"owner.invalid\">\n                        Prosím zadefinujte vlastníka reportu v dĺžke od 5 po 254 znakov\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--deadline -->\n            <mat-form-field>\n                <input matInput [matDatepicker]=\"picker\" placeholder=\"Deadline\" formControlName = \"deadline\">\n                <mat-datepicker-toggle matSuffix [for]=\"picker\" ></mat-datepicker-toggle>\n                <mat-datepicker #picker></mat-datepicker>\n                \n                <mat-error *ngIf=\"deadline.invalid\">\n                    Prosím zadefinujte deadline reportu\n                </mat-error>\n            </mat-form-field>\n        </div>\n\n        <div class = 'reportInlineParameters'>\n            <!--refresh -->\n            <mat-form-field >\n                <mat-label>Frekvencia obnovenia:</mat-label>\n                <mat-select formControlName=\"reportRefresh\">\n                    <mat-option value=\"Jednorázové\">jendorázové</mat-option>\n                    <mat-option value=\"Denne\">denne</mat-option>\n                    <mat-option value=\"Týždenne\">týždenne</mat-option>\n                    <mat-option value=\"Mesačne\">mesačne</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportRefresh.invalid\">\n                        Prosím zadefinujte frekvenciu obnovenia\n                </mat-error>\n\n            </mat-form-field>\n\n            <!--Priority -->\n            <mat-form-field >\n                <mat-label>Priorita</mat-label>\n                <mat-select formControlName=\"requestPriority\">\n                    <mat-option value=\"nízka\">nízka</mat-option>\n                    <mat-option value=\"stredná\">stredná</mat-option>\n                    <mat-option value=\"vysoká\">vysoká</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportRefresh.invalid\">\n                        Prosím vyberte prioritu reportu\n                </mat-error>\n            </mat-form-field>\n\n\n            <!--report type -->\n            <mat-form-field >\n                <mat-label>Typ reportu</mat-label>\n                <mat-select formControlName=\"reportType\">\n                    <mat-option value=\"Nový report\">Nový report</mat-option>\n                    <mat-option value=\"Existujúci report\">Existujúci report</mat-option>\n                </mat-select>\n\n                <mat-error *ngIf=\"reportType.invalid\">\n                        Prosím vyberte typ reportu\n                </mat-error>\n            </mat-form-field>\n        </div>\n    \n        <div class='reportInlineParameters'>\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Účeľ reportu\" formControlName = \"purpose\"></textarea>\n\n                <mat-error *ngIf=\"purpose.invalid\">\n                        Prosím zadefinujte účeľ reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Kritéria reportu\" formControlName = \"criteria\"></textarea>\n\n                <mat-error *ngIf=\"criteria.invalid\">\n                        Prosím zadefinujte kritéria reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Viditeľne údaje\" formControlName = \"visibleData\"></textarea>\n\n                <mat-error *ngIf=\"visibleData.invalid\">\n                        Prosím zadefinujte viditeľné údaje reportu\n                </mat-error>\n            </mat-form-field>\n\n            <mat-form-field >\n                <textarea  matInput placeholder=\"Iné Informácie\" formControlName = \"otherInformation\"></textarea>\n            </mat-form-field>\n        </div>\n\n\n        <div class = 'reportInlineParameters'>\n            <!--access -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Sprístupniť pre\" formControlName = \"accessByPeople\">\n                <mat-error *ngIf=\"accessByPeople.errors?.accessValid\">\n                        Prosím zadefinujte pre koho má byť report sprístupnený\n                </mat-error>\n                \n            </mat-form-field>\n          <!--  <button mat-raised-button type = \"button\" color=\"primary\" class='formAssignedButton'>Pridať</button>-->\n          <img src=\"../../../../assets/images_design/add_icon.png\" class='formAssignedButton'  (click)=\"addPeopleToAccess()\">\n\n          <!-- display added people / remove them -->\n            <div class = 'printingResults'> \n                <ul> \n                    <li *ngFor=\"let item of accessByPeopleArray; let i = index\" class=\"oneLineLI\">\n                        <img src=\"../../../../assets/images_design/delete_icon.png\" \n                            class='formdeleteButton'  \n                            (click)=\"deletePeopleItem(i)\">\n                            {{item}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n\n\n\n\n        <div class = 'reportInlineParameters'>\n            <!--access method -->\n            <mat-form-field >\n                <input  matInput placeholder=\"Sprístupniť cez\" formControlName = \"accessMethods\">\n                <mat-error *ngIf=\"accessMethods.errors?.accessValid\">\n                        Prosím zadefinujte spôsob sprístupnenia reportu\n                </mat-error>\n                \n            </mat-form-field>\n          <img src=\"../../../../assets/images_design/add_icon.png\" class='formAssignedButton'  (click)=\"addMethodToAccess()\">\n\n          <!-- display added people / remove them -->\n            <div class = 'printingResults'> \n                <ul> \n                    <li *ngFor=\"let item of accessByMethodArray; let i = index\" class=\"oneLineLI\">\n                        <img src=\"../../../../assets/images_design/delete_icon.png\" \n                            class='formdeleteButton'  \n                            (click)=\"deleteMethodItem(i)\">\n                            {{item}}\n                    </li>\n                </ul>\n            </div>\n        </div>\n\n\n\n         <!-- uploader -->\n        <div class = 'reportInlineParameters'>\n            <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n        </div>\n\n         <!-- submit button -->\n        <div class = 'reportInlineParameters'>\n            <button mat-raised-button color=\"primary\" id=\"reportSendingButton\" type=\"submit\">Odoslať</button>\n        </div>\n   \n\n    </form>\n\n    <ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>";
     /***/
   },
 
@@ -439,7 +439,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n<h2 class='formTitle'>Požiadavka na Ticket</h2>\n\n<form [formGroup] = \"ticketForm\" (ngSubmit)=\"submit()\">\n   <!-- Values : {{ ticketForm.value | json }}\n    <hr> -->\n    <mat-form-field class='ticketInlineParameters'>\n        <mat-label>Typ Tiketu</mat-label>\n        <mat-select formControlName=\"ticketType\" (selectionChange)= \"changeTicketType($event.value)\">\n            <mat-option value=\"Software\">Software</mat-option>\n            <mat-option value=\"Hardware\">Hardware</mat-option>\n            <mat-option value=\"User\">Uživateľ</mat-option>\n            <mat-option value=\"Server\">Server</mat-option>\n            <mat-option value=\"Other\">Iné</mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"ticketType.invalid\"> Typ tiketu nemôže byť prázdny </mat-error>\n    </mat-form-field>\n\n    <!--TICKET TYPE -->\n\n    <!-- software -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'Software' \" class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\">\n            <mat-option  *ngFor=\"let software of softwareTypes\" [value]=\"software.name\"  >{{ software.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"ticketSubtypeName.invalid\"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n     <!--hardware  -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'Hardware'  \" class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\" >\n            <mat-option  *ngFor=\"let hardware of hardwareTypes\" [value]=\"hardware.name\"  >{{ hardware.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid\">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n     <!-- server -->\n    <mat-form-field *ngIf = \" ticketForm.value.ticketType === 'Server' \"  class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\" >\n            <mat-option  *ngFor=\"let server of serverTypes\" [value]=\"server.name\"  >{{ server.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid\">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n    <!-- username or other -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' \" class='ticketInlineParameters'>\n        <input matInput placeholder=\"Definujte meno\" formControlName = \"ticketSubtypeName\">\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid\"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n\n    <!--Priority -->\n    <mat-form-field class='ticketInlineParameters' >\n        <mat-label>Priorita</mat-label>\n        <mat-select formControlName=\"requestPriority\">\n            <mat-option value=\"nízka\">nízka</mat-option>\n            <mat-option value=\"stredná\">stredná</mat-option>\n            <mat-option value=\"vysoká\">vysoká</mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" requestPriority.invalid\"> Prosím vyberte prioritu tiketu</mat-error>\n\n    </mat-form-field>\n\n    <!--nazov -->\n    <mat-form-field class='ticketInlineParameters'>\n        <input  matInput placeholder=\"Názov tiketu\" formControlName = \"name\">\n\n        <mat-error *ngIf=\" name.invalid\"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>\n\n    </mat-form-field>\n\n    <!--problem -->\n    <mat-form-field class='ticketInlineParameters' >\n        <textarea  matInput placeholder=\"Popis problému\" formControlName = \"problem\"></textarea>\n\n        <mat-error *ngIf=\"problem.invalid\"> Prosím zadefinujte váš problém, minimálne 10 zankov</mat-error>\n    </mat-form-field>\n\n     <!-- uploader -->\n    <div class='ticketInlineParameters'> \n        <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n    </div>\n\n    <!-- submit button -->\n    <div class='ticketInlineParameters'>\n        <button mat-raised-button color=\"primary\" id=\"ticketSendingButton\" type=\"submit\"> Odoslať </button>\n    </div>\n\n</form>\n\n<ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>\n<img id='ticketFormImage' src=\"../../../../assets/images_design/ticket_form.png\"/>";
+    __webpack_exports__["default"] = "\n<h2 class='formTitle'>Požiadavka na Ticket</h2>\n\n<form [formGroup] = \"ticketForm\"  #ticketFormViewChild=\"ngForm\"  (ngSubmit)=\"submit()\">\n   <!-- Values : {{ ticketForm.value | json }}\n    <hr> -->\n    <mat-form-field class='ticketInlineParameters'>\n        <mat-label>Typ Tiketu</mat-label>\n        <mat-select formControlName=\"ticketType\" (selectionChange)= \"changeTicketType($event.value)\">\n            <mat-option value=\"Software\">Software</mat-option>\n            <mat-option value=\"Hardware\">Hardware</mat-option>\n            <mat-option value=\"User\">Uživateľ</mat-option>\n            <mat-option value=\"Server\">Server</mat-option>\n            <mat-option value=\"Other\">Iné</mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"ticketType.invalid && ticketType.touched\"> Typ tiketu nemôže byť prázdny </mat-error>\n    </mat-form-field>\n\n    <!--TICKET TYPE -->\n\n    <!-- software -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'Software' \" class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\">\n            <mat-option  *ngFor=\"let software of softwareTypes\" [value]=\"software.name\"  >{{ software.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\"ticketSubtypeName.invalid && ticketSubtypeName.touched\"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n     <!--hardware  -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'Hardware'  \" class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\" >\n            <mat-option  *ngFor=\"let hardware of hardwareTypes\" [value]=\"hardware.name\"  >{{ hardware.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid && ticketSubtypeName.touched\">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n     <!-- server -->\n    <mat-form-field *ngIf = \" ticketForm.value.ticketType === 'Server' \"  class='ticketInlineParameters'>\n        <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>\n\n        <mat-select formControlName=\"ticketSubtypeName\" >\n            <mat-option  *ngFor=\"let server of serverTypes\" [value]=\"server.name\"  >{{ server.name }} </mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid  && ticketSubtypeName.touched\">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n    <!-- username or other -->\n    <mat-form-field *ngIf = \"ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' \" class='ticketInlineParameters'>\n        <input matInput placeholder=\"Definujte meno\" formControlName = \"ticketSubtypeName\">\n\n        <mat-error *ngIf=\" ticketSubtypeName.invalid  && ticketSubtypeName.touched\"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>\n    </mat-form-field>\n\n\n    <!--Priority -->\n    <mat-form-field class='ticketInlineParameters' >\n        <mat-label>Priorita</mat-label>\n        <mat-select formControlName=\"requestPriority\">\n            <mat-option value=\"nízka\">nízka</mat-option>\n            <mat-option value=\"stredná\">stredná</mat-option>\n            <mat-option value=\"vysoká\">vysoká</mat-option>\n        </mat-select>\n\n        <mat-error *ngIf=\" requestPriority.invalid && requestPriority.touched\"> Prosím vyberte prioritu tiketu</mat-error>\n\n    </mat-form-field>\n\n    <!--nazov -->\n    <mat-form-field class='ticketInlineParameters'>\n        <input  matInput placeholder=\"Názov tiketu\" formControlName = \"name\">\n\n        <mat-error *ngIf=\" name.invalid && name.touched\"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>\n\n    </mat-form-field>\n\n    <!--problem -->\n    <mat-form-field class='ticketInlineParameters' >\n        <textarea  matInput placeholder=\"Popis problému\" formControlName = \"problem\"></textarea>\n\n        <mat-error *ngIf=\"problem.invalid  && problem.touched\"> Prosím zadefinujte váš problém, minimálne 10 zankov</mat-error>\n    </mat-form-field>\n\n     <!-- uploader -->\n    <div class='ticketInlineParameters'> \n        <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>\n    </div>\n\n    <!-- submit button -->\n    <div class='ticketInlineParameters'>\n        <button mat-raised-button color=\"primary\" id=\"ticketSendingButton\" type=\"submit\"> Odoslať </button>\n    </div>\n\n</form>\n\n<ngx-spinner><p style=\"font-size: 20px; color: white\">Posielanie požiadavky...</p> </ngx-spinner>\n<img id='ticketFormImage' src=\"../../../../assets/images_design/ticket_form.png\"/>";
     /***/
   },
 
@@ -719,7 +719,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "<div class='header'>\n    <div class='headerTitle'> {{ tableTitle }}</div>\n</div>\n<div class=\"tableRequest mat-elevation-z3\">\n        <mat-table #table [dataSource]=\"dataSource\" >\n        \n            <ng-container matColumnDef=\"id\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > # </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" class='fontWeight'> \n               {{ element.id }}.\n                <img *ngIf=\"element.requestType === 'Ticket' \" src=\"../../../../assets/images_design/ticket_icon.png\"  class ='userIcon requestIcon'/>\n                <img  *ngIf=\"element.requestType === 'Report' \" src=\"../../../../assets/images_design/report_icon_2.png\"  class ='userIcon requestIcon'/>\n                <img *ngIf=\"element.requestType === 'Finance' \" src=\"../../../../assets/images_design/finance_icon.png\"  class ='userIcon requestIcon'/>  \n                {{ element.requestType}} \n            </mat-cell>\n            </ng-container>\n    \n\n            <ng-container matColumnDef=\"additionalInformation\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Typ </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{ element.additionalInformation}}  </mat-cell>\n            </ng-container>\n        \n            <ng-container matColumnDef=\"creator\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Vytvoril </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img [src]='getImage(element.creatorImageByte)' class='userIcon'/>\n                {{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}\n            </mat-cell>\n            </ng-container>\n\n            <ng-container matColumnDef=\"name\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Názov </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{ element.name}} </mat-cell>\n            </ng-container>\n\n            <ng-container matColumnDef=\"priority\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Priorita </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img *ngIf=\"element.requestPriority === 'nízka' \" src=\"../../../../assets/images_design/priority_low_icon_2.png\"  class ='userIcon'/>\n                <img  *ngIf=\"element.requestPriority === 'stredná' \" src=\"../../../../assets/images_design/priority_medium_icon_2.png\"  class ='userIcon'/>\n                <img *ngIf=\"element.requestPriority === 'vysoká' \" src=\"../../../../assets/images_design/priority_high_icon_2.png\"  class ='userIcon'/>\n                 {{ element.requestPriority}} \n            </mat-cell>\n            </ng-container>\n        \n            <ng-container matColumnDef=\"assigned\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Pridelené </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <div *ngIf = \"element.assigned !== ' ' \">\n                    <img [src]='getImage(element.assignedImageByte)' class='userIcon'/> \n                    {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}\n                </div>  \n                <div *ngIf = \"element.assigned === ' ' && displayAssignToMe\" class='assignOnMe' (click) = \"assignOnMe(element)\">\n                    pridelit mne\n                </div>\n            </mat-cell>\n            </ng-container>\n\n        <ng-container matColumnDef=\"userAction\" >\n            <mat-header-cell *matHeaderCellDef [ngStyle]=\"{'background-color': headerColor}\" > Zahodit </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" > \n                <div *ngIf = \"element.assigned === userService.user.fullname \" class='removeFromMe' (click) = \"removeFromMe(element)\">\n                    Zahodiť\n                </div>\n            </mat-cell>\n        </ng-container>\n\n        <ng-container matColumnDef=\"closed\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Uzatvoril </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img [src]='getImage(element.closedImageByte)' class='userIcon'/>\n                {{ element.closed  | slice:0:1 | titlecase}}. {{ element.closed.split(' ')[1] | titlecase}}\n            </mat-cell>\n            </ng-container>\n    \n        <ng-container matColumnDef=\"timeCreated\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Vytvorené </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>\n        </ng-container>\n\n        <ng-container matColumnDef=\"timeClosed\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Uzatvorené</mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{element.timestampClosed | date:'MMM d, y, HH:mm:ss '}} </mat-cell>\n        </ng-container>\n    \n        <ng-container matColumnDef=\"details\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" >   </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> \n            <button mat-button   class=\"detailButton\" (click)=\"navigateToDetails(element.id)\">\n                    detaily\n            </button>\n            </mat-cell>\n        </ng-container>\n        \n            <mat-header-row *matHeaderRowDef=\"displayedColumns\"></mat-header-row>\n            <mat-row *matRowDef=\"let row; columns: displayedColumns;\"></mat-row>\n        </mat-table>\n        \n        <mat-paginator #paginator\n                        [pageSize]=\"10\"\n                        [pageSizeOptions]=\"[5, 10, 20, 100]\">\n        </mat-paginator>\n    </div>\n    ";
+    __webpack_exports__["default"] = "<div class='header'>\n    <div class='headerTitle'> {{ tableTitle }}</div>\n</div>\n<div class=\"tableRequest mat-elevation-z3\">\n        <mat-table #table [dataSource]=\"dataSource\" >\n        \n            <ng-container matColumnDef=\"id\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > # </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" class='fontWeight'> \n               {{ element.id }}.\n                <img *ngIf=\"element.requestType === 'Ticket' \" src=\"../../../../assets/images_design/ticket_icon.png\"  class ='userIcon requestIcon'/>\n                <img  *ngIf=\"element.requestType === 'Report' \" src=\"../../../../assets/images_design/report_icon_2.png\"  class ='userIcon requestIcon'/>\n                <img *ngIf=\"element.requestType === 'Finance' \" src=\"../../../../assets/images_design/finance_icon.png\"  class ='userIcon requestIcon'/>  \n                {{ element.requestType}} \n            </mat-cell>\n            </ng-container>\n    \n\n           <ng-container matColumnDef=\"additionalInformation\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Typ </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{ element.additionalInformation}}  </mat-cell>\n            </ng-container>\n        \n            <ng-container matColumnDef=\"creator\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Vytvoril </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img [src]='getImage(element.creatorImageByte)' class='userIcon'/>\n                {{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}\n            </mat-cell>\n            </ng-container>\n\n            <ng-container matColumnDef=\"name\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Názov </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{ element.name}} </mat-cell>\n            </ng-container>\n\n           <ng-container matColumnDef=\"priority\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Priorita </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img *ngIf=\"element.requestPriority === 'nízka' \" src=\"../../../../assets/images_design/priority_low_icon_2.png\"  class ='userIcon'/>\n                <img  *ngIf=\"element.requestPriority === 'stredná' \" src=\"../../../../assets/images_design/priority_medium_icon_2.png\"  class ='userIcon'/>\n                <img *ngIf=\"element.requestPriority === 'vysoká' \" src=\"../../../../assets/images_design/priority_high_icon_2.png\"  class ='userIcon'/>\n                 {{ element.requestPriority}} \n            </mat-cell>\n            </ng-container>\n        \n            <ng-container matColumnDef=\"assigned\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Pridelené </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <div *ngIf = \"element.assigned !== ' ' \">\n                    <img [src]='getImage(element.assignedImageByte)' class='userIcon'/> \n                    {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}\n                </div>  \n                <div *ngIf = \"element.assigned === ' ' && displayAssignToMe\" class='assignOnMe' (click) = \"assignOnMe(element)\">\n                    pridelit mne\n                </div>\n            </mat-cell>\n            </ng-container> \n\n        <ng-container matColumnDef=\"userAction\" >\n            <mat-header-cell *matHeaderCellDef [ngStyle]=\"{'background-color': headerColor}\" > Zahodit </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\" > \n                <div *ngIf = \"element.assigned === userService.user.fullname \" class='removeFromMe' (click) = \"removeFromMe(element)\">\n                    Zahodiť\n                </div>\n            </mat-cell>\n        </ng-container>\n\n         <ng-container matColumnDef=\"closed\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Uzatvoril </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\">\n                <img [src]='getImage(element.closedImageByte)' class='userIcon'/>\n                {{ element.closed  | slice:0:1 | titlecase}}. {{ element.closed.split(' ')[1] | titlecase}}\n            </mat-cell>\n            </ng-container>\n    \n        <ng-container matColumnDef=\"timeCreated\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Vytvorené </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>\n        </ng-container>\n\n        <ng-container matColumnDef=\"timeClosed\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" > Uzatvorené</mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> {{element.timestampClosed | date:'MMM d, y, HH:mm:ss '}} </mat-cell>\n        </ng-container>\n    \n        <ng-container matColumnDef=\"details\">\n            <mat-header-cell *matHeaderCellDef  [ngStyle]=\"{'background-color': headerColor}\" >   </mat-header-cell>\n            <mat-cell *matCellDef=\"let element\"> \n            <button mat-button   class=\"detailButton\" (click)=\"navigateToDetails(element.id)\">\n                    detaily\n            </button>\n            </mat-cell>\n        </ng-container> \n        \n            <mat-header-row *matHeaderRowDef=\"displayedColumns\"></mat-header-row>\n            <mat-row *matRowDef=\"let row; columns: displayedColumns;\"></mat-row>\n        </mat-table>\n        \n        <mat-paginator #paginator\n                        [pageSize]=\"10\"\n                        [pageSizeOptions]=\"[5, 10, 20, 100]\">\n        </mat-paginator>\n    </div>\n    ";
     /***/
   },
 
@@ -739,7 +739,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "\n\n\n<button mat-button color=\"primary\"  (click) = \"save()\"  *ngIf='!displayOnlyReset && editActivated '>\n    Uložiť\n</button>\n\n<button mat-button color=\"warn\"   (click) = 'reset()' *ngIf='displayOnlyReset || editActivated '>\n    Resetovať\n</button>\n\n<button mat-button class='editButton'  (click) = 'edit()'  *ngIf='!displayOnlyReset && !editActivated '>\n    Editovať\n</button>\n\n<button mat-button color=\"warn\"  (click) = 'delete()'  *ngIf='!displayOnlyReset && !editActivated'>\n    Vymazať\n</button>";
+    __webpack_exports__["default"] = "\n\n\n<button mat-button color=\"primary\"  (click) = \"save()\"  *ngIf=' editActivated '>\n    Uložiť\n</button>\n\n<button mat-button color=\"warn\"   (click) = 'reset()' *ngIf=' editActivated '>\n    Resetovať\n</button>\n\n<button mat-button class='editButton'  (click) = 'edit()'  *ngIf=' !editActivated '>\n    Editovať\n</button>\n\n<button mat-button color=\"warn\"  (click) = 'delete()'  *ngIf=' !editActivated'>\n    Vymazať\n</button>";
     /***/
   },
 
@@ -1547,7 +1547,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "* {\n  margin: 0;\n  padding: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQzpcXFVzZXJzXFxFZHVhcmRcXERlc2t0b3BcXHByb2pla3R5XFxTaW1wbGVkZXNrXFxTaW1wbGVkZXNrXzJcXENsaWVudC9zcmNcXGFwcFxcYXBwLmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9hcHAuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxTQUFBO0VBQ0EsVUFBQTtBQ0NKIiwiZmlsZSI6InNyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiKntcclxuICAgIG1hcmdpbjogMDtcclxuICAgIHBhZGRpbmc6IDA7XHJcbn1cclxuIiwiKiB7XG4gIG1hcmdpbjogMDtcbiAgcGFkZGluZzogMDtcbn0iXX0= */";
+    __webpack_exports__["default"] = "* {\n  margin: 0;\n  padding: 0;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvQzpcXFVzZXJzXFxFZHVhcmRcXERlc2t0b3BcXHByb2pla3R5XFxTaW1wbGVkZXNrXFxTaW1wbGVkZXNrXzJcXENsaWVudC9zcmNcXGFwcFxcYXBwLmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9hcHAuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxTQUFBO0VBQ0EsVUFBQTtBQ0NKIiwiZmlsZSI6InNyYy9hcHAvYXBwLmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiKntcclxuICAgIG1hcmdpbjogMDtcclxuICAgIHBhZGRpbmc6IDA7XHJcbn1cclxuXHJcblxyXG5cclxuIiwiKiB7XG4gIG1hcmdpbjogMDtcbiAgcGFkZGluZzogMDtcbn0iXX0= */";
     /***/
   },
 
@@ -3479,6 +3479,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
         }
       }, {
+        key: "getAllActiveUsers",
+        value: function getAllActiveUsers() {
+          return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "user/secure/allActive");
+        }
+      }, {
         key: "getAllUsers",
         value: function getAllUsers() {
           return this.http.get(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "user/secure/all");
@@ -3492,6 +3497,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         key: "resetUserPassword",
         value: function resetUserPassword(username) {
           return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "user/secure/resetPassword/".concat(username), null);
+        }
+      }, {
+        key: "modifyUserState",
+        value: function modifyUserState(username) {
+          return this.http.put(_environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "user/secure/modifyState/".concat(username), null);
         }
       }]);
 
@@ -3767,7 +3777,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           var _this6 = this;
 
           this.initFormGroup();
-          this.userService.getAllUsers().subscribe(function (users) {
+          this.userService.getAllActiveUsers().subscribe(function (users) {
             return _this6.allAvailableUsers = users;
           });
           this.requestTypeService.getFinanceTypesAll().subscribe(function (types) {
@@ -3831,6 +3841,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               var group = _this7.consructGroup();
 
               _this7.groupService.registerGroup(group).subscribe(function () {
+                _this7.groupFormViewChild.resetForm();
+
                 sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire({
                   position: 'top-end',
                   text: 'Skupina ' + group.name + " bola vytvorená   ",
@@ -3993,6 +4005,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }];
     };
 
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('groupFormViewChild', {
+      static: true
+    })], RegisterGroupComponent.prototype, "groupFormViewChild", void 0);
     RegisterGroupComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-register-group',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -4094,11 +4109,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(RegisterUserComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          this.initFormGroup();
-        }
-      }, {
-        key: "initFormGroup",
-        value: function initFormGroup() {
           this.userRegistrationForm = this.formBuilder.group({
             firstname: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]],
             lastname: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]],
@@ -4117,11 +4127,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           var formValues = this.userRegistrationForm.value;
           var userRegistraion = {
-            username: formValues.username,
-            firstName: formValues.firstname,
-            lastName: formValues.lastname,
-            email: formValues.email
+            username: formValues.username.trim(),
+            firstName: formValues.firstname.trim(),
+            lastName: formValues.lastname.trim(),
+            email: formValues.email.trim()
           };
+          console.log(userRegistraion);
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
             text: "Naozaj chcetete vytvoriť uživateľa ? ",
             icon: 'warning',
@@ -4147,7 +4158,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                   timer: 1500
                 });
 
-                _this8.userRegistrationForm.reset();
+                _this8.userFormViewChild.resetForm();
               });
             }
           });
@@ -4185,6 +4196,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }];
     };
 
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('userFormViewChild', {
+      static: true
+    })], RegisterUserComponent.prototype, "userFormViewChild", void 0);
     RegisterUserComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-register-user',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -4213,7 +4227,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = ".container {\n  width: 40%;\n  float: left;\n  height: 100%;\n  padding: 20px 0px 0px 35px;\n  position: relative;\n}\n\n.leftLine {\n  border-left: 1px solid #d7d7d7;\n}\n\n.selectTitleSpace {\n  margin-right: 15px;\n}\n\n.formTitleSmall {\n  font-size: 17px;\n  font-weight: bold;\n  color: #818181;\n}\n\n.contanierTitle {\n  position: relative;\n}\n\n#serdbuttonsGroup {\n  position: absolute;\n  right: 0px;\n}\n\n#serdbuttonsUser {\n  position: absolute;\n  right: 15%;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9hcHAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQvQzpcXFVzZXJzXFxFZHVhcmRcXERlc2t0b3BcXHByb2pla3R5XFxTaW1wbGVkZXNrXFxTaW1wbGVkZXNrXzJcXENsaWVudC9zcmNcXGFwcFxcbW9kdWxlc1xcYXBwLW1hbmFnZW1lbnRcXHVzZXItZ3JvdXAtbWFuYWdlbWVudFxcdXNlci1ncm91cC1tYW5hZ2VtZW50LmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9tb2R1bGVzL2FwcC1tYW5hZ2VtZW50L3VzZXItZ3JvdXAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7RUFDSSxVQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSwwQkFBQTtFQUNBLGtCQUFBO0FDQ0o7O0FERUE7RUFDSSw4QkFBQTtBQ0NKOztBREVBO0VBRUksa0JBQUE7QUNBSjs7QURHQTtFQUNJLGVBQUE7RUFDQSxpQkFBQTtFQUNBLGNBQUE7QUNBSjs7QURHQTtFQUNJLGtCQUFBO0FDQUo7O0FER0E7RUFDSSxrQkFBQTtFQUNBLFVBQUE7QUNBSjs7QURHQTtFQUNJLGtCQUFBO0VBQ0EsVUFBQTtBQ0FKIiwiZmlsZSI6InNyYy9hcHAvbW9kdWxlcy9hcHAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQvdXNlci1ncm91cC1tYW5hZ2VtZW50LmNvbXBvbmVudC5zY3NzIiwic291cmNlc0NvbnRlbnQiOlsiLmNvbnRhaW5lcntcclxuICAgIHdpZHRoOiA0MCU7XHJcbiAgICBmbG9hdDogbGVmdDtcclxuICAgIGhlaWdodDogMTAwJTtcclxuICAgIHBhZGRpbmc6IDIwcHggMHB4IDBweCAzNXB4O1xyXG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG59XHJcblxyXG4ubGVmdExpbmV7XHJcbiAgICBib3JkZXItbGVmdDogMXB4IHNvbGlkICNkN2Q3ZDc7XHJcbn1cclxuXHJcbi5zZWxlY3RUaXRsZVNwYWNle1xyXG4gICAgXHJcbiAgICBtYXJnaW4tcmlnaHQ6IDE1cHg7XHJcbn1cclxuXHJcbi5mb3JtVGl0bGVTbWFsbHtcclxuICAgIGZvbnQtc2l6ZTogMTdweDtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gICAgY29sb3I6ICM4MTgxODE7XHJcbn1cclxuXHJcbi5jb250YW5pZXJUaXRsZXtcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxufVxyXG5cclxuI3NlcmRidXR0b25zR3JvdXB7XHJcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICByaWdodDogMHB4O1xyXG59XHJcblxyXG4jc2VyZGJ1dHRvbnNVc2Vye1xyXG4gICAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gICAgcmlnaHQ6IDE1JTtcclxufSIsIi5jb250YWluZXIge1xuICB3aWR0aDogNDAlO1xuICBmbG9hdDogbGVmdDtcbiAgaGVpZ2h0OiAxMDAlO1xuICBwYWRkaW5nOiAyMHB4IDBweCAwcHggMzVweDtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xufVxuXG4ubGVmdExpbmUge1xuICBib3JkZXItbGVmdDogMXB4IHNvbGlkICNkN2Q3ZDc7XG59XG5cbi5zZWxlY3RUaXRsZVNwYWNlIHtcbiAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xufVxuXG4uZm9ybVRpdGxlU21hbGwge1xuICBmb250LXNpemU6IDE3cHg7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xuICBjb2xvcjogIzgxODE4MTtcbn1cblxuLmNvbnRhbmllclRpdGxlIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xufVxuXG4jc2VyZGJ1dHRvbnNHcm91cCB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDBweDtcbn1cblxuI3NlcmRidXR0b25zVXNlciB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDE1JTtcbn0iXX0= */";
+    __webpack_exports__["default"] = "/* Success syling */\n.mat-button.mat-success,\n.mat-stroked-button.mat-success {\n  color: #155724;\n}\n.mat-button.mat-success:hover,\n.mat-stroked-button.mat-success:hover {\n  background-color: #f0fff3;\n}\n.mat-raised-button.mat-success,\n.mat-flat-button.mat-success,\n.mat-fab.mat-success,\n.mat-mini-fab.mat-success {\n  color: #f0fff3;\n  background-color: #155724;\n}\n.mat-icon-button.mat-success {\n  color: #155724;\n}\n.container {\n  width: 40%;\n  float: left;\n  height: 100%;\n  padding: 20px 0px 0px 35px;\n  position: relative;\n}\n.leftLine {\n  border-left: 1px solid #d7d7d7;\n}\n.selectTitleSpace {\n  margin-right: 15px;\n}\n.formTitleSmall {\n  font-size: 17px;\n  font-weight: bold;\n  color: #818181;\n}\n.contanierTitle {\n  position: relative;\n}\n#serdbuttonsGroup {\n  position: absolute;\n  right: 0px;\n}\n#resetButton {\n  position: absolute;\n  right: 28%;\n}\n#ActivateDisableBUtton {\n  position: absolute;\n  right: 12%;\n}\n.modificationButton {\n  z-index: 1;\n  cursor: pointer;\n  font-size: 17px;\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9hcHAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQvQzpcXFVzZXJzXFxFZHVhcmRcXERlc2t0b3BcXHByb2pla3R5XFxTaW1wbGVkZXNrXFxTaW1wbGVkZXNrXzJcXENsaWVudC9zcmNcXGFwcFxcc2hhcmVkXFxjdXN0b21Dc3NcXFN1Y2Nlc3NNYXRCdXR0b24uc2NzcyIsInNyYy9hcHAvbW9kdWxlcy9hcHAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQvdXNlci1ncm91cC1tYW5hZ2VtZW50LmNvbXBvbmVudC5zY3NzIiwic3JjL2FwcC9tb2R1bGVzL2FwcC1tYW5hZ2VtZW50L3VzZXItZ3JvdXAtbWFuYWdlbWVudC9DOlxcVXNlcnNcXEVkdWFyZFxcRGVza3RvcFxccHJvamVrdHlcXFNpbXBsZWRlc2tcXFNpbXBsZWRlc2tfMlxcQ2xpZW50L3NyY1xcYXBwXFxtb2R1bGVzXFxhcHAtbWFuYWdlbWVudFxcdXNlci1ncm91cC1tYW5hZ2VtZW50XFx1c2VyLWdyb3VwLW1hbmFnZW1lbnQuY29tcG9uZW50LnNjc3MiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsbUJBQUE7QUFDQTs7RUFFSSxjQUFBO0FDQ0o7QURDQTs7RUFFRSx5QkFBQTtBQ0VGO0FEQ0E7Ozs7RUFJRSxjQUFBO0VBQ0EseUJBQUE7QUNFRjtBRENBO0VBQ0UsY0FBQTtBQ0VGO0FDbkJBO0VBQ0ksVUFBQTtFQUNBLFdBQUE7RUFDQSxZQUFBO0VBQ0EsMEJBQUE7RUFDQSxrQkFBQTtBRHNCSjtBQ25CQTtFQUNJLDhCQUFBO0FEc0JKO0FDbkJBO0VBRUksa0JBQUE7QURxQko7QUNsQkE7RUFDSSxlQUFBO0VBQ0EsaUJBQUE7RUFDQSxjQUFBO0FEcUJKO0FDbEJBO0VBQ0ksa0JBQUE7QURxQko7QUNsQkE7RUFDSSxrQkFBQTtFQUNBLFVBQUE7QURxQko7QUNsQkE7RUFDSSxrQkFBQTtFQUNBLFVBQUE7QURxQko7QUNsQkE7RUFDSSxrQkFBQTtFQUNBLFVBQUE7QURxQko7QUNsQkE7RUFDSSxVQUFBO0VBQ0EsZUFBQTtFQUNBLGVBQUE7QURxQkoiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL2FwcC1tYW5hZ2VtZW50L3VzZXItZ3JvdXAtbWFuYWdlbWVudC91c2VyLWdyb3VwLW1hbmFnZW1lbnQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIvKiBTdWNjZXNzIHN5bGluZyAqL1xyXG4ubWF0LWJ1dHRvbi5tYXQtc3VjY2VzcyxcclxuLm1hdC1zdHJva2VkLWJ1dHRvbi5tYXQtc3VjY2VzcyB7XHJcbiAgICBjb2xvcjogIzE1NTcyNDtcclxufVxyXG4ubWF0LWJ1dHRvbi5tYXQtc3VjY2Vzczpob3ZlcixcclxuLm1hdC1zdHJva2VkLWJ1dHRvbi5tYXQtc3VjY2Vzczpob3ZlciB7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogI2YwZmZmMztcclxufVxyXG5cclxuLm1hdC1yYWlzZWQtYnV0dG9uLm1hdC1zdWNjZXNzLFxyXG4ubWF0LWZsYXQtYnV0dG9uLm1hdC1zdWNjZXNzLFxyXG4ubWF0LWZhYi5tYXQtc3VjY2VzcyxcclxuLm1hdC1taW5pLWZhYi5tYXQtc3VjY2VzcyB7XHJcbiAgY29sb3I6ICNmMGZmZjM7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjogIzE1NTcyNDtcclxufVxyXG5cclxuLm1hdC1pY29uLWJ1dHRvbi5tYXQtc3VjY2VzcyB7XHJcbiAgY29sb3I6IzE1NTcyNDtcclxufVxyXG4iLCIvKiBTdWNjZXNzIHN5bGluZyAqL1xuLm1hdC1idXR0b24ubWF0LXN1Y2Nlc3MsXG4ubWF0LXN0cm9rZWQtYnV0dG9uLm1hdC1zdWNjZXNzIHtcbiAgY29sb3I6ICMxNTU3MjQ7XG59XG5cbi5tYXQtYnV0dG9uLm1hdC1zdWNjZXNzOmhvdmVyLFxuLm1hdC1zdHJva2VkLWJ1dHRvbi5tYXQtc3VjY2Vzczpob3ZlciB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNmMGZmZjM7XG59XG5cbi5tYXQtcmFpc2VkLWJ1dHRvbi5tYXQtc3VjY2Vzcyxcbi5tYXQtZmxhdC1idXR0b24ubWF0LXN1Y2Nlc3MsXG4ubWF0LWZhYi5tYXQtc3VjY2Vzcyxcbi5tYXQtbWluaS1mYWIubWF0LXN1Y2Nlc3Mge1xuICBjb2xvcjogI2YwZmZmMztcbiAgYmFja2dyb3VuZC1jb2xvcjogIzE1NTcyNDtcbn1cblxuLm1hdC1pY29uLWJ1dHRvbi5tYXQtc3VjY2VzcyB7XG4gIGNvbG9yOiAjMTU1NzI0O1xufVxuXG4uY29udGFpbmVyIHtcbiAgd2lkdGg6IDQwJTtcbiAgZmxvYXQ6IGxlZnQ7XG4gIGhlaWdodDogMTAwJTtcbiAgcGFkZGluZzogMjBweCAwcHggMHB4IDM1cHg7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmxlZnRMaW5lIHtcbiAgYm9yZGVyLWxlZnQ6IDFweCBzb2xpZCAjZDdkN2Q3O1xufVxuXG4uc2VsZWN0VGl0bGVTcGFjZSB7XG4gIG1hcmdpbi1yaWdodDogMTVweDtcbn1cblxuLmZvcm1UaXRsZVNtYWxsIHtcbiAgZm9udC1zaXplOiAxN3B4O1xuICBmb250LXdlaWdodDogYm9sZDtcbiAgY29sb3I6ICM4MTgxODE7XG59XG5cbi5jb250YW5pZXJUaXRsZSB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuI3NlcmRidXR0b25zR3JvdXAge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIHJpZ2h0OiAwcHg7XG59XG5cbiNyZXNldEJ1dHRvbiB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDI4JTtcbn1cblxuI0FjdGl2YXRlRGlzYWJsZUJVdHRvbiB7XG4gIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgcmlnaHQ6IDEyJTtcbn1cblxuLm1vZGlmaWNhdGlvbkJ1dHRvbiB7XG4gIHotaW5kZXg6IDE7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgZm9udC1zaXplOiAxN3B4O1xufSIsIkBpbXBvcnQgJy4uLy4uLy4uL3NoYXJlZC9jdXN0b21Dc3MvU3VjY2Vzc01hdEJ1dHRvbi5zY3NzJztcclxuXHJcbi5jb250YWluZXJ7XHJcbiAgICB3aWR0aDogNDAlO1xyXG4gICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICBoZWlnaHQ6IDEwMCU7XHJcbiAgICBwYWRkaW5nOiAyMHB4IDBweCAwcHggMzVweDtcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxufVxyXG5cclxuLmxlZnRMaW5le1xyXG4gICAgYm9yZGVyLWxlZnQ6IDFweCBzb2xpZCAjZDdkN2Q3O1xyXG59XHJcblxyXG4uc2VsZWN0VGl0bGVTcGFjZXtcclxuICAgIFxyXG4gICAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xyXG59XHJcblxyXG4uZm9ybVRpdGxlU21hbGx7XHJcbiAgICBmb250LXNpemU6IDE3cHg7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICAgIGNvbG9yOiAjODE4MTgxO1xyXG59XHJcblxyXG4uY29udGFuaWVyVGl0bGV7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbn1cclxuXHJcbiNzZXJkYnV0dG9uc0dyb3Vwe1xyXG4gICAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gICAgcmlnaHQ6IDBweDtcclxufVxyXG5cclxuI3Jlc2V0QnV0dG9ue1xyXG4gICAgcG9zaXRpb246IGFic29sdXRlO1xyXG4gICAgcmlnaHQ6IDI4JTtcclxufVxyXG5cclxuI0FjdGl2YXRlRGlzYWJsZUJVdHRvbntcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIHJpZ2h0OiAxMiU7XHJcbn1cclxuXHJcbi5tb2RpZmljYXRpb25CdXR0b257XHJcbiAgICB6LWluZGV4OiAxO1xyXG4gICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gICAgZm9udC1zaXplOiAxN3B4O1xyXG59XHJcblxyXG5cclxuIl19 */";
     /***/
   },
 
@@ -4376,9 +4390,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
           });
         }
       }, {
+        key: "modifyUserState",
+        value: function modifyUserState() {
+          var _this11 = this;
+
+          this.userService.modifyUserState(this.userDetails.displayedUser.username).subscribe(function () {
+            _this11.userDetails.displayedUser.active = !_this11.userDetails.displayedUser.active;
+            sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
+              position: 'top-end',
+              text: 'Stav uživateľa bol zmeneý',
+              showConfirmButton: false,
+              timer: 1200
+            });
+          });
+        }
+      }, {
         key: "saveGroup",
         value: function saveGroup() {
-          var _this11 = this;
+          var _this12 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
             text: "Naozaj chcetete editovať skupinu ? ",
@@ -4397,17 +4426,17 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 timer: 1200
               });
 
-              _this11.groupService.modifyGroup(_this11.groupDetails.group).subscribe(function () {
+              _this12.groupService.modifyGroup(_this12.groupDetails.group).subscribe(function () {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
                   position: 'top-end',
                   text: 'Skupina bola editovaná',
                   showConfirmButton: false,
                   timer: 1200
                 });
-                _this11.groupDetails.editGroupActivated = false;
-                _this11.groupPrivileges.activateUnableClick = false;
-                _this11.groupPrivileges.hideUnassignedPriv = true;
-                _this11.serdbuttonsGroup.editActivated = false;
+                _this12.groupDetails.editGroupActivated = false;
+                _this12.groupPrivileges.activateUnableClick = false;
+                _this12.groupPrivileges.hideUnassignedPriv = true;
+                _this12.serdbuttonsGroup.editActivated = false;
               });
             }
           });
@@ -4415,7 +4444,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "deleteGroup",
         value: function deleteGroup() {
-          var _this12 = this;
+          var _this13 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
             text: "Naozaj chcetete vymazať skupinu ? ",
@@ -4434,18 +4463,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 timer: 1200
               });
 
-              _this12.groupService.deleteGroup(_this12.groupDetails.group.name).subscribe(function () {
-                var grouName = _this12.groupDetails.group.name;
-                _this12.groups = _this12.groups.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (group) {
+              _this13.groupService.deleteGroup(_this13.groupDetails.group.name).subscribe(function () {
+                var grouName = _this13.groupDetails.group.name;
+                _this13.groups = _this13.groups.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (group) {
                   return group.filter(function (name) {
                     return name !== grouName;
                   });
                 }));
-                _this12.groupPrivileges.enabledPrivileges = undefined;
-                _this12.groupPrivileges.disabledPrivileges = undefined;
-                _this12.groupPrivileges.name = undefined;
-                _this12.groupDetails.group = undefined;
-                _this12.serdbuttonsGroup.editActivated = false;
+                _this13.groupPrivileges.enabledPrivileges = undefined;
+                _this13.groupPrivileges.disabledPrivileges = undefined;
+                _this13.groupPrivileges.name = undefined;
+                _this13.groupDetails.group = undefined;
+                _this13.serdbuttonsGroup.editActivated = false;
                 sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
                   position: 'top-end',
                   text: 'Skupina bola zmazaná',
@@ -4606,32 +4635,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(DashboardComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
+          var _this14 = this;
+
           this.getRequestOnDashboard();
           this.isAdmin$ = this.authService.isAdmin();
           this.isGhost$ = this.authService.isGhost();
           this.isSolver$ = this.authService.isSolver();
           this.isManager$ = this.authService.isManager();
           this.isManagerRightHand$ = this.authService.isManagerRightHand();
+          setInterval(function () {
+            return _this14.getRequestOnDashboard();
+          }, 600000); // 10minutes 600000
         }
       }, {
         key: "getRequestOnDashboard",
         value: function getRequestOnDashboard() {
-          var _this13 = this;
+          var _this15 = this;
 
           this.spinner.show();
           this.requestService.getRequestOnDashboard().subscribe(function (requests) {
-            console.log(requests);
-            _this13.myOpenRequests.dataSource.data = requests.myOpen;
-            _this13.meAssignedRequests.dataSource.data = requests.assignedOnMe;
-            _this13.otherOpenRequests.dataSource.data = requests.otherOpen;
+            _this15.myOpenRequests.dataSource.data = requests.myOpen;
+            _this15.meAssignedRequests.dataSource.data = requests.assignedOnMe;
+            _this15.otherOpenRequests.dataSource.data = requests.otherOpen;
 
-            _this13.spinner.hide();
+            _this15.spinner.hide();
           });
         }
       }, {
         key: "assignOnMe",
         value: function assignOnMe(request) {
-          var _this14 = this;
+          var _this16 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
             text: "Naozaj chcetete prideliť na seba požiadavku s id : " + request.id + " ? ",
@@ -4643,8 +4676,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this14.requestService.assignOrRemoveRequestOnMe(request.id, true).subscribe(function (result) {
-                _this14.updateTableAssignMeOnRequest(request);
+              _this16.requestService.assignOrRemoveRequestOnMe(request.id, true).subscribe(function (result) {
+                _this16.updateTableAssignMeOnRequest(request);
 
                 sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
                   position: 'top-end',
@@ -4688,7 +4721,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "removeFromMe",
         value: function removeFromMe(request) {
-          var _this15 = this;
+          var _this17 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
             text: "Naozaj chcetete odstrániť zo seba požiadavku s id : " + request.id + " ? ",
@@ -4700,8 +4733,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this15.requestService.assignOrRemoveRequestOnMe(request.id, false).subscribe(function (result) {
-                _this15.updateTableRemoveRequestFromMe(request);
+              _this17.requestService.assignOrRemoveRequestOnMe(request.id, false).subscribe(function (result) {
+                _this17.updateTableRemoveRequestFromMe(request);
 
                 sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
                   position: 'top-end',
@@ -5032,17 +5065,30 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var app_core_services_user_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
     /*! app/core/services/user.service */
     "./src/app/core/services/user.service.ts");
+    /* harmony import */
+
+
+    var _angular_common__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+    /*! @angular/common */
+    "./node_modules/@angular/common/fesm2015/common.js");
+    /* harmony import */
+
+
+    var environments_environment__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+    /*! environments/environment */
+    "./src/environments/environment.ts");
 
     var LoginFormComponent =
     /*#__PURE__*/
     function () {
-      function LoginFormComponent(fb, router, authService, userService) {
+      function LoginFormComponent(fb, router, authService, userService, location) {
         _classCallCheck(this, LoginFormComponent);
 
         this.fb = fb;
         this.router = router;
         this.authService = authService;
         this.userService = userService;
+        this.location = location;
         this.loggingIn = false;
       }
 
@@ -5057,18 +5103,21 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "login",
         value: function login() {
-          var _this16 = this;
+          var _this18 = this;
 
           var val = this.form.value;
 
           if (val.username && val.password) {
             this.loggingIn = true;
             this.authService.login(val.username, val.password).subscribe(function (result) {
-              _this16.userService.loadLoggedInUser().subscribe(function (subs) {
-                _this16.loggingIn = false;
+              _this18.userService.loadLoggedInUser().subscribe(function (subs) {
+                _this18.loggingIn = false;
 
                 if (result && subs) {
-                  _this16.router.navigateByUrl('/dashboard');
+                  //this.router.navigateByUrl('/dashboard');
+                  // this.location.replaceState('/'); // clears browser history so they can't navigate with back button
+                  // this.router.navigate(['/dashboard']); // tells them they've been logged out (somehow)
+                  window.location.href = "".concat(environments_environment__WEBPACK_IMPORTED_MODULE_7__["environment"].dashboard, "dashboard"); // this.router.navigate(['dashboard'], {relativeTo: this.route});
                 }
               });
             });
@@ -5088,6 +5137,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         type: app_core_services_authentication_service__WEBPACK_IMPORTED_MODULE_4__["AuthenticationService"]
       }, {
         type: app_core_services_user_service__WEBPACK_IMPORTED_MODULE_5__["UserService"]
+      }, {
+        type: _angular_common__WEBPACK_IMPORTED_MODULE_6__["Location"]
       }];
     };
 
@@ -5269,37 +5320,37 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "loadClosedRequests",
         value: function loadClosedRequests() {
-          var _this17 = this;
+          var _this19 = this;
 
           this.spinner.show();
           this.requestService.getClosedRequests(this.requestFilter.dateFrom, this.requestFilter.dateTo).subscribe(function (requests) {
-            _this17.closedRequests.dataSource.data = requests;
-            _this17.loadedRequests = requests;
+            _this19.closedRequests.dataSource.data = requests;
+            _this19.loadedRequests = requests;
 
-            _this17.filterClosedRequests(_this17.requestFilter.filterForm.value);
+            _this19.filterClosedRequests(_this19.requestFilter.filterForm.value);
 
-            _this17.spinner.hide();
+            _this19.spinner.hide();
           });
         }
       }, {
         key: "filterClosedRequests",
         value: function filterClosedRequests(filter) {
-          var _this18 = this;
+          var _this20 = this;
 
           // copy back original requests
           this.closedRequests.dataSource.data = _toConsumableArray(this.loadedRequests); // filter requests
 
           this.loadedRequests.forEach(function (request) {
             if (filter.closed !== '' && filter.closed !== request.closed) {
-              _this18.closedRequests.dataSource.data.splice(_this18.closedRequests.dataSource.data.indexOf(request), 1);
+              _this20.closedRequests.dataSource.data.splice(_this20.closedRequests.dataSource.data.indexOf(request), 1);
             } else if (filter.creator !== '' && filter.creator !== request.creator) {
-              _this18.closedRequests.dataSource.data.splice(_this18.closedRequests.dataSource.data.indexOf(request), 1);
+              _this20.closedRequests.dataSource.data.splice(_this20.closedRequests.dataSource.data.indexOf(request), 1);
             } else if (filter.type !== '' && filter.type !== request.requestType) {
-              _this18.closedRequests.dataSource.data.splice(_this18.closedRequests.dataSource.data.indexOf(request), 1);
+              _this20.closedRequests.dataSource.data.splice(_this20.closedRequests.dataSource.data.indexOf(request), 1);
             } else if (filter.priority !== '' && filter.priority !== request.requestPriority) {
-              _this18.closedRequests.dataSource.data.splice(_this18.closedRequests.dataSource.data.indexOf(request), 1);
+              _this20.closedRequests.dataSource.data.splice(_this20.closedRequests.dataSource.data.indexOf(request), 1);
             } else if (!request.name.includes(filter.name)) {
-              _this18.closedRequests.dataSource.data.splice(_this18.closedRequests.dataSource.data.indexOf(request), 1);
+              _this20.closedRequests.dataSource.data.splice(_this20.closedRequests.dataSource.data.indexOf(request), 1);
             }
           }); // re-render table with data
 
@@ -5472,7 +5523,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "submit",
         value: function submit() {
-          var _this19 = this;
+          var _this21 = this;
 
           if (this.commentInput === '') {
             return;
@@ -5481,28 +5532,28 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
           if (this.isChecked && this.isCheckedName === "Solution") {
             this.constructRequestComment(this.userService.getUserSimple()).subscribe(function (commentDTO) {
-              return _this19.sendComment(commentDTO, false, true);
+              return _this21.sendComment(commentDTO, false, true);
             });
             return;
           } // send simple comment
 
 
           this.constructRequestComment(this.userService.getUserSimple()).subscribe(function (commentDTO) {
-            return _this19.sendComment(commentDTO, _this19.isChecked && _this19.isCheckedName === "Notification", false);
+            return _this21.sendComment(commentDTO, _this21.isChecked && _this21.isCheckedName === "Notification", false);
           });
         }
       }, {
         key: "constructRequestComment",
         value: function constructRequestComment(userSimple) {
-          var _this20 = this;
+          var _this22 = this;
 
           return this.requestDetails$.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["map"])(function (request) {
             var commentDTO = {
               id: null,
               requestId: request.id,
               creator: userSimple,
-              comment: _this20.commentInput,
-              isPrivate: _this20.isChecked && _this20.isCheckedName === "Private",
+              comment: _this22.commentInput,
+              isPrivate: _this22.isChecked && _this22.isCheckedName === "Private",
               groupsToShare: [],
               timestamp: new Date()
             };
@@ -5512,7 +5563,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "sendComment",
         value: function sendComment(commentDTO, sendEmail, solution) {
-          var _this21 = this;
+          var _this23 = this;
 
           if (this.commentInput === '') return;
           sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
@@ -5524,13 +5575,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Odoslať'
           }).then(function (result) {
             if (result.value) {
-              _this21.commentService.addComment(commentDTO, sendEmail, solution).subscribe(function (addedComment) {
-                _this21.addedCommentEmitter.emit(addedComment);
+              _this23.commentService.addComment(commentDTO, sendEmail, solution).subscribe(function (addedComment) {
+                _this23.addedCommentEmitter.emit(addedComment);
 
-                _this21.commentInput = '';
+                _this23.commentInput = '';
 
                 if (solution) {
-                  _this21.requestDetails$.subscribe(function (requst) {
+                  _this23.requestDetails$.subscribe(function (requst) {
                     return requst.solutionComment = addedComment.id;
                   });
                 }
@@ -5664,11 +5715,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "getGroupDetails",
         value: function getGroupDetails(groupName) {
-          var _this22 = this;
+          var _this24 = this;
 
           this.groupService.getGroupDetails(groupName).subscribe(function (group) {
-            _this22.groupDetails.group = group;
-            _this22.clickedGroup = group;
+            _this24.groupDetails.group = group;
+            _this24.clickedGroup = group;
           });
         }
       }]);
@@ -5715,7 +5766,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = ".commentBox {\n  width: 70%;\n  color: #8a8a8a;\n  padding: 10px;\n  margin-right: 10px;\n  margin-bottom: 25px;\n  font-size: 14px;\n  border-bottom: 1px solid #bdbdbd;\n  white-space: pre-wrap;\n  margin-left: 25px;\n  margin-right: 25px;\n}\n\n.floatLeft {\n  float: left;\n}\n\n.floatRight {\n  float: right;\n}\n\n.avatar {\n  height: 35px;\n  width: 35px;\n  margin-right: 5px;\n  margin-bottom: 10px;\n  float: left;\n}\n\n.commentBoxName {\n  position: relative;\n  font-weight: bold;\n  font-size: 12px;\n  display: flow-root;\n  margin-right: 20px;\n}\n\n.light {\n  font-weight: lighter;\n  display: contents;\n}\n\n.bigBold {\n  font-weight: bold;\n}\n\n.flex {\n  position: relative;\n  display: -webkit-box;\n  display: flex;\n}\n\np {\n  margin-bottom: 0px;\n  word-break: break-all;\n}\n\n.icon {\n  margin-right: 2px;\n  margin-bottom: 5px;\n  width: 18px;\n  height: 18px;\n  cursor: pointer;\n  -webkit-transition: 0.4s ease-out;\n  transition: 0.4s ease-out;\n}\n\n.icon:hover {\n  -webkit-transform: scale(1.25);\n          transform: scale(1.25);\n  -webkit-transition: 0.4s ease-out;\n  transition: 0.4s ease-out;\n}\n\n.commentIcons {\n  position: absolute;\n  top: -20px;\n  right: -15px;\n  display: inline-grid;\n}\n\n#solutionImg {\n  position: absolute;\n  left: 10px;\n}\n\n#solutionText {\n  position: relative;\n  color: white;\n  font-size: 19px;\n  left: 68px;\n  top: 2px;\n}\n\n.displayCommentSharing {\n  width: 90%;\n  float: left;\n  margin-left: 7%;\n}\n\n::ng-deep .custom-tooltip-icon {\n  background-color: #818181;\n  font-size: 14px;\n  padding: 5px;\n}\n\n@media (min-width: 1360px) {\n  .commentIcons {\n    position: absolute;\n    top: -10px;\n    right: 0px;\n    display: block;\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9yZXF1ZXN0LWRldGFpbHMvY29tbWVudC9DOlxcVXNlcnNcXEVkdWFyZFxcRGVza3RvcFxccHJvamVrdHlcXFNpbXBsZWRlc2tcXFNpbXBsZWRlc2tfMlxcQ2xpZW50L3NyY1xcYXBwXFxtb2R1bGVzXFxyZXF1ZXN0LWRldGFpbHNcXGNvbW1lbnRcXGNvbW1lbnQuY29tcG9uZW50LnNjc3MiLCJzcmMvYXBwL21vZHVsZXMvcmVxdWVzdC1kZXRhaWxzL2NvbW1lbnQvY29tbWVudC5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLFVBQUE7RUFDQSxjQUFBO0VBQ0EsYUFBQTtFQUNBLGtCQUFBO0VBQ0EsbUJBQUE7RUFDQSxlQUFBO0VBQ0EsZ0NBQUE7RUFDQSxxQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUNDSjs7QURFQTtFQUNJLFdBQUE7QUNDSjs7QURFQTtFQUNJLFlBQUE7QUNDSjs7QURFQTtFQUNJLFlBQUE7RUFDQSxXQUFBO0VBQ0EsaUJBQUE7RUFDQSxtQkFBQTtFQUNBLFdBQUE7QUNDSjs7QURFQTtFQUNJLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxlQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtBQ0NKOztBRENBO0VBQ0ksb0JBQUE7RUFDQSxpQkFBQTtBQ0VKOztBRENBO0VBQ0ksaUJBQUE7QUNFSjs7QURDQTtFQUNJLGtCQUFBO0VBQ0Esb0JBQUE7RUFBQSxhQUFBO0FDRUo7O0FEQ0E7RUFDSSxrQkFBQTtFQUNBLHFCQUFBO0FDRUo7O0FEQ0E7RUFDSSxpQkFBQTtFQUNBLGtCQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBRUEsaUNBQUE7RUFHQSx5QkFBQTtBQ0NKOztBRENJO0VBQ0ksOEJBQUE7VUFBQSxzQkFBQTtFQUNBLGlDQUFBO0VBR0EseUJBQUE7QUNDUjs7QURHQTtFQUNJLGtCQUFBO0VBQ0EsVUFBQTtFQUNBLFlBQUE7RUFFQSxvQkFBQTtBQ0RKOztBRE1BO0VBQ0ksa0JBQUE7RUFDQSxVQUFBO0FDSEo7O0FETUE7RUFDSSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBQ0EsVUFBQTtFQUNBLFFBQUE7QUNISjs7QURNQTtFQUNJLFVBQUE7RUFDQSxXQUFBO0VBQ0EsZUFBQTtBQ0hKOztBRE1BO0VBQ0kseUJBQUE7RUFDQSxlQUFBO0VBQ0EsWUFBQTtBQ0hKOztBRE9BO0VBQ0k7SUFDSSxrQkFBQTtJQUNBLFVBQUE7SUFDQSxVQUFBO0lBRUEsY0FBQTtFQ0xOO0FBQ0YiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL3JlcXVlc3QtZGV0YWlscy9jb21tZW50L2NvbW1lbnQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuY29tbWVudEJveHtcclxuICAgIHdpZHRoOiA3MCU7XHJcbiAgICBjb2xvcjogIzhhOGE4YTtcclxuICAgIHBhZGRpbmc6IDEwcHg7XHJcbiAgICBtYXJnaW4tcmlnaHQ6IDEwcHg7XHJcbiAgICBtYXJnaW4tYm90dG9tOiAyNXB4O1xyXG4gICAgZm9udC1zaXplOiAxNHB4O1xyXG4gICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNiZGJkYmQ7XHJcbiAgICB3aGl0ZS1zcGFjZTogcHJlLXdyYXA7XHJcbiAgICBtYXJnaW4tbGVmdDogMjVweDtcclxuICAgIG1hcmdpbi1yaWdodDogMjVweDtcclxufVxyXG5cclxuLmZsb2F0TGVmdHtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG59XHJcblxyXG4uZmxvYXRSaWdodHtcclxuICAgIGZsb2F0OiByaWdodDtcclxufVxyXG5cclxuLmF2YXRhciB7XHJcbiAgICBoZWlnaHQ6IDM1cHg7XHJcbiAgICB3aWR0aDogMzVweDtcclxuICAgIG1hcmdpbi1yaWdodDogNXB4O1xyXG4gICAgbWFyZ2luLWJvdHRvbTogMTBweDtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG59XHJcblxyXG4uY29tbWVudEJveE5hbWV7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICAgIGZvbnQtc2l6ZTogMTJweDtcclxuICAgIGRpc3BsYXk6IGZsb3ctcm9vdDtcclxuICAgIG1hcmdpbi1yaWdodDogMjBweDtcclxufVxyXG4ubGlnaHR7XHJcbiAgICBmb250LXdlaWdodDogbGlnaHRlcjtcclxuICAgIGRpc3BsYXk6IGNvbnRlbnRzO1xyXG59XHJcblxyXG4uYmlnQm9sZHtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4uZmxleHtcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuICAgIGRpc3BsYXk6IGZsZXg7XHJcbn1cclxuXHJcbnB7XHJcbiAgICBtYXJnaW4tYm90dG9tOiAwcHg7XHJcbiAgICB3b3JkLWJyZWFrOiBicmVhay1hbGw7XHJcbn1cclxuXHJcbi5pY29ue1xyXG4gICAgbWFyZ2luLXJpZ2h0OiAycHg7XHJcbiAgICBtYXJnaW4tYm90dG9tOiA1cHg7XHJcbiAgICB3aWR0aDogMThweDtcclxuICAgIGhlaWdodDogMThweDtcclxuICAgIGN1cnNvcjogcG9pbnRlcjtcclxuXHJcbiAgICAtd2Via2l0LXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgLW1vei10cmFuc2l0aW9uOiAgMC40cyBlYXNlLW91dDtcclxuICAgIC1vLXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcblxyXG4gICAgJjpob3ZlciB7XHJcbiAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgxLjI1KTtcclxuICAgICAgICAtd2Via2l0LXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgICAgIC1tb3otdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICAgICAgLW8tdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICAgICAgdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICB9XHJcbn1cclxuXHJcbi5jb21tZW50SWNvbnN7XHJcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICB0b3A6IC0yMHB4O1xyXG4gICAgcmlnaHQ6IC0xNXB4O1xyXG5cclxuICAgIGRpc3BsYXk6IGlubGluZS1ncmlkO1xyXG5cclxufVxyXG5cclxuXHJcbiNzb2x1dGlvbkltZ3tcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIGxlZnQ6IDEwcHg7XHJcbn1cclxuXHJcbiNzb2x1dGlvblRleHR7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgICBjb2xvcjogd2hpdGU7XHJcbiAgICBmb250LXNpemU6IDE5cHg7XHJcbiAgICBsZWZ0OiA2OHB4O1xyXG4gICAgdG9wOiAycHg7XHJcbn1cclxuXHJcbi5kaXNwbGF5Q29tbWVudFNoYXJpbmd7XHJcbiAgICB3aWR0aDogOTAlO1xyXG4gICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICBtYXJnaW4tbGVmdDogNyU7XHJcbn1cclxuXHJcbjo6bmctZGVlcCAuY3VzdG9tLXRvb2x0aXAtaWNvbntcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICM4MTgxODE7XHJcbiAgICBmb250LXNpemU6IDE0cHg7XHJcbiAgICBwYWRkaW5nOiA1cHg7XHJcbn1cclxuXHJcblxyXG5AbWVkaWEobWluLXdpZHRoOjEzNjBweCkge1xyXG4gICAgLmNvbW1lbnRJY29uc3tcclxuICAgICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICAgICAgdG9wOiAtMTBweDtcclxuICAgICAgICByaWdodDogMHB4O1xyXG4gICAgXHJcbiAgICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBcclxuICAgIH1cclxuICAgIFxyXG5cclxufVxyXG4iLCIuY29tbWVudEJveCB7XG4gIHdpZHRoOiA3MCU7XG4gIGNvbG9yOiAjOGE4YThhO1xuICBwYWRkaW5nOiAxMHB4O1xuICBtYXJnaW4tcmlnaHQ6IDEwcHg7XG4gIG1hcmdpbi1ib3R0b206IDI1cHg7XG4gIGZvbnQtc2l6ZTogMTRweDtcbiAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNiZGJkYmQ7XG4gIHdoaXRlLXNwYWNlOiBwcmUtd3JhcDtcbiAgbWFyZ2luLWxlZnQ6IDI1cHg7XG4gIG1hcmdpbi1yaWdodDogMjVweDtcbn1cblxuLmZsb2F0TGVmdCB7XG4gIGZsb2F0OiBsZWZ0O1xufVxuXG4uZmxvYXRSaWdodCB7XG4gIGZsb2F0OiByaWdodDtcbn1cblxuLmF2YXRhciB7XG4gIGhlaWdodDogMzVweDtcbiAgd2lkdGg6IDM1cHg7XG4gIG1hcmdpbi1yaWdodDogNXB4O1xuICBtYXJnaW4tYm90dG9tOiAxMHB4O1xuICBmbG9hdDogbGVmdDtcbn1cblxuLmNvbW1lbnRCb3hOYW1lIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBmb250LXdlaWdodDogYm9sZDtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBkaXNwbGF5OiBmbG93LXJvb3Q7XG4gIG1hcmdpbi1yaWdodDogMjBweDtcbn1cblxuLmxpZ2h0IHtcbiAgZm9udC13ZWlnaHQ6IGxpZ2h0ZXI7XG4gIGRpc3BsYXk6IGNvbnRlbnRzO1xufVxuXG4uYmlnQm9sZCB7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4uZmxleCB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgZGlzcGxheTogZmxleDtcbn1cblxucCB7XG4gIG1hcmdpbi1ib3R0b206IDBweDtcbiAgd29yZC1icmVhazogYnJlYWstYWxsO1xufVxuXG4uaWNvbiB7XG4gIG1hcmdpbi1yaWdodDogMnB4O1xuICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gIHdpZHRoOiAxOHB4O1xuICBoZWlnaHQ6IDE4cHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgLXdlYmtpdC10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICAtbW96LXRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG4gIC1vLXRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG4gIHRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG59XG4uaWNvbjpob3ZlciB7XG4gIHRyYW5zZm9ybTogc2NhbGUoMS4yNSk7XG4gIC13ZWJraXQtdHJhbnNpdGlvbjogMC40cyBlYXNlLW91dDtcbiAgLW1vei10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICAtby10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICB0cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xufVxuXG4uY29tbWVudEljb25zIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICB0b3A6IC0yMHB4O1xuICByaWdodDogLTE1cHg7XG4gIGRpc3BsYXk6IGlubGluZS1ncmlkO1xufVxuXG4jc29sdXRpb25JbWcge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIGxlZnQ6IDEwcHg7XG59XG5cbiNzb2x1dGlvblRleHQge1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgZm9udC1zaXplOiAxOXB4O1xuICBsZWZ0OiA2OHB4O1xuICB0b3A6IDJweDtcbn1cblxuLmRpc3BsYXlDb21tZW50U2hhcmluZyB7XG4gIHdpZHRoOiA5MCU7XG4gIGZsb2F0OiBsZWZ0O1xuICBtYXJnaW4tbGVmdDogNyU7XG59XG5cbjo6bmctZGVlcCAuY3VzdG9tLXRvb2x0aXAtaWNvbiB7XG4gIGJhY2tncm91bmQtY29sb3I6ICM4MTgxODE7XG4gIGZvbnQtc2l6ZTogMTRweDtcbiAgcGFkZGluZzogNXB4O1xufVxuXG5AbWVkaWEgKG1pbi13aWR0aDogMTM2MHB4KSB7XG4gIC5jb21tZW50SWNvbnMge1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICB0b3A6IC0xMHB4O1xuICAgIHJpZ2h0OiAwcHg7XG4gICAgZGlzcGxheTogYmxvY2s7XG4gIH1cbn0iXX0= */";
+    __webpack_exports__["default"] = ".commentBox {\n  width: 70%;\n  color: #8a8a8a;\n  padding: 10px;\n  margin-right: 10px;\n  margin-bottom: 25px;\n  font-size: 14px;\n  border-bottom: 1px solid #bdbdbd;\n  white-space: pre-wrap;\n  margin-left: 25px;\n  margin-right: 25px;\n}\n\n.floatLeft {\n  float: left;\n}\n\n.floatRight {\n  float: right;\n}\n\n.avatar {\n  height: 35px;\n  width: 35px;\n  margin-right: 5px;\n  margin-bottom: 10px;\n  float: left;\n}\n\n.commentBoxName {\n  position: relative;\n  font-weight: bold;\n  font-size: 12px;\n  display: flow-root;\n  margin-right: 20px;\n}\n\n.light {\n  font-weight: lighter;\n  display: contents;\n}\n\n.bigBold {\n  font-weight: bold;\n}\n\n.flex {\n  position: relative;\n  display: -webkit-box;\n  display: flex;\n}\n\np {\n  margin-bottom: 0px;\n  word-break: break-all;\n}\n\n.icon {\n  margin-right: 2px;\n  margin-bottom: 5px;\n  width: 18px;\n  height: 18px;\n  cursor: pointer;\n  -webkit-transition: 0.4s ease-out;\n  transition: 0.4s ease-out;\n}\n\n.icon:hover {\n  -webkit-transform: scale(1.25);\n          transform: scale(1.25);\n  -webkit-transition: 0.4s ease-out;\n  transition: 0.4s ease-out;\n}\n\n.commentIcons {\n  position: absolute;\n  top: -20px;\n  right: -15px;\n  display: inline-grid;\n}\n\n#solutionImg {\n  position: absolute;\n  left: 10px;\n}\n\n#solutionText {\n  position: relative;\n  color: white;\n  font-size: 19px;\n  left: 68px;\n  top: 2px;\n}\n\n.displayCommentSharing {\n  width: 90%;\n  float: left;\n  margin-left: 7%;\n}\n\n::ng-deep .custom-tooltip-icon {\n  background-color: #818181;\n  font-size: 14px;\n  padding: 5px;\n}\n\n@media (min-width: 1919px) {\n  .commentIcons {\n    position: absolute;\n    top: -10px;\n    right: 0px;\n    display: block;\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvbW9kdWxlcy9yZXF1ZXN0LWRldGFpbHMvY29tbWVudC9DOlxcVXNlcnNcXEVkdWFyZFxcRGVza3RvcFxccHJvamVrdHlcXFNpbXBsZWRlc2tcXFNpbXBsZWRlc2tfMlxcQ2xpZW50L3NyY1xcYXBwXFxtb2R1bGVzXFxyZXF1ZXN0LWRldGFpbHNcXGNvbW1lbnRcXGNvbW1lbnQuY29tcG9uZW50LnNjc3MiLCJzcmMvYXBwL21vZHVsZXMvcmVxdWVzdC1kZXRhaWxzL2NvbW1lbnQvY29tbWVudC5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNJLFVBQUE7RUFDQSxjQUFBO0VBQ0EsYUFBQTtFQUNBLGtCQUFBO0VBQ0EsbUJBQUE7RUFDQSxlQUFBO0VBQ0EsZ0NBQUE7RUFDQSxxQkFBQTtFQUNBLGlCQUFBO0VBQ0Esa0JBQUE7QUNDSjs7QURFQTtFQUNJLFdBQUE7QUNDSjs7QURFQTtFQUNJLFlBQUE7QUNDSjs7QURFQTtFQUNJLFlBQUE7RUFDQSxXQUFBO0VBQ0EsaUJBQUE7RUFDQSxtQkFBQTtFQUNBLFdBQUE7QUNDSjs7QURFQTtFQUNJLGtCQUFBO0VBQ0EsaUJBQUE7RUFDQSxlQUFBO0VBQ0Esa0JBQUE7RUFDQSxrQkFBQTtBQ0NKOztBRENBO0VBQ0ksb0JBQUE7RUFDQSxpQkFBQTtBQ0VKOztBRENBO0VBQ0ksaUJBQUE7QUNFSjs7QURDQTtFQUNJLGtCQUFBO0VBQ0Esb0JBQUE7RUFBQSxhQUFBO0FDRUo7O0FEQ0E7RUFDSSxrQkFBQTtFQUNBLHFCQUFBO0FDRUo7O0FEQ0E7RUFDSSxpQkFBQTtFQUNBLGtCQUFBO0VBQ0EsV0FBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBRUEsaUNBQUE7RUFHQSx5QkFBQTtBQ0NKOztBRENJO0VBQ0ksOEJBQUE7VUFBQSxzQkFBQTtFQUNBLGlDQUFBO0VBR0EseUJBQUE7QUNDUjs7QURHQTtFQUNJLGtCQUFBO0VBQ0EsVUFBQTtFQUNBLFlBQUE7RUFFQSxvQkFBQTtBQ0RKOztBRE1BO0VBQ0ksa0JBQUE7RUFDQSxVQUFBO0FDSEo7O0FETUE7RUFDSSxrQkFBQTtFQUNBLFlBQUE7RUFDQSxlQUFBO0VBQ0EsVUFBQTtFQUNBLFFBQUE7QUNISjs7QURNQTtFQUNJLFVBQUE7RUFDQSxXQUFBO0VBQ0EsZUFBQTtBQ0hKOztBRE1BO0VBQ0kseUJBQUE7RUFDQSxlQUFBO0VBQ0EsWUFBQTtBQ0hKOztBRE9BO0VBQ0k7SUFDSSxrQkFBQTtJQUNBLFVBQUE7SUFDQSxVQUFBO0lBRUEsY0FBQTtFQ0xOO0FBQ0YiLCJmaWxlIjoic3JjL2FwcC9tb2R1bGVzL3JlcXVlc3QtZGV0YWlscy9jb21tZW50L2NvbW1lbnQuY29tcG9uZW50LnNjc3MiLCJzb3VyY2VzQ29udGVudCI6WyIuY29tbWVudEJveHtcclxuICAgIHdpZHRoOiA3MCU7XHJcbiAgICBjb2xvcjogIzhhOGE4YTtcclxuICAgIHBhZGRpbmc6IDEwcHg7XHJcbiAgICBtYXJnaW4tcmlnaHQ6IDEwcHg7XHJcbiAgICBtYXJnaW4tYm90dG9tOiAyNXB4O1xyXG4gICAgZm9udC1zaXplOiAxNHB4O1xyXG4gICAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNiZGJkYmQ7XHJcbiAgICB3aGl0ZS1zcGFjZTogcHJlLXdyYXA7XHJcbiAgICBtYXJnaW4tbGVmdDogMjVweDtcclxuICAgIG1hcmdpbi1yaWdodDogMjVweDtcclxufVxyXG5cclxuLmZsb2F0TGVmdHtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG59XHJcblxyXG4uZmxvYXRSaWdodHtcclxuICAgIGZsb2F0OiByaWdodDtcclxufVxyXG5cclxuLmF2YXRhciB7XHJcbiAgICBoZWlnaHQ6IDM1cHg7XHJcbiAgICB3aWR0aDogMzVweDtcclxuICAgIG1hcmdpbi1yaWdodDogNXB4O1xyXG4gICAgbWFyZ2luLWJvdHRvbTogMTBweDtcclxuICAgIGZsb2F0OiBsZWZ0O1xyXG59XHJcblxyXG4uY29tbWVudEJveE5hbWV7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICAgIGZvbnQtc2l6ZTogMTJweDtcclxuICAgIGRpc3BsYXk6IGZsb3ctcm9vdDtcclxuICAgIG1hcmdpbi1yaWdodDogMjBweDtcclxufVxyXG4ubGlnaHR7XHJcbiAgICBmb250LXdlaWdodDogbGlnaHRlcjtcclxuICAgIGRpc3BsYXk6IGNvbnRlbnRzO1xyXG59XHJcblxyXG4uYmlnQm9sZHtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG59XHJcblxyXG4uZmxleHtcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxuICAgIGRpc3BsYXk6IGZsZXg7XHJcbn1cclxuXHJcbnB7XHJcbiAgICBtYXJnaW4tYm90dG9tOiAwcHg7XHJcbiAgICB3b3JkLWJyZWFrOiBicmVhay1hbGw7XHJcbn1cclxuXHJcbi5pY29ue1xyXG4gICAgbWFyZ2luLXJpZ2h0OiAycHg7XHJcbiAgICBtYXJnaW4tYm90dG9tOiA1cHg7XHJcbiAgICB3aWR0aDogMThweDtcclxuICAgIGhlaWdodDogMThweDtcclxuICAgIGN1cnNvcjogcG9pbnRlcjtcclxuXHJcbiAgICAtd2Via2l0LXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgLW1vei10cmFuc2l0aW9uOiAgMC40cyBlYXNlLW91dDtcclxuICAgIC1vLXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcblxyXG4gICAgJjpob3ZlciB7XHJcbiAgICAgICAgdHJhbnNmb3JtOiBzY2FsZSgxLjI1KTtcclxuICAgICAgICAtd2Via2l0LXRyYW5zaXRpb246ICAwLjRzIGVhc2Utb3V0O1xyXG4gICAgICAgIC1tb3otdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICAgICAgLW8tdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICAgICAgdHJhbnNpdGlvbjogIDAuNHMgZWFzZS1vdXQ7XHJcbiAgICB9XHJcbn1cclxuXHJcbi5jb21tZW50SWNvbnN7XHJcbiAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICB0b3A6IC0yMHB4O1xyXG4gICAgcmlnaHQ6IC0xNXB4O1xyXG5cclxuICAgIGRpc3BsYXk6IGlubGluZS1ncmlkO1xyXG5cclxufVxyXG5cclxuXHJcbiNzb2x1dGlvbkltZ3tcclxuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcclxuICAgIGxlZnQ6IDEwcHg7XHJcbn1cclxuXHJcbiNzb2x1dGlvblRleHR7XHJcbiAgICBwb3NpdGlvbjogcmVsYXRpdmU7XHJcbiAgICBjb2xvcjogd2hpdGU7XHJcbiAgICBmb250LXNpemU6IDE5cHg7XHJcbiAgICBsZWZ0OiA2OHB4O1xyXG4gICAgdG9wOiAycHg7XHJcbn1cclxuXHJcbi5kaXNwbGF5Q29tbWVudFNoYXJpbmd7XHJcbiAgICB3aWR0aDogOTAlO1xyXG4gICAgZmxvYXQ6IGxlZnQ7XHJcbiAgICBtYXJnaW4tbGVmdDogNyU7XHJcbn1cclxuXHJcbjo6bmctZGVlcCAuY3VzdG9tLXRvb2x0aXAtaWNvbntcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICM4MTgxODE7XHJcbiAgICBmb250LXNpemU6IDE0cHg7XHJcbiAgICBwYWRkaW5nOiA1cHg7XHJcbn1cclxuXHJcblxyXG5AbWVkaWEobWluLXdpZHRoOjE5MTlweCkge1xyXG4gICAgLmNvbW1lbnRJY29uc3tcclxuICAgICAgICBwb3NpdGlvbjogYWJzb2x1dGU7XHJcbiAgICAgICAgdG9wOiAtMTBweDtcclxuICAgICAgICByaWdodDogMHB4O1xyXG4gICAgXHJcbiAgICAgICAgZGlzcGxheTogYmxvY2s7XHJcbiAgICBcclxuICAgIH1cclxuICAgIFxyXG5cclxufVxyXG4iLCIuY29tbWVudEJveCB7XG4gIHdpZHRoOiA3MCU7XG4gIGNvbG9yOiAjOGE4YThhO1xuICBwYWRkaW5nOiAxMHB4O1xuICBtYXJnaW4tcmlnaHQ6IDEwcHg7XG4gIG1hcmdpbi1ib3R0b206IDI1cHg7XG4gIGZvbnQtc2l6ZTogMTRweDtcbiAgYm9yZGVyLWJvdHRvbTogMXB4IHNvbGlkICNiZGJkYmQ7XG4gIHdoaXRlLXNwYWNlOiBwcmUtd3JhcDtcbiAgbWFyZ2luLWxlZnQ6IDI1cHg7XG4gIG1hcmdpbi1yaWdodDogMjVweDtcbn1cblxuLmZsb2F0TGVmdCB7XG4gIGZsb2F0OiBsZWZ0O1xufVxuXG4uZmxvYXRSaWdodCB7XG4gIGZsb2F0OiByaWdodDtcbn1cblxuLmF2YXRhciB7XG4gIGhlaWdodDogMzVweDtcbiAgd2lkdGg6IDM1cHg7XG4gIG1hcmdpbi1yaWdodDogNXB4O1xuICBtYXJnaW4tYm90dG9tOiAxMHB4O1xuICBmbG9hdDogbGVmdDtcbn1cblxuLmNvbW1lbnRCb3hOYW1lIHtcbiAgcG9zaXRpb246IHJlbGF0aXZlO1xuICBmb250LXdlaWdodDogYm9sZDtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBkaXNwbGF5OiBmbG93LXJvb3Q7XG4gIG1hcmdpbi1yaWdodDogMjBweDtcbn1cblxuLmxpZ2h0IHtcbiAgZm9udC13ZWlnaHQ6IGxpZ2h0ZXI7XG4gIGRpc3BsYXk6IGNvbnRlbnRzO1xufVxuXG4uYmlnQm9sZCB7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4uZmxleCB7XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbiAgZGlzcGxheTogZmxleDtcbn1cblxucCB7XG4gIG1hcmdpbi1ib3R0b206IDBweDtcbiAgd29yZC1icmVhazogYnJlYWstYWxsO1xufVxuXG4uaWNvbiB7XG4gIG1hcmdpbi1yaWdodDogMnB4O1xuICBtYXJnaW4tYm90dG9tOiA1cHg7XG4gIHdpZHRoOiAxOHB4O1xuICBoZWlnaHQ6IDE4cHg7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgLXdlYmtpdC10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICAtbW96LXRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG4gIC1vLXRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG4gIHRyYW5zaXRpb246IDAuNHMgZWFzZS1vdXQ7XG59XG4uaWNvbjpob3ZlciB7XG4gIHRyYW5zZm9ybTogc2NhbGUoMS4yNSk7XG4gIC13ZWJraXQtdHJhbnNpdGlvbjogMC40cyBlYXNlLW91dDtcbiAgLW1vei10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICAtby10cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xuICB0cmFuc2l0aW9uOiAwLjRzIGVhc2Utb3V0O1xufVxuXG4uY29tbWVudEljb25zIHtcbiAgcG9zaXRpb246IGFic29sdXRlO1xuICB0b3A6IC0yMHB4O1xuICByaWdodDogLTE1cHg7XG4gIGRpc3BsYXk6IGlubGluZS1ncmlkO1xufVxuXG4jc29sdXRpb25JbWcge1xuICBwb3NpdGlvbjogYWJzb2x1dGU7XG4gIGxlZnQ6IDEwcHg7XG59XG5cbiNzb2x1dGlvblRleHQge1xuICBwb3NpdGlvbjogcmVsYXRpdmU7XG4gIGNvbG9yOiB3aGl0ZTtcbiAgZm9udC1zaXplOiAxOXB4O1xuICBsZWZ0OiA2OHB4O1xuICB0b3A6IDJweDtcbn1cblxuLmRpc3BsYXlDb21tZW50U2hhcmluZyB7XG4gIHdpZHRoOiA5MCU7XG4gIGZsb2F0OiBsZWZ0O1xuICBtYXJnaW4tbGVmdDogNyU7XG59XG5cbjo6bmctZGVlcCAuY3VzdG9tLXRvb2x0aXAtaWNvbiB7XG4gIGJhY2tncm91bmQtY29sb3I6ICM4MTgxODE7XG4gIGZvbnQtc2l6ZTogMTRweDtcbiAgcGFkZGluZzogNXB4O1xufVxuXG5AbWVkaWEgKG1pbi13aWR0aDogMTkxOXB4KSB7XG4gIC5jb21tZW50SWNvbnMge1xuICAgIHBvc2l0aW9uOiBhYnNvbHV0ZTtcbiAgICB0b3A6IC0xMHB4O1xuICAgIHJpZ2h0OiAwcHg7XG4gICAgZGlzcGxheTogYmxvY2s7XG4gIH1cbn0iXX0= */";
     /***/
   },
 
@@ -5857,7 +5908,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "deleteComment",
         value: function deleteComment(requestComment) {
-          var _this23 = this;
+          var _this25 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire({
             title: 'Naozaj chcete zmazať komentár ?',
@@ -5870,11 +5921,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Zmazať'
           }).then(function (result) {
             if (result.value) {
-              _this23.commentHttp.deleteComment(requestComment).subscribe(function () {
-                var index = _this23.requestComments.indexOf(requestComment);
+              _this25.commentHttp.deleteComment(requestComment).subscribe(function () {
+                var index = _this25.requestComments.indexOf(requestComment);
 
                 if (index > -1) {
-                  _this23.requestComments.splice(index, 1);
+                  _this25.requestComments.splice(index, 1);
                 }
 
                 sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire({
@@ -5913,7 +5964,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "shareWith",
         value: function shareWith(group) {
-          var _this24 = this;
+          var _this26 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire({
             text: "Naozaj chcete vyzdie\u013Ea\u0165 koment\xE1r so skupinou : ".concat(group.name, " ?"),
@@ -5925,9 +5976,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Zdieľať'
           }).then(function (result) {
             if (result.value) {
-              _this24.sharingComment.groupsToShare.push(group.name);
+              _this26.sharingComment.groupsToShare.push(group.name);
 
-              _this24.commentHttp.shareComment(_this24.sharingComment).subscribe(function () {
+              _this26.commentHttp.shareComment(_this26.sharingComment).subscribe(function () {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_3___default.a.fire({
                   position: 'top-end',
                   text: 'Komentár bol vyzdieľaný',
@@ -6061,15 +6112,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "ngOnInit",
         value: function ngOnInit() {
-          var _this25 = this;
+          var _this27 = this;
 
           var url = window.location.pathname;
           var id = url.substring(url.lastIndexOf('/') + 1);
           this.spinner.show();
           this.requestService.loadRequestDetails(id).subscribe(function (value) {
-            return _this25.spinner.hide();
+            return _this27.spinner.hide();
           }, function (err) {
-            return _this25.spinner.hide();
+            return _this27.spinner.hide();
           });
         }
       }, {
@@ -6263,7 +6314,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "assignOnMe",
         value: function assignOnMe(requestDetails) {
-          var _this26 = this;
+          var _this28 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
             text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestDetails.id + " ? ",
@@ -6275,14 +6326,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this26.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(function (result) {
+              _this28.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(function (result) {
                 sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
                   text: 'Pridelené',
                   position: 'top-end',
                   timer: 1200,
                   showConfirmButton: false
                 });
-                requestDetails.assigned = _this26.userService.getUserSimple();
+                requestDetails.assigned = _this28.userService.getUserSimple();
                 requestDetails.requestPosition = app_shared_enums_request_position_enum__WEBPACK_IMPORTED_MODULE_7__["RequestPosition"].Assigned;
               });
             }
@@ -6419,7 +6470,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(RequestSideOptionsComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          this.allusers$ = this.userService.getAllUsers();
+          this.allusers$ = this.userService.getAllActiveUsers();
           this.requestDetail$ = this.requestService.getRequestDetials();
           this.isSolver$ = this.authService.isSolver();
           this.isManager$ = this.authService.isManager();
@@ -6430,14 +6481,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "changePriority",
         value: function changePriority(requestDetails) {
-          var _this27 = this;
+          var _this29 = this;
 
           if (this.priority === undefined) {
             return;
           }
 
           this.requestService.changePriority(requestDetails.id, this.priority).subscribe(function () {
-            requestDetails.requestPriority = _this27.priority;
+            requestDetails.requestPriority = _this29.priority;
             sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
               position: 'top-end',
               text: 'Priorita bola zmenená',
@@ -6490,7 +6541,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "closeRequest",
         value: function closeRequest(requestDetails) {
-          var _this28 = this;
+          var _this30 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
             text: "Naozaj chcetete uzatvoriť požiadavku ?",
@@ -6502,8 +6553,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this28.requestService.changeState(requestDetails.id, true).subscribe(function () {
-                requestDetails.closed = _this28.userService.getUserSimple();
+              _this30.requestService.changeState(requestDetails.id, true).subscribe(function () {
+                requestDetails.closed = _this30.userService.getUserSimple();
                 requestDetails.timestampClosed = new Date();
                 requestDetails.requestPosition = app_shared_enums_request_position_enum__WEBPACK_IMPORTED_MODULE_6__["RequestPosition"].Closed;
                 sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
@@ -6519,7 +6570,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "reopenRequest",
         value: function reopenRequest(requestDetails) {
-          var _this29 = this;
+          var _this31 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
             text: "Naozaj chcetete znovu otvoriť požiadavku ?",
@@ -6531,7 +6582,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this29.requestService.changeState(requestDetails.id, false).subscribe(function () {
+              _this31.requestService.changeState(requestDetails.id, false).subscribe(function () {
                 requestDetails.closed = null;
                 requestDetails.timestampClosed = null;
                 requestDetails.requestPosition = app_shared_enums_request_position_enum__WEBPACK_IMPORTED_MODULE_6__["RequestPosition"].Assigned;
@@ -6548,15 +6599,15 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "addEvaluationForReport",
         value: function addEvaluationForReport(requestDetails) {
-          var _this30 = this;
+          var _this32 = this;
 
           if (this.reportEvaluation === undefined) {
             return;
           }
 
           this.requestService.reportAddEvaluation(requestDetails.id, this.reportEvaluation).subscribe(function () {
-            requestDetails.evaluation = _this30.reportEvaluation;
-            _this30.reportEvaluation = undefined;
+            requestDetails.evaluation = _this32.reportEvaluation;
+            _this32.reportEvaluation = undefined;
             sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
               position: 'top-end',
               text: 'Nadhodnocenie reportu bolo zaznamenané',
@@ -6764,10 +6815,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "loadFinanceType",
         value: function loadFinanceType() {
-          var _this31 = this;
+          var _this33 = this;
 
           this.http.get(environments_environment__WEBPACK_IMPORTED_MODULE_5__["environment"].apiUrl + "requests/finance/types").subscribe(function (financeType) {
-            return _this31.financeTypeArray = financeType;
+            return _this33.financeTypeArray = financeType;
           });
         }
       }, {
@@ -6781,7 +6832,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "submit",
         value: function submit() {
-          var _this32 = this;
+          var _this34 = this;
 
           if (this.financeForm.invalid || this.fileInput.isEmpty()) {
             return;
@@ -6797,11 +6848,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this32.spinner.show();
+              _this34.spinner.show();
 
-              _this32.sendFinanceFormToAPI().subscribe(function (id) {
-                return _this32.fileService.postFileForRequest(id, _this32.fileInput.files).subscribe(function (succ) {
-                  _this32.spinner.hide();
+              _this34.sendFinanceFormToAPI().subscribe(function (id) {
+                return _this34.fileService.postFileForRequest(id, _this34.fileInput.files).subscribe(function (succ) {
+                  _this34.financeFormViewChild.resetForm();
+
+                  _this34.spinner.hide();
 
                   sweetalert2__WEBPACK_IMPORTED_MODULE_4___default.a.fire({
                     position: 'top-end',
@@ -6849,6 +6902,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('fileUploader', {
       static: true
     })], RequestFinanceFormComponent.prototype, "fileInput", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('financeFormViewChild', {
+      static: true
+    })], RequestFinanceFormComponent.prototype, "financeFormViewChild", void 0);
     RequestFinanceFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-request-finance-form',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -7108,7 +7164,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "submit",
         value: function submit() {
-          var _this33 = this;
+          var _this35 = this;
 
           if (this.reportForm.invalid) {
             return;
@@ -7124,11 +7180,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this33.spinner.show();
+              _this35.spinner.show();
 
-              _this33.sendReportFormToAPI().subscribe(function (id) {
-                _this33.fileService.postFileForRequest(id, _this33.fileInput.files).subscribe(function (succ) {
-                  _this33.spinner.hide();
+              _this35.sendReportFormToAPI().subscribe(function (id) {
+                _this35.fileService.postFileForRequest(id, _this35.fileInput.files).subscribe(function (succ) {
+                  _this35.reportFormViewChild.resetForm();
+
+                  _this35.spinner.hide();
 
                   sweetalert2__WEBPACK_IMPORTED_MODULE_6___default.a.fire({
                     position: 'top-end',
@@ -7259,6 +7317,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('fileUploader', {
       static: true
     })], RequestReportFormComponent.prototype, "fileInput", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('reportFormViewChild', {
+      static: true
+    })], RequestReportFormComponent.prototype, "reportFormViewChild", void 0);
     RequestReportFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-request-report-form',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -7383,17 +7444,12 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(RequestTicketFormComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          this.initFormGroup(); //this.ticketForm.valueChanges.subscribe(console.log);
-        }
-      }, {
-        key: "initFormGroup",
-        value: function initFormGroup() {
           this.ticketForm = this.formBuilder.group({
-            ticketType: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]],
-            ticketSubtypeName: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(2)]],
-            requestPriority: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]],
-            name: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(5), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].maxLength(254)]],
-            problem: ['', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(10)]]
+            ticketType: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]),
+            ticketSubtypeName: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(2)]),
+            requestPriority: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required]),
+            name: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(5), _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].maxLength(254)]),
+            problem: new _angular_forms__WEBPACK_IMPORTED_MODULE_2__["FormControl"]('', [_angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].required, _angular_forms__WEBPACK_IMPORTED_MODULE_2__["Validators"].minLength(10)])
           });
         }
       }, {
@@ -7407,7 +7463,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "submit",
         value: function submit() {
-          var _this34 = this;
+          var _this36 = this;
 
           if (this.ticketForm.invalid) {
             return;
@@ -7423,13 +7479,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: 'Ano'
           }).then(function (result) {
             if (result.value) {
-              _this34.spinner.show();
+              _this36.spinner.show();
 
-              _this34.sendTicketFormToAPI().subscribe(function (id) {
-                _this34.fileService.postFileForRequest(id, _this34.fileInput.files).subscribe(function (succ) {
-                  _this34.initFormGroup();
+              _this36.sendTicketFormToAPI().subscribe(function (id) {
+                _this36.fileService.postFileForRequest(id, _this36.fileInput.files).subscribe(function (succ) {
+                  _this36.ticketFormViewChild.resetForm();
 
-                  _this34.spinner.hide();
+                  _this36.spinner.hide();
 
                   sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
                     position: 'top-end',
@@ -7438,7 +7494,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                     timer: 1200
                   });
                 }, function (err) {
-                  return _this34.spinner.hide();
+                  return _this36.spinner.hide();
                 });
               });
             }
@@ -7455,7 +7511,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "loadTicketSubtype",
         value: function loadTicketSubtype(value) {
-          var _this35 = this;
+          var _this37 = this;
 
           //let headers = new Headers().set('Content-Type', 'application/json');
           var params = new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpParams"]().set('ticketTypeName', value);
@@ -7464,19 +7520,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             this.http.get(environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "requests/ticket/ticketSubtype", {
               params: params
             }).subscribe(function (ticketSubTypes) {
-              return _this35.softwareTypes = ticketSubTypes;
+              return _this37.softwareTypes = ticketSubTypes;
             });
           } else if (value === 'Hardware' && this.hardwareTypes.length === 0) {
             this.http.get(environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "requests/ticket/ticketSubtype", {
               params: params
             }).subscribe(function (ticketSubTypes) {
-              return _this35.hardwareTypes = ticketSubTypes;
+              return _this37.hardwareTypes = ticketSubTypes;
             });
           } else if (value === 'Server' && this.serverTypes.length === 0) {
             this.http.get(environments_environment__WEBPACK_IMPORTED_MODULE_4__["environment"].apiUrl + "requests/ticket/ticketSubtype", {
               params: params
             }).subscribe(function (ticketSubTypes) {
-              return _this35.serverTypes = ticketSubTypes;
+              return _this37.serverTypes = ticketSubTypes;
             });
           }
         }
@@ -7525,6 +7581,9 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('fileUploader', {
       static: true
     })], RequestTicketFormComponent.prototype, "fileInput", void 0);
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('ticketFormViewChild', {
+      static: true
+    })], RequestTicketFormComponent.prototype, "ticketFormViewChild", void 0);
     RequestTicketFormComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-request-ticket-form',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -7682,7 +7741,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
         this.userService = userService;
         this.editGroupActivated = false;
-        this.allUsers$ = this.userService.getAllUsers();
+        this.allUsers$ = this.userService.getAllActiveUsers();
       }
 
       _createClass(GroupDetailsComponent, [{
@@ -8223,7 +8282,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "sendPasswordToAPI",
         value: function sendPasswordToAPI(password) {
-          var _this36 = this;
+          var _this38 = this;
 
           if (password.newPassword1 !== password.newPassword2) {
             sweetalert2__WEBPACK_IMPORTED_MODULE_2___default.a.fire({
@@ -8250,7 +8309,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 timer: 1500
               });
             }, function () {
-              return _this36.spinner.hide();
+              return _this38.spinner.hide();
             });
           }
         }
@@ -8377,14 +8436,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "getGroupDetails",
         value: function getGroupDetails(groupName) {
-          var _this37 = this;
+          var _this39 = this;
 
           if (!this.elevationActivated) {
             return;
           }
 
           this.groupService.getGroupDetails(groupName).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["takeUntil"])(this.destroy$)).subscribe(function (group) {
-            _this37.selectedGroupEmmiter.emit(group);
+            _this39.selectedGroupEmmiter.emit(group);
           });
         }
       }]);
@@ -8527,13 +8586,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "loadAvailableAvatars",
         value: function loadAvailableAvatars() {
-          var _this38 = this;
+          var _this40 = this;
 
           this.spinner.show();
           this.http.get(environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiUrl + "user/getImages").subscribe(function (images) {
-            _this38.images = images;
+            _this40.images = images;
 
-            _this38.spinner.hide();
+            _this40.spinner.hide();
           });
         }
       }, {
@@ -8547,7 +8606,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "selectImage",
         value: function selectImage(imageDTO) {
-          var _this39 = this;
+          var _this41 = this;
 
           sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
             title: "Potvrďte zmenu obrázku",
@@ -8558,10 +8617,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             confirmButtonText: "Potvrdiť"
           }).then(function (result) {
             if (result.value === true) {
-              _this39.spinner.show();
+              _this41.spinner.show();
 
-              _this39.changeImage(imageDTO).subscribe(function (res) {
-                _this39.userService.changeUserImage(imageDTO);
+              _this41.changeImage(imageDTO).subscribe(function (res) {
+                _this41.userService.changeUserImage(imageDTO);
 
                 sweetalert2__WEBPACK_IMPORTED_MODULE_5___default.a.fire({
                   position: 'top-end',
@@ -8572,7 +8631,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
               });
             }
           }).finally(function () {
-            return _this39.spinner.hide();
+            return _this41.spinner.hide();
           });
         }
       }]);
@@ -8704,10 +8763,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "ngAfterViewInit",
         value: function ngAfterViewInit() {
-          var _this40 = this;
+          var _this42 = this;
 
           setTimeout(function () {
-            _this40.initUserPrivileges();
+            _this42.initUserPrivileges();
           });
         }
       }, {
@@ -8719,7 +8778,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       }, {
         key: "initUserPrivileges",
         value: function initUserPrivileges() {
-          var _this41 = this;
+          var _this43 = this;
 
           this.authService.getDecodedToken().pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_6__["takeUntil"])(this.destroy$)).subscribe(function (token) {
             var priv = {
@@ -8734,7 +8793,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
                 Other: token.TICKET_OTHER_PRIVILEGES
               }
             };
-            _this41.userPrivileges.disabledPrivileges = priv;
+            _this43.userPrivileges.disabledPrivileges = priv;
           });
           this.groupContainer = this.groupService.getAllGroupContainersForUser();
         }
@@ -9381,11 +9440,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
       _createClass(RequestFilterComponent, [{
         key: "ngOnInit",
         value: function ngOnInit() {
-          var _this42 = this;
+          var _this44 = this;
 
           this.initDateFilter();
           this.isMoreThanNormalUser$ = this.authService.isMoreThanNormalUser();
-          this.allUsers$ = this.userService.getAllUsers();
+          this.allUsers$ = this.userService.getAllActiveUsers();
           this.filterForm = this.formBuilder.group({
             type: '',
             creator: '',
@@ -9394,7 +9453,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
             priority: ''
           });
           this.filterForm.valueChanges.pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_7__["takeUntil"])(this.destroy$)).subscribe(function (form) {
-            _this42.changedFormFilter.emit(form);
+            _this44.changedFormFilter.emit(form);
           });
         }
       }, {
@@ -9517,7 +9576,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     /* harmony default export */
 
 
-    __webpack_exports__["default"] = "mat-header-row {\n  min-height: 28px;\n  border-bottom: 0;\n}\n\n/* table design */\n\n.tableRequest {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n          flex-direction: column;\n  width: 95%;\n  margin: auto;\n  margin-bottom: 20px;\n}\n\n.mat-table {\n  overflow: hidden;\n}\n\n.header {\n  width: 95%;\n  margin: auto;\n  position: relative;\n}\n\n.headerTitle {\n  float: right;\n  color: #15691e;\n  margin-right: 15px;\n  font-weight: 700;\n}\n\n.userIcon {\n  width: 22px;\n  height: 22px;\n  margin-right: 5px;\n}\n\n.requestIcon {\n  margin-left: 5px;\n}\n\n.fontWeight {\n  font-weight: 500;\n}\n\n.detailButton {\n  border: none;\n  line-height: 30px;\n  padding: 0 12px;\n  border-radius: 6px;\n  display: inline-block;\n  -webkit-transition: all 0.5s ease 0s;\n  transition: all 0.5s ease 0s;\n  color: #515151;\n  font-weight: 500 !important;\n}\n\n.detailButton:hover {\n  font-weight: 700 !important;\n  background-color: #404040 !important;\n  color: #ffffff !important;\n  letter-spacing: 2px;\n  box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);\n  -webkit-transition: all 0.5s ease 0s;\n  transition: all 0.5s ease 0s;\n}\n\n.assignOnMe {\n  color: #3b73f3;\n  cursor: pointer;\n  font-size: 12px;\n  font-weight: bold;\n}\n\n.removeFromMe {\n  color: #f94646;\n  cursor: pointer;\n  font-size: 12px;\n  font-weight: bold;\n}\n\nmat-header-cell {\n  color: black;\n}\n\nmat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {\n  padding-right: 0 !important;\n}\n\nmat-cell {\n  font-size: 11px;\n  color: #515151;\n}\n\nmat-footer-row, mat-row {\n  min-height: 20px;\n}\n\nmat-paginator {\n  font-size: 11px;\n  min-height: 30px;\n  max-height: 30px;\n}\n\nmat-row:nth-child(even) {\n  background-color: white;\n}\n\n.mat-row:nth-child(odd) {\n  background-color: #f6f6f6;\n}\n\n.mat-row:hover {\n  background-color: #cecece;\n}\n\n:host ::ng-deep.mat-paginator .mat-paginator-container {\n  min-height: 40px !important;\n  max-height: 40px !important;\n}\n\n@media (min-width: 1360px) {\n  .headerTitle {\n    font-size: 19px;\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2hhcmVkL2NvbXBvbmVudHMvcmVxdWVzdC10YWJsZS9DOlxcVXNlcnNcXEVkdWFyZFxcRGVza3RvcFxccHJvamVrdHlcXFNpbXBsZWRlc2tcXFNpbXBsZWRlc2tfMlxcQ2xpZW50L3NyY1xcYXBwXFxzaGFyZWRcXGNvbXBvbmVudHNcXHJlcXVlc3QtdGFibGVcXHJlcXVlc3QtdGFibGUuY29tcG9uZW50LnNjc3MiLCJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL3JlcXVlc3QtdGFibGUvcmVxdWVzdC10YWJsZS5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFBO0VBQ0EsZ0JBQUE7QUNDRjs7QURFQSxpQkFBQTs7QUFDQTtFQUNJLG9CQUFBO0VBQUEsYUFBQTtFQUNBLDRCQUFBO0VBQUEsNkJBQUE7VUFBQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSxZQUFBO0VBQ0EsbUJBQUE7QUNDSjs7QURFRTtFQUNFLGdCQUFBO0FDQ0o7O0FER0E7RUFDSSxVQUFBO0VBQ0EsWUFBQTtFQUNBLGtCQUFBO0FDQUo7O0FER0E7RUFDSSxZQUFBO0VBQ0EsY0FBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7QUNBSjs7QURHQTtFQUNFLFdBQUE7RUFDQSxZQUFBO0VBQ0EsaUJBQUE7QUNBRjs7QURHQTtFQUNFLGdCQUFBO0FDQUY7O0FER0E7RUFDRSxnQkFBQTtBQ0FGOztBREdBO0VBQ0UsWUFBQTtFQUNBLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EscUJBQUE7RUFDQSxvQ0FBQTtFQUFBLDRCQUFBO0VBQ0EsY0FBQTtFQUNBLDJCQUFBO0FDQUY7O0FER0E7RUFDRSwyQkFBQTtFQUNBLG9DQUFBO0VBQ0EseUJBQUE7RUFDQSxtQkFBQTtFQUNBLGtEQUFBO0VBQ0Esb0NBQUE7RUFBQSw0QkFBQTtBQ0FGOztBREdFO0VBQ0UsY0FBQTtFQUNBLGVBQUE7RUFDQSxlQUFBO0VBQ0EsaUJBQUE7QUNBSjs7QURHRTtFQUNFLGNBQUE7RUFDQSxlQUFBO0VBQ0EsZUFBQTtFQUNBLGlCQUFBO0FDQUo7O0FESUE7RUFDSSxZQUFBO0FDREo7O0FESUE7RUFDRSwyQkFBQTtBQ0RGOztBRElBO0VBRUUsZUFBQTtFQUNBLGNBQUE7QUNGRjs7QURJQTtFQUNFLGdCQUFBO0FDREY7O0FER0E7RUFDSSxlQUFBO0VBQ0EsZ0JBQUE7RUFDQSxnQkFBQTtBQ0FKOztBRElBO0VBQ0UsdUJBQUE7QUNERjs7QURJQTtFQUNFLHlCQUFBO0FDREY7O0FESUU7RUFDRSx5QkFBQTtBQ0RKOztBRElFO0VBQ0UsMkJBQUE7RUFDQSwyQkFBQTtBQ0RKOztBRE1BO0VBQ0k7SUFDRSxlQUFBO0VDSEo7QUFDRiIsImZpbGUiOiJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL3JlcXVlc3QtdGFibGUvcmVxdWVzdC10YWJsZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIm1hdC1oZWFkZXItcm93e1xyXG4gIG1pbi1oZWlnaHQ6IDI4cHg7XHJcbiAgYm9yZGVyLWJvdHRvbTogMDtcclxufVxyXG5cclxuLyogdGFibGUgZGVzaWduICovXHJcbi50YWJsZVJlcXVlc3Qge1xyXG4gICAgZGlzcGxheTogZmxleDtcclxuICAgIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XHJcbiAgICB3aWR0aDogOTUlO1xyXG4gICAgbWFyZ2luOiBhdXRvO1xyXG4gICAgbWFyZ2luLWJvdHRvbTogMjBweDtcclxuICB9XHJcbiAgXHJcbiAgLm1hdC10YWJsZSB7XHJcbiAgICBvdmVyZmxvdzogaGlkZGVuO1xyXG4gIH1cclxuXHJcblxyXG4uaGVhZGVye1xyXG4gICAgd2lkdGg6IDk1JTtcclxuICAgIG1hcmdpbjogYXV0bztcclxuICAgIHBvc2l0aW9uOiByZWxhdGl2ZTtcclxufVxyXG5cclxuLmhlYWRlclRpdGxle1xyXG4gICAgZmxvYXQ6IHJpZ2h0O1xyXG4gICAgY29sb3I6ICMxNTY5MWU7IC8vIzYwNjA2MDtcclxuICAgIG1hcmdpbi1yaWdodDogMTVweDtcclxuICAgIGZvbnQtd2VpZ2h0OiA3MDA7XHJcbn1cclxuXHJcbi51c2VySWNvbntcclxuICB3aWR0aDogMjJweDtcclxuICBoZWlnaHQ6IDIycHg7XHJcbiAgbWFyZ2luLXJpZ2h0OiA1cHg7XHJcbn1cclxuXHJcbi5yZXF1ZXN0SWNvbntcclxuICBtYXJnaW4tbGVmdDogNXB4O1xyXG59XHJcblxyXG4uZm9udFdlaWdodHtcclxuICBmb250LXdlaWdodDogNTAwIDtcclxufVxyXG5cclxuLmRldGFpbEJ1dHRvbiB7XHJcbiAgYm9yZGVyOiBub25lO1xyXG4gIGxpbmUtaGVpZ2h0OiAzMHB4O1xyXG4gIHBhZGRpbmc6IDAgMTJweDtcclxuICBib3JkZXItcmFkaXVzOiA2cHg7XHJcbiAgZGlzcGxheTogaW5saW5lLWJsb2NrO1xyXG4gIHRyYW5zaXRpb246IGFsbCAwLjVzIGVhc2UgMHM7XHJcbiAgY29sb3I6ICM1MTUxNTE7XHJcbiAgZm9udC13ZWlnaHQ6IDUwMCAhaW1wb3J0YW50O1xyXG4gIH1cclxuXHJcbi5kZXRhaWxCdXR0b246aG92ZXIge1xyXG4gIGZvbnQtd2VpZ2h0OiA3MDAgIWltcG9ydGFudDtcclxuICBiYWNrZ3JvdW5kLWNvbG9yOiAjNDA0MDQwICFpbXBvcnRhbnQ7XHJcbiAgY29sb3I6ICNmZmZmZmYgIWltcG9ydGFudDtcclxuICBsZXR0ZXItc3BhY2luZzogMnB4O1xyXG4gIGJveC1zaGFkb3c6IDBweCA1cHggNDBweCAtMTBweCByZ2JhKDAsMCwwLDAuNTcpO1xyXG4gIHRyYW5zaXRpb246IGFsbCAwLjVzIGVhc2UgMHM7XHJcbiAgfVxyXG5cclxuICAuYXNzaWduT25NZXtcclxuICAgIGNvbG9yOiAjM2I3M2YzO1xyXG4gICAgY3Vyc29yOiBwb2ludGVyO1xyXG4gICAgZm9udC1zaXplOiAxMnB4O1xyXG4gICAgZm9udC13ZWlnaHQ6IGJvbGQ7XHJcbiAgfVxyXG5cclxuICAucmVtb3ZlRnJvbU1le1xyXG4gICAgY29sb3I6ICNmOTQ2NDY7XHJcbiAgICBjdXJzb3I6IHBvaW50ZXI7XHJcbiAgICBmb250LXNpemU6IDEycHg7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICB9XHJcblxyXG5cclxubWF0LWhlYWRlci1jZWxse1xyXG4gICAgY29sb3I6YmxhY2s7XHJcbn1cclxuXHJcbm1hdC1jZWxsOmxhc3Qtb2YtdHlwZSwgbWF0LWZvb3Rlci1jZWxsOmxhc3Qtb2YtdHlwZSwgbWF0LWhlYWRlci1jZWxsOmxhc3Qtb2YtdHlwZXtcclxuICBwYWRkaW5nLXJpZ2h0OiAwICAhaW1wb3J0YW50O1xyXG59XHJcblxyXG5tYXQtY2VsbHtcclxuIFxyXG4gIGZvbnQtc2l6ZTogMTFweDtcclxuICBjb2xvcjogIzUxNTE1MTtcclxufVxyXG5tYXQtZm9vdGVyLXJvdywgbWF0LXJvd3tcclxuICBtaW4taGVpZ2h0OiAyMHB4O1xyXG59XHJcbm1hdC1wYWdpbmF0b3J7XHJcbiAgICBmb250LXNpemU6IDExcHg7XHJcbiAgICBtaW4taGVpZ2h0OiAzMHB4O1xyXG4gICAgbWF4LWhlaWdodDogMzBweDtcclxufVxyXG5cclxuXHJcbm1hdC1yb3c6bnRoLWNoaWxkKGV2ZW4pe1xyXG4gIGJhY2tncm91bmQtY29sb3I6d2hpdGU7XHJcbiAgfVxyXG5cclxuLm1hdC1yb3c6bnRoLWNoaWxkKG9kZCl7XHJcbiAgYmFja2dyb3VuZC1jb2xvciA6ICNmNmY2ZjY7XHJcbiAgfVxyXG5cclxuICAubWF0LXJvdzpob3ZlciB7XHJcbiAgICBiYWNrZ3JvdW5kLWNvbG9yOiAjY2VjZWNlO1xyXG4gIH1cclxuXHJcbiAgOmhvc3QgOjpuZy1kZWVwLm1hdC1wYWdpbmF0b3IgLm1hdC1wYWdpbmF0b3ItY29udGFpbmVye1xyXG4gICAgbWluLWhlaWdodDogNDBweCAhaW1wb3J0YW50O1xyXG4gICAgbWF4LWhlaWdodDogNDBweCAhaW1wb3J0YW50O1xyXG4gIH1cclxuXHJcblxyXG5cclxuQG1lZGlhKG1pbi13aWR0aDoxMzYwcHgpIHtcclxuICAgIC5oZWFkZXJUaXRsZXtcclxuICAgICAgZm9udC1zaXplOiAxOXB4O1xyXG4gICAgICAgIFxyXG4gICAgfVxyXG5cclxufVxyXG4iLCJtYXQtaGVhZGVyLXJvdyB7XG4gIG1pbi1oZWlnaHQ6IDI4cHg7XG4gIGJvcmRlci1ib3R0b206IDA7XG59XG5cbi8qIHRhYmxlIGRlc2lnbiAqL1xuLnRhYmxlUmVxdWVzdCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIHdpZHRoOiA5NSU7XG4gIG1hcmdpbjogYXV0bztcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcbn1cblxuLm1hdC10YWJsZSB7XG4gIG92ZXJmbG93OiBoaWRkZW47XG59XG5cbi5oZWFkZXIge1xuICB3aWR0aDogOTUlO1xuICBtYXJnaW46IGF1dG87XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmhlYWRlclRpdGxlIHtcbiAgZmxvYXQ6IHJpZ2h0O1xuICBjb2xvcjogIzE1NjkxZTtcbiAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xuICBmb250LXdlaWdodDogNzAwO1xufVxuXG4udXNlckljb24ge1xuICB3aWR0aDogMjJweDtcbiAgaGVpZ2h0OiAyMnB4O1xuICBtYXJnaW4tcmlnaHQ6IDVweDtcbn1cblxuLnJlcXVlc3RJY29uIHtcbiAgbWFyZ2luLWxlZnQ6IDVweDtcbn1cblxuLmZvbnRXZWlnaHQge1xuICBmb250LXdlaWdodDogNTAwO1xufVxuXG4uZGV0YWlsQnV0dG9uIHtcbiAgYm9yZGVyOiBub25lO1xuICBsaW5lLWhlaWdodDogMzBweDtcbiAgcGFkZGluZzogMCAxMnB4O1xuICBib3JkZXItcmFkaXVzOiA2cHg7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcbiAgY29sb3I6ICM1MTUxNTE7XG4gIGZvbnQtd2VpZ2h0OiA1MDAgIWltcG9ydGFudDtcbn1cblxuLmRldGFpbEJ1dHRvbjpob3ZlciB7XG4gIGZvbnQtd2VpZ2h0OiA3MDAgIWltcG9ydGFudDtcbiAgYmFja2dyb3VuZC1jb2xvcjogIzQwNDA0MCAhaW1wb3J0YW50O1xuICBjb2xvcjogI2ZmZmZmZiAhaW1wb3J0YW50O1xuICBsZXR0ZXItc3BhY2luZzogMnB4O1xuICBib3gtc2hhZG93OiAwcHggNXB4IDQwcHggLTEwcHggcmdiYSgwLCAwLCAwLCAwLjU3KTtcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcbn1cblxuLmFzc2lnbk9uTWUge1xuICBjb2xvcjogIzNiNzNmMztcbiAgY3Vyc29yOiBwb2ludGVyO1xuICBmb250LXNpemU6IDEycHg7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4ucmVtb3ZlRnJvbU1lIHtcbiAgY29sb3I6ICNmOTQ2NDY7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxubWF0LWhlYWRlci1jZWxsIHtcbiAgY29sb3I6IGJsYWNrO1xufVxuXG5tYXQtY2VsbDpsYXN0LW9mLXR5cGUsIG1hdC1mb290ZXItY2VsbDpsYXN0LW9mLXR5cGUsIG1hdC1oZWFkZXItY2VsbDpsYXN0LW9mLXR5cGUge1xuICBwYWRkaW5nLXJpZ2h0OiAwICFpbXBvcnRhbnQ7XG59XG5cbm1hdC1jZWxsIHtcbiAgZm9udC1zaXplOiAxMXB4O1xuICBjb2xvcjogIzUxNTE1MTtcbn1cblxubWF0LWZvb3Rlci1yb3csIG1hdC1yb3cge1xuICBtaW4taGVpZ2h0OiAyMHB4O1xufVxuXG5tYXQtcGFnaW5hdG9yIHtcbiAgZm9udC1zaXplOiAxMXB4O1xuICBtaW4taGVpZ2h0OiAzMHB4O1xuICBtYXgtaGVpZ2h0OiAzMHB4O1xufVxuXG5tYXQtcm93Om50aC1jaGlsZChldmVuKSB7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xufVxuXG4ubWF0LXJvdzpudGgtY2hpbGQob2RkKSB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNmNmY2ZjY7XG59XG5cbi5tYXQtcm93OmhvdmVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogI2NlY2VjZTtcbn1cblxuOmhvc3QgOjpuZy1kZWVwLm1hdC1wYWdpbmF0b3IgLm1hdC1wYWdpbmF0b3ItY29udGFpbmVyIHtcbiAgbWluLWhlaWdodDogNDBweCAhaW1wb3J0YW50O1xuICBtYXgtaGVpZ2h0OiA0MHB4ICFpbXBvcnRhbnQ7XG59XG5cbkBtZWRpYSAobWluLXdpZHRoOiAxMzYwcHgpIHtcbiAgLmhlYWRlclRpdGxlIHtcbiAgICBmb250LXNpemU6IDE5cHg7XG4gIH1cbn0iXX0= */";
+    __webpack_exports__["default"] = "mat-header-row {\n  min-height: 28px;\n  border-bottom: 0;\n}\n\n.tableRequest {\n  display: -webkit-box;\n  display: flex;\n  -webkit-box-orient: vertical;\n  -webkit-box-direction: normal;\n          flex-direction: column;\n  width: 95%;\n  margin: auto;\n  margin-bottom: 20px;\n}\n\n.mat-table {\n  overflow: hidden;\n}\n\n.header {\n  width: 95%;\n  margin: auto;\n  position: relative;\n}\n\n.headerTitle {\n  float: right;\n  color: #15691e;\n  margin-right: 15px;\n  font-weight: 700;\n}\n\n.userIcon {\n  width: 22px;\n  height: 22px;\n  margin-right: 5px;\n}\n\n.requestIcon {\n  margin-left: 5px;\n}\n\n.fontWeight {\n  font-weight: 500;\n}\n\n.detailButton {\n  border: none;\n  line-height: 30px;\n  padding: 0 12px;\n  border-radius: 6px;\n  display: inline-block;\n  -webkit-transition: all 0.5s ease 0s;\n  transition: all 0.5s ease 0s;\n  color: #515151;\n  font-weight: 500 !important;\n}\n\n.detailButton:hover {\n  font-weight: 700 !important;\n  background-color: #404040 !important;\n  color: #ffffff !important;\n  letter-spacing: 2px;\n  box-shadow: 0px 5px 40px -10px rgba(0, 0, 0, 0.57);\n  -webkit-transition: all 0.5s ease 0s;\n  transition: all 0.5s ease 0s;\n}\n\n.assignOnMe {\n  color: #3b73f3;\n  cursor: pointer;\n  font-size: 12px;\n  font-weight: bold;\n}\n\n.removeFromMe {\n  color: #f94646;\n  cursor: pointer;\n  font-size: 12px;\n  font-weight: bold;\n}\n\nmat-header-cell {\n  color: black;\n}\n\nmat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-type {\n  padding-right: 0 !important;\n}\n\nmat-cell {\n  font-size: 11px;\n  color: #515151;\n}\n\nmat-footer-row, mat-row {\n  min-height: 20px;\n}\n\nmat-paginator {\n  font-size: 11px;\n  min-height: 30px;\n  max-height: 30px;\n}\n\nmat-row:nth-child(even) {\n  background-color: white;\n}\n\n.mat-row:nth-child(odd) {\n  background-color: #f6f6f6;\n}\n\n.mat-row:hover {\n  background-color: #cecece;\n}\n\n:host ::ng-deep.mat-paginator .mat-paginator-container {\n  min-height: 40px !important;\n  max-height: 40px !important;\n}\n\n@media (min-width: 1360px) {\n  .headerTitle {\n    font-size: 19px;\n  }\n}\n/*# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbInNyYy9hcHAvc2hhcmVkL2NvbXBvbmVudHMvcmVxdWVzdC10YWJsZS9DOlxcVXNlcnNcXEVkdWFyZFxcRGVza3RvcFxccHJvamVrdHlcXFNpbXBsZWRlc2tcXFNpbXBsZWRlc2tfMlxcQ2xpZW50L3NyY1xcYXBwXFxzaGFyZWRcXGNvbXBvbmVudHNcXHJlcXVlc3QtdGFibGVcXHJlcXVlc3QtdGFibGUuY29tcG9uZW50LnNjc3MiLCJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL3JlcXVlc3QtdGFibGUvcmVxdWVzdC10YWJsZS5jb21wb25lbnQuc2NzcyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQTtFQUNFLGdCQUFBO0VBQ0EsZ0JBQUE7QUNDRjs7QURFQTtFQUNJLG9CQUFBO0VBQUEsYUFBQTtFQUNBLDRCQUFBO0VBQUEsNkJBQUE7VUFBQSxzQkFBQTtFQUNBLFVBQUE7RUFDQSxZQUFBO0VBQ0EsbUJBQUE7QUNDSjs7QURFRTtFQUNFLGdCQUFBO0FDQ0o7O0FER0E7RUFDSSxVQUFBO0VBQ0EsWUFBQTtFQUNBLGtCQUFBO0FDQUo7O0FER0E7RUFDSSxZQUFBO0VBQ0EsY0FBQTtFQUNBLGtCQUFBO0VBQ0EsZ0JBQUE7QUNBSjs7QURHQTtFQUNFLFdBQUE7RUFDQSxZQUFBO0VBQ0EsaUJBQUE7QUNBRjs7QURHQTtFQUNFLGdCQUFBO0FDQUY7O0FER0E7RUFDRSxnQkFBQTtBQ0FGOztBREdBO0VBQ0UsWUFBQTtFQUNBLGlCQUFBO0VBQ0EsZUFBQTtFQUNBLGtCQUFBO0VBQ0EscUJBQUE7RUFDQSxvQ0FBQTtFQUFBLDRCQUFBO0VBQ0EsY0FBQTtFQUNBLDJCQUFBO0FDQUY7O0FER0E7RUFDRSwyQkFBQTtFQUNBLG9DQUFBO0VBQ0EseUJBQUE7RUFDQSxtQkFBQTtFQUNBLGtEQUFBO0VBQ0Esb0NBQUE7RUFBQSw0QkFBQTtBQ0FGOztBREdFO0VBQ0UsY0FBQTtFQUNBLGVBQUE7RUFDQSxlQUFBO0VBQ0EsaUJBQUE7QUNBSjs7QURHRTtFQUNFLGNBQUE7RUFDQSxlQUFBO0VBQ0EsZUFBQTtFQUNBLGlCQUFBO0FDQUo7O0FESUE7RUFDSSxZQUFBO0FDREo7O0FESUE7RUFDRSwyQkFBQTtBQ0RGOztBRElBO0VBRUUsZUFBQTtFQUNBLGNBQUE7QUNGRjs7QURJQTtFQUNFLGdCQUFBO0FDREY7O0FER0E7RUFDSSxlQUFBO0VBQ0EsZ0JBQUE7RUFDQSxnQkFBQTtBQ0FKOztBRElBO0VBQ0UsdUJBQUE7QUNERjs7QURJQTtFQUNFLHlCQUFBO0FDREY7O0FESUU7RUFDRSx5QkFBQTtBQ0RKOztBRElFO0VBQ0UsMkJBQUE7RUFDQSwyQkFBQTtBQ0RKOztBRE1BO0VBQ0k7SUFDRSxlQUFBO0VDSEo7QUFDRiIsImZpbGUiOiJzcmMvYXBwL3NoYXJlZC9jb21wb25lbnRzL3JlcXVlc3QtdGFibGUvcmVxdWVzdC10YWJsZS5jb21wb25lbnQuc2NzcyIsInNvdXJjZXNDb250ZW50IjpbIm1hdC1oZWFkZXItcm93e1xyXG4gIG1pbi1oZWlnaHQ6IDI4cHg7XHJcbiAgYm9yZGVyLWJvdHRvbTogMDtcclxufVxyXG5cclxuLnRhYmxlUmVxdWVzdCB7XHJcbiAgICBkaXNwbGF5OiBmbGV4O1xyXG4gICAgZmxleC1kaXJlY3Rpb246IGNvbHVtbjtcclxuICAgIHdpZHRoOiA5NSU7XHJcbiAgICBtYXJnaW46IGF1dG87XHJcbiAgICBtYXJnaW4tYm90dG9tOiAyMHB4O1xyXG4gIH1cclxuICBcclxuICAubWF0LXRhYmxlIHtcclxuICAgIG92ZXJmbG93OiBoaWRkZW47XHJcbiAgfVxyXG5cclxuXHJcbi5oZWFkZXJ7XHJcbiAgICB3aWR0aDogOTUlO1xyXG4gICAgbWFyZ2luOiBhdXRvO1xyXG4gICAgcG9zaXRpb246IHJlbGF0aXZlO1xyXG59XHJcblxyXG4uaGVhZGVyVGl0bGV7XHJcbiAgICBmbG9hdDogcmlnaHQ7XHJcbiAgICBjb2xvcjogIzE1NjkxZTsgLy8jNjA2MDYwO1xyXG4gICAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xyXG4gICAgZm9udC13ZWlnaHQ6IDcwMDtcclxufVxyXG5cclxuLnVzZXJJY29ue1xyXG4gIHdpZHRoOiAyMnB4O1xyXG4gIGhlaWdodDogMjJweDtcclxuICBtYXJnaW4tcmlnaHQ6IDVweDtcclxufVxyXG5cclxuLnJlcXVlc3RJY29ue1xyXG4gIG1hcmdpbi1sZWZ0OiA1cHg7XHJcbn1cclxuXHJcbi5mb250V2VpZ2h0e1xyXG4gIGZvbnQtd2VpZ2h0OiA1MDAgO1xyXG59XHJcblxyXG4uZGV0YWlsQnV0dG9uIHtcclxuICBib3JkZXI6IG5vbmU7XHJcbiAgbGluZS1oZWlnaHQ6IDMwcHg7XHJcbiAgcGFkZGluZzogMCAxMnB4O1xyXG4gIGJvcmRlci1yYWRpdXM6IDZweDtcclxuICBkaXNwbGF5OiBpbmxpbmUtYmxvY2s7XHJcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcclxuICBjb2xvcjogIzUxNTE1MTtcclxuICBmb250LXdlaWdodDogNTAwICFpbXBvcnRhbnQ7XHJcbiAgfVxyXG5cclxuLmRldGFpbEJ1dHRvbjpob3ZlciB7XHJcbiAgZm9udC13ZWlnaHQ6IDcwMCAhaW1wb3J0YW50O1xyXG4gIGJhY2tncm91bmQtY29sb3I6ICM0MDQwNDAgIWltcG9ydGFudDtcclxuICBjb2xvcjogI2ZmZmZmZiAhaW1wb3J0YW50O1xyXG4gIGxldHRlci1zcGFjaW5nOiAycHg7XHJcbiAgYm94LXNoYWRvdzogMHB4IDVweCA0MHB4IC0xMHB4IHJnYmEoMCwwLDAsMC41Nyk7XHJcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcclxuICB9XHJcblxyXG4gIC5hc3NpZ25Pbk1le1xyXG4gICAgY29sb3I6ICMzYjczZjM7XHJcbiAgICBjdXJzb3I6IHBvaW50ZXI7XHJcbiAgICBmb250LXNpemU6IDEycHg7XHJcbiAgICBmb250LXdlaWdodDogYm9sZDtcclxuICB9XHJcblxyXG4gIC5yZW1vdmVGcm9tTWV7XHJcbiAgICBjb2xvcjogI2Y5NDY0NjtcclxuICAgIGN1cnNvcjogcG9pbnRlcjtcclxuICAgIGZvbnQtc2l6ZTogMTJweDtcclxuICAgIGZvbnQtd2VpZ2h0OiBib2xkO1xyXG4gIH1cclxuXHJcblxyXG5tYXQtaGVhZGVyLWNlbGx7XHJcbiAgICBjb2xvcjpibGFjaztcclxufVxyXG5cclxubWF0LWNlbGw6bGFzdC1vZi10eXBlLCBtYXQtZm9vdGVyLWNlbGw6bGFzdC1vZi10eXBlLCBtYXQtaGVhZGVyLWNlbGw6bGFzdC1vZi10eXBle1xyXG4gIHBhZGRpbmctcmlnaHQ6IDAgICFpbXBvcnRhbnQ7XHJcbn1cclxuXHJcbm1hdC1jZWxse1xyXG4gXHJcbiAgZm9udC1zaXplOiAxMXB4O1xyXG4gIGNvbG9yOiAjNTE1MTUxO1xyXG59XHJcbm1hdC1mb290ZXItcm93LCBtYXQtcm93e1xyXG4gIG1pbi1oZWlnaHQ6IDIwcHg7XHJcbn1cclxubWF0LXBhZ2luYXRvcntcclxuICAgIGZvbnQtc2l6ZTogMTFweDtcclxuICAgIG1pbi1oZWlnaHQ6IDMwcHg7XHJcbiAgICBtYXgtaGVpZ2h0OiAzMHB4O1xyXG59XHJcblxyXG5cclxubWF0LXJvdzpudGgtY2hpbGQoZXZlbil7XHJcbiAgYmFja2dyb3VuZC1jb2xvcjp3aGl0ZTtcclxuICB9XHJcblxyXG4ubWF0LXJvdzpudGgtY2hpbGQob2RkKXtcclxuICBiYWNrZ3JvdW5kLWNvbG9yIDogI2Y2ZjZmNjtcclxuICB9XHJcblxyXG4gIC5tYXQtcm93OmhvdmVyIHtcclxuICAgIGJhY2tncm91bmQtY29sb3I6ICNjZWNlY2U7XHJcbiAgfVxyXG5cclxuICA6aG9zdCA6Om5nLWRlZXAubWF0LXBhZ2luYXRvciAubWF0LXBhZ2luYXRvci1jb250YWluZXJ7XHJcbiAgICBtaW4taGVpZ2h0OiA0MHB4ICFpbXBvcnRhbnQ7XHJcbiAgICBtYXgtaGVpZ2h0OiA0MHB4ICFpbXBvcnRhbnQ7XHJcbiAgfVxyXG5cclxuXHJcblxyXG5AbWVkaWEobWluLXdpZHRoOjEzNjBweCkge1xyXG4gICAgLmhlYWRlclRpdGxle1xyXG4gICAgICBmb250LXNpemU6IDE5cHg7XHJcbiAgICAgICAgXHJcbiAgICB9XHJcblxyXG59XHJcbiIsIm1hdC1oZWFkZXItcm93IHtcbiAgbWluLWhlaWdodDogMjhweDtcbiAgYm9yZGVyLWJvdHRvbTogMDtcbn1cblxuLnRhYmxlUmVxdWVzdCB7XG4gIGRpc3BsYXk6IGZsZXg7XG4gIGZsZXgtZGlyZWN0aW9uOiBjb2x1bW47XG4gIHdpZHRoOiA5NSU7XG4gIG1hcmdpbjogYXV0bztcbiAgbWFyZ2luLWJvdHRvbTogMjBweDtcbn1cblxuLm1hdC10YWJsZSB7XG4gIG92ZXJmbG93OiBoaWRkZW47XG59XG5cbi5oZWFkZXIge1xuICB3aWR0aDogOTUlO1xuICBtYXJnaW46IGF1dG87XG4gIHBvc2l0aW9uOiByZWxhdGl2ZTtcbn1cblxuLmhlYWRlclRpdGxlIHtcbiAgZmxvYXQ6IHJpZ2h0O1xuICBjb2xvcjogIzE1NjkxZTtcbiAgbWFyZ2luLXJpZ2h0OiAxNXB4O1xuICBmb250LXdlaWdodDogNzAwO1xufVxuXG4udXNlckljb24ge1xuICB3aWR0aDogMjJweDtcbiAgaGVpZ2h0OiAyMnB4O1xuICBtYXJnaW4tcmlnaHQ6IDVweDtcbn1cblxuLnJlcXVlc3RJY29uIHtcbiAgbWFyZ2luLWxlZnQ6IDVweDtcbn1cblxuLmZvbnRXZWlnaHQge1xuICBmb250LXdlaWdodDogNTAwO1xufVxuXG4uZGV0YWlsQnV0dG9uIHtcbiAgYm9yZGVyOiBub25lO1xuICBsaW5lLWhlaWdodDogMzBweDtcbiAgcGFkZGluZzogMCAxMnB4O1xuICBib3JkZXItcmFkaXVzOiA2cHg7XG4gIGRpc3BsYXk6IGlubGluZS1ibG9jaztcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcbiAgY29sb3I6ICM1MTUxNTE7XG4gIGZvbnQtd2VpZ2h0OiA1MDAgIWltcG9ydGFudDtcbn1cblxuLmRldGFpbEJ1dHRvbjpob3ZlciB7XG4gIGZvbnQtd2VpZ2h0OiA3MDAgIWltcG9ydGFudDtcbiAgYmFja2dyb3VuZC1jb2xvcjogIzQwNDA0MCAhaW1wb3J0YW50O1xuICBjb2xvcjogI2ZmZmZmZiAhaW1wb3J0YW50O1xuICBsZXR0ZXItc3BhY2luZzogMnB4O1xuICBib3gtc2hhZG93OiAwcHggNXB4IDQwcHggLTEwcHggcmdiYSgwLCAwLCAwLCAwLjU3KTtcbiAgdHJhbnNpdGlvbjogYWxsIDAuNXMgZWFzZSAwcztcbn1cblxuLmFzc2lnbk9uTWUge1xuICBjb2xvcjogIzNiNzNmMztcbiAgY3Vyc29yOiBwb2ludGVyO1xuICBmb250LXNpemU6IDEycHg7XG4gIGZvbnQtd2VpZ2h0OiBib2xkO1xufVxuXG4ucmVtb3ZlRnJvbU1lIHtcbiAgY29sb3I6ICNmOTQ2NDY7XG4gIGN1cnNvcjogcG9pbnRlcjtcbiAgZm9udC1zaXplOiAxMnB4O1xuICBmb250LXdlaWdodDogYm9sZDtcbn1cblxubWF0LWhlYWRlci1jZWxsIHtcbiAgY29sb3I6IGJsYWNrO1xufVxuXG5tYXQtY2VsbDpsYXN0LW9mLXR5cGUsIG1hdC1mb290ZXItY2VsbDpsYXN0LW9mLXR5cGUsIG1hdC1oZWFkZXItY2VsbDpsYXN0LW9mLXR5cGUge1xuICBwYWRkaW5nLXJpZ2h0OiAwICFpbXBvcnRhbnQ7XG59XG5cbm1hdC1jZWxsIHtcbiAgZm9udC1zaXplOiAxMXB4O1xuICBjb2xvcjogIzUxNTE1MTtcbn1cblxubWF0LWZvb3Rlci1yb3csIG1hdC1yb3cge1xuICBtaW4taGVpZ2h0OiAyMHB4O1xufVxuXG5tYXQtcGFnaW5hdG9yIHtcbiAgZm9udC1zaXplOiAxMXB4O1xuICBtaW4taGVpZ2h0OiAzMHB4O1xuICBtYXgtaGVpZ2h0OiAzMHB4O1xufVxuXG5tYXQtcm93Om50aC1jaGlsZChldmVuKSB7XG4gIGJhY2tncm91bmQtY29sb3I6IHdoaXRlO1xufVxuXG4ubWF0LXJvdzpudGgtY2hpbGQob2RkKSB7XG4gIGJhY2tncm91bmQtY29sb3I6ICNmNmY2ZjY7XG59XG5cbi5tYXQtcm93OmhvdmVyIHtcbiAgYmFja2dyb3VuZC1jb2xvcjogI2NlY2VjZTtcbn1cblxuOmhvc3QgOjpuZy1kZWVwLm1hdC1wYWdpbmF0b3IgLm1hdC1wYWdpbmF0b3ItY29udGFpbmVyIHtcbiAgbWluLWhlaWdodDogNDBweCAhaW1wb3J0YW50O1xuICBtYXgtaGVpZ2h0OiA0MHB4ICFpbXBvcnRhbnQ7XG59XG5cbkBtZWRpYSAobWluLXdpZHRoOiAxMzYwcHgpIHtcbiAgLmhlYWRlclRpdGxlIHtcbiAgICBmb250LXNpemU6IDE5cHg7XG4gIH1cbn0iXX0= */";
     /***/
   },
 
@@ -9721,7 +9780,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
         this.saveEmittter = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.resetEmittter = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
         this.editEmittter = new _angular_core__WEBPACK_IMPORTED_MODULE_1__["EventEmitter"]();
-        this.displayOnlyReset = false;
         this.editActivated = false;
       }
 
@@ -9759,7 +9817,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()], SERDButtonsComponent.prototype, "saveEmittter", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()], SERDButtonsComponent.prototype, "resetEmittter", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Output"])()], SERDButtonsComponent.prototype, "editEmittter", void 0);
-    tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Input"])()], SERDButtonsComponent.prototype, "displayOnlyReset", void 0);
     SERDButtonsComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
       selector: 'app-serdbuttons',
       template: tslib__WEBPACK_IMPORTED_MODULE_0__["__importDefault"](__webpack_require__(
@@ -10019,7 +10076,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
     var environment = {
       production: false,
       loginUrl: 'http://localhost:8081/',
-      apiUrl: 'http://localhost:8081/api/'
+      apiUrl: 'http://localhost:8081/api/',
+      dashboard: 'http://localhost:8081/'
     };
     /*
      * For easier debugging in development mode, you can import the following file

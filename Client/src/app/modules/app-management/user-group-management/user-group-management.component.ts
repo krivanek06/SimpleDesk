@@ -21,7 +21,8 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   public groups: Observable<string[]>;
   public users: Observable<UserSimpleDTO[]>;
   private destroy$: Subject<boolean> = new Subject<boolean>();
-  public isAdmin$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
+  isGhost$: Observable<boolean>;
   public hasPrivilegeAccess$: Observable<boolean>;
 
   @ViewChild('userDetails',  {static: false}) userDetails: UserDetailsComponent;
@@ -33,6 +34,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
 
   constructor(private groupService: GroupService, private userService: UserService, private authService: AuthenticationService) { 
     this.isAdmin$ = this.authService.isAdmin();
+    this.isGhost$ = this.authService.isGhost();
     this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
   }
 

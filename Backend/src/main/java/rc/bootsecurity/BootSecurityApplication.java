@@ -40,7 +40,7 @@ public class BootSecurityApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        List<User> users=  this.userRepository.findAll();
+        List<User> users =  this.userRepository.findAll();
         for(User user : users){
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             user.setPassword(encoder.encode(user.getPassword()));

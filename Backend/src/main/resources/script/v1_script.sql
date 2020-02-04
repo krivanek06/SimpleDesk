@@ -55,7 +55,7 @@ create table tbl_users(
   first_name varchar(255) NOT NULL,
   last_name varchar(255) NOT NULL,
   photo varchar default 'user.png',
-  email varchar unique NOT NULL,
+  email varchar NOT NULL,
   active boolean default True,
   timestamp_creation TIMESTAMP default current_timestamp,
   timestamp_ending TIMESTAMP default NULL
@@ -687,7 +687,7 @@ from get_all_privileges_for_user_varchar( searching_name)) )
 OR
 -- get privileges on ticket types
     (rt.name = 'TICKET' AND (select case
-    when  tbl_ticket_types.name = 'USER' or tbl_ticket_types.name = 'OTHER' then (
+    when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
     select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
     like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(searching_name))
     else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'

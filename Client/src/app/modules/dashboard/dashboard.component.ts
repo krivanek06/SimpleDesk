@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { RequestTable } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
@@ -13,7 +13,9 @@ import { RequestModificationService } from 'app/core/services/request-modificati
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
+  
+  private refreshIntervalId: any;
   public viewTable = ['id',   'additionalInformation',  'creator',  'name',
                       'priority', 'assigned' ,'timeCreated' , 'details'];
   public modifyTable = ['id', 'additionalInformation', 'creator',  'name', 
@@ -42,7 +44,11 @@ export class DashboardComponent implements OnInit {
     this.isManager$ = this.authService.isManager();
     this.isManagerRightHand$ = this.authService.isManagerRightHand();
 
-    setInterval(() => this.getRequestOnDashboard() , 600000); // 10minutes
+    this.refreshIntervalId = setInterval(() => this.getRequestOnDashboard() , 600000); // 10minutes 600000
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.refreshIntervalId);
   }
 
   private getRequestOnDashboard(){

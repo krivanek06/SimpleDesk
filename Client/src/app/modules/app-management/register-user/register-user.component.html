@@ -1,6 +1,6 @@
 
 <div class = 'leftContainer'>
-    <form [formGroup] = "userRegistrationForm" (ngSubmit)="submit()">
+    <form [formGroup] = "userRegistrationForm" (ngSubmit)="submit()" #userFormViewChild="ngForm">
         <div class='inlineParameters formTitleContainer'>
             <img src = "../../../../assets/images_design/registeru_user_icon.png" class='registerUserIcon'>
             <span class='formTitle'>Registrovanie uživateľa</span>

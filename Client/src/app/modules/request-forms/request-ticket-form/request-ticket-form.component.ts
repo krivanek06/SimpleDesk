@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'environments/environment';
 import Swal from 'sweetalert2';
@@ -23,36 +23,19 @@ export class RequestTicketFormComponent implements OnInit {
 
   @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient, 
+  @ViewChild('ticketFormViewChild',  {static: true}) ticketFormViewChild;
+
+  constructor(private formBuilder: FormBuilder, private http: HttpClient,
     private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.initFormGroup();
-    //this.ticketForm.valueChanges.subscribe(console.log);
-  }
-
-  private initFormGroup(){
     this.ticketForm = this.formBuilder.group({
-      ticketType: ['' , [
-        Validators.required,
-      ]],
-      ticketSubtypeName: ['' , [
-        Validators.required,
-        Validators.minLength(2),
-      ]],
-      requestPriority: ['' , [
-        Validators.required,
-      ]],
-      name: ['' , [
-        Validators.required,
-        Validators.minLength(5),
-        Validators.maxLength(254),
-      ]],
-      problem: ['' , [
-        Validators.required,
-        Validators.minLength(10),
-      ]],
-    })
+      ticketType:  new FormControl('' , [ Validators.required, ]),
+      ticketSubtypeName:  new FormControl('' , [ Validators.required,  Validators.minLength(2), ]),
+      requestPriority:  new FormControl('' , [ Validators.required, ]),
+      name:  new FormControl('' , [ Validators.required, Validators.minLength(5), Validators.maxLength(254),]),
+      problem:  new FormControl('' , [ Validators.required,  Validators.minLength(10), ]),
+    });
   }
 
   get ticketType(){
@@ -91,10 +74,10 @@ export class RequestTicketFormComponent implements OnInit {
         this.spinner.show();
         this.sendTicketFormToAPI().subscribe(id => {
             this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
-              this.initFormGroup();
+              this.ticketFormViewChild.resetForm();
               this.spinner.hide();
               Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", showConfirmButton: false, timer: 1200 })
-           }, err => this.spinner.hide());
+            }, err => this.spinner.hide());
         });
       }
     })

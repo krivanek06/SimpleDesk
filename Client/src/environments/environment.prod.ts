@@ -3,5 +3,5 @@ export const environment = {
 
   loginUrl: 'http://localhost:8081/',
   apiUrl: 'http://localhost:8081/api/',
-  dashboard: 'http://localhost:4200/',
+  dashboard: 'http://localhost:8081/',
 };

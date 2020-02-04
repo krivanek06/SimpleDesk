@@ -16,7 +16,7 @@
     </div>   
     
     <!-- modifycation buttons -->
-    <ng-container  *ngIf='userDetails.displayedUser'>
+    <ng-container  *ngIf='userDetails.displayedUser && !(isGhost$ | async)'>
         <button mat-button 
                 color="primary" 
                 class='modificationButton' 

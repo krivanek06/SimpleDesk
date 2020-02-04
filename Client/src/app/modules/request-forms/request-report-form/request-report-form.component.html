@@ -1,6 +1,6 @@
 <h2 class='formTitle'>Požiadavka na Report</h2>
 
-<form [formGroup] = "reportForm" (ngSubmit)="submit()">
+<form [formGroup] = "reportForm" (ngSubmit)="submit()" #reportFormViewChild="ngForm">
       <!--  Values : {{ reportForm.value | json }}
         <hr> -->
 

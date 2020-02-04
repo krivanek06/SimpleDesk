@@ -1,5 +1,5 @@
 <div class = 'leftContainer'>
-    <form [formGroup] = "groupRegistrationForm" (ngSubmit)="submit()">
+    <form [formGroup] = "groupRegistrationForm" (ngSubmit)="submit()" #groupFormViewChild="ngForm">
         <div class='inlineParameters formTitleContainer'>
             <img src = "../../../../assets/images_design/registeru_user_icon.png" class='registerUserIcon'>
             <span class='formTitle'>Registrovanie skupiny</span>
@@ -91,7 +91,13 @@
                         <mat-option value = "Ticket"> Tikety </mat-option>
                         <mat-option value = "Report"> Reporty </mat-option>
                         <mat-option value = "Finance"> Financie </mat-option>
-                        <mat-option value = "Privilege"> Privilege </mat-option>
+                        <mat-option value = "Privilege"
+                                    matTooltip="Vybertu možnosť ak chcete spístupniť sekciu 'Správa aplikácie' pre uživateľov v danej skupine"
+                                    matTooltipPosition="right"
+                                    matTooltipClass="custom-tooltip"
+                                    matTooltipShowDelay="150"> 
+                                        Privilege 
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
 

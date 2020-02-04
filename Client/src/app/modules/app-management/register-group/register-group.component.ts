@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { UserService } from 'app/core/services/user.service';
 import { UserSimpleDTO, ApplicationPrivilege, Group } from 'app/shared/models/UserGroups';
@@ -19,10 +19,8 @@ export class RegisterGroupComponent implements OnInit {
   public financeTypes: FinanceType[] = [];
   public softwares: TicketType[];
   public hardwares: TicketType[];
-  public servers: TicketType[];
-
-   
-
+  public servers: TicketType[];   
+  @ViewChild('groupFormViewChild',  {static: true}) groupFormViewChild;
 
   constructor(private formBuilder: FormBuilder, public userService: UserService, 
     public requestTypeService: RequestTypeService, private groupService: GroupService) { }
@@ -79,6 +77,7 @@ export class RegisterGroupComponent implements OnInit {
         Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie skupiny bolo zaslané', showConfirmButton: false, timer: 1500 })
         const group = this.consructGroup();
         this.groupService.registerGroup(group).subscribe(() => {
+          this.groupFormViewChild.resetForm();
           Swal.fire({ position: 'top-end', text: 'Skupina ' + group.name + " bola vytvorená   ", showConfirmButton: false, timer: 1500 })
         })
       }

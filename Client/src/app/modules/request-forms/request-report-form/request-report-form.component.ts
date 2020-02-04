@@ -21,6 +21,7 @@ export class RequestReportFormComponent implements OnInit {
   accessByMethodArray:any[] = [];
 
   @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
+  @ViewChild('reportFormViewChild',  {static: true}) reportFormViewChild;
 
   constructor(private formBuilder: FormBuilder, private http : HttpClient, private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
 
@@ -82,6 +83,7 @@ export class RequestReportFormComponent implements OnInit {
         this.spinner.show();
         this.sendReportFormToAPI().subscribe(id => {
           this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+            this.reportFormViewChild.resetForm();
             this.spinner.hide();
             Swal.fire({ position: 'top-end', text:  'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", showConfirmButton: false, timer: 1200 })
          });

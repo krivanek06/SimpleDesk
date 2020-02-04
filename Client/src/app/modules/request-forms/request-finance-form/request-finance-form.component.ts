@@ -18,6 +18,7 @@ export class RequestFinanceFormComponent implements OnInit {
   public financeTypeArray:FinanceType[] = [];
   financeForm: FormGroup;
   @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
+  @ViewChild('financeFormViewChild',  {static: true}) financeFormViewChild;
 
   constructor(private formBuilder: FormBuilder, 
     private http: HttpClient, 
@@ -69,6 +70,7 @@ export class RequestFinanceFormComponent implements OnInit {
         this.spinner.show();
         this.sendFinanceFormToAPI().subscribe((id : number) => 
           this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+            this.financeFormViewChild.resetForm();
               this.spinner.hide();
               Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.'", showConfirmButton: false, timer: 1200 })
         }))

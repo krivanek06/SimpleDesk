@@ -1,8 +1,8 @@
 package rc.bootsecurity.model.enums;
 
 public enum USER_TYPE {
-    Admin("Admin"),
-    Ghost("Ghost");
+    Admin("admin"),
+    Ghost("ghost");
 
     private final String text;
 

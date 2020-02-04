@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { UserService } from 'app/core/services/user.service';
@@ -13,13 +13,11 @@ export class RegisterUserComponent implements OnInit {
 
   userRegistrationForm: FormGroup;
 
+  @ViewChild('userFormViewChild',  {static: true}) userFormViewChild;
+
   constructor(private formBuilder: FormBuilder, private userService: UserService) { }
 
   ngOnInit() {
-    this.initFormGroup();
-  }
-
-  private initFormGroup(){
     this.userRegistrationForm = this.formBuilder.group({
       firstname: ['' , [
         Validators.required,
@@ -44,11 +42,12 @@ export class RegisterUserComponent implements OnInit {
     
     const formValues = this.userRegistrationForm.value;
     const userRegistraion: UserSimpleDTO = {
-      username : formValues.username,
-      firstName : formValues.firstname,
-      lastName : formValues.lastname,
-      email : formValues.email
+      username : formValues.username.trim(),
+      firstName : formValues.firstname.trim(),
+      lastName : formValues.lastname.trim(),
+      email : formValues.email.trim()
     }
+    console.log(userRegistraion);
 
     Swal.fire({ text: "Naozaj chcetete vytvoriť uživateľa ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
@@ -57,7 +56,7 @@ export class RegisterUserComponent implements OnInit {
         Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie uživateľa bolo zaslané', showConfirmButton: false, timer: 1500 })
         this.userService.registerUser(userRegistraion).subscribe(x => {
           Swal.fire({ position: 'top-end',text: 'Uživateľ bol zaregistrovaný, emailom sa bude notifikovať', showConfirmButton: false, timer: 1500 })
-          this.userRegistrationForm.reset();
+           this.userFormViewChild.resetForm();
         })
       }
     });

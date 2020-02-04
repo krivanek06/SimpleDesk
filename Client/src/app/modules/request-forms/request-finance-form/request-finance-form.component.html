@@ -2,7 +2,7 @@
 
 <h2 class='formTitle'>Požiadavka na Financie</h2>
 
-<form [formGroup] = "financeForm" (ngSubmit)="submit()">
+<form [formGroup] = "financeForm" (ngSubmit)="submit()" #financeFormViewChild="ngForm">
     <!-- finance type -->
     <mat-form-field class='InlineParameters'>
         <mat-label>Typ Financie</mat-label>
