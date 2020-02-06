@@ -118,7 +118,6 @@ public class RequestService {
      * I have privileges
      */
    private Boolean hasAccessForDetails(Request request, String username ){
-
         if(username.equalsIgnoreCase("admin") || username.equalsIgnoreCase("ghost")){
             return true;
         }

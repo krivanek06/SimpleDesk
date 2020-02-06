@@ -77,7 +77,7 @@
     <!-- modifycation buttons -->
     <app-serdbuttons #serdbuttonsGroup 
         id='serdbuttonsGroup' 
-        *ngIf="groupDetails.group" 
+        *ngIf="groupDetails.group  && !(isGhost$ | async)" 
         (editEmittter) = "editGroup()" 
         (resetEmittter) = "resetGroup()"
         (saveEmittter) = "saveGroup()"
@@ -85,7 +85,7 @@
     </app-serdbuttons>
 
     <app-group-details #groupDetails ></app-group-details>
-    <app-privileges #groupPrivileges ></app-privileges>
+    <app-privileges #groupPrivileges [applyGreenColor] = 'true'></app-privileges>
 </div>
 
 

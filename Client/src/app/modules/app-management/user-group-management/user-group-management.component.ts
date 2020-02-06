@@ -66,7 +66,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
         takeUntil(this.destroy$)
       ).subscribe(user => {
         this.userDetails.displayedUser = user;
-        this.userPrivileges.disabledPrivileges = user.applicationPrivilegeDTO;
+        this.userPrivileges.enabledPrivileges = user.applicationPrivilegeDTO;
         this.userPrivileges.name = 'Uživateľa';
 
         const groupContainer: GroupContainer = {

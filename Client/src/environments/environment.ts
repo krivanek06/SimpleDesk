@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  loginUrl: 'http://localhost:8081/',
+  loginUrl: 'http://localhost:8081/', // 10.134.216.210:8081
   apiUrl: 'http://localhost:8081/api/',
   dashboard: 'http://localhost:4200/', // 4200 8081
 };

@@ -88,15 +88,11 @@ export class RegisterGroupComponent implements OnInit {
     let ticketpriv:any = {};
     if(this.solveTickets.value !== null){
         ticketpriv = {
-        "Software" : this.solveSoftware.value === null ? [] : this.solveSoftware.value,
-        "Hardware" : this.solveHardware.value === null ? [] : this.solveHardware.value,
-        "Server" : this.solveServer.value === null ? [] : this.solveServer.value,
-      }
-      if(this.solveTickets.value.includes('Užívateľ')){
-        ticketpriv.Užívateľ = null;
-      }
-      if(this.solveTickets.value.includes('Iné')){
-        ticketpriv.Iné = null;
+          "Software" : this.solveSoftware.value === null ? [] : this.solveSoftware.value,
+          "Hardware" : this.solveHardware.value === null ? [] : this.solveHardware.value,
+          "Server" : this.solveServer.value === null ? [] : this.solveServer.value,
+          "User" : this.solveTickets.value.includes('User') ? ["True"] : [],
+          "Other" : this.solveTickets.value.includes('Other') ? ["True"] : []
       }
     }
 

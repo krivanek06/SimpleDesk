@@ -19,7 +19,6 @@ import java.util.List;
 
 //@EnableJpaRepositories("rc.bootsecurity.repository.*")
 //@EntityScan("rc.bootsecurity.*")
-
 @SpringBootApplication
 public class BootSecurityApplication {
 

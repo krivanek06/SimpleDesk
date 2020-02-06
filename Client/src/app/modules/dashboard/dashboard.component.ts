@@ -82,7 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     request.assigned = this.userService.user.firstName + " " + this.userService.user.lastName;
     request.assignedImageByte = this.userService.user.photoBytes;
 
-    this.meAssignedRequests.dataSource.data.push(request)
+    this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
     this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id );
 
     this.meAssignedRequests.dataSource._updateChangeSubscription();

@@ -15,10 +15,7 @@ import rc.bootsecurity.service.UserService;
 import rc.bootsecurity.utils.service.EmailService;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -65,23 +62,30 @@ public class RequestStateService {
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Uzatvorené.name()));
 
         this.saveOrUpdateRequest(request);
-
         // send information email
-        String[] emails = this.getEngagedUsersEmails(request);
-        this.emailService.sendClosedRequestEmail(request, user, emails);
+        String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+        String creator = request.getCreator().getEmail();
+        String closed = request.getClosed().getEmail();
+
+        this.emailService.sendClosedRequestEmail(request, user, assigned, creator, closed);
     }
 
     public void reopenRequest(Integer requestId){
         Request request = this.findRequest(requestId);
+
+        // send information email
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        //String[] emails = this.getEngagedUsersEmails(request);
+        String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+        String creator = request.getCreator().getEmail();
+        String closed = request.getClosed().getEmail();
+
+        this.emailService.sendReopenRequestEmail(request, user, creator, assigned, closed);
+
         request.setClosed(null);
         request.setTimestampClosed(null);
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
-
-        // send information email
-        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
-        String[] emails = this.getEngagedUsersEmails(request);
-        this.emailService.sendReopenRequestEmail(request, user, emails);
     }
 
     public void changePriority(Integer requestId, String priority){
@@ -102,7 +106,7 @@ public class RequestStateService {
      * @return emails of assigned / creator / closed / watched users
      */
     public String[] getEngagedUsersEmails(Request request){
-       String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+     /*  String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
        String solver = "";
        if(request.getSolutionComment() != null)
            solver = this.requestCommentService.getRequestComment(request.getSolutionComment()).getUser().getEmail();
@@ -110,6 +114,12 @@ public class RequestStateService {
        String closed = request.getClosed() != null ? request.getClosed().getEmail() : "";
        List<String> watched = new ArrayList<>(this.userService.getUsersWatchedRequest(request).stream().map(User::getEmail).collect(Collectors.toList()));
        watched.addAll(new ArrayList<>(Arrays.asList(closed, solver, assigned)));
-       return (String[]) new HashSet(watched).toArray(String[]::new);
+       return (String[]) new HashSet(watched).toArray(String[]::new);*/
+        String assigned = request.getAssigned() != null ? request.getAssigned().getEmail() : "";
+        String creator = request.getCreator().getEmail();
+        String closed = request.getClosed().getEmail();
+
+        return  (String[])  new HashSet(Arrays.asList(creator,assigned,closed)).toArray(String[]::new);
+
     }
 }

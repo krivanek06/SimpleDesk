@@ -42,11 +42,11 @@ public class EmailService {
     }
 
     public void sendAssignRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, ASSIGN_EMAIL, sendToEmails));
+     //   javaMailSender.send(this.composeRequestEmail(request, whoInitiated, ASSIGN_EMAIL, sendToEmails));
     }
 
     public void sendClosedRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-     //   javaMailSender.send(this.composeRequestEmail(request, whoInitiated, CLOSE_EMAIL, sendToEmails));
+      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, CLOSE_EMAIL, sendToEmails));
     }
 
     public void sendReopenRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
@@ -67,8 +67,9 @@ public class EmailService {
         message.setText("Môžete vstúpiť do systemu helpdesk. \n" +
                 "prihlasovanie údaje sú nasledovné \n" +
                 "prihlasovacie meno : " + newUser.getUsername() + "\n" +
-                "prihlasovacie heslo : " + newUser.getPassword() +
-                 this.getEmailFooter(whoInitiated) );
+                "prihlasovacie heslo : " + newUser.getPassword() + "\n" +
+                "adresa stránky : http://10.134.216.210:8081" +
+                this.getEmailFooter(whoInitiated) );
 
       //  javaMailSender.send(message);
     }

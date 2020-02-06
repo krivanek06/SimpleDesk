@@ -34,15 +34,15 @@
     </div>
 
 
-    <div class = 'module' *ngIf = "requestDetails.closed === null &&  
-                        (((isSolverRightHand$ | async) && (isSolver$ | async))  ||  (isAdmin$ | async))">
+    <div class = 'module' *ngIf = "requestDetails.closed === null &&  (
+        ( ((isSolverRightHand$ | async) || (isManager$ | async)) && (isSolver$ | async))  ||  (isAdmin$ | async))">
         <mat-form-field class='customInputSmall'>
             <mat-label>Zmena riešiteľa</mat-label>
             <mat-select  (selectionChange)="selectedUser($event.value)">
                 <mat-option *ngFor='let user of (allusers$ | async)' [value] = "user">{{ user.firstName }} {{ user.lastName }}</mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-raised-button  class='sendingButton' (click) = 'changeAssignedUser(requestDetails)'>Odoslať</button>
+        <button mat-raised-button  class='sendingButton' (click) = 'changeAssignedUser(requestDetails)'>Zmeniť</button>
         <hr>
     </div>
 
@@ -55,7 +55,7 @@
                 <mat-option value="vysoká">vysoká</mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-raised-button  class='sendingButton' (click) = 'changePriority(requestDetails)'>Odoslať</button>
+        <button mat-raised-button  class='sendingButton' (click) = 'changePriority(requestDetails)'>Zmeniť</button>
         <hr>
     </div>
 

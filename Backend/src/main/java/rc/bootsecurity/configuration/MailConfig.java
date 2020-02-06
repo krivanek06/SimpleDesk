@@ -15,7 +15,7 @@ public class MailConfig {
         JavaMailSenderImpl javaMailSender = new JavaMailSenderImpl();
 
         javaMailSender.setHost("smtp-si.cm-cic.fr");
-        javaMailSender.setPort(465);
+        javaMailSender.setPort(25);
 
         javaMailSender.setJavaMailProperties(getMailProperties());
 

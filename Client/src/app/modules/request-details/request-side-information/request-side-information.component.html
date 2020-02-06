@@ -127,7 +127,7 @@
             </ul>
         </li>
 
-        <li class='userInformationsContainer'>
+        <li class='userInformationsContainer' [hidden] = 'true'>
             <div class='informationAnswer'>Sledované</div>
             <ul> 
                 <li class='information ' *ngFor='let person of requestDetails.userToWatchRequest'>

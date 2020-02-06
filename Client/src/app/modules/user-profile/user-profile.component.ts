@@ -52,7 +52,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit, OnDestroy{
             Other : token.TICKET_OTHER_PRIVILEGES
           }
         };
-        this.userPrivileges.disabledPrivileges = priv;
+        this.userPrivileges.enabledPrivileges = priv;
     })
 
     this.groupContainer = this.groupService.getAllGroupContainersForUser();
@@ -60,7 +60,7 @@ export class UserProfileComponent implements OnInit , AfterViewInit, OnDestroy{
 
 
   initGroupPrivileges(group: Group):void{
-      this.groupPrivileges.disabledPrivileges = group.applicationPrivilegeDTO;
+      this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
       this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
   }

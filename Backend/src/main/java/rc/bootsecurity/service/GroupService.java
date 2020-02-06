@@ -249,9 +249,7 @@ public class GroupService {
     private List<TicketPrivileges> convertTicketPrivilegesForGroupToDTO(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
         List<TicketPrivileges> ticketPrivilegesList = new ArrayList<>();
         for(String ticketTypeName: applicationPrivilegeDTO.getSolveTickets().keySet()){
-
-            if(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName) == null ||
-                    applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName).size() == 0 ) {
+            if(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName) == null || applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName).size() == 0 ) {
                 continue;
             }
 
@@ -265,6 +263,8 @@ public class GroupService {
                 ticketPrivilegesList.add(ticketPrivileges);
                 continue;
             }
+
+
 
             for(String ticketSubtypeName: applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName)){
                 TicketPrivileges ticketPrivileges = new TicketPrivileges();

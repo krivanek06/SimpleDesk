@@ -11,6 +11,7 @@ import rc.bootsecurity.model.entity.request.RequestComment;
 import rc.bootsecurity.model.entity.ticket.Ticket;
 import rc.bootsecurity.model.entity.ticket.TicketPrivileges;
 import rc.bootsecurity.model.enums.MODULE_TYPE;
+import rc.bootsecurity.model.enums.TICKET_TYPE;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -64,6 +65,15 @@ public class RequestConverter {
         ticketDTO.setTicketSubtypeName(ticket.getTicketSubtypeName());
         ticketDTO.setProblem(ticket.getProblem());
         ticketDTO.setTicketType(ticket.getTicketType().getName());
+
+        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.User.name())){
+            ticketDTO.setTicketType("Uživateľ");
+        }
+
+        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.Other.name())){
+            ticketDTO.setTicketType("Iné");
+        }
+
 
         return ticketDTO;
     }

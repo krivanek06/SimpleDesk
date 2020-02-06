@@ -9,7 +9,8 @@
         <li class='informationsContainer topspace' *ngIf ='enabledPrivileges.moduleTypesToUse.length > 0 || disabledPrivileges.moduleTypesToUse.length > 0'>
             <div class='informationTitle'>Používanie modulov</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges.moduleTypesToUse' class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'
+                <li *ngFor='let type of enabledPrivileges.moduleTypesToUse' 
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
                         (click) = 'changeModuleTypeToUse(type)' > {{ type }} </li>  
 
                 <li *ngFor='let type of disabledPrivileges.moduleTypesToUse' 
@@ -23,7 +24,8 @@
         [ngClass] = '{"unableClick" : activateUnableClick &&  !enabledPrivileges.moduleTypesToUse.includes("Finance") }'>
             <div class='informationTitle'>Zasielanie financií</div>
             <ul class='informationsHolder'> 
-                <li *ngFor='let type of enabledPrivileges.submitFinanceRequests' class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'
+                <li *ngFor='let type of enabledPrivileges.submitFinanceRequests'
+                     [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
                         (click) = 'changesubmitFinanceRequests(type)'> {{ type }} </li>  
 
                 <li *ngFor='let type of disabledPrivileges.submitFinanceRequests'  
@@ -36,8 +38,7 @@
             <div class='informationTitle'>Riešenie požiadávok</div>
             <ul class='informationsHolder'> 
                 <li *ngFor='let type of enabledPrivileges.requestTypesToSolve' 
-                        class ='coloredLi'  
-                        [ngClass] = '{ "enabledPriv" :  activateUnableClick }'
+                        [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
                         (click) = 'changeRequestTypeToSolve(type)'> 
                     {{ type }} 
                 </li> 
@@ -57,48 +58,43 @@
             <ul class='informationsHolder'> 
                 <li *ngIf = ' enabledPrivileges.requestTypesToSolve.includes("Ticket") && enabledPrivileges.solveTickets.Software !== null' 
                     (click) = "changeSolveTicketsSoftwareAll()"  
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'>Softvér</li>
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Softvér</li>
 
                 <li *ngIf = ' enabledPrivileges.requestTypesToSolve.includes("Ticket") && enabledPrivileges.solveTickets.Hardware !== null' 
                     (click) = "changeSolveTicketsHardwareAll()"
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'>Hardvér</li>
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Hardvér</li>
 
                 <li *ngIf = ' enabledPrivileges.requestTypesToSolve.includes("Ticket") &&  enabledPrivileges.solveTickets.Server !== null' 
                     (click) = "changeSolveTicketsServerAll()" 
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'>Server</li>
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Server</li>
 
                 <li *ngIf = ' enabledPrivileges.requestTypesToSolve.includes("Ticket") &&  enabledPrivileges.solveTickets.User.length > 0' 
                     (click) = 'changeSolveTicketsUserAll()' 
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'>Uživateľ</li>
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Uživateľ</li>
                     
                 <li *ngIf = ' enabledPrivileges.requestTypesToSolve.includes("Ticket") &&  enabledPrivileges.solveTickets.Other.length > 0' 
                     (click) = 'changeSolveTicketsOtherAll()' 
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'>Iné</li>
+                     [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Iné</li>
                 
        
-                <div [hidden] = "!activateUnableClick && hideUnassignedPriv"  >
-                    <li *ngIf = '( activateUnableClick && enabledPrivileges.solveTickets.Software === null ) || 
-                                disabledPrivileges.solveTickets.Software.length !== 0'  
+                <div  >
+                    <li *ngIf = ' activateUnableClick && enabledPrivileges.solveTickets.Software === null'  
                         (click) = "changeSolveTicketsSoftwareAll()" 
                         [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'>Softvér</li>
 
-                    <li *ngIf = '( activateUnableClick && enabledPrivileges.solveTickets.Hardware === null) || 
-                                disabledPrivileges.solveTickets.Hardware.length !== 0 ' 
+                    <li *ngIf = ' activateUnableClick && enabledPrivileges.solveTickets.Hardware === null ' 
                         (click) = "changeSolveTicketsHardwareAll()"
                         [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")  }'>Hardvér</li>
 
-                    <li *ngIf = '( activateUnableClick && enabledPrivileges.solveTickets.Server === null ) || 
-                                disabledPrivileges.solveTickets.Server.length !== 0' 
+                    <li *ngIf = ' activateUnableClick && enabledPrivileges.solveTickets.Server === null' 
                         (click) = "changeSolveTicketsServerAll()"
                         [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'>Server</li>
 
-                    <li *ngIf = '( activateUnableClick && enabledPrivileges.solveTickets.User.length === 0 ) || 
-                                disabledPrivileges.solveTickets.User.length !== 0' 
+                    <li *ngIf = ' activateUnableClick && enabledPrivileges.solveTickets.User.length === 0' 
                         (click) = 'changeSolveTicketsUserAll()'
                         [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'>Uživateľ</li>
 
-                    <li *ngIf = '( activateUnableClick && enabledPrivileges.solveTickets.Other.length === 0) || 
-                                disabledPrivileges.solveTickets.Other.length !== 0' 
+                    <li *ngIf = 'activateUnableClick && enabledPrivileges.solveTickets.Other.length === 0' 
                         (click) = 'changeSolveTicketsOtherAll()'
                         [ngClass] = '{ "ableClick" :  activateUnableClick && enabledPrivileges.requestTypesToSolve.includes("Ticket")}'>Iné</li>
                 </div>
@@ -111,7 +107,7 @@
             <div class='informationTitle'>Riešenie Softvéru</div>
             <ul class='informationsHolder'> 
                 <li *ngFor='let type of enabledPrivileges.solveTickets.Software' 
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }' 
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }' 
                     (click) = 'changeSolveTicketsSoftware(type)'> {{ type }} </li>  
 
                 <li *ngFor='let type of disabledPrivileges.solveTickets.Software' 
@@ -131,7 +127,7 @@
             <div class='informationTitle'>Riešenie Hardvéru</div>
             <ul class='informationsHolder'> 
                 <li *ngFor='let type of enabledPrivileges.solveTickets.Hardware' 
-                     class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }' 
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }' 
                     (click) = 'changeSolveTicketsHardware(type)'> {{ type }} </li>  
 
                 <li *ngFor='let type of disabledPrivileges.solveTickets.Hardware' 
@@ -148,7 +144,7 @@
             <div class='informationTitle'>Riešenie Serverov</div>
             <ul class='informationsHolder'> 
                 <li *ngFor='let type of enabledPrivileges.solveTickets.Server' 
-                    class ='coloredLi'  [ngClass] = '{ "enabledPriv" :  activateUnableClick }'
+                    [ngClass] = '{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
                     (click) = 'changeSolveTicketsServer(type)'> {{ type }} </li>  
 
                 <li *ngFor='let type of disabledPrivileges.solveTickets.Server' 

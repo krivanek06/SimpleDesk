@@ -1,11 +1,11 @@
 
 
-<h2 class='formTitle'>Požiadavka na Financie</h2>
+<h2 class='formTitle'>Požiadavka na Účtáreň</h2>
 
 <form [formGroup] = "financeForm" (ngSubmit)="submit()" #financeFormViewChild="ngForm">
     <!-- finance type -->
     <mat-form-field class='InlineParameters'>
-        <mat-label>Typ Financie</mat-label>
+        <mat-label>Typ požiadavky</mat-label>
 
         <mat-select formControlName="financeType">
             <mat-option  *ngFor="let type of financeTypeArray" [value]="type.name"  >{{ type.name }} </mat-option>

@@ -8,6 +8,8 @@ import { ApplicationPrivilege } from 'app/shared/models/UserGroups';
 })
 export class PrivilegesComponent implements OnInit {
   @Input() public name;
+
+  @Input() public applyGreenColor: boolean = false;
   public activateUnableClick = false; // true if editing privileges
   public hideUnassignedPriv = false; // true only want to print assigned privileges
   public enabledPrivileges: ApplicationPrivilege;

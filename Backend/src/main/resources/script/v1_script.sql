@@ -198,7 +198,7 @@ DROP TABLE IF EXISTS tbl_groups CASCADE;
 create table tbl_groups(
   id serial primary key,
   name varchar(255) NOT NULL unique,
-  email varchar(255) unique,
+  email varchar(255),
   description varchar,
   manager_id integer
 );
@@ -450,15 +450,20 @@ CREATE or replace FUNCTION get_all_existing_privileges()
     RETURNS varchar AS
 $$
 select json_build_object(
-'ticketTypeToSolve' , (select jsonb_agg(ticket_priv) from( select  json_build_object(tbl_ticket_types.name,
-jsonb_agg(distinct tbl_ticket_privileges.application_name)) as ticket_priv
-from tbl_ticket_privileges
-left join tbl_ticket_types on tbl_ticket_types.id = tbl_ticket_privileges.ticket_type_id
-group by tbl_ticket_types.name) as tbl) ,
-'moduleTypeToUse' , (select jsonb_agg( distinct t.name) from ( select  tbl_module_type.name from tbl_module_type ) as t),
-'requestTypeToSolve',(select jsonb_agg(distinct t.name) from (select tbl_module_type.name from tbl_module_type ) as t),
-'financeTypeToSubmit',(select jsonb_agg(distinct t.name) from (select  tbl_finance_types.name from tbl_finance_types) as t))::varchar;
+       'ticketTypeToSolve' ,  (
+    select jsonb_agg(t) from( select json_build_object(
+             'Software' , (select jsonb_agg( t.name) from ( select  tbl_softwares.name from tbl_softwares ) as t) ,
+             'Hardware' , (select jsonb_agg( t.name) from ( select  tbl_hardwares.name from tbl_hardwares ) as t) ,
+             'Server' , (select jsonb_agg( t.name) from ( select  tbl_servers.name from tbl_servers ) as t) ,
+             'User', null,
+             'Other', null
+         ) as t) as t ),
+       'moduleTypeToUse' , (select jsonb_agg( distinct t.name) from ( select  tbl_module_type.name from tbl_module_type ) as t),
+       'requestTypeToSolve',(select jsonb_agg(distinct t.name) from (select tbl_module_type.name from tbl_module_type ) as t),
+       'financeTypeToSubmit',(select jsonb_agg(distinct t.name) from (select  tbl_finance_types.name from tbl_finance_types) as t)
+   )::varchar;
 $$ LANGUAGE sql;
+
 
 
 -- decide on request type [ticket, report, finance] what additional information to return
@@ -630,7 +635,7 @@ $$ LANGUAGE plpgsql;
 
 
 
-
+-- applied for admin / ghost
 drop function if exists get_all_closed_requests(varchar, varchar);
 CREATE FUNCTION get_all_closed_requests(date_closed1 varchar, date_closed2 varchar)
     RETURNS varchar AS $$
@@ -682,11 +687,11 @@ left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
 cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
 where r.closed_uid is not null and ((
 -- get privileges if I can solve reports or tickets
-(rt.name != 'TICKET' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
+(rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
 from get_all_privileges_for_user_varchar( searching_name)) )
 OR
 -- get privileges on ticket types
-    (rt.name = 'TICKET' AND (select case
+    (rt.name = 'Ticket' AND (select case
     when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
     select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
     like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(searching_name))
@@ -730,21 +735,22 @@ drop function if exists get_access_for_request(searching_request_id integer, req
 CREATE FUNCTION get_access_for_request(searching_request_id integer,  request_type varchar, user_name varchar)
     RETURNS boolean AS $$
 select
-case when request_type != 'Ticket'
-then (select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? request_type as has_access
-from get_all_privileges_for_user_varchar(user_name) )
-else(
-select case
-    when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
-        select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-                    like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(user_name))
-    else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-                      like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(user_name))
-    end as has_access
-from tbl_tickets
-  left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-where request_id = searching_request_id
-) end as has_access;
+case
+    when request_type != 'Ticket' then (
+        select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? request_type as has_access
+        from get_all_privileges_for_user_varchar(user_name) )
+    else(
+    select case
+        when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
+            select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                        like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(user_name))
+        else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                          like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(user_name))
+        end as has_access
+    from tbl_tickets
+      left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+    where request_id = searching_request_id
+    ) end as has_access;
 $$ LANGUAGE sql;
 
 
