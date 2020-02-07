@@ -54,7 +54,7 @@
 
     <!-- username or other -->
     <mat-form-field *ngIf = "ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' " class='ticketInlineParameters'>
-        <input matInput placeholder="Definujte meno" formControlName = "ticketSubtypeName">
+        <input matInput placeholder="Zadajte bližšie informácie" formControlName = "ticketSubtypeName">
 
         <mat-error *ngIf=" ticketSubtypeName.invalid  && ticketSubtypeName.touched"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
     </mat-form-field>
