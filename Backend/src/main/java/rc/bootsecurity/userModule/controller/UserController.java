@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.userModule.exception.PasswordException;
 import rc.bootsecurity.util.fileModule.ImageDTO;
 import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.dto.UserPasswordContainer;
@@ -35,6 +36,8 @@ public class UserController {
         try {
             this.userService.changePassword(userPasswordContainer);
             return new ResponseEntity<>(HttpStatus.OK);
+        } catch (PasswordException e){
+            return new ResponseEntity<>("Zadané heslo sa nezhoduje s aktuálne nastaveným heslom",HttpStatus.BAD_REQUEST);
         } catch (Exception e) {
             LOGGER.error("Failed to change password, error : " + e.getMessage());
         }

@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Output } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { EventEmitter } from '@angular/core';
 import Swal from 'sweetalert2';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -10,7 +11,7 @@ import Swal from 'sweetalert2';
 })
 export class FileUploadComponent {
   
-  constructor(){}
+  constructor(private swallNotification: SwallNotificationService){}
    @Output() public fileInserted: EventEmitter<File> = new EventEmitter<File>();
    @Input() public uploaderHeight: number;
    @Input() public requiredUpload: boolean;
@@ -22,10 +23,7 @@ export class FileUploadComponent {
     // if more than 10MB
     let size : number = Math.round(files.item(0).size / 1000000) ;
     if(size > 10){
-      Swal.fire({
-        icon: 'error',
-        text: `Veľkosť vášho súboru je ${size}MB, maximálna povolená veľkosť je 10MB. `,
-      })
+      this.swallNotification.generateErrorNotification(`Veľkosť vášho súboru je ${size}MB, maximálna povolená veľkosť je 10MB. `)
       return;
     }
     this.files.push(files.item(0));

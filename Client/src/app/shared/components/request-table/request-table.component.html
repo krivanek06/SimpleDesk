@@ -61,7 +61,7 @@
     <ng-container matColumnDef="userAction" >
         <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" > Zahodit </mat-header-cell>
         <mat-cell *matCellDef="let element" > 
-            <div *ngIf = "element.assigned === userService.user.fullname " class='removeFromMe' (click) = "removeFromMe(element)">
+            <div *ngIf = "element.assigned === userService.user.fullName " class='removeFromMe' (click) = "removeFromMe(element)">
                 Vzdať sa
             </div>
         </mat-cell>

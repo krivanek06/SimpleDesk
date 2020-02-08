@@ -3,6 +3,7 @@ import { Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { UserService } from 'app/core/services/user.service';
 import Swal from 'sweetalert2';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-register-user',
@@ -15,7 +16,9 @@ export class RegisterUserComponent implements OnInit {
 
   @ViewChild('userFormViewChild',  {static: true}) userFormViewChild;
 
-  constructor(private formBuilder: FormBuilder, private userService: UserService) { }
+  constructor(private formBuilder: FormBuilder, 
+              private userService: UserService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.userRegistrationForm = this.formBuilder.group({
@@ -48,13 +51,11 @@ export class RegisterUserComponent implements OnInit {
       email : formValues.email.trim()
     }
 
-    Swal.fire({ text: "Naozaj chcetete vytvoriť uživateľa ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((res) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete vytvoriť uživateľa ?`).then((res) => {
       if(res.value){
-        Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie uživateľa bolo zaslané', showConfirmButton: false, timer: 1500 })
-        this.userService.registerUser(userRegistraion).subscribe(x => {
-          Swal.fire({ position: 'top-end',text: 'Uživateľ bol zaregistrovaný, emailom sa bude notifikovať', showConfirmButton: false, timer: 1500 })
+        this.swallNotification.generateNotification(`Žiadosť o vytvorenie uživateľa bolo zaslané`);
+        this.userService.registerUser(userRegistraion).subscribe(() => {
+          this.swallNotification.generateNotification(`Uživateľ bol zaregistrovaný, emailom sa bude notifikovať`);
            this.userFormViewChild.resetForm();
         })
       }

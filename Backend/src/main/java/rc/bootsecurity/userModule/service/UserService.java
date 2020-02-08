@@ -14,6 +14,7 @@ import rc.bootsecurity.groupModule.service.GroupService;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.userModule.exception.PasswordException;
 import rc.bootsecurity.userModule.repository.UserRepository;
 import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.dto.UserPasswordContainer;
@@ -93,18 +94,18 @@ public class UserService {
         return userDTO;
     }
 
-    public void changePassword(UserPasswordContainer userPasswordContainer) throws Exception {
+    public void changePassword(UserPasswordContainer userPasswordContainer) throws PasswordException {
         String username = this.getPrincipalUsername();
 
-        if(!userPasswordContainer.getNewPassword1().contentEquals(userPasswordContainer.getNewPassword2())){
+        /*if(!userPasswordContainer.getNewPassword1().contentEquals(userPasswordContainer.getNewPassword2())){
             throw new Exception("Password does not match for user : " + username);
-        }
+        }*/
 
         User user = this.loadUserByUsername(username);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
         if(!bCryptPasswordEncoder.matches(userPasswordContainer.getOldPassword() , user.getPassword())){
-            throw new Exception("Provided old password with actual one does not match for user : " + username);
+            throw new PasswordException("Provided old password with actual one does not match for user : " + username);
         }
 
         user.setPassword(bCryptPasswordEncoder.encode(userPasswordContainer.getNewPassword1()));

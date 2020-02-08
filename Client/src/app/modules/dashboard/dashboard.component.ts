@@ -7,6 +7,7 @@ import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
 import { UserService } from 'app/core/services/user.service';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -32,8 +33,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public isManagerRightHand$: Observable<boolean>;
 
 
-  constructor(private spinner: NgxSpinnerService, private authService: AuthenticationService,
-    private userService: UserService, private requestService: RequestModificationService ) { }
+  constructor(private spinner: NgxSpinnerService, 
+              private authService: AuthenticationService,
+              private userService: UserService, 
+              private requestService: RequestModificationService,
+              private swallNotification: SwallNotificationService ) { }
 
   ngOnInit() {
     this.getRequestOnDashboard();
@@ -65,14 +69,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   public assignOnMe(request: RequestTable){
-    Swal.fire({
-      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + request.id + " ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', cancelButtonText: "Zrušiť", confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete prideliť na seba požiadavku s id: ${request.id}. ?`).then((result) => {
       if (result.value) {
         this.requestService.assignOrRemoveRequestOnMe(request.id, true).subscribe(result => {
           this.updateTableAssignMeOnRequest(request)
-          Swal.fire({ position: 'top-end', text: 'Úspešne ste na seba pridelili požiadavku s id: ' + request.id, showConfirmButton: false, timer: 1200 })
+          this.swallNotification.generateNotification(`Úspešne ste na seba pridelili požiadavku s id:  ${request.id}.`);
         })
       }
     });  
@@ -103,14 +104,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   public removeFromMe(request: RequestTable): void{
-    Swal.fire({
-      text: "Naozaj chcetete odstrániť zo seba požiadavku s id : " + request.id + " ? ", icon: 'warning',
-      showCancelButton: true, confirmButtonColor: '#3085d6', cancelButtonColor: '#d33', cancelButtonText: "Zrušiť", confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete odstrániť zo seba požiadavku s id ${request.id} ?`).then((result) => {
       if (result.value) {
-        this.requestService.assignOrRemoveRequestOnMe(request.id, false).subscribe(result => {
+        this.requestService.assignOrRemoveRequestOnMe(request.id, false).subscribe(() => {
           this.updateTableRemoveRequestFromMe(request);
-          Swal.fire({ position: 'top-end', text: 'Úspešne ste odstránili zo seba požiadavku s id : ' + request.id, showConfirmButton: false, timer: 1200 })
+          this.swallNotification.generateNotification(`Úspešne ste odstránili zo seba požiadavku s id : ${+ request.id}. `);
         })
       }
     })

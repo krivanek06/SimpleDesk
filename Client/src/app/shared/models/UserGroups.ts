@@ -43,7 +43,7 @@ export interface User{
     username: string,
     firstName: string,
     lastName: string,
-    fullname: string,
+    fullName: string,
     photo: string,
     photoBytes: string,
     email: string,

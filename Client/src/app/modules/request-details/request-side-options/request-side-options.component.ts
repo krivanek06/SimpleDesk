@@ -10,6 +10,7 @@ import { takeWhile } from 'rxjs/operators';
 import { BehaviorSubject, Subject, Subscription, Observable } from 'rxjs';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { RequestPosition } from 'app/shared/enums/request-position.enum';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-request-side-options',
@@ -29,7 +30,10 @@ export class RequestSideOptionsComponent implements OnInit {
   allusers$: Observable<UserSimpleDTO[]>;
   isSolverRightHand$: Observable<boolean>;
 
-  constructor( public userService: UserService,  private requestService: RequestModificationService, private authService: AuthenticationService) { }
+  constructor( public userService: UserService,  
+              private requestService: RequestModificationService, 
+              private authService: AuthenticationService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.allusers$ = this.userService.getAllActiveUsers();
@@ -48,7 +52,7 @@ export class RequestSideOptionsComponent implements OnInit {
 
     this.requestService.changePriority( requestDetails.id, this.priority).subscribe(() => {
       requestDetails.requestPriority = this.priority;
-      Swal.fire({ position: 'top-end', text: 'Priorita bola zmenená', showConfirmButton: false, timer: 1500 })
+      this.swallNotification.generateNotification(`Priorita bola zmenená`);
     })
   }
 
@@ -60,51 +64,44 @@ export class RequestSideOptionsComponent implements OnInit {
     this.requestService.assignSolver(requestDetails.id, this.userSimple).subscribe((userSimple) => {
       requestDetails.assigned = userSimple;
       requestDetails.requestPosition = RequestPosition.Assigned;
-      Swal.fire({ position: 'top-end', text: 'Riešiteľ zmenený', showConfirmButton: false, timer: 1500 })
+      this.swallNotification.generateNotification(`Riešiteľ zmenený`);
     })
   }
 
    changeCommenting(requestDetails : RequestDetails){
     this.requestService.changeCommenting(requestDetails.id).subscribe(() => {
       requestDetails.allowCommenting = !requestDetails.allowCommenting;
-      if(requestDetails.allowCommenting){
-        Swal.fire({ position: 'top-end', text: 'Komentovanie požiadavky sa zakázalo', showConfirmButton: false, timer: 1500 })
-      }else{
-        Swal.fire({ position: 'top-end', text: 'Komentovanie požiadavky sa povolilo', showConfirmButton: false, timer: 1500 })
-      }
+      this.swallNotification.generateNotification(requestDetails.allowCommenting ? 
+          'Komentovanie požiadavky sa zakázalo' : 'Komentovanie požiadavky sa povolilo');
     })
 
   }
 
   closeRequest(requestDetails : RequestDetails){
-    Swal.fire({ text: "Naozaj chcetete uzatvoriť požiadavku ?", icon: 'warning', showCancelButton: true,
-    confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-  }).then((result) => {
-    if (result.value) {
-      this.requestService.changeState(requestDetails.id, true).subscribe(() =>{
-        requestDetails.closed = this.userService.getUserSimple();
-        requestDetails.timestampClosed = new Date();
-        requestDetails.requestPosition = RequestPosition.Closed;
-        Swal.fire({ position: 'top-end', text: 'Požiadavka ' + requestDetails.id + ". bola uzavretá.", showConfirmButton: false, timer: 1200 })
-      }) 
-    }
-  })
+    this.swallNotification.generateQuestion( "Naozaj chcetete uzatvoriť požiadavku ?").then((result) => {
+      if (result.value) {
+        this.requestService.changeState(requestDetails.id, true).subscribe(() =>{
+          requestDetails.closed = this.userService.getUserSimple();
+          requestDetails.timestampClosed = new Date();
+          requestDetails.requestPosition = RequestPosition.Closed;
+          this.swallNotification.generateNotification(`Požiadavka ${requestDetails.id}. bola uzavretá`);
+        }) 
+      }
+    })
     
   }
 
   reopenRequest(requestDetails : RequestDetails){
-    Swal.fire({ text: "Naozaj chcetete znovu otvoriť požiadavku ?", icon: 'warning', showCancelButton: true,
-    confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-  }).then((result) => {
-    if (result.value) {
-        this.requestService.changeState(requestDetails.id, false).subscribe(() =>{
-          requestDetails.closed = null;
-          requestDetails.timestampClosed = null;
-          requestDetails.requestPosition = RequestPosition.Assigned;
-          Swal.fire({ position: 'top-end', text: 'Požiadavka ' + requestDetails.id + ". bola otvorená.", showConfirmButton: false, timer: 1200 })
-        }) 
-      }
-    })
+    this.swallNotification.generateQuestion("Naozaj chcetete otvoriť požiadavku ?").then((result) => {
+      if (result.value) {
+          this.requestService.changeState(requestDetails.id, false).subscribe(() =>{
+            requestDetails.closed = null;
+            requestDetails.timestampClosed = null;
+            requestDetails.requestPosition = RequestPosition.Assigned;
+            this.swallNotification.generateNotification(`Požiadavka ${requestDetails.id}. bola otvorená`);
+          }) 
+        }
+      })
   }
 
   addEvaluationForReport(requestDetails : ReportDetails){
@@ -114,7 +111,7 @@ export class RequestSideOptionsComponent implements OnInit {
     this.requestService.reportAddEvaluation(requestDetails.id, this.reportEvaluation).subscribe(() =>{
       requestDetails.evaluation =  this.reportEvaluation ;
       this.reportEvaluation = undefined;
-      Swal.fire({ position: 'top-end', text: 'Nadhodnocenie reportu bolo zaznamenané', showConfirmButton: false, timer: 1200 })
+      this.swallNotification.generateNotification(`Nadhodnocenie reportu bolo zaznamenané`);
     }) 
   }
 
@@ -137,7 +134,7 @@ export class RequestSideOptionsComponent implements OnInit {
 
   dropRequest(requestDetails : RequestDetails){
     this.requestService.removeSolver(requestDetails.id).subscribe(() => {
-      Swal.fire({ position: 'top-end', text: 'Riešiteľ bol odstránený', showConfirmButton: false, timer: 1200 })
+      this.swallNotification.generateNotification(`Riešiteľ bol odstránený`);
       requestDetails.assigned = null;
       requestDetails.requestPosition = RequestPosition.UnAssigned;
     })

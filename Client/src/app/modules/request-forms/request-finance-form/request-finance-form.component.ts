@@ -8,6 +8,7 @@ import { FileUploadComponent } from '../../../shared/components/file-upload/file
 import { FileServiceService } from 'app/core/services/file-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-request-finance-form',
@@ -21,9 +22,10 @@ export class RequestFinanceFormComponent implements OnInit {
   @ViewChild('financeFormViewChild',  {static: true}) financeFormViewChild;
 
   constructor(private formBuilder: FormBuilder, 
-    private http: HttpClient, 
-    private fileService: FileServiceService,
-    private spinner: NgxSpinnerService) { }
+              private http: HttpClient, 
+              private fileService: FileServiceService,
+              private spinner: NgxSpinnerService,
+              private swallNotification: SwallNotificationService) { }
 
 
   ngOnInit() {
@@ -63,16 +65,14 @@ export class RequestFinanceFormComponent implements OnInit {
     if(this.financeForm.invalid || this.fileInput.isEmpty()){ 
       return;
     }
-    Swal.fire({ text: "Naozaj chcetete odoslať požiadavku na financie ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať na účtáreň ?`).then((result) => {
       if (result.value) {
         this.spinner.show();
         this.sendFinanceFormToAPI().subscribe((id : number) => 
-          this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
+          this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(() => {
             this.financeFormViewChild.resetForm();
               this.spinner.hide();
-              Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.'", showConfirmButton: false, timer: 1200 })
+              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${id}. bola zaznamenaná. `);
         }))
       }
     })
