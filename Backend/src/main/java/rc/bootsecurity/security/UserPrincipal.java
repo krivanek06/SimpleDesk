@@ -6,9 +6,9 @@ import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.model.enums.TICKET_TYPE;
+import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.userModule.entity.User;
+import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
 import java.util.*;
 
 @Getter
