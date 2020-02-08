@@ -62,58 +62,6 @@ public class Creator {
         return group;
     }
 
-
-
-    public static TicketPrivileges creatTicketPrivileges(Group group, TicketType ticketType, String applicatioName){
-        TicketPrivileges ticketPrivileges = new TicketPrivileges();
-        ticketPrivileges.setGroup(group);
-        ticketPrivileges.setTicketType(ticketType);
-        ticketPrivileges.setApplicationName(applicatioName);
-
-        return ticketPrivileges;
-    }
-
-
-    // ************** START REQUEST **********************
-
-    public static RequestPosition createRequestPosition(String name){
-        RequestPosition requestPosition = new RequestPosition();
-        requestPosition.setName(name);
-
-        return requestPosition;
-    }
-
-    public static RequestPriority createRequestPriority(String name){
-        RequestPriority requestPriority = new RequestPriority();
-        requestPriority.setName(name);
-
-        return requestPriority;
-    }
-    // , Set<Group> groupToSolve, Set<Group> groupToSubmit
-    public static ModuleType createRequestType(String name){
-        ModuleType moduleType = new ModuleType();
-        moduleType.setName(name);
-       // requestType.setGroupsToSolveDifferentRequests(groupToSolve);
-       // requestType.setGroupsToSubmitDifferentRequests(groupToSubmit);
-
-        return moduleType;
-    }
-    public static RequestComment createRequestComment(Request request, User user, String comment) {
-        RequestComment requestComment = new RequestComment();
-        requestComment.setRequest(request);
-        requestComment.setUser(user);
-        requestComment.setComment(comment);
-        return requestComment;
-    }
-
-    public static RequestLog createRequestLog(String log, User user, Request request){
-        RequestLog requestLog = new RequestLog();
-        requestLog.setLog(log);
-        requestLog.setRequest(request);
-        requestLog.setUser(user);
-        return requestLog;
-    }
-
     // ************** END REQUEST **********************
 
 

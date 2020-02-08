@@ -79,4 +79,5 @@ public class RequestCommentController {
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse z zdieľania komentára", HttpStatus.BAD_REQUEST);
     }
+
 }

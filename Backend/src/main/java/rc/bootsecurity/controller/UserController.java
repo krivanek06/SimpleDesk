@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.exception.UserException;
 import rc.bootsecurity.model.dto.ImageDTO;
 import rc.bootsecurity.model.dto.UserDTO;
 import rc.bootsecurity.model.dto.UserPasswordContainer;
@@ -79,7 +80,9 @@ public class UserController {
         try {
             this.userService.registerUser(userDTO);
             return new ResponseEntity<>(HttpStatus.OK);
-        } catch (Exception e) {
+        } catch (UserException e) {
+            return new ResponseEntity<>("Uživateľské meno existuje v databáze, prosím zadajte iné",HttpStatus.BAD_REQUEST);
+        } catch (Exception e){
             LOGGER.error("Failed to register user, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie uživateľa",HttpStatus.BAD_REQUEST);

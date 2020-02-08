@@ -42,12 +42,11 @@ export class RegisterUserComponent implements OnInit {
     
     const formValues = this.userRegistrationForm.value;
     const userRegistraion: UserSimpleDTO = {
-      username : formValues.username.trim(),
+      username : formValues.username.trim().toLowerCase(),
       firstName : formValues.firstname.trim(),
       lastName : formValues.lastname.trim(),
       email : formValues.email.trim()
     }
-    console.log(userRegistraion);
 
     Swal.fire({ text: "Naozaj chcetete vytvoriť uživateľa ? ", icon: 'warning', showCancelButton: true,
       confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'

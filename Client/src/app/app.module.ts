@@ -60,6 +60,7 @@ import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.compo
 import { DotLoaderComponent } from './shared/components/dot-loader/dot-loader.component';
 import { SERDButtonsComponent } from './shared/components/serdbuttons/serdbuttons.component';
 import { CommentFormComponent } from './modules/request-details/comment-form/comment-form.component';
+import { IgxExcelExporterService } from "igniteui-angular";
 
 @NgModule({
   declarations: [
@@ -128,6 +129,7 @@ import { CommentFormComponent } from './modules/request-details/comment-form/com
     AuthenticationService,
     UserService,
     FileServiceService,
+    IgxExcelExporterService ,
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},
     { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
   ],

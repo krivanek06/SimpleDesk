@@ -28,8 +28,10 @@ export class AuthenticationService {
   public login (username: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    return this.http.post<Response>( environment.loginUrl + "login", {username: username, password: password}, {headers, observe: 'response'})
-      .pipe(
+    return this.http.post<Response>( environment.loginUrl + "login", 
+        {username: username.toLowerCase(), password: password}, 
+        {headers, observe: 'response'}
+      ).pipe(
         tap(ressponse => {
           this.setAccessToken(ressponse.headers.get("authorization"));
          // this.setRefreshToken(tokens.refresh_token);

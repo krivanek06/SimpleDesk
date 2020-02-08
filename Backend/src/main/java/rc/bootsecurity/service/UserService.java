@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.exception.UserException;
 import rc.bootsecurity.model.dto.*;
 import rc.bootsecurity.model.entity.Group;
 import rc.bootsecurity.model.entity.User;
@@ -154,7 +155,10 @@ public class UserService {
     }
 
 
-    public void registerUser(UserDTO userDTO){
+    public void registerUser(UserDTO userDTO) throws UserException{
+        if(this.userRepository.findByUsername(userDTO.getUsername()).isPresent()){
+            throw new UserException("User already exists");
+        }
         this.modifyPassword(this.userConverter.generateFreshUser(userDTO));
     }
 

@@ -1,3 +1,4 @@
+@import '../../shared/customCss/SuccessMatButton.scss';
 
 #contentContainer{
     height: 100%;
@@ -10,4 +11,10 @@
 .filterContent{
   position: relative;
   margin-left: 50px;
+}
+
+#excelButton{
+  position: absolute;
+  right: 5%;
+  top: 95px;
 }

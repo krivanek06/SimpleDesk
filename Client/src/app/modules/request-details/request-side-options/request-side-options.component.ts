@@ -66,7 +66,7 @@ export class RequestSideOptionsComponent implements OnInit {
 
    changeCommenting(requestDetails : RequestDetails){
     this.requestService.changeCommenting(requestDetails.id).subscribe(() => {
-      requestDetails.allowCommenting = ! requestDetails.allowCommenting;
+      requestDetails.allowCommenting = !requestDetails.allowCommenting;
       if(requestDetails.allowCommenting){
         Swal.fire({ position: 'top-end', text: 'Komentovanie požiadavky sa zakázalo', showConfirmButton: false, timer: 1500 })
       }else{
