@@ -5,11 +5,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.model.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.model.entity.Group;
-import rc.bootsecurity.model.entity.User;
-import rc.bootsecurity.service.GroupService;
-import rc.bootsecurity.service.UserService;
+import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.groupModule.entity.Group;
+import rc.bootsecurity.userModule.entity.User;
+import rc.bootsecurity.groupModule.service.GroupService;
+import rc.bootsecurity.userModule.service.UserService;
 
 import java.util.List;
 import java.util.stream.Collectors;

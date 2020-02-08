@@ -32,13 +32,6 @@ create table tbl_documents(
   description varchar
 );
 
-DROP TABLE IF EXISTS tbl_document_to_requests CASCADE;
-create table tbl_document_to_requests(
- id serial primary key,
- document_id Integer not null,
- request_id Integer not null
-);
-
 DROP TABLE IF EXISTS tbl_document_to_users CASCADE;
 create table tbl_document_to_users(
   id serial primary key,
@@ -355,9 +348,6 @@ ALTER TABLE tbl_module_type_to_use ADD FOREIGN KEY (request_type_id) REFERENCES 
 
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
 ALTER TABLE tbl_request_comments_shared ADD FOREIGN KEY (request_comment_id) REFERENCES tbl_request_comments(id);
-
-alter table tbl_document_to_requests add foreign key(document_id) references tbl_documents(id);
-alter table tbl_document_to_requests add foreign key(request_id) references tbl_requests(id);
 
 alter table tbl_finance_type_privileges add foreign key(finance_type_id) references tbl_finance_types(id);
 alter table tbl_finance_type_privileges add foreign key(group_id) references tbl_groups(id);

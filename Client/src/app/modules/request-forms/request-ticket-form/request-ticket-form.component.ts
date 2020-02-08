@@ -8,6 +8,7 @@ import { FileUploadComponent } from 'app/shared/components/file-upload/file-uplo
 import { FileServiceService } from 'app/core/services/file-service.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Observable } from 'rxjs';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -25,8 +26,11 @@ export class RequestTicketFormComponent implements OnInit {
 
   @ViewChild('ticketFormViewChild',  {static: true}) ticketFormViewChild;
 
-  constructor(private formBuilder: FormBuilder, private http: HttpClient,
-    private fileService: FileServiceService, private spinner: NgxSpinnerService) { }
+  constructor(private formBuilder: FormBuilder, 
+              private http: HttpClient,
+              private fileService: FileServiceService, 
+              private spinner: NgxSpinnerService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.ticketForm = this.formBuilder.group({
@@ -38,25 +42,7 @@ export class RequestTicketFormComponent implements OnInit {
     });
   }
 
-  get ticketType(){
-    return this.ticketForm.get("ticketType");
-  }
-
-  get ticketSubtypeName(){
-    return this.ticketForm.get("ticketSubtypeName");
-  }
-
-  get requestPriority(){
-    return this.ticketForm.get("requestPriority");
-  }
-
-  get name(){
-    return this.ticketForm.get("name");
-  }
-
-  get problem(){
-    return this.ticketForm.get("problem");
-  }
+  
 
   private sendTicketFormToAPI(): Observable<any>{
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -67,16 +53,15 @@ export class RequestTicketFormComponent implements OnInit {
     if(this.ticketForm.invalid){ 
       return;
     }
-    Swal.fire({ text: "Naozaj chcetete odoslať ticket ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((result) => {
+
+    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať ticket ?`).then((result) => {
       if (result.value) {
         this.spinner.show();
         this.sendTicketFormToAPI().subscribe(id => {
             this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
               this.ticketFormViewChild.resetForm();
               this.spinner.hide();
-              Swal.fire({ position: 'top-end', text: 'Vaša požiadavka s id : ' + id + ". bola zaznamenaná.", showConfirmButton: false, timer: 1200 })
+              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${id}. bola zaznamenaná. `);
             }, err => this.spinner.hide());
         });
       }
@@ -105,6 +90,27 @@ export class RequestTicketFormComponent implements OnInit {
         .subscribe(ticketSubTypes =>this.serverTypes = ticketSubTypes)
     }
 
+  }
+
+
+  get ticketType(){
+    return this.ticketForm.get("ticketType");
+  }
+
+  get ticketSubtypeName(){
+    return this.ticketForm.get("ticketSubtypeName");
+  }
+
+  get requestPriority(){
+    return this.ticketForm.get("requestPriority");
+  }
+
+  get name(){
+    return this.ticketForm.get("name");
+  }
+
+  get problem(){
+    return this.ticketForm.get("problem");
   }
 
 }

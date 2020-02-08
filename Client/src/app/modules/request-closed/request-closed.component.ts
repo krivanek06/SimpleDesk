@@ -4,7 +4,8 @@ import { RequestTableComponent } from 'app/shared/components/request-table/reque
 import { NgxSpinnerService } from 'ngx-spinner';
 import { RequestFilterComponent } from 'app/shared/components/request-filter/request-filter.component';
 import { RequestModificationService } from 'app/core/services/request-modification.service';
-
+import { IgxExcelExporterService, IgxExcelExporterOptions } from "igniteui-angular";
+import * as _ from 'lodash';
 
 export interface SatDatepickerRangeValue<D> {
   begin: D | null;
@@ -24,7 +25,7 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
   
   
-  constructor(private spinner: NgxSpinnerService, private requestService: RequestModificationService) { }
+  constructor(private spinner: NgxSpinnerService, private requestService: RequestModificationService, private excelExportService: IgxExcelExporterService) { }
 
   ngOnInit() {
     
@@ -76,6 +77,16 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
     
     // re-render table with data
     this.closedRequests.dataSource.data = this.closedRequests.dataSource.data  as RequestTable[]
+  }
+
+
+  exportTOExcel(){ 
+    // filter important fields
+    let result = [];
+    this.closedRequests.dataSource.data.forEach(x => {
+      result.push(_.pick(x,  ['id', 'timestampCreation', 'timestampClosed' , 'additionalInformation' , 'name', 'requestPriority', 'requestType', 'creator', 'closed']));
+    });
+    this.excelExportService.exportData(result, new IgxExcelExporterOptions("ExportedDataFile"));
   }
 
 

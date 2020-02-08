@@ -8,6 +8,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { map } from 'rxjs/operators';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { CommentHttpService } from 'app/core/services/comment-http.service';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 
 
@@ -28,8 +29,11 @@ export class CommentFormComponent implements OnInit {
 
   @Output() addedCommentEmitter: EventEmitter<RequestComment> = new EventEmitter();
    
-  constructor(private userService: UserService, private requestService: RequestModificationService, private formBuilder: FormBuilder,
-    private authService: AuthenticationService, private commentService: CommentHttpService) { }
+  constructor(private userService: UserService, 
+              private requestService: RequestModificationService,
+              private authService: AuthenticationService, 
+              private commentService: CommentHttpService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.requestDetails$ = this.requestService.getRequestDetials();
@@ -81,14 +85,7 @@ export class CommentFormComponent implements OnInit {
     if(this.commentInput === '')
       return;
 
-    Swal.fire({
-      title: 'Odoslať komentár ?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#0077ec',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Odoslať'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Odoslať komentár ?`).then((result) => {
       if (result.value) {
         this.commentService.addComment(commentDTO,  sendEmail, solution).subscribe((addedComment: RequestComment) => {
           this.addedCommentEmitter.emit(addedComment);
@@ -96,7 +93,7 @@ export class CommentFormComponent implements OnInit {
           if(solution){
             this.requestDetails$.subscribe(requst => requst.solutionComment = addedComment.id)
           }
-          Swal.fire({ position: 'top-end', text: 'Komentár bol odoslaný', showConfirmButton: false, timer: 1500 })
+          this.swallNotification.generateNotification(`Komentár bol odoslaný`);
         })
       }
     })

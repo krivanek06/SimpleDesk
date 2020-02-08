@@ -10,6 +10,7 @@ import Swal from 'sweetalert2';
 import { Subscription, Observable } from 'rxjs';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { RequestPosition } from 'app/shared/enums/request-position.enum';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-request-side-information',
@@ -21,8 +22,11 @@ export class RequestSideInformationComponent implements OnInit {
   public isSolver$: Observable<boolean>;
   public isGhost$: Observable<boolean>;
 
-  constructor( private fileService: FileServiceService, private userService: UserService, 
-    private requestService: RequestModificationService , private authService: AuthenticationService) { }
+  constructor( private fileService: FileServiceService, 
+              private userService: UserService, 
+              private requestService: RequestModificationService , 
+              private authService: AuthenticationService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.requestDetails$ =  this.requestService.getRequestDetials();
@@ -59,18 +63,11 @@ export class RequestSideInformationComponent implements OnInit {
   }
 
   assignOnMe(requestDetails: RequestDetails){
-    Swal.fire({
-      text: "Naozaj chcetete prideliť na seba požiadavku s id : " + requestDetails.id + " ? ",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      cancelButtonText: "Zrušiť",
-      confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete prideliť na seba požiadavku s id : ${requestDetails.id} ?`)
+    .then((result) => {
       if (result.value) {
-        this.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(result => {
-          Swal.fire({ text: 'Pridelené', position: 'top-end', timer: 1200, showConfirmButton: false,});
+        this.requestService.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(() => {
+          this.swallNotification.generateNotification(`Pridelené`);
           requestDetails.assigned = this.userService.getUserSimple(); 
           requestDetails.requestPosition = RequestPosition.Assigned;
         })

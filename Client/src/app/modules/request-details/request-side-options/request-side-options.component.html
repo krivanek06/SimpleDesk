@@ -1,23 +1,39 @@
 <div class='content' *ngIf= 'requestDetail$ | async as requestDetails'>
 
 
-        
+    <!-- open / close request -->
     <div class = 'module'>
-        <button mat-raised-button id = 'sliderButton' color='warn' 
-                class='customInput' (click) = 'closeRequest(requestDetails)'
+        <button mat-raised-button 
                 *ngIf='requestDetails.closed === null && ((isAdmin$ | async) || 
-                isAssignedOnMe(requestDetails) || (requestDetails.creator.username === userService.user.username ))   ' > 
+                isAssignedOnMe(requestDetails) || (requestDetails.creator.username === userService.user.username ))   ' 
+                id = 'sliderButton' 
+                color='warn' 
+                class='customInput' 
+                (click) = 'closeRequest(requestDetails)'
+                matTooltip="Stlačením tlačítka uzatvoríte požiadavku"
+                matTooltipClass="custom-tooltip"> 
                     Uzatvoriť
                 </button>
                 
-        <button mat-raised-button id = 'sliderButton' color='warn' 
-                class='customInput openInput'  *ngIf='requestDetails.closed !== null' (click) = 'reopenRequest(requestDetails)'>Otvoriť</button>
+        <button mat-raised-button 
+                *ngIf='requestDetails.closed !== null'
+                id = 'sliderButton' 
+                color='warn' 
+                class='customInput openInput'  
+                (click) = 'reopenRequest(requestDetails)'
+                matTooltip="Stlačením tlačítka otvoríte požiadavku"
+                matTooltipClass="custom-tooltip">
+                    Otvoriť
+        </button>
         <hr>
     </div>
 
-
+    <!-- enable / disable commenting -->
     <div class = 'module' *ngIf='requestDetails.closed === null && ((isAdmin$ | async) || isAssignedOnMe(requestDetails))'>
-        <label class="switch">
+        <label class="switch"
+                matTooltip="Stlačením tlačítka zakážete komentovanie požiadavky bežným uživateľom. 
+                            Komentovať budú môcť len uživatelia klasifikovaní ako riešitelia"
+                matTooltipClass="custom-tooltip">
             <input class="switch-input" type="checkbox"  (click) = 'changeCommenting(requestDetails)' [checked] = "requestDetails.allowCommenting" />
             <span class="switch-label" data-on="Povolené komentovanie" data-off="Zakázané komentovanie"></span> 
             <span class="switch-handle"></span> 
@@ -25,15 +41,21 @@
         <hr>
     </div>
 
-
+    <!-- remove solver -->
     <div class = 'module'  *ngIf='requestDetails.closed === null  && (isAssignedOnMe(requestDetails) || (isAdmin$ | async))'>
-        <button mat-raised-button id = 'sliderButton' color='warn'  class='customInput' (click) = 'dropRequest(requestDetails)'> 
+        <button mat-raised-button 
+                id = 'sliderButton' 
+                color='warn'  
+                class='customInput' 
+                (click) = 'dropRequest(requestDetails)'
+                matTooltip="Stlačením tlačítka odstránite priradeného riešiteľa"
+                matTooltipClass="custom-tooltip"> 
                 Zmazať riešiteľa
         </button>
         <hr>
     </div>
 
-
+    <!-- change solver -->
     <div class = 'module' *ngIf = "requestDetails.closed === null &&  (
         ( ((isSolverRightHand$ | async) || (isManager$ | async)) && (isSolver$ | async))  ||  (isAdmin$ | async))">
         <mat-form-field class='customInputSmall'>
@@ -46,6 +68,7 @@
         <hr>
     </div>
 
+    <!-- change priority -->
     <div class = 'module'  *ngIf='requestDetails.closed === null && ((isSolver$ | async) || (isAdmin$ | async)) && isAssignedOnMe(requestDetails)'>
         <mat-form-field class='customInputSmall'>
             <mat-label>Zmena priority</mat-label>
@@ -59,6 +82,7 @@
         <hr>
     </div>
 
+    <!-- Report only, add evaluation -->
     <div class = 'module'  
         *ngIf='requestDetails.closed === null && 
                 requestDetails.requestType === "Report" && 

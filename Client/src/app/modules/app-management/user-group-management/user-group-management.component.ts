@@ -11,6 +11,7 @@ import { UserDetailsComponent } from 'app/modules/user-profile/user-details/user
 import { UserGroupsComponent } from 'app/modules/user-profile/user-groups/user-groups.component';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { SERDButtonsComponent } from 'app/shared/components/serdbuttons/serdbuttons.component';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-user-group-management',
@@ -32,7 +33,11 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
   @ViewChild('serdbuttonsGroup',  {static: false}) serdbuttonsGroup: SERDButtonsComponent;
 
-  constructor(private groupService: GroupService, private userService: UserService, private authService: AuthenticationService) { 
+  constructor(private groupService: GroupService, 
+              private userService: UserService, 
+              private authService: AuthenticationService,
+              private swallNotification: SwallNotificationService) { 
+
     this.isAdmin$ = this.authService.isAdmin();
     this.isGhost$ = this.authService.isGhost();
     this.hasPrivilegeAccess$ = this.authService.hasPrivilegeAccess();
@@ -96,25 +101,23 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
 
   resetUserPassword(){
     this.userService.resetUserPassword(this.userDetails.displayedUser.username).subscribe(() => {
-      Swal.fire({ position: 'top-end',  text: 'Heslo uživateľa bolo resetované',  showConfirmButton: false,timer: 1200 })
+      this.swallNotification.generateNotification(`Heslo uživateľa bolo resetované`);
     })
   }
 
   modifyUserState(){
     this.userService.modifyUserState(this.userDetails.displayedUser.username).subscribe(() => {
       this.userDetails.displayedUser.active = !this.userDetails.displayedUser.active;
-      Swal.fire({ position: 'top-end',  text: 'Stav uživateľa bol zmeneý',  showConfirmButton: false,timer: 1200 })
+      this.swallNotification.generateNotification(`Stav uživateľa bol zmeneý`);
     })
   }
 
   saveGroup(){
-    Swal.fire({ text: "Naozaj chcetete editovať skupinu ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete editovať skupinu ?`).then((result) => {
       if(result.value){
-        Swal.fire({ position: 'top-end',  text: 'Požiadavka editovanie skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
+        this.swallNotification.generateNotification(`Požiadavka editovanie skupiny zaslaná`);
         this.groupService.modifyGroup(this.groupDetails.group).subscribe(() => {
-          Swal.fire({ position: 'top-end',  text: 'Skupina bola editovaná',  showConfirmButton: false,timer: 1200 })
+          this.swallNotification.generateNotification(`Skupina bola editovaná`);
           this.groupDetails.editGroupActivated = false;
           this.groupPrivileges.activateUnableClick = false;
           this.groupPrivileges.hideUnassignedPriv = true;
@@ -125,11 +128,9 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
   }
 
   deleteGroup(): void{
-    Swal.fire({ text: "Naozaj chcetete vymazať skupinu ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((result) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete vymazať skupinu ?`).then((result) => {
       if(result.value){
-          Swal.fire({ position: 'top-end',  text: 'Požiadavka zmazania skupiny zaslaná',  showConfirmButton: false,timer: 1200 })
+        this.swallNotification.generateNotification(`Požiadavka zmazania skupiny zaslaná`);
           this.groupService.deleteGroup(this.groupDetails.group.name).subscribe(() => {
             
             const grouName = this.groupDetails.group.name;
@@ -139,8 +140,7 @@ export class UserGroupManagementComponent implements OnInit, OnDestroy, AfterVie
             this.groupPrivileges.name = undefined;
             this.groupDetails.group = undefined;
             this.serdbuttonsGroup.editActivated = false;
-            
-            Swal.fire({ position: 'top-end',  text: 'Skupina bola zmazaná',  showConfirmButton: false,timer: 1200 })
+            this.swallNotification.generateNotification(`Skupina bola zmazaná`);
           })   
         }
       });

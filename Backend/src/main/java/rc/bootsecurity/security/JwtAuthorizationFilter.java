@@ -60,10 +60,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userName, null, rights);
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 return authToken;
-
-
             }
-            return null;
         }
         return null;
     }

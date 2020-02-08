@@ -7,6 +7,7 @@ import { FinanceType } from 'app/shared/models/FinanceType';
 import { TicketType } from 'app/shared/models/TicketSubtype';
 import { GroupService } from 'app/core/services/group.service';
 import Swal from 'sweetalert2';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-register-group',
@@ -22,8 +23,11 @@ export class RegisterGroupComponent implements OnInit {
   public servers: TicketType[];   
   @ViewChild('groupFormViewChild',  {static: true}) groupFormViewChild;
 
-  constructor(private formBuilder: FormBuilder, public userService: UserService, 
-    public requestTypeService: RequestTypeService, private groupService: GroupService) { }
+  constructor(private formBuilder: FormBuilder, 
+              public userService: UserService, 
+              public requestTypeService: RequestTypeService, 
+              private groupService: GroupService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.initFormGroup();
@@ -69,16 +73,13 @@ export class RegisterGroupComponent implements OnInit {
     if(this.groupRegistrationForm.invalid){
         return;
     }
-
-    Swal.fire({ text: "Naozaj chcetete vytvoriť skupinu ? ", icon: 'warning', showCancelButton: true,
-      confirmButtonColor: '#3085d6',  cancelButtonColor: '#d33',  cancelButtonText: "Zrušiť",  confirmButtonText: 'Ano'
-    }).then((res) => {
+    this.swallNotification.generateQuestion(`Naozaj chcetete vytvoriť skupinu ?`).then((res) => {
       if(res.value){
-        Swal.fire({ position: 'top-end', text: 'Žiadosť o vytvorenie skupiny bolo zaslané', showConfirmButton: false, timer: 1500 })
+        this.swallNotification.generateNotification(`Žiadosť o vytvorenie skupiny bolo zaslané`);
         const group = this.consructGroup();
         this.groupService.registerGroup(group).subscribe(() => {
           this.groupFormViewChild.resetForm();
-          Swal.fire({ position: 'top-end', text: 'Skupina ' + group.name + " bola vytvorená   ", showConfirmButton: false, timer: 1500 })
+          this.swallNotification.generateNotification(`Skupina ${group.name} bola vytvorená`);
         })
       }
     });

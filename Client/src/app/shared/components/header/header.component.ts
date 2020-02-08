@@ -11,8 +11,10 @@ import { RequestModificationService } from 'app/core/services/request-modificati
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private authService: AuthenticationService , private router: Router, public userService: UserService,
-    private requestService: RequestModificationService) { }
+  constructor(private authService: AuthenticationService , 
+              private router: Router, 
+              public userService: UserService,
+              private requestService: RequestModificationService) { }
 
   ngOnInit() {
   }

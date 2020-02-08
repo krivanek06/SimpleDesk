@@ -1,10 +1,10 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { RequestTable } from 'app/shared/models/RequestTable';
 import { UserService } from 'app/core/services/user.service';
 import { Router } from '@angular/router';
-import { RequestDetails } from '../../models/RequestDetails';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-request-table',
@@ -21,6 +21,7 @@ export class RequestTableComponent implements OnInit {
   @Output() removeFromMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+ // @ViewChild('TABLE', { static: false }) table: ElementRef;
 
   public dataSource:MatTableDataSource<RequestTable> = new MatTableDataSource<RequestTable>();
   dateFrom: string;
@@ -30,6 +31,7 @@ export class RequestTableComponent implements OnInit {
   constructor(public userService: UserService, private router:Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {  }
+
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;

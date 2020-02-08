@@ -6,6 +6,7 @@ import { ImageDTO } from 'app/shared/models/ImageDTO';
 import Swal from 'sweetalert2';
 import { Observable } from 'rxjs';
 import { UserService } from 'app/core/services/user.service';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-user-images',
@@ -16,7 +17,10 @@ export class UserImagesComponent implements OnInit {
   @Output() changeWindow: EventEmitter<Boolean> = new EventEmitter<Boolean>();
   public images: ImageDTO[] = [];
 
-  constructor(private http : HttpClient, private spinner: NgxSpinnerService, private userService: UserService) { }
+  constructor(private http : HttpClient, 
+              private spinner: NgxSpinnerService, 
+              private userService: UserService,
+              private swallNotification: SwallNotificationService) { }
 
   ngOnInit() {
     this.loadAvailableAvatars();
@@ -42,20 +46,12 @@ export class UserImagesComponent implements OnInit {
   }
 
   selectImage(imageDTO: ImageDTO): void{
-    Swal.fire({
-      title: "Potvrďte zmenu obrázku",
-      html: "<img src='data:image/jpeg;base64, "+ imageDTO.imageBytes + "' style='width:350px' />",
-      imageHeight: 500,
-      imageAlt: 'A tall image',
-      showConfirmButton: true,
-      confirmButtonText: "Potvrdiť"
-    }).then(result =>{
+    this.swallNotification.selectImage(imageDTO.imageBytes).then(result =>{
         if(result.value === true){
           this.spinner.show();
-          this.changeImage(imageDTO).subscribe(res => {
+          this.changeImage(imageDTO).subscribe(() => {
               this.userService.changeUserImage(imageDTO);
-              Swal.fire({ position: 'top-end', title: 'Váš obrázok bol zmenený',showConfirmButton: false,timer: 1500 })
-              
+              this.swallNotification.generateNotification(`Váš obrázok bol zmenený`);
           })
         }
     }).finally(() => this.spinner.hide());

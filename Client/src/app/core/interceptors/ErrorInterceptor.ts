@@ -4,10 +4,12 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import Swal from 'sweetalert2'
 import { Router } from '@angular/router';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-    constructor(private router : Router) { }
+    constructor(private router : Router,
+                private swallNotification: SwallNotificationService) { }
 
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
         return next.handle(request).pipe(catchError(err => {
@@ -15,7 +17,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if (err.status === 401) {
                 this.authenticationFailed();
             }else if(err.status === 403){
-                Swal.fire({ icon: 'error', text: err.error}).then(() => this.router.navigate(['/unauthorized']));
+                this.swallNotification.generateErrorNotification(err.error).then(() => this.router.navigate(['/unauthorized']));
             }else if(err.status === 404){
                 console.log("404 error, shoud be created an error page")
             }else{
@@ -26,17 +28,11 @@ export class ErrorInterceptor implements HttpInterceptor {
     }
 
     private generalError(error : string){
-        Swal.fire({
-            icon: 'error',
-            text: 'Požiadavka zlyhala, chyba hlášky : ' + error,
-          })
+        this.swallNotification.generateErrorNotification(`Požiadavka zlyhala, chyba hlášky : ${error}`);
     }
 
 
     private authenticationFailed():void{
-        Swal.fire({
-            icon: 'error',
-            text: 'Zadali ste nesprávne prihlasovacie údaje.',
-          })
+        this.swallNotification.generateErrorNotification(`Zadali ste nesprávne prihlasovacie údaje.`);
     }
 }
