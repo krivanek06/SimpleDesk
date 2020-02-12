@@ -5,9 +5,10 @@ import { RequestTableComponent } from 'app/shared/components/request-table/reque
 import { NgxSpinnerService } from "ngx-spinner";
 import { Observable } from 'rxjs';
 import Swal from 'sweetalert2';
-import { UserService } from 'app/core/services/user.service';
-import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { UserStoreService } from 'app/core/services/user-store.service';
+import { RequestStoreService } from 'app/core/services/request-store.service';
 import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import { RequestHttpService } from 'app/api/request-http.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -34,19 +35,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
 
   constructor(private spinner: NgxSpinnerService, 
-              private authService: AuthenticationService,
-              private userService: UserService, 
-              private requestService: RequestModificationService,
+              private userStoreService: UserStoreService, 
+              private requestHttp: RequestHttpService,
               private swallNotification: SwallNotificationService ) { }
 
   ngOnInit() {
     this.getRequestOnDashboard();
 
-    this.isAdmin$ = this.authService.isAdmin();
-    this.isGhost$ = this.authService.isGhost(); 
-    this.isSolver$ = this.authService.isSolver();
-    this.isManager$ = this.authService.isManager();
-    this.isManagerRightHand$ = this.authService.isManagerRightHand();
+    this.isAdmin$ = this.userStoreService.isAdmin();
+    this.isGhost$ = this.userStoreService.isGhost(); 
+    this.isSolver$ = this.userStoreService.isSolver();
+    this.isManager$ = this.userStoreService.isManager();
+    this.isManagerRightHand$ = this.userStoreService.isManagerRightHand();
 
     this.refreshIntervalId = setInterval(() => this.getRequestOnDashboard() , 600000); // 10minutes 600000
   }
@@ -58,7 +58,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   private getRequestOnDashboard(){
     this.spinner.show();
 
-    this.requestService.getRequestOnDashboard().subscribe(requests => {
+    this.requestHttp.getRequestOnDashboard().subscribe(requests => {
         this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
         this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
         this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
@@ -71,7 +71,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public assignOnMe(request: RequestTable){
     this.swallNotification.generateQuestion(`Naozaj chcetete prideliť na seba požiadavku s id: ${request.id}. ?`).then((result) => {
       if (result.value) {
-        this.requestService.assignOrRemoveRequestOnMe(request.id, true).subscribe(result => {
+        this.requestHttp.assignOrRemoveRequestOnMe(request.id, true).subscribe(result => {
           this.updateTableAssignMeOnRequest(request)
           this.swallNotification.generateNotification(`Úspešne ste na seba pridelili požiadavku s id:  ${request.id}.`);
         })
@@ -80,8 +80,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableAssignMeOnRequest(request: RequestTable){
-    request.assigned = this.userService.user.firstName + " " + this.userService.user.lastName;
-    request.assignedImageByte = this.userService.user.photoBytes;
+    request.assigned = this.userStoreService.user.firstName + " " + this.userStoreService.user.lastName;
+    request.assignedImageByte = this.userStoreService.user.photoBytes;
 
     this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
     this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id );
@@ -106,7 +106,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   public removeFromMe(request: RequestTable): void{
     this.swallNotification.generateQuestion(`Naozaj chcetete odstrániť zo seba požiadavku s id ${request.id} ?`).then((result) => {
       if (result.value) {
-        this.requestService.assignOrRemoveRequestOnMe(request.id, false).subscribe(() => {
+        this.requestHttp.assignOrRemoveRequestOnMe(request.id, false).subscribe(() => {
           this.updateTableRemoveRequestFromMe(request);
           this.swallNotification.generateNotification(`Úspešne ste odstránili zo seba požiadavku s id : ${+ request.id}. `);
         })

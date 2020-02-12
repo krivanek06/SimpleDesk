@@ -4,34 +4,53 @@
 
 
 <div id='contentContainer' >
+
     <!-- user details -->
     <div  class = 'windowLeft' id = 'userInforContainer'  >
+        
+        <!-- useer informations -->
         <app-user-details 
             #userDetials
-            (changeWindow) = "changeFrames($event)"  
+            (changeImageEmitter) = "changeFrames()"  
+            (changePasswordEmitter) = 'changePassword($event)'
             [displayedUser] = "userService.user"  
             addImageClick = 'true' 
             showPasswordChange = 'true'>
         </app-user-details>
+
+        <!-- user privileges -->
         <app-privileges 
             #userPrivileges 
             name = "uživateľa">
         </app-privileges>
+
     </div>
 
     <!-- group details -->
     <div  class = 'windowLeft' >
+
+        <!-- available groups -->
         <app-user-groups 
             (selectedGroupEmmiter) = "initGroupPrivileges($event)"  
-            [groupContainer] = "groupContainer | async" 
+            [groupContainer] = "groupContainer$ | async" 
             elevationActivated = "true">
         </app-user-groups>
+
+        <!-- specific groups informations -->
         <app-group-details #groupDetails></app-group-details>
+
         <app-privileges #groupPrivileges ></app-privileges>
     </div>
 
-    <div *ngIf="displayAvatarts" >
-        <app-user-images (changeWindow) = "changeFrames($event)"></app-user-images>
-    </div>
+
+    <!-- shows available avatars -->
+    <app-user-images 
+        #userAvatars
+        [hidden]="!displayAvatarts"
+        (changeWindowEmitter) = "changeFrames()"
+        (selectImageEmitter) = "selectImage($event)">
+    </app-user-images>
+   
 
 </div>
+<ngx-spinner><p style="font-size: 20px; color: white">Načítavanie...</p> </ngx-spinner>

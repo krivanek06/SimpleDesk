@@ -1,0 +1,34 @@
+@import '../../../../../shared/customCss/SwitchScss.scss';
+
+
+.module{
+    position: relative;
+    /*margin: auto;*/
+    width: 250px;
+    margin-bottom: 25px;
+    display: block;
+}
+
+.switch{
+    margin: auto;
+}
+
+.customInput{
+    width: 200px;
+    margin: auto;
+}
+
+.customInputSmall{
+    width: 150px;
+    float: left;
+}
+
+.openInput{
+    background-color: #4cc715;
+}
+
+.sendingButton{
+    background-color: #0077ec;
+    margin-top: 10px;
+    color: white;
+}

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input, Output, EventEmitter, ElementRef } from '@angular/core';
 import { MatTableDataSource, MatPaginator } from '@angular/material';
 import { RequestTable } from 'app/shared/models/RequestTable';
-import { UserService } from 'app/core/services/user.service';
+import { UserStoreService } from 'app/core/services/user-store.service';
 import { Router } from '@angular/router';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 
@@ -28,7 +28,7 @@ export class RequestTableComponent implements OnInit {
   dateTo: string;
   
   
-  constructor(public userService: UserService, private router:Router, private sanitizer: DomSanitizer) { }
+  constructor(public userService: UserStoreService, private router:Router, private sanitizer: DomSanitizer) { }
 
   ngOnInit() {  }
 

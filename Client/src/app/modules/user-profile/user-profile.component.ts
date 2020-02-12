@@ -1,72 +1,103 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { UserService } from 'app/core/services/user.service';
-import { GroupService } from 'app/core/services/group.service';
-import { PrivilegesComponent } from './privileges/privileges.component';
-import { Group, ApplicationPrivilege, GroupContainer } from 'app/shared/models/UserGroups';
-import { GroupDetailsComponent } from './group-details/group-details.component';
-import { UserDetailsComponent } from './user-details/user-details.component';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { UserStoreService } from 'app/core/services/user-store.service';
+import { GroupHttpService } from 'app/api/group-http.service';
+import { PrivilegesComponent } from '../../resources/privilege/view/privileges/privileges.component';
+import { ApplicationPrivilege, GroupContainer } from 'app/shared/models/UserGroups';
+import { GroupDetailsComponent } from '../../resources/group/view/group-details/group-details.component';
+import { UserDetailsComponent } from '../../resources/user/views/user-details/user-details.component';
+import { Observable } from 'rxjs';
+import { PasswordContainer } from 'app/shared/models/PasswordContainer';
+import { UserHttpService } from 'app/api/user-http.service';
+import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ImageDTO } from 'app/shared/models/ImageDTO';
+import { UserImagesComponent } from '../../resources/user/views/user-images/user-images.component';
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.scss']
 })
-export class UserProfileComponent implements OnInit , AfterViewInit, OnDestroy{
+export class UserProfileComponent implements OnInit , AfterViewInit{
   
-  public displayAvatarts : boolean = false;
-  public groupContainer: Observable<GroupContainer>;
-  private destroy$: Subject<boolean> = new Subject<boolean>();
+  displayAvatarts : boolean = false;
+  groupContainer$: Observable<GroupContainer>;
+
   @ViewChild('userDetials',  {static: false}) userDetials: UserDetailsComponent;
   @ViewChild('userPrivileges',  {static: false}) userPrivileges: PrivilegesComponent;
   @ViewChild('groupPrivileges',  {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails',  {static: false}) groupDetails: GroupDetailsComponent;
+  @ViewChild('userAvatars',  {static: false}) userAvatars: UserImagesComponent;
+
 
   
-  constructor(private authService : AuthenticationService, public userService : UserService, private groupService: GroupService) { }
+  constructor(private authService : AuthenticationService, 
+              public userService : UserStoreService, 
+              private groupService: GroupHttpService,
+              private userHttp: UserHttpService,
+              private swallNotification: SwallNotificationService,
+              private spinner: NgxSpinnerService) { }
 
-  ngOnInit() { }
+  ngOnInit() { 
+    this.groupContainer$ = this.groupService.getAllGroupContainersForUser();
+  }
 
   ngAfterViewInit(): void {
     setTimeout(() => { this.initUserPrivileges(); });
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
-  }
 
   private initUserPrivileges(): void{
-     this.authService.getDecodedToken().pipe(takeUntil(this.destroy$)).subscribe(token =>{
-        let priv : ApplicationPrivilege = {
-          moduleTypesToUse : token.MODULE_TYPES_TO_USE,
-          requestTypesToSolve : token.REQUEST_TYPE_TO_SOLVE,
-          submitFinanceRequests : token.FINANCE_TYPE_TO_SUBMIT,
-          solveTickets : {
-            Software : token.TICKET_SOFTWARE_PRIVILEGES,
-            Hardware : token.TICKET_HARDWARE_PRIVILEGES,
-            Server :  token.TICKET_SERVER_PRIVILEGES,
-            User : token.TICKET_USER_PRIVILEGES,
-            Other : token.TICKET_OTHER_PRIVILEGES
-          }
-        };
-        this.userPrivileges.enabledPrivileges = priv;
-    })
+    const token =  this.authService.decodedTokenValue;
 
-    this.groupContainer = this.groupService.getAllGroupContainersForUser();
+    const priv : ApplicationPrivilege = {
+      moduleTypesToUse : token.MODULE_TYPES_TO_USE,
+      requestTypesToSolve : token.REQUEST_TYPE_TO_SOLVE,
+      submitFinanceRequests : token.FINANCE_TYPE_TO_SUBMIT,
+      solveTickets : {
+        Software : token.TICKET_SOFTWARE_PRIVILEGES,
+        Hardware : token.TICKET_HARDWARE_PRIVILEGES,
+        Server :  token.TICKET_SERVER_PRIVILEGES,
+        User : token.TICKET_USER_PRIVILEGES,
+        Other : token.TICKET_OTHER_PRIVILEGES
+      }
+    };
+    this.userPrivileges.enabledPrivileges = priv;
+
+
   }
 
 
-  initGroupPrivileges(group: Group):void{
+  initGroupPrivileges(groupName: string):void{
+    this.groupService.getGroupDetails(groupName).subscribe(group => {
       this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
       this.groupPrivileges.name = 'Skupiny';
       this.groupDetails.group = group;
+    });
   }
 
-  public changeFrames(change: boolean): void{
-    this.displayAvatarts = change;
+  changePassword(password: PasswordContainer): void{
+    this.userHttp.changePassword(password).subscribe(() => this.swallNotification.generateNotification(`Heslo bolo zmenené`));
+  }
+
+  changeFrames(): void{
+    this.displayAvatarts = !this.displayAvatarts;
+    // load images first time
+    if(!this.userAvatars.avatars){
+      this.spinner.show();
+      this.userHttp.getAvailableAvatars().subscribe(avatars => {
+        this.spinner.hide();
+        this.userAvatars.avatars = avatars;
+      })
+    }
+  }
+
+  selectImage(imageDTO: ImageDTO){
+    this.userHttp.changeImage(imageDTO).subscribe(() => {
+      this.userService.changeUserImage(imageDTO);
+      this.swallNotification.generateNotification(`Váš obrázok bol zmenený`);
+    })
   }
 
 }

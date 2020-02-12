@@ -1,0 +1,50 @@
+
+
+
+
+<mat-form-field class='inlineParameters' >
+    <textarea  matInput placeholder="Napíšte komentár" id="commentField" [(ngModel)]="commentInput" ></textarea>
+    <!--<mat-error *ngIf="commentField.invalid"> Prosím zadajte komentár</mat-error>-->
+</mat-form-field>
+
+<div class='inlineParameters' >
+
+    <mat-checkbox   
+        name='Solution'  
+        (change)="onChange($event)" 
+        [disabled]="isChecked && (isCheckedName!=='Solution')"
+        matTooltip="Označiť komentár ako riešenie požiadavky. 
+                    Prebehne automatická emailová notifikácia riešiteľovi a výtvorcovi požiadavky"
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+        Riešenie
+    </mat-checkbox>
+
+    <mat-checkbox 
+        name='Private'
+        (change)="onChange($event)" 
+        [disabled]="isChecked && (isCheckedName!=='Private')"
+        matTooltip="Označiť komentár ako privátny. 
+                    Komentár bude viditeľný len vám pokiaľ ho nezdieľate, alebo neodomknete. "
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+        Privátny
+    </mat-checkbox>
+
+    <mat-checkbox  
+        name='Notification' 
+        (change)="onChange($event)" 
+        [disabled]="isChecked && (isCheckedName!=='Notification')"
+        matTooltip="Zaškrnutím emailovo notifikujete priradeného riešiteľia a výtvorcu požiadavky"
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+        Notifikovať
+    </mat-checkbox> 
+</div>
+
+<button mat-raised-button color="primary" id="sendingButton" (click)="submit()"> Odoslať </button>
+
+

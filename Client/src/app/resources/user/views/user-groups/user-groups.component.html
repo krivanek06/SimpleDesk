@@ -1,0 +1,41 @@
+
+<ng-container *ngIf = "groupContainer">  
+    <div class = ' smallerContent'>
+
+        <span class='formTitleSmall' >
+            <img src="../../../../../assets/images_design/groups_icon.png" class="icon"/>
+            Skupiny
+        </span>
+
+        <!-- manager of groups -->
+        <li class='informationsContainer topspace'  *ngIf="groupContainer && groupContainer.managerOfGroups.length > 0"> 
+            <div class='informationTitle'>Manažér skupín</div>
+            <ul class='informationsHolder'>
+                <li [ngClass] = '{ "elevation" : elevationActivated}'  *ngFor="let name of groupContainer.managerOfGroups" (click)="getGroupDetails(name)"> 
+                    {{ name }}  
+                </li>
+            </ul>
+        </li>
+
+        <!-- watched groups -->
+        <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.watchedGroupActivity.length > 0">
+            <div class='informationTitle'>Sledované skupiny</div>
+            <ul class='informationsHolder'>
+                <li [ngClass] = '{ "elevation" : elevationActivated}'   *ngFor="let name of groupContainer.watchedGroupActivity" (click)="getGroupDetails(name)"> 
+                    {{ name }}
+                </li> 
+            </ul>
+        </li>
+        
+        <!-- involved in groups -->
+        <li class='informationsContainer topspace' *ngIf="groupContainer && groupContainer.userInGroups.length > 0">
+            <div class='informationTitle' >Člen skupín</div>
+            <ul class='informationsHolder'> 
+                <li [ngClass] = '{ "elevation" : elevationActivated}'   *ngFor="let name of groupContainer.userInGroups" (click)="getGroupDetails(name)">
+                    {{ name }} 
+                </li>
+            </ul>
+        </li>
+
+    </div>
+</ng-container>

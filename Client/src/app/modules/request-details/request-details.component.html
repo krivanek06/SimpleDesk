@@ -10,7 +10,7 @@
         </div>
         <hr>
 
-        <app-request-side-options #sideBar ></app-request-side-options>
+        <app-request-management-container #sideBar ></app-request-management-container>
     </ng-sidebar>
     
     <div ng-sidebar-content>    
@@ -18,71 +18,43 @@
         <app-navigation></app-navigation>
 
 
-    <div id='contentContainer' *ngIf = 'requestDetail$ | async as requestDetail' >
-        <div id=requestRightSide >
-            <div id = 'sliderDiv2'  (click)='openSideBar()' *ngIf = "!(isGhost$ | async)"> 
-                <i class="material-icons sliderButton" > reorder</i>
+        <div id='contentContainer' *ngIf = 'requestDetail$ | async as requestDetail' >
+            <div id=requestRightSide >
+                <div id = 'sliderDiv2'  (click)='openSideBar()' *ngIf = "!(isGhost$ | async)"> 
+                    <i class="material-icons sliderButton" > reorder</i>
+                </div>
+
+                <app-request-side-information #sideDetails>
+
+                </app-request-side-information>
             </div>
-            <app-request-side-information #sideDetails></app-request-side-information>
+
+            <div id='requestLeftSide'>
+               <!-- <app-request-content 
+                    [requestDetail]='requestDetail'>
+                </app-request-content>
+
+               <app-request-comment-container
+                    [requestComments]='(requestDetail$ | async).requestComments'
+                    [commentSolutionId]='(requestDetail$ | async).solutionComment'
+                    [isRequestOpen]='(requestDetail$ | async).closed === null'>
+               </app-request-comment-container>
+
+                <app-request-comment-sharing  
+                    *ngIf="changeFramws"  
+                    class = 'displayCommentSharing'
+                    (changeWindow) = "changeFrames(undefined)" 
+                    (shareWithGroup) = "shareWith($event)">
+                </app-request-comment-sharing>
+
+                <app-request-comment-form 
+                    (addedCommentEmitter)="addCommentToArray($event)">
+                </app-request-comment-form>-->
+
+            </div>
         </div>
 
-        <div id='requestLeftSide'>
-
-
-            <!-- TICKET -->
-            <div  *ngIf = " requestDetail.requestType === 'Ticket'" class='customRow mainInformationContainer' >
-                    <div class="raisedbox customCol" [style.width.%] = 75>
-                        <p class="raisedboxName" >
-                            <img [src]="'data:image/jpeg;base64,'+ requestDetail.creator.photoBytes" class='avatar' />
-                                {{ requestDetail.creator.firstName }} {{ requestDetail.creator.lastName }}<br>
-                                {{ requestDetail.timestampCreation | date:'MMM d, y, h:mm:ss a'}}            
-                        </p>
-                        <p > {{ $any(requestDetail).problem}}  </p>
-                    </div>
-            </div>
-            <!-- ------------------- -->
-
-            <!-- REPORT -->
-            <div  *ngIf = " requestDetail.requestType === 'Report'" class='mainInformationContainer'>
-                <div class='customRow'>
-                        <div class="raisedbox customCol" [style.width.%] = 45>
-                            <p class="raisedboxName">Účeľ reportu</p>
-                            <p class='test'>
-                                {{ $any(requestDetail).purpose}} 
-                            </p>
-                        </div>
-
-                        <div class="raisedbox customCol" [style.width.%] = 45>
-                            <p class="raisedboxName">Kritériá reportu</p>
-                            <p  class='test'> 
-                                {{ $any(requestDetail).criteria}} 
-                            </p>
-                        </div>
-                    </div>
-                    <div class='customRow'>
-                        <div class="raisedbox customCol" [style.width.%] = 45>
-                            <p class="raisedboxName">Viditeľné údaje</p>
-                            <p   class='test'>
-                                {{ $any(requestDetail).visibleData}} 
-                            </p>
-                        </div>
-                        <div class="raisedbox customCol" [style.width.%] = 45 *ngIf=" $any(requestDetail).otherInformation !== '' ">
-                            <p class="raisedboxName">Dodatočné informácie</p>
-                            <p class='test'> {{ $any(requestDetail).otherInformation}} </p>
-                        </div>
-                    </div>
-            </div>
-                <!-- ------------------- -->
-
-
-
-            <app-comment #requestComments  [requestComments] = "requestDetail.requestCommentDTOS"></app-comment>
-            <app-comment-form (addedCommentEmitter)="addCommentToArray($event)"></app-comment-form>
-
-        </div>
-    </div>
-
-    <ngx-spinner >  <p style="font-size: 20px; color: white">Načítavam požiadavku...</p> </ngx-spinner>
+        <ngx-spinner >  <p style="font-size: 20px; color: white">Načítavam požiadavku...</p> </ngx-spinner>
  </div>
 
 

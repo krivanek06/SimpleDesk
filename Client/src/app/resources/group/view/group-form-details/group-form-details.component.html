@@ -1,0 +1,90 @@
+<div class = 'formInformationContainerSubcontent smallerContent'>
+    <span class='formTitleSmall'>
+        <img src = '../../../../../assets/images_design/research.png' class='icon'/>
+        Detaily skupiny
+    </span>
+
+    <li class='informationsContainer topspace' *ngIf="groupName.value !== '' ">
+        <div class='informationTitle'>Meno skupiny</div>
+        <ul class='informationsHolder'>
+            <li > {{groupName.value}} </li> 
+        </ul>
+    </li>
+
+    <li class='informationsContainer' *ngIf="groupEmail.value !== '' ">
+        <div class='informationTitle'>Email skupiny</div>
+        <ul class='informationsHolder'>
+            <li > {{groupEmail.value}} </li> 
+        </ul>
+    </li>
+
+    <li class='informationsContainer' *ngIf="groupDescription.value !== '' ">
+        <div class='informationTitle'>Popis skupiny</div>
+        <ul class='informationsHolder'>
+            <li > {{groupDescription.value}} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="groupManager.value !== null ">
+        <div class='informationTitle'>Manažér</div>
+        <ul class='informationsHolder'>
+            <li > {{groupManager.value.firstName}} {{groupManager.value.lastName}} </li> 
+        </ul>
+    </li>
+
+    <li class='informationsContainer' *ngIf="usersWatchGroup.value !== null ">
+        <div class='informationTitle'>Sledovatelia</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let user of usersWatchGroup.value'> {{user.firstName}} {{user.lastName}} </li> 
+        </ul>
+    </li>
+
+    <li class='informationsContainer' *ngIf="usersInGroup.value !== null ">
+        <div class='informationTitle'>Členovia</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let user of usersInGroup.value'> {{user.firstName}} {{user.lastName}} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="moduleTypesToUse.value !== null ">
+        <div class='informationTitle'>Používanie modulov</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of moduleTypesToUse.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="submitFinanceRequests.value !== null ">
+        <div class='informationTitle'>Zasielanie financií</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of submitFinanceRequests.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="requestTypesToSolve.value !== null ">
+        <div class='informationTitle'>Riešenie požiadaviek</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of requestTypesToSolve.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="solveTickets.value !== null ">
+        <div class='informationTitle'>Riešenie typov tiketov</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of solveTickets.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="solveSoftware.value !== null ">
+        <div class='informationTitle'>Riešenie typov software</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of solveSoftware.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="solveHardware.value !== null ">
+        <div class='informationTitle'>Riešenie typov hardware</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of solveHardware.value'> {{ type }} </li> 
+        </ul>
+    </li>
+    <li class='informationsContainer' *ngIf="solveServer.value !== null ">
+        <div class='informationTitle'>Riešenie typov server</div>
+        <ul class='informationsHolder'>
+            <li *ngFor='let type of solveServer.value'> {{ type }} </li> 
+        </ul>
+    </li>
+
+</div>

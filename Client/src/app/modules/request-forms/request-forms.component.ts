@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
+import { UserStoreService } from 'app/core/services/user-store.service';
 
 @Component({
   selector: 'app-request-forms',
@@ -12,12 +13,12 @@ export class RequestFormsComponent implements OnInit {
   public hasTicketModuleAccess$: Observable<boolean>;
   public hasReportModuleAccess$: Observable<boolean>;
 
-  constructor( private authService: AuthenticationService ) { }
+  constructor( private userStoreService: UserStoreService ) { }
 
   ngOnInit() {
-    this.hasFinanceModuleAccess$ = this.authService.hasFinanceModuleAccess();
-    this.hasTicketModuleAccess$ = this.authService.hasTicketModuleAccess();
-    this.hasReportModuleAccess$ = this.authService.hasReportModuleAccess();
+    this.hasFinanceModuleAccess$ = this.userStoreService.hasFinanceModuleAccess();
+    this.hasTicketModuleAccess$ = this.userStoreService.hasTicketModuleAccess();
+    this.hasReportModuleAccess$ = this.userStoreService.hasReportModuleAccess();
   }
 
 }

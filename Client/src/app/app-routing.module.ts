@@ -4,20 +4,19 @@ import { LoginComponent } from './modules/login/login.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/AuthGuard';
 import { RequestFormsComponent } from './modules/request-forms/request-forms.component';
-import { RequestTicketFormComponent } from './modules/request-forms/request-ticket-form/request-ticket-form.component';
-import { RequestReportFormComponent } from './modules/request-forms/request-report-form/request-report-form.component';
-import { RequestFinanceFormComponent } from './modules/request-forms/request-finance-form/request-finance-form.component';
+import { RequestTicketFormComponent } from './resources/request/view/form/request-ticket-form/request-ticket-form.component';
+import { RequestReportFormComponent } from './resources/request/view/form/request-report-form/request-report-form.component';
+import { RequestFinanceFormComponent } from './resources/request/view/form/request-finance-form/request-finance-form.component';
 import { UserProfileComponent } from './modules/user-profile/user-profile.component';
 import { RequestClosedComponent } from './modules/request-closed/request-closed.component';
 import { AppManagementComponent } from './modules/app-management/app-management.component';
-import { RegisterUserComponent } from './modules/app-management/register-user/register-user.component';
-import { RegisterGroupComponent } from './modules/app-management/register-group/register-group.component';
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
-import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
-import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
 import { FinanceGuardGuard } from './core/guards/finance-guard.guard';
 import { PrivilegeManagerGuard } from './core/guards/privilege-manager.guard';
 import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
+import { UserGroupManagementComponent } from './modules/app-management/views/user-group-management/user-group-management.component';
+import { UserRegistrationComponent } from './modules/app-management/views/user-registration/user-registration.component';
+import { GroupRegistrationComponent } from './modules/app-management/views/group-registration/group-registration.component';
 
 
 const routes: Routes = [
@@ -36,8 +35,8 @@ const routes: Routes = [
   { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard, PrivilegeManagerGuard],
       children:[
         { path: '', component: UserGroupManagementComponent, canActivate:[AuthGuard]},
-        { path: 'register_user', component: RegisterUserComponent, canActivate:[AuthGuard]},
-        { path: 'register_group', component: RegisterGroupComponent, canActivate:[AuthGuard]},
+        { path: 'register_user', component: UserRegistrationComponent, canActivate:[AuthGuard]},
+        { path: 'register_group', component: GroupRegistrationComponent, canActivate:[AuthGuard]},
         { path: '**' ,  redirectTo: ''  }
     ]},
   { path: 'unauthorized' , component: UnauthorizedComponent, canActivate:[AuthGuard] },

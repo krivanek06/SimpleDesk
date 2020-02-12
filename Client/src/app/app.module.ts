@@ -16,51 +16,61 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { RouterModule } from '@angular/router';
 import { SidebarModule } from 'ng-sidebar';
 import { SatNativeDateModule ,SatDatepickerModule } from 'saturn-datepicker';
+import { IgxExcelExporterService } from "igniteui-angular";
 
 // custom interceptors
 import { AuthInterceptor } from './core/interceptors/AuthInterceptor ';
 import { ErrorInterceptor } from './core/interceptors/ErrorInterceptor';
 
 // custom components
-import { NavigationComponent } from './shared/components/navigation/navigation.component';
-import { HeaderComponent } from './shared/components/header/header.component';
+import { NavigationComponent } from './core/components/navigation/navigation.component';
+import { HeaderComponent } from './core/components/header/header.component';
 import { ChartComponent } from './shared/components/chart/chart.component';
 import { DashboardComponent } from './modules/dashboard/dashboard.component';
 import { UserProfileComponent } from './modules/user-profile/user-profile.component';
-import { UserDetailsComponent } from './modules/user-profile/user-details/user-details.component';
-import { PrivilegesComponent } from './modules/user-profile/privileges/privileges.component';
-import { UserGroupsComponent } from './modules/user-profile/user-groups/user-groups.component';
-import { GroupDetailsComponent } from './modules/user-profile/group-details/group-details.component';
-import { RequestTicketFormComponent } from './modules/request-forms/request-ticket-form/request-ticket-form.component';
-import { RequestReportFormComponent } from './modules/request-forms/request-report-form/request-report-form.component';
-import { RequestFinanceFormComponent } from './modules/request-forms/request-finance-form/request-finance-form.component';
+import { UserDetailsComponent } from './resources/user/views/user-details/user-details.component';
+import { PrivilegesComponent } from './resources/privilege/view/privileges/privileges.component';
+import { UserGroupsComponent } from './resources/user/views/user-groups/user-groups.component';
+import { GroupDetailsComponent } from './resources/group/view/group-details/group-details.component';
+import { RequestTicketFormComponent } from './resources/request/view/form/request-ticket-form/request-ticket-form.component';
+import { RequestReportFormComponent } from './resources/request/view/form/request-report-form/request-report-form.component';
+import { RequestFinanceFormComponent } from './resources/request/view/form/request-finance-form/request-finance-form.component';
 import { RequestClosedComponent } from './modules/request-closed/request-closed.component';
-import { CommentComponent } from './modules/request-details/comment/comment.component';
 import { RequestDetailsComponent } from './modules/request-details/request-details.component';
 import { AppManagementComponent } from './modules/app-management/app-management.component';
-import { RegisterUserComponent } from './modules/app-management/register-user/register-user.component';
-import { RegisterGroupComponent } from './modules/app-management/register-group/register-group.component';
+import { UserFormComponent } from './resources/user/views/user-form/user-form.component';
+import { GroupFormComponent } from './resources/group/view/group-form/group-form.component';
 import { RequestFormsComponent } from './modules/request-forms/request-forms.component';
 import { LoginComponent } from './modules/login/login.component';
 import { LoginFormComponent } from './modules/login/login-form/login-form.component';
 import { LoginBackgroundComponent } from './modules/login/login-background/loginBackground.component';
 import { NavigationIconHoverDirective } from './shared/directives/navigation-icon-hover.directive';
 import { FileUploadComponent } from './shared/components/file-upload/file-upload.component';
-import { UserGroupManagementComponent } from './modules/app-management/user-group-management/user-group-management.component';
+import { GroupManagementComponent } from './modules/app-management/container/group-management/group-management.component';
 import { AuthenticationService } from './core/services/authentication.service';
-import { UserService } from './core/services/user.service';
+import { UserStoreService } from './core/services/user-store.service';
 import { RequestTableComponent } from './shared/components/request-table/request-table.component';
 import { FileServiceService } from './core/services/file-service.service';
-import { UserImagesComponent } from './modules/user-profile/user-images/user-images.component';
-import { RequestSideInformationComponent } from './modules/request-details/request-side-information/request-side-information.component';
-import { CommentSharingComponent } from './modules/request-details/comment-sharing/comment-sharing.component';
-import { RequestSideOptionsComponent } from './modules/request-details/request-side-options/request-side-options.component';
+import { UserImagesComponent } from './resources/user/views/user-images/user-images.component';
+import { RequestSideInformationComponent } from './modules/request-details/container/request-side-information/request-side-information.component';
+import { RequestManagementContainerComponent } from './modules/request-details/container/request-management-container/request-management-container.component';
 import { RequestFilterComponent } from './shared/components/request-filter/request-filter.component';
 import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
 import { DotLoaderComponent } from './shared/components/dot-loader/dot-loader.component';
 import { SERDButtonsComponent } from './shared/components/serdbuttons/serdbuttons.component';
-import { CommentFormComponent } from './modules/request-details/comment-form/comment-form.component';
-import { IgxExcelExporterService } from "igniteui-angular";
+import { RequestCommentFormComponent } from './resources/request-comment/request-comment-form/request-comment-form.component';
+import { UserManagementButtonsComponent } from './resources/user/views/user-management-buttons/user-management-buttons.component';
+import { UserManagementComponent } from './modules/app-management/container/user-management/user-management.component';
+import { UserGroupManagementComponent  } from './modules/app-management/views/user-group-management/user-group-management.component';
+import { GroupFormDetailsComponent } from './resources/group/view/group-form-details/group-form-details.component';
+import { GroupRegistrationComponent  } from './modules/app-management/views/group-registration/group-registration.component';
+import { UserRegistrationComponent } from './modules/app-management/views/user-registration/user-registration.component';
+import { RequestCommentBodyComponent } from './resources/request-comment/request-comment-body/request-comment-body.component';
+import { RequestCommentSharingComponent } from './resources/request-comment/request-comment-sharing/request-comment-sharing.component';
+import { RequestCommentOptionsComponent } from './resources/request-comment/request-comment-options/request-comment-options.component';
+import { RequestManagementComponent } from './resources/request/view/detial/request-management/request-management.component';
+import { RequestContentComponent } from './resources/request/view/detial/request-content/request-content.component';
+import { RequestCommentContainerComponent } from './modules/request-details/container/request-comment-container/request-comment-container.component';
 
 @NgModule({
   declarations: [
@@ -81,26 +91,36 @@ import { IgxExcelExporterService } from "igniteui-angular";
     RequestReportFormComponent,
     RequestFinanceFormComponent,
     RequestClosedComponent,
-    CommentComponent,
+    RequestCommentBodyComponent,
     RequestDetailsComponent,
     AppManagementComponent,
-    RegisterUserComponent,
-    RegisterGroupComponent,
+    UserFormComponent,
+    GroupFormComponent,
     RequestFormsComponent,
     LoginComponent,
     NavigationIconHoverDirective,
     FileUploadComponent,
-    UserGroupManagementComponent,
+    GroupManagementComponent,
     RequestTableComponent,
     UserImagesComponent,
     RequestSideInformationComponent,
-    CommentSharingComponent,
-    RequestSideOptionsComponent,
+    RequestCommentSharingComponent,
+    RequestManagementContainerComponent,
     RequestFilterComponent,
     UnauthorizedComponent,
     DotLoaderComponent,
     SERDButtonsComponent,
-    CommentFormComponent
+    RequestCommentFormComponent,
+    RequestCommentOptionsComponent,
+    UserManagementButtonsComponent,
+    UserManagementComponent,
+    UserGroupManagementComponent,
+    GroupFormDetailsComponent,
+    UserRegistrationComponent,
+    GroupRegistrationComponent,
+    RequestManagementComponent,
+    RequestContentComponent,
+    RequestCommentContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -127,7 +147,7 @@ import { IgxExcelExporterService } from "igniteui-angular";
   providers: [
     DatePipe,
     AuthenticationService,
-    UserService,
+    UserStoreService,
     FileServiceService,
     IgxExcelExporterService ,
     { provide: HTTP_INTERCEPTORS,  useClass: AuthInterceptor, multi: true},

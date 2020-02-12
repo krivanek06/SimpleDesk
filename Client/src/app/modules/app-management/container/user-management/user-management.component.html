@@ -1,0 +1,29 @@
+
+<div class = 'contanierTitle'>
+    <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>
+    <mat-form-field >
+        <mat-label>Vyberte uživateľa</mat-label>
+        <mat-select (selectionChange)= "selectUser($event.value)">
+            <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'> 
+                {{ value.firstName }} {{ value.lastName }}
+            </mat-option>
+        </mat-select>
+
+    </mat-form-field>
+
+
+    <!-- modifycation buttons -->
+    <div id = 'userModificationButtons' *ngIf='userDetails.displayedUser && !(isGhost$ | async)'>
+        <app-user-management-buttons
+            [isActive] = 'userDetails.displayedUser.active'
+            (modifyStateEmitter) = 'modifyUserState()'
+            (reserPasswordEmitter) = 'resetUserPassword()'>
+        </app-user-management-buttons>
+    </div>
+
+</div>   
+
+
+<app-user-details #userDetails ></app-user-details>
+<app-privileges #userPrivileges ></app-privileges>
+<app-user-groups #userGroups ></app-user-groups>

@@ -1,0 +1,86 @@
+
+
+.avatar {
+    height: 35px;
+    width: 35px;
+    margin-right: 5px;
+    margin-bottom: 10px;
+    float: left;
+}
+
+.commentBoxName{
+    position: relative;
+    font-weight: bold;
+    font-size: 12px;
+    display: flow-root;
+    margin-right: 20px;
+}
+.light{
+    font-weight: lighter;
+    display: contents;
+}
+
+.bigBold{
+    font-weight: bold;
+}
+
+.flex{
+    position: relative;
+    display: flex;
+}
+
+p{
+    margin-bottom: 0px;
+    word-break: break-all;
+}
+
+
+
+.commentIcons{
+    position: absolute;
+    top: -20px;
+    right: -15px;
+
+    display: inline-grid;
+
+}
+
+
+#solutionImg{
+    position: absolute;
+    left: 10px;
+}
+
+#solutionText{
+    position: relative;
+    color: white;
+    font-size: 19px;
+    left: 68px;
+    top: 2px;
+}
+
+.displayCommentSharing{
+    width: 90%;
+    float: left;
+    margin-left: 7%;
+}
+
+::ng-deep .custom-tooltip-icon{
+    background-color: #818181;
+    font-size: 14px;
+    padding: 5px;
+}
+
+
+@media(min-width:1919px) {
+    .commentIcons{
+        position: absolute;
+        top: -10px;
+        right: 0px;
+    
+        display: block;
+    
+    }
+    
+
+}

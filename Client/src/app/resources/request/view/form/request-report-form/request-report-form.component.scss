@@ -1,0 +1,57 @@
+mat-form-field{
+    display: block;
+    width: 50%;
+    margin-left: 20px;
+}
+
+.reportInlineParameters{
+    width: 90%;
+    height: auto;
+    display: inline-flex;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.reportInlineParameters mat-form-field textarea{
+    height: 210px;
+}
+
+.formTitle{
+    margin-top: -20px;
+    margin-left: -10px;
+    font-weight: bold;
+}
+
+#uploader{
+    float: left;
+    width: 100%;
+    margin-left: 20px;
+}
+
+#reportSendingButton{
+    position: absolute;
+    right: 0px;
+    background-color:#0077ec;
+    margin-bottom: 20px;
+}
+
+.formAssignedButton{
+    height: 35px;
+    margin: auto 10px;
+    cursor: pointer;
+}
+
+.formdeleteButton{
+    height: 16px;
+    width: 16px;
+    cursor: pointer;
+}
+
+.oneLineLI{
+    list-style-type: none; 
+}
+
+mat-checkbox{
+    padding: 16px 0px 0px 10px;
+}
+

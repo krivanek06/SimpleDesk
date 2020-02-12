@@ -1,0 +1,44 @@
+
+
+<ng-container *ngIf = "requestDetails$ | async as requestDetails"> 
+    <app-request-content 
+        [requestDetail]='requestDetails'>
+    </app-request-content>
+
+    <div *ngFor = "let requestComment of requestDetails.requestComments" 
+        [ngClass] = "requestComment.creator.username === userStoreService.user.username ? 'floatRight' : 'floatLeft'"
+        class="commentBox " >
+
+        <app-request-comment-body 
+            [requestComment]='requestComment'>
+        </app-request-comment-body>
+
+
+        <app-request-comment-options
+            *ngIf='enableCommentModification && (requestDetails$ | async).closed === null'
+            [isPrivate] = 'requestComment.isPrivate'
+            [isSolution] = 'requestComment.id === requestDetails.solutionComment'
+            (shareEmitter) = 'changeFrames($event)'
+            (lockEmitter) = 'changeCommentPrivacy($event)'
+            (editEmitter) = 'editComment($event)'
+            (deleteEmitter) = 'deleteComment($event)'>
+        </app-request-comment-options>
+    </div>
+
+
+    <app-request-comment-sharing  
+        *ngIf="showWindowCommentSharing && (requestDetails$ | async).closed === null"  
+        class = 'displayCommentSharing'
+        (changeWindow) = "changeFrames(undefined)" 
+        (shareWithGroup) = "shareWith($event)">
+    </app-request-comment-sharing>
+
+    <!--<div *ngIf = "(requestDetails$ | async)?.closed === null && 
+              !(isGhost$ | async) &&
+              ( (requestDetails$ | async)?.allowCommenting || (isSolver$ | async) )">-->
+    <app-request-comment-form 
+        *ngIf='(requestDetails$ | async).closed === null'
+        (addedCommentEmitter)="addComment($event)">
+    </app-request-comment-form>
+</ng-container>
+

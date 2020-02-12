@@ -1,0 +1,26 @@
+.icon{
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    margin-top: -8px;
+}
+
+.bigIcon{
+    width: 45px;
+    height: 45px;
+    margin-right: 5px;
+    margin-top: -8px;
+}
+
+
+@media(min-width:1919px) {
+    .icon{ 
+        width: 40px;
+        height: 40px;
+    }
+
+    .bigIcon{
+        width: 55px;
+        height: 55px;
+    }
+}

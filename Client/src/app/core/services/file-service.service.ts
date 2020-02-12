@@ -26,8 +26,7 @@ export class FileServiceService {
   
   public downloadFileForRequest(id:number, fileName: string){
     let params = new HttpParams().set('fileName' , fileName) ;
-    this.http.get(environment.apiUrl + `requests/requestDetails/${id}/download` , 
-        {params: params, responseType:'blob'})
+    this.http.get(environment.apiUrl + `requests/requestDetails/${id}/download` , {params: params, responseType:'blob'})
             .subscribe(res =>  saveAs(res, fileName))
   }
 

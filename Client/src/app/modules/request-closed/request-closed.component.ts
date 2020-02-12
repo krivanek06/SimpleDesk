@@ -3,9 +3,10 @@ import { RequestTable, FilterRequests } from 'app/shared/models/RequestTable';
 import { RequestTableComponent } from 'app/shared/components/request-table/request-table.component';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { RequestFilterComponent } from 'app/shared/components/request-filter/request-filter.component';
-import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { RequestStoreService } from 'app/core/services/request-store.service';
 import { IgxExcelExporterService, IgxExcelExporterOptions } from "igniteui-angular";
 import * as _ from 'lodash';
+import { RequestHttpService } from 'app/api/request-http.service';
 
 export interface SatDatepickerRangeValue<D> {
   begin: D | null;
@@ -25,7 +26,9 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
   
   
-  constructor(private spinner: NgxSpinnerService, private requestService: RequestModificationService, private excelExportService: IgxExcelExporterService) { }
+  constructor(private spinner: NgxSpinnerService, 
+              private requestHttp: RequestHttpService, 
+              private excelExportService: IgxExcelExporterService) { }
 
   ngOnInit() {
     
@@ -38,7 +41,7 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
   loadClosedRequests(){
     this.spinner.show();
     
-    this.requestService.getClosedRequests(this.requestFilter.dateFrom, this.requestFilter.dateTo)
+    this.requestHttp.getClosedRequests(this.requestFilter.dateFrom, this.requestFilter.dateTo)
     .subscribe(requests => {
       this.closedRequests.dataSource.data = requests  as RequestTable[];
       this.loadedRequests = requests;

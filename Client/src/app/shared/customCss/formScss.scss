@@ -1,0 +1,30 @@
+.inlineParameters{
+    display: block;
+    margin-left: 40px;
+    position: relative;
+    margin-bottom: 10px;
+} 
+
+.formTitleContainer{
+    display: inline-flex;
+    margin-bottom: 20px;
+    width: 100%;
+    margin-left: 15px;
+    margin-top: 10px;
+}
+
+.formTitle{
+    font-size: 25px;
+    font-weight: bold;
+    color:#818181;
+}
+
+.sendingButton{
+    float: right; 
+    background-color:#3757c9;
+}
+
+.extraSpace{
+    margin-top: 10px;
+}
+

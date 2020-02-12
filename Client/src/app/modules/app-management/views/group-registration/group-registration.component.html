@@ -1,0 +1,15 @@
+
+
+
+<app-group-form 
+    #groupForm
+    id='groupForm'
+    [groupRegistrationForm] = 'groupRegistrationForm'
+    (groupRegistrationEmitter) = 'registerGroup($event)'>
+</app-group-form>
+
+
+<app-group-form-details  
+    id='groupDetails'
+    [groupRegistrationForm] = 'groupRegistrationForm'>
+</app-group-form-details>

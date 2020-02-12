@@ -1,0 +1,37 @@
+<button mat-button 
+        color="primary" 
+        class='modificationButton' 
+        id='resetButton'  
+        (click) = 'reserPassword()'
+        matTooltip="Resetovaním uživateľa sa vygeneruje nové heslo, ktoré mu bude zaslané emailom"
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+    Resetovať
+</button>
+
+<button mat-button 
+        color="success" 
+        class='modificationButton' 
+        id='ActivateDisableBUtton' 
+        *ngIf='!isActive'
+        (click) = 'modifyState()'
+        matTooltip="Aktiváciou uživateľa povolíte prihlásenie do systému"
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+    Aktivovať
+</button>
+
+<button mat-button 
+        color="warn"  
+        class='modificationButton' 
+        id='ActivateDisableBUtton'  
+        *ngIf='isActive'
+        (click) = 'modifyState()'
+        matTooltip="Zablokovaním uživateľa zakážete prihlásenie do systému"
+        matTooltipPosition="right"
+        matTooltipClass="custom-tooltip"
+        matTooltipShowDelay="150">
+    Zablokovať
+</button>

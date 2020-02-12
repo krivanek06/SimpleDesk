@@ -3,14 +3,16 @@
 <app-navigation></app-navigation>
 
 <div id='contentContainer'>
-    <app-request-table #myOpenRequests 
+    <app-request-table 
+        #myOpenRequests 
         headerColor="#358BF0" 
         [displayedColumns]= "viewTable"
         tableTitle="Moje požiadávky"
         [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
     </app-request-table>   
 
-    <app-request-table #meAssignedRequests 
+    <app-request-table 
+        #meAssignedRequests 
         [hidden] = '!(isSolver$ | async) &&  meAssignedRequests.dataSource.data.length === 0'
         headerColor="#56A3FF" 
         [displayedColumns]= "modifyTable"
@@ -18,7 +20,8 @@
         (removeFromMeEmitter) = "removeFromMe($event)">
     </app-request-table> 
 
-    <app-request-table #otherOpenRequests 
+    <app-request-table 
+        #otherOpenRequests 
         [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async) ||  otherOpenRequests.dataSource.data.length > 0)'
         headerColor="#E8F3FF" 
         [displayedColumns]= "viewTable" 

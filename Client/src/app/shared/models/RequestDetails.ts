@@ -12,7 +12,7 @@ export interface RequestDetails{
     assigned: UserSimple,
     closed: UserSimple,
     userToWatchRequest: UserSimple[],
-    requestCommentDTOS: RequestComment[],
+    requestComments: RequestComment[],
     documents: CustomDocument[],
 }
 
@@ -51,6 +51,13 @@ export interface RequestComment{
     groupsToShare: string[],
     timestamp: Date,
 }
+
+export interface RequestCommentWrapper{
+    requestComment: RequestComment,
+    solution: boolean,
+    sendEmail: boolean
+}
+
 export interface UserSimple{
     username: string,
     firstName: string,

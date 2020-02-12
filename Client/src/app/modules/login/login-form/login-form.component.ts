@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup,  FormBuilder, Validators  } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthenticationService } from 'app/core/services/authentication.service';
-import { UserService } from 'app/core/services/user.service';
+import { UserStoreService } from 'app/core/services/user-store.service';
 import { Location } from '@angular/common';
 import { environment } from 'environments/environment';
 
@@ -17,7 +17,7 @@ export class LoginFormComponent implements OnInit {
   public loggingIn: boolean = false;
 
   constructor(private fb:FormBuilder,  private router: Router, 
-    private authService: AuthenticationService, private userService: UserService, private location: Location) { }
+    private authService: AuthenticationService, private userService: UserStoreService, private location: Location) { }
 
   ngOnInit() {
     this.form = this.fb.group({

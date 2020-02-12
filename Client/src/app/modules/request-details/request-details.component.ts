@@ -1,13 +1,12 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { RequestDetails,  RequestComment } from 'app/shared/models/RequestDetails';
-import { environment } from 'environments/environment';
-import { RequestSideInformationComponent } from './request-side-information/request-side-information.component';
-import { RequestModificationService } from 'app/core/services/request-modification.service';
+import { RequestSideInformationComponent } from './container/request-side-information/request-side-information.component';
+import { RequestStoreService } from 'app/core/services/request-store.service';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
-import { CommentComponent } from './comment/comment.component';
+import { UserStoreService } from 'app/core/services/user-store.service';
+import { RequestCommentBodyComponent } from 'app/resources/request-comment/request-comment-body/request-comment-body.component';
+import { RequestService } from 'app/core/services/request.service';
 
 @Component({
   selector: 'app-request-details',
@@ -15,19 +14,23 @@ import { CommentComponent } from './comment/comment.component';
   styleUrls: ['./request-details.component.scss']
 })
 export class RequestDetailsComponent implements OnInit, OnDestroy {
-  public sideBarBoolean = false;
+  
+  sideBarBoolean = false;
   public isGhost$: Observable<boolean>;
   public isAdmin$: Observable<boolean>;
   public requestDetail$: Observable<RequestDetails>;
 
   @ViewChild('sideDetails', {static: false}) sideDetails: RequestSideInformationComponent;
-  @ViewChild('requestComments', {static: false}) requestComments: CommentComponent;
+  @ViewChild('requestComments', {static: false}) requestComments: RequestCommentBodyComponent;
 
 
-  constructor(private requestService: RequestModificationService, private spinner: NgxSpinnerService, private authService: AuthenticationService) {
-      this.isGhost$ = this.authService.isGhost();
-      this.isAdmin$ = this.authService.isAdmin();
-      this.requestDetail$ = this.requestService.getRequestDetials();
+  constructor(private requestStoreService: RequestStoreService, 
+              private spinner: NgxSpinnerService, 
+              public userStoreService: UserStoreService,) {
+
+      this.isGhost$ = this.userStoreService.isGhost();
+      this.isAdmin$ = this.userStoreService.isAdmin();
+      this.requestDetail$ = this.requestStoreService.getRequestDetials();
     }
 
   openSideBar(){
@@ -39,18 +42,19 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     let id = url.substring(url.lastIndexOf('/') + 1);
 
     this.spinner.show();
-    this.requestService.loadRequestDetails(id).subscribe(
+    this.requestStoreService.addRequestDetails(id).subscribe(
         value => this.spinner.hide(),
         err =>  this.spinner.hide()
     );
   }
 
   ngOnDestroy(): void {
-    this.requestService.removeRequestDetails();
+    this.requestStoreService.removeRequestDetails();
   }
 
   addCommentToArray(requestComment: RequestComment){
-    this.requestComments.requestComments.push(requestComment);
+    this.requestStoreService.requestDetails.requestComments.push(requestComment);
+    //this.requestComments.requestComments.push(requestComment);
   }
 
 
