@@ -16,7 +16,8 @@ export class RequestStoreService {
   public addRequestDetails(id: any): Observable<RequestDetails> {
     return this.requestHttp.getRequestDetails(id).pipe(
       tap(requestDetails => {
-        this.requestDetails = requestDetails;
+        //this.requestDetails = requestDetails;
+        this.requestDetails$.next(requestDetails);
       })
     )
   }

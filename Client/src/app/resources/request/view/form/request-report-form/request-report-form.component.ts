@@ -1,15 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, AbstractControl } from '@angular/forms';
-import { accessValidator } from 'app/shared/validators/reportAccessValidator';
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { environment } from 'environments/environment';
-import Swal from 'sweetalert2';
-import { DatePipe } from '@angular/common';
-import { FileServiceService } from 'app/core/services/file-service.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
-import { Observable } from 'rxjs';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators} from '@angular/forms';
+import {accessValidator} from 'app/shared/validators/reportAccessValidator';
+import {ReportForm} from "../../../model/Report";
 
 @Component({
   selector: 'app-request-report-form',
@@ -18,159 +10,158 @@ import { SwallNotificationService } from 'app/shared/services/swall-notification
 })
 export class RequestReportFormComponent implements OnInit {
   reportForm: FormGroup;
-  accessByPeopleArray:any[] = []; // people who can access report
-  accessByMethodArray:any[] = [];
+  accessByPeopleArray: any[] = []; // people who can access report
+  accessByMethodArray: any[] = [];
 
-  @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
-  @ViewChild('reportFormViewChild',  {static: true}) reportFormViewChild;
+  @Output() formEmitter: EventEmitter<ReportForm> = new EventEmitter<ReportForm>();
+  @ViewChild('reportFormViewChild', {static: true}) reportFormViewChild;
 
-  constructor(private formBuilder: FormBuilder, 
-              private http : HttpClient, 
-              private fileService: FileServiceService, 
-              private spinner: NgxSpinnerService,
-              private swallNotification: SwallNotificationService) { }
+  constructor(private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.reportForm = this.formBuilder.group({
-      name: ['' , [
+      name: ['', [
         Validators.required,
         Validators.minLength(5),
       ]],
-      requestPriority: ['' , [
+      requestPriority: ['', [
         Validators.required,
       ]],
-      owner: ['' , [
+      owner: ['', [
         Validators.required,
       ]],
-      reportType: ['' , [
+      reportType: ['', [
         Validators.required,
       ]],
-      reportRefresh: ['' , [
+      reportRefresh: ['', [
         Validators.required,
       ]],
-      purpose: ['' , [
+      purpose: ['', [
         Validators.required,
       ]],
-      criteria: ['' , [
+      criteria: ['', [
         Validators.required,
       ]],
-      visibleData: ['' , [
+      visibleData: ['', [
         Validators.required,
       ]],
-      otherInformation: '', 
-      accessMethods: ['' , [
-         accessValidator(this.accessByMethodArray)
+      otherInformation: '',
+      accessMethods: ['', [
+        accessValidator(this.accessByMethodArray)
       ]],
-      accessByPeople:['', [ accessValidator(this.accessByPeopleArray)]],
-      deadline: ['' , [
+      accessByPeople: ['', [accessValidator(this.accessByPeopleArray)]],
+      deadline: ['', [
         Validators.required,
       ]],
     });
 
   }
 
-  private sendReportFormToAPI(): Observable<any>{
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    this.reportForm.patchValue({'accessByPeople' : this.accessByPeopleArray.join(",")});
-    this.reportForm.patchValue({'accessMethods' : this.accessByMethodArray.join(",")});
 
-    return this.http.post(environment.apiUrl + "requests/report", this.reportForm.value, {headers});
-  }
-  submit(): void{
-    if(this.reportForm.invalid){
+  submit(): void {
+    if (this.reportForm.invalid) {
       return;
     }
+    this.reportForm.patchValue({accessByPeople: this.accessByPeopleArray.join(",")});
+    this.reportForm.patchValue({accessMethods: this.accessByMethodArray.join(",")});
 
-    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať report ?`).then((result) => {
-      if (result.value) {
-        this.spinner.show();
-        this.sendReportFormToAPI().subscribe(id => {
-          this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
-            this.reportFormViewChild.resetForm();
-            this.spinner.hide();
-            this.swallNotification.generateNotification(`Vaša požiadavka s id : ${id}. bola zaznamenaná. `);
-         });
-        })
-      }
-    })
+    const reportForm: ReportForm = {
+      name: this.reportForm.get("name").value,
+      owner: this.reportForm.get("owner").value,
+      requestPriority: this.reportForm.get("requestPriority").value,
+      reportType: this.reportForm.get("reportType").value,
+      reportRefresh: this.reportForm.get("reportRefresh").value,
+      purpose: this.reportForm.get("purpose").value,
+      criteria: this.reportForm.get("criteria").value,
+      visibleData: this.reportForm.get("visibleData").value,
+      otherInformation: this.reportForm.get("otherInformation").value,
+      accessByPeople: this.reportForm.get("accessByPeople").value,
+      deadline: this.reportForm.get("deadline").value,
+      accessMethods: this.reportForm.get("accessMethods").value,
+    };
+
+    this.formEmitter.emit(reportForm);
   }
 
+  public resetForm(): void {
+    this.reportFormViewChild.resetForm();
+  }
 
-  addPeopleToAccess(){
+  addPeopleToAccess() {
     const value = this.reportForm.get("accessByPeople").value;
-    if(value === ""){
+    if (value === "") {
       return;
     }
     this.accessByPeopleArray.push(value);
-    this.reportForm.patchValue({accessByPeople : ''});
+    this.reportForm.patchValue({accessByPeople: ''});
   }
 
-  addMethodToAccess(){
+  addMethodToAccess() {
     const value = this.reportForm.get("accessMethods").value;
-    if(value === ""){
+    if (value === "") {
       return;
     }
     this.accessByMethodArray.push(value);
-    this.reportForm.patchValue({accessMethods : ''});
+    this.reportForm.patchValue({accessMethods: ''});
   }
 
-  deletePeopleItem(index: number){
-    this.accessByPeopleArray.splice(index,1);
+  deletePeopleItem(index: number) {
+    this.accessByPeopleArray.splice(index, 1);
   }
 
-  deleteMethodItem(index: number){
-    this.accessByMethodArray.splice(index,1);
+  deleteMethodItem(index: number) {
+    this.accessByMethodArray.splice(index, 1);
   }
- 
 
-  get requestPriority(){
+
+  get requestPriority() {
     return this.reportForm.get("requestPriority");
   }
 
-  get name(){
+  get name() {
     return this.reportForm.get("name");
   }
 
-  get owner(){
+  get owner() {
     return this.reportForm.get("owner");
   }
 
-  get reportType(){
+  get reportType() {
     return this.reportForm.get("reportType");
   }
 
-  get reportRefresh(){
+  get reportRefresh() {
     return this.reportForm.get("reportRefresh");
   }
 
-  get purpose(){
+  get purpose() {
     return this.reportForm.get("purpose");
   }
 
-  get criteria(){
+  get criteria() {
     return this.reportForm.get("criteria");
   }
 
-  get visibleData(){
+  get visibleData() {
     return this.reportForm.get("visibleData");
   }
 
-  get otherInformation(){
+  get otherInformation() {
     return this.reportForm.get("otherInformation");
   }
 
-  get accessByPeople(){
+  get accessByPeople() {
     return this.reportForm.get("accessByPeople");
   }
 
-  get deadline(){
+  get deadline() {
     return this.reportForm.get("deadline");
   }
 
-  get accessMethods(){
+  get accessMethods() {
     return this.reportForm.get("accessMethods");
   }
 
-  
 
 }

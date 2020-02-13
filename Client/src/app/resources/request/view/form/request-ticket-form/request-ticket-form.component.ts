@@ -1,14 +1,8 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { environment } from 'environments/environment';
-import Swal from 'sweetalert2';
-import { TicketSubtype } from 'app/shared/models/TicketSubtype';
-import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
-import { FileServiceService } from 'app/core/services/file-service.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Observable } from 'rxjs';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
+import {environment} from 'environments/environment';
+import {TicketSubtype} from 'app/shared/models/TicketSubtype';
+import {TicketForm} from "../../../model/Ticket";
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -16,100 +10,72 @@ import { SwallNotificationService } from 'app/shared/services/swall-notification
   styleUrls: ['./request-ticket-form.component.scss']
 })
 export class RequestTicketFormComponent implements OnInit {
-  public softwareTypes:TicketSubtype[] = []; 
-  public hardwareTypes:TicketSubtype[] = [];
-  public serverTypes:TicketSubtype[] = [];
+  @Input() softwareTypes: TicketSubtype[] = [];
+  @Input() hardwareTypes: TicketSubtype[] = [];
+  @Input() serverTypes: TicketSubtype[] = [];
+
+  @Output() formEmitter: EventEmitter<TicketForm> = new EventEmitter<TicketForm>();
+
+  @ViewChild('ticketFormViewChild', {static: true}) ticketFormViewChild;
 
   ticketForm: FormGroup;
 
-  @ViewChild('fileUploader',  {static: true}) fileInput: FileUploadComponent;
 
-  @ViewChild('ticketFormViewChild',  {static: true}) ticketFormViewChild;
-
-  constructor(private formBuilder: FormBuilder, 
-              private http: HttpClient,
-              private fileService: FileServiceService, 
-              private spinner: NgxSpinnerService,
-              private swallNotification: SwallNotificationService) { }
+  constructor(private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
     this.ticketForm = this.formBuilder.group({
-      ticketType:  new FormControl('' , [ Validators.required, ]),
-      ticketSubtypeName:  new FormControl('' , [ Validators.required,  Validators.minLength(2), ]),
-      requestPriority:  new FormControl('' , [ Validators.required, ]),
-      name:  new FormControl('' , [ Validators.required, Validators.minLength(5), Validators.maxLength(254),]),
-      problem:  new FormControl('' , [ Validators.required,  Validators.minLength(10), ]),
+      ticketType: new FormControl('', [Validators.required]),
+      ticketSubtypeName: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      requestPriority: new FormControl('', [Validators.required]),
+      name: new FormControl('', [Validators.required, Validators.minLength(5), Validators.maxLength(254)]),
+      problem: new FormControl('', [Validators.required, Validators.minLength(10)]),
     });
   }
 
-  
 
-  private sendTicketFormToAPI(): Observable<any>{
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
-    return this.http.post(environment.apiUrl + 'requests/ticket', this.ticketForm.value, {headers});
-  }
-
-  submit() : void{
-    if(this.ticketForm.invalid){ 
+  submit(): void {
+    if (this.ticketForm.invalid) {
       return;
     }
 
-    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať ticket ?`).then((result) => {
-      if (result.value) {
-        this.spinner.show();
-        this.sendTicketFormToAPI().subscribe(id => {
-            this.fileService.postFileForRequest(id , this.fileInput.files).subscribe(succ => {
-              this.ticketFormViewChild.resetForm();
-              this.spinner.hide();
-              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${id}. bola zaznamenaná. `);
-            }, err => this.spinner.hide());
-        });
-      }
-    })
+    const ticketForm: TicketForm = {
+      name: this.ticketForm.get("name").value,
+      ticketType: this.ticketForm.get("ticketType").value,
+      ticketSubtypeName: this.ticketForm.get("ticketSubtypeName").value,
+      problem: this.ticketForm.get("problem").value,
+      requestPriority: this.ticketForm.get("requestPriority").value,
+    };
+
+    this.formEmitter.emit(ticketForm);
   }
 
-  changeTicketType(value: string): void{
-    this.loadTicketSubtype(value);
-    this.ticketForm.patchValue({'ticketSubtypeName' : ''});
+  public resetForm(): void {
+    this.ticketFormViewChild.resetForm();
   }
 
-  private loadTicketSubtype(value: string): void{
-    //let headers = new Headers().set('Content-Type', 'application/json');
-    let params = new HttpParams().set('ticketTypeName' , value)  
-
-    if(value === 'Software' && this.softwareTypes.length === 0){
-      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
-        .subscribe(ticketSubTypes =>this.softwareTypes = ticketSubTypes)
-    }
-    else if(value === 'Hardware' && this.hardwareTypes.length === 0){
-      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
-        .subscribe(ticketSubTypes =>this.hardwareTypes = ticketSubTypes)
-    }
-    else if(value === 'Server' && this.serverTypes.length === 0){
-      this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params: params})
-        .subscribe(ticketSubTypes =>this.serverTypes = ticketSubTypes)
-    }
-
+  changeTicketType(value: string): void {
+    this.ticketForm.patchValue({ticketSubtypeName: ''});
   }
 
-
-  get ticketType(){
+  get ticketType() {
     return this.ticketForm.get("ticketType");
   }
 
-  get ticketSubtypeName(){
+  get ticketSubtypeName() {
     return this.ticketForm.get("ticketSubtypeName");
   }
 
-  get requestPriority(){
+  get requestPriority() {
     return this.ticketForm.get("requestPriority");
   }
 
-  get name(){
+  get name() {
     return this.ticketForm.get("name");
   }
 
-  get problem(){
+  get problem() {
     return this.ticketForm.get("problem");
   }
 

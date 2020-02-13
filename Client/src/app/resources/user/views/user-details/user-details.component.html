@@ -1,42 +1,50 @@
-<ng-container *ngIf = "displayedUser">   
-    <div class = ' smallerContent'>
+<ng-container *ngIf="displayedUser">
+  <div class=' smallerContent'>
 
-        <span class='formTitleSmall' >
+        <span class='formTitleSmall'>
             <img src="../../../../../assets/images_design/information_icon.png" class="icon"/>
             Detaily uživateľa
         </span>
 
 
-        <li class='informationsContainer topspace'>
-            <div class='informationTitle'>Avatar</div>
-            <ul class='informationsHolder'>
-                <li>
-                    <img [src]="'data:image/jpeg;base64,'+ displayedUser.photoBytes" 
-                        class='avatar' 
-                        (click)="changeImage()"  
-                        [ngClass] = '{"avatarReactive" : addImageClick }' />
-                </li>
-            </ul> 
+    <li class='informationsContainer topspace'>
+      <div class='informationTitle'>Avatar</div>
+      <ul class='informationsHolder'>
+        <li>
+          <img [src]="'data:image/jpeg;base64,'+ displayedUser.photoBytes"
+               class='avatar'
+               (click)="changeImage()"
+               [ngClass]='{"avatarReactive" : addImageClick }'/>
         </li>
-        
-        <li class='informationsContainer topspace'>
-            <div class='informationTitle'>Meno</div>
-            <ul class='informationsHolder'><li > {{ displayedUser.firstName }}</li> </ul>
-        </li>
+      </ul>
+    </li>
 
-        <li class='informationsContainer topspace'>
-            <div class='informationTitle'>Priezvisko</div>
-            <ul class='informationsHolder'> <li>{{ displayedUser.lastName }}  </li></ul>
-        </li>
+    <li class='informationsContainer topspace'>
+      <div class='informationTitle'>Meno</div>
+      <ul class='informationsHolder'>
+        <li> {{ displayedUser.firstName }}</li>
+      </ul>
+    </li>
 
-        <li class='informationsContainer topspace'>
-            <div class='informationTitle'>Email</div>
-            <ul class='informationsHolder'> <li>{{ displayedUser.email }}  </li></ul>
-        </li>
+    <li class='informationsContainer topspace'>
+      <div class='informationTitle'>Priezvisko</div>
+      <ul class='informationsHolder'>
+        <li>{{ displayedUser.lastName }}  </li>
+      </ul>
+    </li>
 
-        <li class='informationsContainer topspace' *ngIf = 'showPasswordChange'>
-            <div class='informationTitle'>Heslo</div>
-            <ul class='informationsHolder'> <li class='passwordChange' (click) = "changePassword()">zmeniť  </li></ul>
-        </li>
-    </div>
+    <li class='informationsContainer topspace'>
+      <div class='informationTitle'>Email</div>
+      <ul class='informationsHolder'>
+        <li>{{ displayedUser.email }}  </li>
+      </ul>
+    </li>
+
+    <li class='informationsContainer topspace' *ngIf='showPasswordChange'>
+      <div class='informationTitle'>Heslo</div>
+      <ul class='informationsHolder'>
+        <li class='passwordChange' (click)="changePassword()">zmeniť</li>
+      </ul>
+    </li>
+  </div>
 </ng-container>

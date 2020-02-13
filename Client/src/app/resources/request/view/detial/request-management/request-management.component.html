@@ -1,12 +1,8 @@
-<!--<ng-container *ngIf= 'requestDetail$ | async as requestDetails'>-->
 
 <!-- open / close request -->
 <div class = 'module'>
-    <!-- requestDetails.closed === null && ((isAdmin$ | async) ||
-            isAssignedOnMe(requestDetails) || (requestDetails.creator.username === userStoreService.user.username )) -->
     <button mat-raised-button
             *ngIf = 'isOpen && enableChangeState'
-            id = 'sliderButton'
             color='warn'
             class='customInput'
             (click) = 'changeState()'
@@ -17,7 +13,6 @@
 
     <button mat-raised-button
             *ngIf = '!isOpen'
-            id = 'sliderButton'
             color='warn'
             class='customInput openInput'
             (click) = 'changeState()'
@@ -29,7 +24,6 @@
 </div>
 
 <!-- enable / disable commenting -->
-<!-- *ngIf='requestDetails.closed === null && ((isAdmin$ | async) || isAssignedOnMe(requestDetails))' -->
 <div class = 'module' *ngIf = 'isOpen && enableChangeCommenting'>
     <label class="switch"
             matTooltip="Stlačením tlačítka zakážete komentovanie požiadavky bežným uživateľom.
@@ -43,10 +37,8 @@
 </div>
 
 <!-- remove solver -->
-<!-- *ngIf='requestDetails.closed === null  && (isAssignedOnMe(requestDetails) || (isAdmin$ | async))' -->
 <div class = 'module'  *ngIf = 'isOpen && enableRemoveSolver'>
     <button mat-raised-button
-            id = 'sliderButton'
             color='warn'
             class='customInput'
             (click) = 'removeSolver()'
@@ -58,9 +50,6 @@
 </div>
 
 <!-- change solver -->
-<!-- *ngIf = "requestDetails.closed === null &&  (
-    ( ((isSolverRightHand$ | async) || (isManager$ | async)) &&
-    (isSolver$ | async))  ||  (isAdmin$ | async))" -->
 <div class = 'module' *ngIf = "isOpen && enableChangeSolver">
     <mat-form-field class='customInputSmall'>
         <mat-label>Zmena riešiteľa</mat-label>
@@ -77,7 +66,6 @@
 </div>
 
 <!-- change priority -->
-<!-- *ngIf='requestDetails.closed === null && ((isSolver$ | async) || (isAdmin$ | async)) && isAssignedOnMe(requestDetails)' -->
 <div class = 'module'  *ngIf = 'isOpen && enableChangePriority'>
     <mat-form-field class='customInputSmall'>
         <mat-label>Zmena priority</mat-label>
@@ -96,9 +84,6 @@
 </div>
 
 <!-- Report only, add evaluation -->
-<!--*ngIf='requestDetails.closed === null &&
-            requestDetails.requestType === "Report" &&
-            ((isAssignedOnMe(requestDetails)) || (isAdmin$ | async))-->
 <div class = 'module'  *ngIf = 'isOpen && enableEvaluation'>
     <mat-form-field class='customInputSmall'>
         <input  matInput placeholder="Nahodnocenie v dňoch" (keyup)="saveEvaluation($event.target.value)"  type="number">
@@ -106,4 +91,3 @@
     <button mat-raised-button  class='sendingButton' (click) = "addEvaluation()">Odoslať</button>
     <hr>
 </div>
-<!--</ng-container>-->

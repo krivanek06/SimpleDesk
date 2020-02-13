@@ -1,57 +1,18 @@
-.ticketInlineParameters{
-    display: block;
-    width: 40%;
-    position: relative;
-    margin-bottom: 5px;
-}
 
-#uploader{
-    float: left;
-    width: 100%;
-    margin-left: 20px;
-}
-
-#ticketSendingButton{
-    margin-top: 10px;
-    float: right;
-    background-color: #0077ec;
-}
-
-.formTitle{
-    margin-top: -20px;
-    margin-left: -10px;
-    font-weight: bold;
-}
-
-#ticketFormImage{
-    position: absolute;
-    top:125px;
-    width: 325px;
-    left: 55%;
-    -webkit-transition: -webkit-transform .8s ease-in-out;
-    transition:  transform .8s ease-in-out;
-}
-#ticketFormImage:hover {
-    -webkit-transform: rotate(360deg);
-            transform: rotate(360deg);
-  }
-
-
-
-mat-form-field{
-    margin-left: 20px;
-}
-
-textarea{
-    height: 175px;
+#ticketSendingButton {
+  margin-top: 10px;
+  float: right;
+  background-color: #0077ec;
 }
 
 
-  
-@media(min-width:1919px) {
-    #ticketFormImage{
-        width: 400px;
-        
-    }
-
+mat-form-field {
+  display: inline;
 }
+
+textarea {
+  height: 175px;
+}
+
+
+

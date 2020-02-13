@@ -71,6 +71,9 @@ import { RequestCommentOptionsComponent } from './resources/request-comment/requ
 import { RequestManagementComponent } from './resources/request/view/detial/request-management/request-management.component';
 import { RequestContentComponent } from './resources/request/view/detial/request-content/request-content.component';
 import { RequestCommentContainerComponent } from './pages/request-details/container/request-comment-container/request-comment-container.component';
+import { TicketFormPageComponent } from './pages/request-forms/view/ticket-form-page/ticket-form-page.component';
+import { ReportFormPageComponent } from './pages/request-forms/view/report-form-page/report-form-page.component';
+import { FinanceFormPageComponent } from './pages/request-forms/view/finance-form-page/finance-form-page.component';
 
 @NgModule({
   declarations: [
@@ -120,7 +123,10 @@ import { RequestCommentContainerComponent } from './pages/request-details/contai
     GroupRegistrationComponent,
     RequestManagementComponent,
     RequestContentComponent,
-    RequestCommentContainerComponent
+    RequestCommentContainerComponent,
+    TicketFormPageComponent,
+    ReportFormPageComponent,
+    FinanceFormPageComponent
   ],
   imports: [
     BrowserModule,

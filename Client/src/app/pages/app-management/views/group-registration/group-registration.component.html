@@ -1,15 +1,19 @@
 
 
 
-<app-group-form 
+<app-group-form
     #groupForm
     id='groupForm'
-    [groupRegistrationForm] = 'groupRegistrationForm'
+    [allAvailableUsers] = 'allAvailableUsers'
+    [financeTypes] = 'financeTypes'
+    [softwares] = 'softwares'
+    [hardwares] = 'hardwares'
+    [servers] = 'servers'
     (groupRegistrationEmitter) = 'registerGroup($event)'>
 </app-group-form>
 
 
-<app-group-form-details  
+<app-group-form-details
     id='groupDetails'
-    [groupRegistrationForm] = 'groupRegistrationForm'>
+    [groupRegistrationForm] = 'groupForm.groupRegistrationForm'>
 </app-group-form-details>

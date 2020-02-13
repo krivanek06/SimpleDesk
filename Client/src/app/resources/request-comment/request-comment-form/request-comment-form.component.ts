@@ -10,13 +10,14 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
   styleUrls: ['./request-comment-form.component.scss']
 })
 export class RequestCommentFormComponent implements OnInit {
-  commentInput: string = '';
-  isChecked: boolean = false; // if checkbotton is checked
-  isCheckedName: string = ''; // name of checkButton
+  commentInput = '';
+  isChecked = false; // if checkbotton is checked
+  isCheckedName = ''; // name of checkButton
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 
-  constructor(private userStoreService: UserStoreService, private swallNotification: SwallNotificationService) { }
+  constructor(private userStoreService: UserStoreService, private swallNotification: SwallNotificationService) {
+  }
 
   ngOnInit() {
   }
@@ -27,8 +28,8 @@ export class RequestCommentFormComponent implements OnInit {
   }
 
 
-  submit(): void{
-    if(this.commentInput === ''){
+  submit(): void {
+    if (this.commentInput === '') {
       return;
     }
 
@@ -43,25 +44,25 @@ export class RequestCommentFormComponent implements OnInit {
     });
   }
 
-  private constructRequestCommentWrapper(requestComment: RequestComment): RequestCommentWrapper{
+  private constructRequestCommentWrapper(requestComment: RequestComment): RequestCommentWrapper {
     const requestCommentWrapper: RequestCommentWrapper = {
       requestComment,
       sendEmail: this.isChecked && (this.isCheckedName === "Solution" || this.isCheckedName === "Notification"),
       solution: this.isCheckedName === "Solution"
-    }
+    };
     return requestCommentWrapper;
   }
 
-  private constructRequestComment(userSimple: UserSimple): RequestComment{
+  private constructRequestComment(userSimple: UserSimple): RequestComment {
     return {
-        id: null,
-        requestId: null,
-        creator: userSimple,
-        comment: this.commentInput,
-        isPrivate: this.isChecked && this.isCheckedName === "Private",
-        groupsToShare: [],
-        timestamp: new Date()
-      };
+      id: null,
+      requestId: null,
+      creator: userSimple,
+      comment: this.commentInput,
+      isPrivate: this.isChecked && this.isCheckedName === "Private",
+      groupsToShare: [],
+      timestamp: new Date()
+    };
   }
 
 }

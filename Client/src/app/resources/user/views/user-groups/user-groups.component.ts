@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { GroupContainer } from 'app/shared/models/UserGroups';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {GroupContainer} from 'app/shared/models/UserGroups';
 
 @Component({
   selector: 'app-user-groups',
@@ -11,15 +11,17 @@ export class UserGroupsComponent implements OnInit {
   @Input() groupContainer: GroupContainer;
   @Input() elevationActivated: boolean = false;
 
-  constructor() { }
+  constructor() {
+  }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
 
-  getGroupDetails(groupName: string){
-    if(!this.elevationActivated){
+  getGroupDetails(groupName: string) {
+    if (!this.elevationActivated) {
       return;
     }
-    
+
     this.selectedGroupEmmiter.emit(groupName);
   }
 

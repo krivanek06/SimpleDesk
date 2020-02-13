@@ -1,14 +1,16 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserSimpleDTO} from 'app/shared/models/UserGroups';
 import {RequestDetails, UserSimple} from 'app/shared/models/RequestDetails';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestStoreService} from 'app/core/services/request-store.service';
-import {Observable, combineLatest, of} from 'rxjs';
+import {Observable, ReplaySubject} from 'rxjs';
 import {RequestPosition} from 'app/shared/enums/request-position.enum';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {UserHttpService} from 'app/api/user-http.service';
 import {RequestService} from 'app/core/services/request.service';
+import {takeUntil} from "rxjs/operators";
+import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
 
 @Component({
   selector: 'app-request-management-container',
@@ -21,14 +23,16 @@ export class RequestManagementContainerComponent implements OnInit {
   private isAdmin$: Observable<boolean>;
   private isSolverRightHand$: Observable<boolean>;
 
+
   requestDetails$: Observable<RequestDetails>;
   allusers$: Observable<UserSimpleDTO[]>;
 
 
   constructor(private userHttp: UserHttpService,
+              private reportHttpService: ReportHttpService,
               private requestSerivce: RequestService,
               private requestStoreService: RequestStoreService,
-              private userStoreService: UserStoreService,
+              public userStoreService: UserStoreService,
               private requestHttp: RequestHttpService,
               private swallNotification: SwallNotificationService) {
   }
@@ -41,6 +45,7 @@ export class RequestManagementContainerComponent implements OnInit {
     this.isSolverRightHand$ = this.userStoreService.isSolverRightHand();
     this.requestDetails$ = this.requestStoreService.getRequestDetials();
   }
+
 
   changePriority(priority: string) {
     this.requestHttp.changePriority(this.requestStoreService.requestDetails.id, priority).subscribe(() => {
@@ -55,7 +60,7 @@ export class RequestManagementContainerComponent implements OnInit {
         this.requestStoreService.requestDetails.assigned = userSimple;
         this.requestStoreService.requestDetails.requestPosition = RequestPosition.Assigned;
         this.swallNotification.generateNotification(`Riešiteľ zmenený`);
-    });
+      });
   }
 
   changeCommenting() {
@@ -76,7 +81,7 @@ export class RequestManagementContainerComponent implements OnInit {
   }
 
   addReportEvaluation(days: number) {
-    this.requestHttp.reportAddEvaluation(this.requestStoreService.requestDetails.id, days)
+    this.reportHttpService.addEvaluation(this.requestStoreService.requestDetails.id, days)
       .subscribe(() => {
         this.requestStoreService.reportDetials.evaluation = days;
         this.swallNotification.generateNotification(`Nadhodnocenie reportu bolo zaznamenané`);
@@ -116,55 +121,6 @@ export class RequestManagementContainerComponent implements OnInit {
         });
       }
     });
-  }
-
-
-  get enableChangeState(): Observable<boolean> {
-    return combineLatest(
-      this.isAdmin$,
-      this.requestSerivce.isAssignedOnMe(),
-      this.requestSerivce.amICreator(),
-      (admin, assigned, creator) => (admin || assigned || creator));
-  }
-
-  get enableCommenting(): Observable<boolean> {
-    return combineLatest(
-      this.isAdmin$,
-      this.requestSerivce.isAssignedOnMe(),
-      (admin, assigned) => (admin || assigned));
-  }
-
-  get enableRemoveSolver(): Observable<boolean> {
-    return combineLatest(
-      this.isAdmin$,
-      this.requestSerivce.isAssignedOnMe(),
-      (admin, assigned) => (admin || assigned));
-  }
-
-  get enableChangeSolver(): Observable<boolean> {
-    return combineLatest(
-      this.isAdmin$,
-      this.isManager$,
-      this.isSolver$,
-      this.isSolverRightHand$,
-      (isAdmin, isManager, isSolver, isSolverRightHand) =>
-        (isAdmin || (isSolver && (isManager || isSolverRightHand))));
-  }
-
-  get enableChangePriority(): Observable<boolean> {
-    return combineLatest(
-      this.isAdmin$,
-      this.isSolver$,
-      this.requestSerivce.isAssignedOnMe(),
-      (isAdmin, isSolver, isAssignedOnMe) => (isAdmin || isSolver || isAssignedOnMe));
-  }
-
-  get enableEvaluation(): Observable<boolean> {
-    return combineLatest(
-      of(this.requestStoreService.requestDetails.requestType === "Report"),
-      this.isAdmin$,
-      this.requestSerivce.isAssignedOnMe(),
-      (isReport, isAdmin, isAssignedOnMe) => (isReport && (isAdmin || isAssignedOnMe)));
   }
 
 }

@@ -1,6 +1,5 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import { ImageDTO } from 'app/shared/models/ImageDTO';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {ImageDTO} from 'app/shared/models/ImageDTO';
 
 @Component({
   selector: 'app-user-images',
@@ -11,24 +10,21 @@ export class UserImagesComponent implements OnInit {
   @Input() avatars: ImageDTO[];
   @Output() changeWindowEmitter: EventEmitter<any> = new EventEmitter<any>();
   @Output() selectImageEmitter: EventEmitter<ImageDTO> = new EventEmitter<ImageDTO>();
-  
 
-  constructor(private swallNotification: SwallNotificationService) { }
+
+  constructor() {
+  }
 
   ngOnInit() {
 
   }
 
-  closeWindow(){
+  closeWindow() {
     this.changeWindowEmitter.emit();
   }
 
-  selectImage(imageDTO: ImageDTO): void{
-    this.swallNotification.selectImage(imageDTO.imageBytes).then(result =>{
-        if(result.value === true){
-          this.selectImageEmitter.emit(imageDTO);
-        }
-    });
+  selectImage(imageDTO: ImageDTO): void {
+    this.selectImageEmitter.emit(imageDTO);
   }
 
 }

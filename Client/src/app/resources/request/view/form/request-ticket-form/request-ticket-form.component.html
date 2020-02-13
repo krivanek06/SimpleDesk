@@ -1,10 +1,10 @@
 
-<h2 class='formTitle'>Požiadavka na IT & Projekty</h2>
+
 
 <form [formGroup] = "ticketForm"  #ticketFormViewChild="ngForm"  (ngSubmit)="submit()">
    <!-- Values : {{ ticketForm.value | json }}
     <hr> -->
-    <mat-form-field class='ticketInlineParameters'>
+    <mat-form-field >
         <mat-label>Typ Tiketu</mat-label>
         <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType($event.value)">
             <mat-option value="Software">Software</mat-option>
@@ -20,7 +20,7 @@
     <!--TICKET TYPE -->
 
     <!-- software -->
-    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'Software' " class='ticketInlineParameters'>
+    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'Software' " >
         <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>
 
         <mat-select formControlName="ticketSubtypeName">
@@ -31,7 +31,7 @@
     </mat-form-field>
 
      <!--hardware  -->
-    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'Hardware'  " class='ticketInlineParameters'>
+    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'Hardware'">
         <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>
 
         <mat-select formControlName="ticketSubtypeName" >
@@ -42,7 +42,7 @@
     </mat-form-field>
 
      <!-- server -->
-    <mat-form-field *ngIf = " ticketForm.value.ticketType === 'Server' "  class='ticketInlineParameters'>
+    <mat-form-field *ngIf = " ticketForm.value.ticketType === 'Server' " >
         <mat-label>{{ ticketForm.value.ticketType  }}</mat-label>
 
         <mat-select formControlName="ticketSubtypeName" >
@@ -53,7 +53,7 @@
     </mat-form-field>
 
     <!-- username or other -->
-    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' " class='ticketInlineParameters'>
+    <mat-form-field *ngIf = "ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' ">
         <input matInput placeholder="Zadajte bližšie informácie" formControlName = "ticketSubtypeName">
 
         <mat-error *ngIf=" ticketSubtypeName.invalid  && ticketSubtypeName.touched"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
@@ -61,7 +61,7 @@
 
 
     <!--Priority -->
-    <mat-form-field class='ticketInlineParameters' >
+    <mat-form-field >
         <mat-label>Priorita</mat-label>
         <mat-select formControlName="requestPriority">
             <mat-option value="nízka">nízka</mat-option>
@@ -74,7 +74,7 @@
     </mat-form-field>
 
     <!--nazov -->
-    <mat-form-field class='ticketInlineParameters'>
+    <mat-form-field>
         <input  matInput placeholder="Názov tiketu" formControlName = "name">
 
         <mat-error *ngIf=" name.invalid && name.touched"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>
@@ -82,23 +82,16 @@
     </mat-form-field>
 
     <!--problem -->
-    <mat-form-field class='ticketInlineParameters' >
+    <mat-form-field >
         <textarea  matInput placeholder="Popis problému" formControlName = "problem"></textarea>
 
         <mat-error *ngIf="problem.invalid  && problem.touched"> Prosím zadefinujte váš problém, minimálne 10 zankov</mat-error>
     </mat-form-field>
 
-     <!-- uploader -->
-    <div class='ticketInlineParameters'> 
-        <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
-    </div>
-
     <!-- submit button -->
-    <div class='ticketInlineParameters'>
+    <div>
         <button mat-raised-button color="primary" id="ticketSendingButton" type="submit"> Odoslať </button>
     </div>
 
 </form>
 
-<ngx-spinner><p style="font-size: 20px; color: white">Posielanie požiadavky...</p> </ngx-spinner>
-<img id='ticketFormImage' src="../../../../assets/images_design/ticket_form.png"/>

@@ -1,6 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { RequestComment } from 'app/shared/models/RequestDetails';
-import { UserStoreService } from 'app/core/services/user-store.service';
+import {Component, OnInit, Input} from '@angular/core';
+import {RequestComment} from 'app/shared/models/RequestDetails';
+import {UserStoreService} from 'app/core/services/user-store.service';
 
 
 @Component({
@@ -9,10 +9,11 @@ import { UserStoreService } from 'app/core/services/user-store.service';
   styleUrls: ['./request-comment-body.component.scss']
 })
 export class RequestCommentBodyComponent implements OnInit {
-  @Input() requestComment:RequestComment;
+  @Input() requestComment: RequestComment;
   @Input() solutionId: number;
 
-  constructor(public userStoreService: UserStoreService ) { }
+  constructor(public userStoreService: UserStoreService) {
+  }
 
   ngOnInit() {
 
