@@ -1,6 +1,6 @@
 <ng-container >
-    <img *ngIf='isPrivate  &&  !isSolution' 
-        src="../../../../assets/images_design/share_icon.png" 
+    <img *ngIf='requestComment.isPrivate  &&  !isSolution'
+        src="../../../../assets/images_design/share_icon.png"
         class = 'icon'
         (click)="shareComment()"
         matTooltip="Zdieľať"
@@ -8,18 +8,18 @@
         matTooltipClass="custom-tooltip-icon"
         matTooltipShowDelay="200"/>
 
-    <img *ngIf=' isPrivate  &&  !isSolution' 
-        src="../../../../assets/images_design/lock_closed_icon.png" 
-        class = 'icon' 
+    <img *ngIf=' requestComment.isPrivate  &&  !isSolution'
+        src="../../../../assets/images_design/lock_closed_icon.png"
+        class = 'icon'
         (click)="lockComment()"
         matTooltip="Otvoriť"
         matTooltipPosition="right"
         matTooltipClass="custom-tooltip-icon"
         matTooltipShowDelay="200"/>
 
-    <img *ngIf='!isPrivate &&  !isSolution ' 
-        src="../../../../assets/images_design/lock_open_icon.png" 
-        class = 'icon' 
+    <img *ngIf='!requestComment.isPrivate &&  !isSolution '
+        src="../../../../assets/images_design/lock_open_icon.png"
+        class = 'icon'
         (click)="lockComment()"
         matTooltip="Uzamknúť"
         matTooltipPosition="right"
@@ -27,16 +27,16 @@
         matTooltipShowDelay="200" />
 
 
-    <img src="../../../../assets/images_design/edit_icon.png" 
-        class = 'icon' 
-        (click)="editComment()" 
+    <img src="../../../../assets/images_design/edit_icon.png"
+        class = 'icon'
+        (click)="editComment()"
         matTooltip="Editovať"
         matTooltipPosition="right"
         matTooltipClass="custom-tooltip-icon"
         matTooltipShowDelay="200"/>
 
-    <img src="../../../../assets/images_design/delete_bin_icon.png" 
-        class = 'icon'  
+    <img src="../../../../assets/images_design/delete_bin_icon.png"
+        class = 'icon'
         (click)='deleteComment()'
         matTooltip="Vymazať"
         matTooltipPosition="right"

@@ -1,6 +1,7 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { RequestDetails, UserSimple } from 'app/shared/models/RequestDetails';
-import { UserSimpleDTO } from 'app/shared/models/UserGroups';
+import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {RequestDetails, UserSimple} from 'app/shared/models/RequestDetails';
+import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+
 @Component({
   selector: 'app-request-management',
   templateUrl: './request-management.component.html',
@@ -10,16 +11,17 @@ export class RequestManagementComponent implements OnInit {
   private priority: string;
   private solver: UserSimple;
   private reportEvaluation: number;
-  
+
   @Input() enableChangeState: boolean;  // open or close
-  @Input() enableCommenting: boolean;
+  @Input() enableChangeCommenting: boolean;
   @Input() enableRemoveSolver: boolean;
   @Input() enableChangeSolver: boolean;
   @Input() enableChangePriority: boolean;
   @Input() enableEvaluation: boolean;
 
   @Input() availableUsers: UserSimpleDTO[];
-  @Input() requestDetails: RequestDetails;
+  @Input() isOpen: boolean;
+  @Input() allowCommenting: boolean;
 
 
   @Output() changeStateEmitter: EventEmitter<any> = new EventEmitter();  // open or close
@@ -30,46 +32,52 @@ export class RequestManagementComponent implements OnInit {
   @Output() evaluationEmitter: EventEmitter<number> = new EventEmitter();
 
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  changeState(){
+  changeState() {
     this.changeStateEmitter.emit();
   }
 
-  changeCommenting(){
+  changeCommenting() {
     this.commentingEmitter.emit();
   }
-  removeSolver(){
+
+  removeSolver() {
     this.removeSolverEmitter.emit();
   }
-  changeSolver(){
-    if(this.solver){
+
+  changeSolver() {
+    if (this.solver) {
       this.changeSolverEmitter.emit(this.solver);
     }
   }
-  saveSolver(userSimpleDTO: UserSimple){
+
+  saveSolver(userSimpleDTO: UserSimple) {
     this.solver = userSimpleDTO;
   }
-  
-  addEvaluation(){
-    if(this.reportEvaluation){
+
+  addEvaluation() {
+    if (this.reportEvaluation) {
       this.evaluationEmitter.emit(this.reportEvaluation);
       this.reportEvaluation = undefined;
     }
   }
-  saveEvaluation(days: number){
+
+  saveEvaluation(days: number) {
     this.reportEvaluation = days;
   }
 
-  changePriority(){
-    if(this.priority){
+  changePriority() {
+    if (this.priority) {
       this.changePriorityEmitter.emit(this.priority);
     }
   }
-  savePriority(priority: string){
+
+  savePriority(priority: string) {
     this.priority = priority;
   }
 

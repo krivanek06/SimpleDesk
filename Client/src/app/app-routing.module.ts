@@ -1,22 +1,22 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { LoginComponent } from './modules/login/login.component';
-import { DashboardComponent } from './modules/dashboard/dashboard.component';
+import { LoginComponent } from './pages/login/login.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AuthGuard } from './core/guards/AuthGuard';
-import { RequestFormsComponent } from './modules/request-forms/request-forms.component';
+import { RequestFormsComponent } from './pages/request-forms/request-forms.component';
 import { RequestTicketFormComponent } from './resources/request/view/form/request-ticket-form/request-ticket-form.component';
 import { RequestReportFormComponent } from './resources/request/view/form/request-report-form/request-report-form.component';
 import { RequestFinanceFormComponent } from './resources/request/view/form/request-finance-form/request-finance-form.component';
-import { UserProfileComponent } from './modules/user-profile/user-profile.component';
-import { RequestClosedComponent } from './modules/request-closed/request-closed.component';
-import { AppManagementComponent } from './modules/app-management/app-management.component';
-import { RequestDetailsComponent } from './modules/request-details/request-details.component';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { RequestClosedComponent } from './pages/request-closed/request-closed.component';
+import { AppManagementComponent } from './pages/app-management/app-management.component';
+import { RequestDetailsComponent } from './pages/request-details/request-details.component';
 import { FinanceGuardGuard } from './core/guards/finance-guard.guard';
 import { PrivilegeManagerGuard } from './core/guards/privilege-manager.guard';
-import { UnauthorizedComponent } from './modules/unauthorized/unauthorized.component';
-import { UserGroupManagementComponent } from './modules/app-management/views/user-group-management/user-group-management.component';
-import { UserRegistrationComponent } from './modules/app-management/views/user-registration/user-registration.component';
-import { GroupRegistrationComponent } from './modules/app-management/views/group-registration/group-registration.component';
+import { UnauthorizedComponent } from './pages/unauthorized/unauthorized.component';
+import { UserGroupManagementComponent } from './pages/app-management/views/user-group-management/user-group-management.component';
+import { UserRegistrationComponent } from './pages/app-management/views/user-registration/user-registration.component';
+import { GroupRegistrationComponent } from './pages/app-management/views/group-registration/group-registration.component';
 
 
 const routes: Routes = [
@@ -29,7 +29,7 @@ const routes: Routes = [
         { path: 'finance' , component: RequestFinanceFormComponent, canActivate:[ FinanceGuardGuard] },
         { path: '**' ,  redirectTo: 'ticket'  }
     ]},
-  { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]}, 
+  { path: 'request_closed', component: RequestClosedComponent, canActivate:[AuthGuard]},
   { path: 'request_details/:id', component: RequestDetailsComponent, canActivate:[AuthGuard]},
   { path: 'user_profile', component: UserProfileComponent, canActivate:[AuthGuard]} ,
   { path: 'app_management', component: AppManagementComponent, canActivate:[AuthGuard, PrivilegeManagerGuard],

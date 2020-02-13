@@ -35,17 +35,6 @@ p{
 }
 
 
-
-.commentIcons{
-    position: absolute;
-    top: -20px;
-    right: -15px;
-
-    display: inline-grid;
-
-}
-
-
 #solutionImg{
     position: absolute;
     left: 10px;
@@ -59,28 +48,4 @@ p{
     top: 2px;
 }
 
-.displayCommentSharing{
-    width: 90%;
-    float: left;
-    margin-left: 7%;
-}
 
-::ng-deep .custom-tooltip-icon{
-    background-color: #818181;
-    font-size: 14px;
-    padding: 5px;
-}
-
-
-@media(min-width:1919px) {
-    .commentIcons{
-        position: absolute;
-        top: -10px;
-        right: 0px;
-    
-        display: block;
-    
-    }
-    
-
-}

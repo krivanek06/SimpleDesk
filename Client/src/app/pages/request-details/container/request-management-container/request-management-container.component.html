@@ -1,0 +1,21 @@
+
+<ng-container *ngIf = "requestDetails$ | async as requestDetails">
+  <app-request-management
+      class='content'
+      [isOpen] = 'requestDetails.closed === null'
+      [allowCommenting]="requestDetails.allowCommenting"
+      [availableUsers] = 'allusers$ | async'
+      [enableChangeState] = 'enableChangeState | async'
+      [enableChangeCommenting]="enableCommenting | async"
+      [enableRemoveSolver] = 'enableRemoveSolver | async'
+      [enableChangeSolver] = 'enableChangeSolver | async'
+      [enableChangePriority] = 'enableChangePriority | async'
+      [enableEvaluation] = 'enableEvaluation | async'
+      (changeStateEmitter) = 'changeState()'
+      (commentingEmitter) = 'changeCommenting()'
+      (removeSolverEmitter) = 'removeSolver()'
+      (changeSolverEmitter) = 'changeSolver($event)'
+      (changePriorityEmitter) = 'changePriority($event)'
+      (evaluationEmitter) = 'addReportEvaluation($event)'>
+  </app-request-management>
+</ng-container>

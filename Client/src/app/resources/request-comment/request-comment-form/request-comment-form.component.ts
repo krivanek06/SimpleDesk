@@ -1,9 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { Observable } from 'rxjs';
-import { RequestComment, UserSimple, RequestCommentWrapper } from 'app/shared/models/RequestDetails';
-import { UserStoreService } from 'app/core/services/user-store.service';
-import { CommentHttpService } from 'app/api/comment-http.service';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {RequestComment, RequestCommentWrapper, UserSimple} from 'app/shared/models/RequestDetails';
+import {UserStoreService} from 'app/core/services/user-store.service';
+import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 
 
 @Component({
@@ -20,20 +18,20 @@ export class RequestCommentFormComponent implements OnInit {
 
   constructor(private userStoreService: UserStoreService, private swallNotification: SwallNotificationService) { }
 
-  ngOnInit() {    
+  ngOnInit() {
   }
-   
+
   onChange(event: any) {
     this.isChecked = !this.isChecked;
     this.isCheckedName = event.source.name;
   }
 
-  
+
   submit(): void{
-    if(this.commentInput === ''){ 
+    if(this.commentInput === ''){
       return;
     }
-    
+
     const requestComment = this.constructRequestComment(this.userStoreService.getUserSimple());
     const requestCommentWrapper = this.constructRequestCommentWrapper(requestComment);
 
@@ -46,8 +44,8 @@ export class RequestCommentFormComponent implements OnInit {
   }
 
   private constructRequestCommentWrapper(requestComment: RequestComment): RequestCommentWrapper{
-    const requestCommentWrapper : RequestCommentWrapper = {
-      requestComment : requestComment,
+    const requestCommentWrapper: RequestCommentWrapper = {
+      requestComment,
       sendEmail: this.isChecked && (this.isCheckedName === "Solution" || this.isCheckedName === "Notification"),
       solution: this.isCheckedName === "Solution"
     }
@@ -55,16 +53,15 @@ export class RequestCommentFormComponent implements OnInit {
   }
 
   private constructRequestComment(userSimple: UserSimple): RequestComment{
-      const commentDTO: RequestComment = {
-          id: null,
-          requestId: null,
-          creator: userSimple,
-          comment: this.commentInput,
-          isPrivate: this.isChecked && this.isCheckedName === "Private",
-          groupsToShare: [],
-          timestamp: new Date()
-      }   
-      return commentDTO;
+    return {
+        id: null,
+        requestId: null,
+        creator: userSimple,
+        comment: this.commentInput,
+        isPrivate: this.isChecked && this.isCheckedName === "Private",
+        groupsToShare: [],
+        timestamp: new Date()
+      };
   }
 
 }

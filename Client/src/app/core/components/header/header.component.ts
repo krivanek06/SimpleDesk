@@ -11,8 +11,8 @@ import { RequestStoreService } from 'app/core/services/request-store.service';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private authService: AuthenticationService , 
-              private router: Router, 
+  constructor(private authService: AuthenticationService ,
+              private router: Router,
               public userService: UserStoreService,
               private requestService: RequestStoreService) { }
 

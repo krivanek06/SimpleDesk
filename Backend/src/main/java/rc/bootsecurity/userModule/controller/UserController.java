@@ -84,7 +84,7 @@ public class UserController {
             this.userService.registerUser(userDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (UserException e) {
-            return new ResponseEntity<>("Uživateľské meno existuje v databáze, prosím zadajte iné",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Prihlasovacie meno existuje v databáze, prosím zadajte iné",HttpStatus.BAD_REQUEST);
         } catch (Exception e){
             LOGGER.error("Failed to register user, error : " + e.getMessage());
         }
