@@ -4,7 +4,8 @@ public enum MODULE_TYPE {
     Ticket("Ticket"),
     Report("Report"),
     Finance("Finance"),
-    Privilege("Privilege");
+    Privilege("Správa aplikácie");
+    //Privilege("Privilege");
 
     private final String text;
 

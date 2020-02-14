@@ -9,6 +9,7 @@ import {FinanceForm, FinanceType} from "../../../model/Finance";
 })
 export class RequestFinanceFormComponent implements OnInit {
   financeForm: FormGroup;
+  checkUrgent = false;
 
   @Input() financeTypeArray: FinanceType[] = [];
 
@@ -30,8 +31,9 @@ export class RequestFinanceFormComponent implements OnInit {
     });
   }
 
-  changeToUrgent(checked) {
-    if (checked) {
+  changeToUrgent() {
+    this.checkUrgent = !this.checkUrgent;
+    if (this.checkUrgent) {
       this.financeForm.patchValue({requestPriority: 'vysoká'});
     } else {
       this.financeForm.patchValue({requestPriority: 'nízka'});
@@ -48,12 +50,13 @@ export class RequestFinanceFormComponent implements OnInit {
       financeType: this.financeForm.get("financeType").value,
       requestPriority: this.financeForm.get("requestPriority").value,
     };
-
     this.formEmitter.emit(financeForm);
   }
 
   public resetForm() {
     this.financeFormViewChild.resetForm();
+    this.financeForm.patchValue({requestPriority: 'nízka'});
+    this.checkUrgent = false;
   }
 
   get financeType() {

@@ -9,7 +9,8 @@
 
 <!-- uploader -->
 <app-file-upload
-  #fileUploader
+  #fileUploadComponent
+  (fileInserted) = 'fileInserted($event)'
   id='uploader'
   [uploaderHeight] = '45' >
 </app-file-upload>

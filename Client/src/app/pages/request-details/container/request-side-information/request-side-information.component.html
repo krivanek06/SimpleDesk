@@ -181,7 +181,7 @@
             <div class='informationAnswer'>Čas otvorenia</div>
             <ul>
                 <li class='information'>
-                    {{ calculateOpenDays(requestDetails) }} dni
+                    {{ openDays }} dni
                 </li>
             </ul>
         </li>
@@ -198,7 +198,7 @@
 
     <ul class='userInformations'>
         <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
-            <div class='informationAnswer clicable' (click) = "downloadFile(requestDetails ,document.name)"> {{ document.name }}</div>
+            <div class='informationAnswer clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
             <ul>
                 <li class='information'>
                     {{ document.lastModified  |  date:'MMM d, y, HH:mm:ss ' }}
@@ -210,8 +210,7 @@
         <div class='uploaderContainer' *ngIf = 'requestDetails.closed === null && !(isGhost$  | async)'>
             <app-file-upload id='uploader'
                             [uploaderHeight] = '45'
-                            #fileUploader
-                            (fileInserted) = "uploadFile( requestDetails,$event)"
+                            (fileInserted) = "uploadFile($event)"
                             hideIt = true>
             </app-file-upload>
         </div>

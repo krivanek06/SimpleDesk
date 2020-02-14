@@ -86,6 +86,8 @@ export class RequestReportFormComponent implements OnInit {
 
   public resetForm(): void {
     this.reportFormViewChild.resetForm();
+    this.accessByPeopleArray = [];
+    this.accessByMethodArray = [];
   }
 
   addPeopleToAccess() {

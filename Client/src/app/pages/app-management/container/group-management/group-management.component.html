@@ -3,7 +3,7 @@
   <mat-form-field>
     <mat-label>Vyberte skupinu</mat-label>
     <mat-select (selectionChange)="selectGroup($event.value)">
-      <mat-option *ngFor='let name of groups | async ' [value]='name'> {{ name }}</mat-option>
+      <mat-option *ngFor='let name of groups$ | async ' [value]='name'> {{ name }}</mat-option>
     </mat-select>
   </mat-form-field>
 </div>
@@ -12,6 +12,7 @@
 <app-serdbuttons
   #serdbuttonsGroup
   id='serdbuttonsGroup'
+  [editActivated] = 'editGroupActivated'
   *ngIf="groupDetails.group  && !(isGhost$ | async)"
   (editEmittter)="editGroup()"
   (resetEmittter)="resetGroup()"

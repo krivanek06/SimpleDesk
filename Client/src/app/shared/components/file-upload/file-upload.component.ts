@@ -1,8 +1,6 @@
-import { Component, OnInit, Input, Output } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { EventEmitter } from '@angular/core';
-import Swal from 'sweetalert2';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
+import {Component, OnInit, Input, Output} from '@angular/core';
+import {EventEmitter} from '@angular/core';
+import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 
 @Component({
   selector: 'app-file-upload',
@@ -10,30 +8,42 @@ import { SwallNotificationService } from 'app/shared/services/swall-notification
   styleUrls: ['./file-upload.component.scss']
 })
 export class FileUploadComponent {
-  
-  constructor(private swallNotification: SwallNotificationService){}
-   @Output() public fileInserted: EventEmitter<File> = new EventEmitter<File>();
-   @Input() public uploaderHeight: number;
-   @Input() public requiredUpload: boolean;
-   @Input() public hideIt: boolean = false;
 
-  public files: File[]  = [];
+  constructor(private swallNotification: SwallNotificationService) {
+  }
 
-  uploadFile(files: FileList ) {
-    // if more than 10MB
-    let size : number = Math.round(files.item(0).size / 1000000) ;
-    if(size > 10){
-      this.swallNotification.generateErrorNotification(`Veľkosť vášho súboru je ${size}MB, maximálna povolená veľkosť je 10MB. `)
+  @Output() public fileInserted: EventEmitter<FileList> = new EventEmitter<FileList>();
+  @Input() public uploaderHeight: number;
+  @Input() public requiredUpload: boolean;
+  @Input() public hideIt = false;
+
+  files: File[] = [];
+
+  uploadFile(files: FileList) {
+    // if more than 20MB
+    let fileSize = 0;
+    for (let i = 0; i < files.length; i++) {
+      fileSize += files.item(i).size;
+    }
+
+    const sizeMB: number = Math.round(fileSize / 1000000);
+    if (sizeMB > 20) {
+      this.swallNotification.generateErrorNotification(`Veľkosť vášho súboru je ${sizeMB}MB, maximálna povolená veľkosť je 20MB. `);
       return;
     }
-    this.files.push(files.item(0));
-    this.fileInserted.emit(files.item(0));
+    for (let i = 0; i < files.length; i++) {
+      this.files.push(files.item(i));
+    }
+
+    this.fileInserted.emit(files);
   }
+
   deleteAttachment(index) {
-    this.files.splice(index, 1)
+    this.files.splice(index, 1);
   }
-  public isEmpty(): boolean{
-    return this.files.length === 0;
+
+  removeFiles() {
+    this.files = [];
   }
 
 }

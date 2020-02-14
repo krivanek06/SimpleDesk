@@ -1,17 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, HostListener, OnDestroy } from '@angular/core';
-import { RequestDetails, TicketDetails, ReportDetails, FinanceDetails } from 'app/shared/models/RequestDetails';
-import { FileUploadComponent } from 'app/shared/components/file-upload/file-upload.component';
-import { FileServiceService } from 'app/core/services/file-service.service';
-import { CustomDocument} from '../../../../shared/models/RequestDetails';
-import { HttpClient } from '@angular/common/http';
-import { RequestStoreService } from 'app/core/services/request-store.service';
-import { UserStoreService } from 'app/core/services/user-store.service';
-import Swal from 'sweetalert2';
-import { Subscription, Observable } from 'rxjs';
-import { AuthenticationService } from 'app/core/services/authentication.service';
-import { RequestPosition } from 'app/shared/enums/request-position.enum';
-import { SwallNotificationService } from 'app/shared/services/swall-notification.service';
-import { RequestHttpService } from 'app/api/request-http.service';
+import {Component, OnInit} from '@angular/core';
+import {RequestDetails} from 'app/shared/models/RequestDetails';
+import {FileServiceService} from 'app/core/services/file-service.service';
+import {RequestStoreService} from 'app/core/services/request-store.service';
+import {UserStoreService} from 'app/core/services/user-store.service';
+import {Observable} from 'rxjs';
+import {RequestPosition} from 'app/shared/enums/request-position.enum';
+import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {RequestHttpService} from 'app/api/request-http.service';
+import {RequestService} from "../../../../core/services/request.service";
 
 @Component({
   selector: 'app-request-side-information',
@@ -19,61 +15,63 @@ import { RequestHttpService } from 'app/api/request-http.service';
   styleUrls: ['./request-side-information.component.scss']
 })
 export class RequestSideInformationComponent implements OnInit {
-  public requestDetails$: Observable<RequestDetails>;
-  public isSolver$: Observable<boolean>;
-  public isGhost$: Observable<boolean>;
+  requestDetails$: Observable<RequestDetails>;
+  isSolver$: Observable<boolean>;
+  isGhost$: Observable<boolean>;
 
-  constructor( private fileService: FileServiceService, 
-              private userStoreService: UserStoreService, 
-              private requestService: RequestStoreService , 
+  openDays: number;
+
+  constructor(private fileService: FileServiceService,
+              private userStoreService: UserStoreService,
+              private requestStoreService: RequestStoreService,
               private requestHttp: RequestHttpService,
-              private swallNotification: SwallNotificationService) { }
+              private requestService: RequestService,
+              private swallNotification: SwallNotificationService) {
+  }
 
   ngOnInit() {
-    this.requestDetails$ =  this.requestService.getRequestDetials();
+    this.requestDetails$ = this.requestStoreService.getRequestDetials();
     this.isSolver$ = this.userStoreService.isSolver();
     this.isGhost$ = this.userStoreService.isGhost();
+    this.openDays = this.calculateOpenDays();
   }
 
-  calculateOpenDays(requestDetails: RequestDetails): number{
-    let open = new Date(requestDetails.timestampCreation);
+  calculateOpenDays(): number {
+    const open = new Date(this.requestStoreService.requestDetails.timestampCreation);
     let result = 0;
-    let one_day=1000*60*60*24; //Get 1 day in milliseconds
+    const oneDay = 1000 * 60 * 60 * 24; // Get 1 day in milliseconds
 
-    if(requestDetails.timestampClosed === null){
-      let today = new Date();
-      result = today.getTime() - open.getTime() ;
-    }else{
-      let closed = new Date(requestDetails.timestampClosed);
-      result = closed.getTime() - open.getTime() ;
+    if (this.requestStoreService.requestDetails.timestampClosed === null) {
+      const today = new Date();
+      result = today.getTime() - open.getTime();
+    } else {
+      const closed = new Date(this.requestStoreService.requestDetails.timestampClosed);
+      result = closed.getTime() - open.getTime();
     }
-    return Math.round(result/one_day); 
+    return Math.round(result / oneDay);
   }
 
-  uploadFile(requestDetails: RequestDetails, file: File){
-    this.fileService.postFileForRequest(requestDetails.id, [file]).subscribe(() => {
-      requestDetails.documents.push({
-        name: file.name,
-        lastModified: new Date().getTime()
-      });
+  uploadFile( fileList: FileList) {
+    this.fileService.postFileForRequest(this.requestStoreService.requestDetails.id, fileList).subscribe(() => {
+      this.requestService.addFilesToRequest(fileList);
     });
   }
 
-  downloadFile(requestDetails: RequestDetails, name: string){
-    this.fileService.downloadFileForRequest(requestDetails.id, name);
+  downloadFile(name: string) {
+    this.fileService.downloadFileForRequest(this.requestStoreService.requestDetails.id, name);
   }
 
-  assignOnMe(requestDetails: RequestDetails){
+  assignOnMe(requestDetails: RequestDetails) {
     this.swallNotification.generateQuestion(`Naozaj chcetete prideliť na seba požiadavku s id : ${requestDetails.id} ?`)
-    .then((result) => {
-      if (result.value) {
-        this.requestHttp.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(() => {
-          this.swallNotification.generateNotification(`Pridelené`);
-          requestDetails.assigned = this.userStoreService.getUserSimple(); 
-          requestDetails.requestPosition = RequestPosition.Assigned;
-        })
-      }
-    });   
+      .then((result) => {
+        if (result.value) {
+          this.requestHttp.assignOrRemoveRequestOnMe(requestDetails.id, true).subscribe(() => {
+            this.swallNotification.generateNotification(`Pridelené`);
+            requestDetails.assigned = this.userStoreService.getUserSimple();
+            requestDetails.requestPosition = RequestPosition.Assigned;
+          });
+        }
+      });
   }
 
 }

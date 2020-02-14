@@ -14,8 +14,9 @@ import {RequestTicketFormComponent} from "../../../../resources/request/view/for
 })
 export class TicketFormPageComponent implements OnInit {
   @ViewChild('ticketFormComponent', {static: true}) ticketFormComponent: RequestTicketFormComponent;
+  @ViewChild('fileUploadComponent', {static: true}) fileUploadComponent: FileUploadComponent;
 
-  @ViewChild('fileUploader', {static: true}) fileInput: FileUploadComponent;
+  fileList: FileList;
 
   softwareTypes: TicketSubtype[] = [];
   hardwareTypes: TicketSubtype[] = [];
@@ -33,13 +34,18 @@ export class TicketFormPageComponent implements OnInit {
     this.ticketHttp.getTicketSubtype('Server').subscribe(server => this.serverTypes = server);
   }
 
+  fileInserted(fileList: FileList) {
+    this.fileList = fileList;
+  }
+
   submitTicket(ticketForm: TicketForm) {
     this.swallNotification.generateQuestion(`Naozaj chcetete odoslať ticket ?`).then((result) => {
       if (result.value) {
         this.spinner.show();
         this.ticketHttp.submitTicket(ticketForm).subscribe(id => {
-          this.fileService.postFileForRequest(id, this.fileInput.files).subscribe(succ => {
+          this.fileService.postFileForRequest(id, this.fileList).subscribe(() => {
             this.ticketFormComponent.resetForm();
+            this.fileUploadComponent.removeFiles();
             this.spinner.hide();
             this.swallNotification.generateNotification(`Vaša požiadavka s id : ${id}. bola zaznamenaná. `);
           }, err => this.spinner.hide());

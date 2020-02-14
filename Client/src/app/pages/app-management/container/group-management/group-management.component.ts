@@ -56,11 +56,13 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
   editGroup() {
     this.groupDetails.editGroup();
     this.groupPrivileges.editGroup();
+    this.editGroupActivated = true;
   }
 
   resetGroup() {
     this.groupDetails.resetGroup();
     this.groupPrivileges.resetGroup();
+    this.editGroupActivated = false;
   }
 
 
@@ -73,7 +75,8 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
           this.editGroupActivated = false;
           this.groupPrivileges.activateUnableClick = false;
           this.groupPrivileges.hideUnassignedPriv = true;
-          this.serdbuttonsGroup.editActivated = false;
+          this.editGroupActivated = false;
+          // this.serdbuttonsGroup.editActivated = false;
         });
       }
     });
@@ -91,7 +94,8 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
           this.groupPrivileges.disabledPrivileges = undefined;
           this.groupPrivileges.name = undefined;
           this.groupDetails.group = undefined;
-          this.serdbuttonsGroup.editActivated = false;
+          this.editGroupActivated = false;
+          // this.serdbuttonsGroup.editActivated = false;
           this.swallNotification.generateNotification(`Skupina bola zmazaná`);
         });
       }

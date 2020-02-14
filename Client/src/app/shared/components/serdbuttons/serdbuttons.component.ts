@@ -11,7 +11,7 @@ export class SERDButtonsComponent implements OnInit {
   @Output() resetEmittter: EventEmitter<any> = new EventEmitter();
   @Output() editEmittter: EventEmitter<any> = new EventEmitter();
 
-  public editActivated: boolean = false;
+  @Input() editActivated = false;
   constructor() { }
 
   ngOnInit() {

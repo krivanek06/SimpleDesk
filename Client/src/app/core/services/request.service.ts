@@ -13,4 +13,14 @@ export class RequestService {
               private userStore: UserStoreService) {
   }
 
+  public addFilesToRequest(fileList: FileList) {
+    for (let i = 0; i < fileList.length; i++) {
+      const file = fileList.item(i);
+      this.requestStore.requestDetails.documents.push({
+        name: file.name,
+        lastModified: new Date().getTime()
+      });
+    }
+  }
+
 }

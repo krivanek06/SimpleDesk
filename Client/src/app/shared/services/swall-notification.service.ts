@@ -1,40 +1,41 @@
-import { Injectable } from '@angular/core';
-import Swal, { SweetAlertResult } from 'sweetalert2';
+import {Injectable} from '@angular/core';
+import Swal, {SweetAlertResult} from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SwallNotificationService {
 
-  constructor() { }
+  constructor() {
+  }
 
-  public generateNotification(text: string): void{
-    Swal.fire({ 
-        position: 'top-end', 
-        text: text, 
-        showConfirmButton: false, 
-        timer: 1500 
+  public generateNotification(text: string): void {
+    Swal.fire({
+      position: 'top-end',
+      text: text,
+      showConfirmButton: false,
+      timer: 1500
     });
   }
 
-  public generateQuestion(text: string): Promise<SweetAlertResult>{
-    return Swal.fire({ 
-        text: text, 
-        icon: 'warning', 
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',  
-        cancelButtonColor: '#d33',  
-        cancelButtonText: "Zrušiť",  
-        confirmButtonText: 'Ano'
+  public generateQuestion(text: string): Promise<SweetAlertResult> {
+    return Swal.fire({
+      text: text,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      cancelButtonText: "Zrušiť",
+      confirmButtonText: 'Ano'
     });
   }
 
-  public generateErrorNotification( text: string): Promise<SweetAlertResult>{
-    return Swal.fire({ text:text , icon: 'error'});
+  public generateErrorNotification(text: string): Promise<SweetAlertResult> {
+    return Swal.fire({text: text, icon: 'error'});
   }
 
-  public generateDeleteQuestion(title: string , text: string): Promise<SweetAlertResult> {
-    return  Swal.fire({
+  public generateDeleteQuestion(title: string, text: string): Promise<SweetAlertResult> {
+    return Swal.fire({
       title: `Naozaj chcete zmazať ${title} ?`,
       text: text,
       icon: 'warning',
@@ -50,13 +51,15 @@ export class SwallNotificationService {
     return Swal.fire({
       html:
         '<label for="commentText">Zmente komentár a potvrdte</label>' +
-        '<textarea id="commentText" class="swal2-input" style = "height: 200px;">' + 
-          comment +
-        '</textarea>' ,
+        '<textarea id="commentText" class="swal2-input" style = "height: 200px;">' +
+        comment +
+        '</textarea>',
       focusConfirm: false,
       width: 750,
-      preConfirm: () => { return [(<HTMLInputElement>document.getElementById('commentText')).value]}
-    })
+      preConfirm: () => {
+        return [(<HTMLInputElement> document.getElementById('commentText')).value]
+      }
+    });
   }
 
   public selectImage(bytes: string): Promise<SweetAlertResult> {
@@ -76,7 +79,7 @@ export class SwallNotificationService {
       html:
         '<label for="old_pwd">Staré heslo</label> <input id="old_pwd" type = "password" class="swal2-input">' +
         '<label for="new_pwd1">nové heslo</label><input id="new_pwd1" type = "password"  class="swal2-input">' +
-        '<label for="new_pwd2">nové heslo znovu</label><input id="new_pwd2" type = "password"  class="swal2-input">' ,
+        '<label for="new_pwd2">nové heslo znovu</label><input id="new_pwd2" type = "password"  class="swal2-input">',
       focusConfirm: false,
       preConfirm: () => {
         return [

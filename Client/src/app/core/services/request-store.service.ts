@@ -16,10 +16,10 @@ export class RequestStoreService {
   public addRequestDetails(id: any): Observable<RequestDetails> {
     return this.requestHttp.getRequestDetails(id).pipe(
       tap(requestDetails => {
-        //this.requestDetails = requestDetails;
+        // this.requestDetails = requestDetails;
         this.requestDetails$.next(requestDetails);
       })
-    )
+    );
   }
 
   public removeRequestDetails(): void {
@@ -39,7 +39,7 @@ export class RequestStoreService {
   }
 
   get reportDetials(): ReportDetails {
-    return <ReportDetails>this.requestDetails$.getValue();
+    return this.requestDetails$.getValue() as ReportDetails;
   }
 
 

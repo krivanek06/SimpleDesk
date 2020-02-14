@@ -9,11 +9,16 @@
     [serverTypes]='serverTypes'
     (formEmitter)='submitTicket($event)'>
 
-    </app-request-ticket-form>
+  </app-request-ticket-form>
 
 
-    <!-- uploader -->
-    <app-file-upload id='uploader' [uploaderHeight]='45' #fileUploader></app-file-upload>
+  <!-- uploader -->
+  <app-file-upload
+    #fileUploadComponent
+    id='uploader'
+    [uploaderHeight]='45'
+    (fileInserted)='fileInserted($event)'>
+  </app-file-upload>
 </div>
 
 

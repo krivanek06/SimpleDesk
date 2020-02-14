@@ -165,7 +165,7 @@ public class GroupService {
         ApplicationPrivilegeDTO applicationPrivilegeDTO = this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.groupRepository.findAllExistingPrivileges());
         applicationPrivilegeDTO.getModuleTypesToUse().removeAll(groupDTO.getApplicationPrivilegeDTO().getModuleTypesToUse());
         applicationPrivilegeDTO.getRequestTypesToSolve().removeAll(groupDTO.getApplicationPrivilegeDTO().getRequestTypesToSolve());
-        applicationPrivilegeDTO.getRequestTypesToSolve().remove(MODULE_TYPE.Privilege.name());
+        applicationPrivilegeDTO.getRequestTypesToSolve().remove(MODULE_TYPE.Privilege.toString());
         applicationPrivilegeDTO.getSubmitFinanceRequests().removeAll(groupDTO.getApplicationPrivilegeDTO().getSubmitFinanceRequests());
         for(String key : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().keySet()) {
             for(String value : groupDTO.getApplicationPrivilegeDTO().getSolveTickets().get(key)){

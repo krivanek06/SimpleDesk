@@ -9,7 +9,12 @@
   </app-request-finance-form>
 
   <!-- uploader -->
-  <app-file-upload id='fileUploader' [uploaderHeight]='45' #fileUploader></app-file-upload>
+  <app-file-upload
+    #fileUploadComponent
+    id='fileUploader'
+    [uploaderHeight]='45'
+    (fileInserted) = 'fileInserted($event)'>
+  </app-file-upload>
   <!--<mat-error *ngIf="fileInput && fileInput.isEmpty()" class='movedError'> Prosím vyberte súbor</mat-error>-->
 </div>
 

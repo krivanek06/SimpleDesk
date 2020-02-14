@@ -8,7 +8,7 @@
     [enableChangeCommenting]="(this.isAdmin$ | async) || requestDetails.assigned?.username === userStoreService.user.username "
     [enableRemoveSolver]='(this.isAdmin$ | async) || requestDetails.assigned?.username === userStoreService.user.username '
     [enableChangeSolver]='(this.isAdmin$ | async) || ((isSolver$ | async) && ((isManager$ | async) || (isSolverRightHand$ | async)))'
-    [enableChangePriority]='(isAdmin$ | async) || (isSolver$ | async) || requestDetails.assigned?.username === userStoreService.user.username '
+    [enableChangePriority]='(isAdmin$ | async) || ((isSolver$ | async) && requestDetails.assigned?.username === userStoreService.user.username) '
     [enableEvaluation]='requestDetails.requestType === "Report" &&  (( isAdmin$ | async ) || requestDetails.assigned?.username === userStoreService.user.username ) '
     (changeStateEmitter)='changeState()'
     (commentingEmitter)='changeCommenting()'

@@ -90,7 +90,7 @@ export class UserStoreService {
   }
 
   public hasPrivilegeAccess(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Privilege")));
+    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Správa aplikácie")));
   }
 
   public hasFinanceModuleAccess(): Observable<boolean> {
