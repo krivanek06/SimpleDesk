@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms';
+import {Component, OnInit, Input} from '@angular/core';
+import {FormGroup} from '@angular/forms';
 
 @Component({
   selector: 'app-group-form-details',
@@ -8,60 +8,62 @@ import { FormGroup } from '@angular/forms';
 })
 export class GroupFormDetailsComponent implements OnInit {
   @Input() groupRegistrationForm: FormGroup;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  get groupName(){
+  get groupName() {
     return this.groupRegistrationForm.get("groupName");
   }
 
-  get groupEmail(){
+  get groupEmail() {
     return this.groupRegistrationForm.get("groupEmail");
   }
 
-  get groupDescription(){
+  get groupDescription() {
     return this.groupRegistrationForm.get("groupDescription");
   }
 
-  get groupManager(){
+  get groupManager() {
     return this.groupRegistrationForm.get("groupManager");
   }
 
-  get usersWatchGroup(){
+  get usersWatchGroup() {
     return this.groupRegistrationForm.get("usersWatchGroup");
   }
 
-  get usersInGroup(){
+  get usersInGroup() {
     return this.groupRegistrationForm.get("usersInGroup");
   }
 
-  get moduleTypesToUse(){
+  get moduleTypesToUse() {
     return this.groupRegistrationForm.get("moduleTypesToUse");
   }
 
-  get submitFinanceRequests(){
+  get submitFinanceRequests() {
     return this.groupRegistrationForm.get("submitFinanceRequests");
   }
 
-  get requestTypesToSolve(){
+  get requestTypesToSolve() {
     return this.groupRegistrationForm.get("requestTypesToSolve");
   }
 
-  get solveTickets(){
+  get solveTickets() {
     return this.groupRegistrationForm.get("solveTickets");
   }
 
-  get solveSoftware(){
+  get solveSoftware() {
     return this.groupRegistrationForm.get("solveSoftware");
   }
 
-  get solveHardware(){
+  get solveHardware() {
     return this.groupRegistrationForm.get("solveHardware");
   }
 
-  get solveServer(){
+  get solveServer() {
     return this.groupRegistrationForm.get("solveServer");
   }
 

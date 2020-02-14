@@ -1,8 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
-import {environment} from 'environments/environment';
-import {TicketSubtype} from 'app/shared/models/TicketSubtype';
-import {TicketForm} from "../../../model/Ticket";
+import {TicketForm, TicketSubtype} from "../../../model/Ticket";
 
 @Component({
   selector: 'app-request-ticket-form',

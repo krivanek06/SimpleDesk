@@ -1,7 +1,5 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {Group, UserSimpleDTO} from 'app/shared/models/UserGroups';
-import {Observable} from 'rxjs';
-import {UserHttpService} from 'app/api/user-http.service';
 
 @Component({
   selector: 'app-group-details',
@@ -11,13 +9,12 @@ import {UserHttpService} from 'app/api/user-http.service';
 export class GroupDetailsComponent implements OnInit {
 
   private copyGroup: Group; // stores group object state when editing group
-  public group: Group;
-  public editGroupActivated: boolean = false;
 
-  allUsers$: Observable<UserSimpleDTO[]>;
+  @Input() group: Group;
+  @Input() editGroupActivated = false;
+  @Input() allUsers: UserSimpleDTO[];
 
-  constructor(private userHttp: UserHttpService) {
-    this.allUsers$ = this.userHttp.getAllActiveUsers();
+  constructor() {
   }
 
   ngOnInit() {

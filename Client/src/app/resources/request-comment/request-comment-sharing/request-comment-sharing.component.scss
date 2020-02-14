@@ -1,37 +1,20 @@
 @import "./src/app/shared/customCss/SideTablePrintScss.scss";
 @import "./src/app/shared/customCss/ElevationButtonScss.scss";
-@import "./src/app/shared/customCss/ModalScss.scss";
 
 
-.groupTitle{
-    margin-bottom: 20px;
-    font-weight: bold;
-    margin-left: -10px;
-    color: #8a8a8a;
-    font-size: 22px;
+.groupTitle {
+  margin-bottom: 20px;
+  font-weight: bold;
+  margin-left: -10px;
+  color: #8a8a8a;
+  font-size: 22px;
 }
 
-.groupDetails{
-    float: left;
-    display: contents;
+#sendingButton {
+  float: right;
+  margin-right: 25px;
+  margin-top: 15px;
+  background-color: #0077ec;
 }
 
-.content{
-    float: left;
-    margin-top: 14px;
-    margin-right: 40px;
-    width: 45%;
-}
-
-
-#sendingButton{
-    float: right;
-    margin-right: 25px;
-    margin-top:15px;
-    background-color: #0077ec;
-}
-
-.groupDetailContent{
-    float: left;
-}
 

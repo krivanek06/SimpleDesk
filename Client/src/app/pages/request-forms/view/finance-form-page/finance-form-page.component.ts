@@ -4,10 +4,9 @@ import {HttpClient} from "@angular/common/http";
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
-import {FinanceForm} from "../../../../resources/request/model/Finance";
+import {FinanceForm, FinanceType} from "../../../../resources/request/model/Finance";
 import {RequestFinanceFormComponent} from "../../../../resources/request/view/form/request-finance-form/request-finance-form.component";
 import {FinanceHttpService} from "../../../../resources/request/service/finance-http.service";
-import {FinanceType} from "../../../../shared/models/FinanceType";
 
 @Component({
   selector: 'app-finance-form-page',

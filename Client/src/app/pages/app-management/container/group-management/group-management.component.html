@@ -1,28 +1,34 @@
-
-
-<div class = 'contanierTitle'>
-    <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>
-    <mat-form-field >
-        <mat-label>Vyberte skupinu</mat-label>
-        <mat-select (selectionChange)= "selectGroup($event.value)">
-            <mat-option *ngFor = 'let name of groups | async ' [value] = 'name'> {{ name }}</mat-option>
-        </mat-select>
-    </mat-form-field>
+<div class='contanierTitle'>
+  <span class='formTitleSmall selectTitleSpace'>Zvoľte skupinu</span>
+  <mat-form-field>
+    <mat-label>Vyberte skupinu</mat-label>
+    <mat-select (selectionChange)="selectGroup($event.value)">
+      <mat-option *ngFor='let name of groups | async ' [value]='name'> {{ name }}</mat-option>
+    </mat-select>
+  </mat-form-field>
 </div>
 
 <!-- modifycation buttons -->
-<app-serdbuttons 
-    #serdbuttonsGroup 
-    id='serdbuttonsGroup' 
-    *ngIf="groupDetails.group  && !(isGhost$ | async)" 
-    (editEmittter) = "editGroup()" 
-    (resetEmittter) = "resetGroup()"
-    (saveEmittter) = "saveGroup()"
-    (deleteEmittter) = "deleteGroup()">
+<app-serdbuttons
+  #serdbuttonsGroup
+  id='serdbuttonsGroup'
+  *ngIf="groupDetails.group  && !(isGhost$ | async)"
+  (editEmittter)="editGroup()"
+  (resetEmittter)="resetGroup()"
+  (saveEmittter)="saveGroup()"
+  (deleteEmittter)="deleteGroup()">
 </app-serdbuttons>
 
-<app-group-details #groupDetails ></app-group-details>
-<app-privileges #groupPrivileges [applyGreenColor] = 'true'></app-privileges>
+<app-group-details
+  #groupDetails
+  [editGroupActivated] = "editGroupActivated"
+  [allUsers]='users$ | async'>
+
+</app-group-details>
+<app-privileges
+  #groupPrivileges
+  [applyGreenColor]='true'>
+</app-privileges>
 
 
 

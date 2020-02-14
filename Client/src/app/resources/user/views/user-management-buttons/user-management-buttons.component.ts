@@ -8,7 +8,7 @@ import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 export class UserManagementButtonsComponent implements OnInit {
   @Input() isActive: boolean;
   @Output() modifyStateEmitter: EventEmitter<any> = new EventEmitter();
-  @Output() reserPasswordEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() resetPasswordEmitter: EventEmitter<any> = new EventEmitter();
 
   constructor() {
   }
@@ -17,7 +17,7 @@ export class UserManagementButtonsComponent implements OnInit {
   }
 
   reserPassword(): void {
-    return this.reserPasswordEmitter.emit();
+    return this.resetPasswordEmitter.emit();
   }
 
   modifyState(): void {

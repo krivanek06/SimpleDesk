@@ -5,14 +5,14 @@
 <app-request-report-form
   #reportFormComponent
   (formEmitter) = 'submitReport($event)'>
-
 </app-request-report-form>
 
 <!-- uploader -->
-<div class = 'reportInlineParameters'>
-  <app-file-upload id='uploader' [uploaderHeight] = '45' #fileUploader></app-file-upload>
-</div>
-
+<app-file-upload
+  #fileUploader
+  id='uploader'
+  [uploaderHeight] = '45' >
+</app-file-upload>
 
 
 <ngx-spinner><p style="font-size: 20px; color: white">Posielanie požiadavky...</p> </ngx-spinner>

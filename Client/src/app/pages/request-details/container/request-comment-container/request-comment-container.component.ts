@@ -1,12 +1,13 @@
-import {Component, OnInit, Input} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {RequestComment, RequestDetails, RequestCommentWrapper} from 'app/shared/models/RequestDetails';
-import {Observable, combineLatest, of} from 'rxjs';
+import {Observable} from 'rxjs';
 import {Group} from 'app/shared/models/UserGroups';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {CommentHttpService} from 'app/api/comment-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestService} from 'app/core/services/request.service';
+import {GroupHttpService} from "../../../../api/group-http.service";
 
 @Component({
   selector: 'app-request-comment-container',
@@ -15,18 +16,24 @@ import {RequestService} from 'app/core/services/request.service';
 })
 export class RequestCommentContainerComponent implements OnInit {
   showWindowCommentSharing = false;
+  clickedGroup = false;
+  selectedGroup: Group;
+  loggedInUsername: string;
 
   private sharingComment: RequestComment;
   private isAdmin$: Observable<boolean>;
   private isGhost$: Observable<boolean>;
   private isSolver$: Observable<boolean>;
+
   requestDetails$: Observable<RequestDetails>;
+  involvedInGroups$: Observable<string[]>;
 
 
   constructor(private swallNotification: SwallNotificationService,
               private userStoreService: UserStoreService,
               private commentHttp: CommentHttpService,
               private requestService: RequestService,
+              private groupService: GroupHttpService,
               private requestStore: RequestStoreService) {
   }
 
@@ -35,10 +42,11 @@ export class RequestCommentContainerComponent implements OnInit {
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
     this.requestDetails$ = this.requestStore.getRequestDetials();
+    this.involvedInGroups$ = this.groupService.getAllGroupNamesForUser();
+    this.loggedInUsername = this.userStoreService.user.username;
   }
 
   async editComment(requestComment: RequestComment) {
-    console.log(requestComment);
     const {value: formValues} = await this.swallNotification.editComment(requestComment.comment);
     if (formValues) {
       requestComment.comment = formValues[0];
@@ -77,16 +85,23 @@ export class RequestCommentContainerComponent implements OnInit {
     this.sharingComment = requestComment;
   }
 
-  shareWith(group: Group) {
-    this.swallNotification.generateQuestion(`Naozaj chcete vyzdieľať komentár so skupinou : ${group.name} ?`)
+  shareWith() {
+    this.swallNotification.generateQuestion(`Naozaj chcete vyzdieľať komentár so skupinou : ${this.selectedGroup.name} ?`)
       .then((result) => {
         if (result.value) {
-          this.sharingComment.groupsToShare.push(group.name);
+          this.sharingComment.groupsToShare.push(this.selectedGroup.name);
           this.commentHttp.shareComment(this.sharingComment).subscribe(() => {
             this.swallNotification.generateNotification(`Komentár bol vyzdieľaný`);
           });
         }
       });
+  }
+
+  getGroupDetails(groupName: string) {
+    this.groupService.getGroupDetails(groupName).subscribe(group => {
+      this.clickedGroup = true;
+      this.selectedGroup = group;
+    });
   }
 
   addComment(requestCommentWrapper: RequestCommentWrapper) {
@@ -98,11 +113,6 @@ export class RequestCommentContainerComponent implements OnInit {
       }
       this.swallNotification.generateNotification(`Komentár bol odoslaný`);
     });
-  }
-
-
-  get commentCreatorUsername(): string {
-    return this.userStoreService.user.username;
   }
 
 }

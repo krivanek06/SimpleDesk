@@ -4,12 +4,12 @@
     [isOpen]='requestDetails.closed === null'
     [allowCommenting]="requestDetails.allowCommenting"
     [availableUsers]='allusers$ | async'
-    [enableChangeState]='(this.isAdmin$ | async) || requestDetails.assigned.username === userStoreService.user.username || requestDetails.creator.username === userStoreService.user.username'
-    [enableChangeCommenting]="(this.isAdmin$ | async) || requestDetails.assigned.username === userStoreService.user.username "
-    [enableRemoveSolver]='(this.isAdmin$ | async) || requestDetails.assigned.username === userStoreService.user.username '
+    [enableChangeState]='(this.isAdmin$ | async) || requestDetails.assigned?.username === userStoreService.user.username || requestDetails.creator.username === userStoreService.user.username'
+    [enableChangeCommenting]="(this.isAdmin$ | async) || requestDetails.assigned?.username === userStoreService.user.username "
+    [enableRemoveSolver]='(this.isAdmin$ | async) || requestDetails.assigned?.username === userStoreService.user.username '
     [enableChangeSolver]='(this.isAdmin$ | async) || ((isSolver$ | async) && ((isManager$ | async) || (isSolverRightHand$ | async)))'
-    [enableChangePriority]='(isAdmin$ | async) || (isSolver$ | async) || requestDetails.assigned.username === userStoreService.user.username '
-    [enableEvaluation]='requestDetails.requestType === "Report" &&  (( isAdmin$ | async ) || requestDetails.assigned.username === userStoreService.user.username ) '
+    [enableChangePriority]='(isAdmin$ | async) || (isSolver$ | async) || requestDetails.assigned?.username === userStoreService.user.username '
+    [enableEvaluation]='requestDetails.requestType === "Report" &&  (( isAdmin$ | async ) || requestDetails.assigned?.username === userStoreService.user.username ) '
     (changeStateEmitter)='changeState()'
     (commentingEmitter)='changeCommenting()'
     (removeSolverEmitter)='removeSolver()'

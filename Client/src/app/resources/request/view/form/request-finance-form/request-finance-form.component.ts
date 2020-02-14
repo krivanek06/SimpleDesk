@@ -1,7 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {FinanceType} from 'app/shared/models/FinanceType';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {FinanceForm} from "../../../model/Finance";
+import {FinanceForm, FinanceType} from "../../../model/Finance";
 
 @Component({
   selector: 'app-request-finance-form',

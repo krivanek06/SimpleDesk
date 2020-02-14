@@ -3,3 +3,10 @@ export interface FinanceForm {
   name: string;
   requestPriority: string;
 }
+
+
+export interface FinanceType {
+  id: number;
+  name: string;
+  groupsToSubmitSpecificFinanceType: string[];
+}

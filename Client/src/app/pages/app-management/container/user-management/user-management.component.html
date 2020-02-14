@@ -4,7 +4,7 @@
     <mat-form-field >
         <mat-label>Vyberte uživateľa</mat-label>
         <mat-select (selectionChange)= "selectUser($event.value)">
-            <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'> 
+            <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'>
                 {{ value.firstName }} {{ value.lastName }}
             </mat-option>
         </mat-select>
@@ -17,11 +17,11 @@
         <app-user-management-buttons
             [isActive] = 'userDetails.displayedUser.active'
             (modifyStateEmitter) = 'modifyUserState()'
-            (reserPasswordEmitter) = 'resetUserPassword()'>
+            (resetPasswordEmitter)="resetUserPassword()">
         </app-user-management-buttons>
     </div>
 
-</div>   
+</div>
 
 
 <app-user-details #userDetails ></app-user-details>

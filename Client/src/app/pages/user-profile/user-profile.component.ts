@@ -7,7 +7,7 @@ import {ApplicationPrivilege, GroupContainer} from 'app/shared/models/UserGroups
 import {GroupDetailsComponent} from '../../resources/group/view/group-details/group-details.component';
 import {UserDetailsComponent} from '../../resources/user/views/user-details/user-details.component';
 import {Observable} from 'rxjs';
-import {PasswordContainer} from 'app/shared/models/PasswordContainer';
+import {PasswordContainer} from 'app/resources/user/model/PasswordContainer';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {NgxSpinnerService} from 'ngx-spinner';
@@ -21,7 +21,7 @@ import {UserImagesComponent} from '../../resources/user/views/user-images/user-i
 })
 export class UserProfileComponent implements OnInit, AfterViewInit {
 
-  displayAvatarts: boolean = false;
+  displayAvatarts = false;
   groupContainer$: Observable<GroupContainer>;
 
   @ViewChild('userDetials', {static: false}) userDetials: UserDetailsComponent;
@@ -80,7 +80,14 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
   }
 
   changePassword(password: PasswordContainer): void {
-    this.userHttp.changePassword(password).subscribe(() => this.swallNotification.generateNotification(`Heslo bolo zmenené`));
+    if (password.newPassword1 !== password.newPassword2) {
+      this.swallNotification.generateErrorNotification(`Zadané heslá sa nezhodujú, požiadavka o zmenu hesla nebola odoslaná`);
+    } else if (password.newPassword1.length < 6 || password.newPassword2.length < 6) {
+      this.swallNotification.generateErrorNotification(`Minimálna dĺžka hesla je 6 znakov, požiadavka o zmenu hesla nebola odoslaná.`);
+    } else {
+      this.userHttp.changePassword(password).subscribe(() =>
+        this.swallNotification.generateNotification(`Heslo bolo zmenené`));
+    }
   }
 
   changeFrames(): void {

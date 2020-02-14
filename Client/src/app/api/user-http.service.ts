@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { UserSimpleDTO, User } from 'app/shared/models/UserGroups';
 import { Observable } from 'rxjs';
 import { environment } from 'environments/environment';
-import { PasswordContainer } from 'app/shared/models/PasswordContainer';
+import { PasswordContainer } from 'app/resources/user/model/PasswordContainer';
 import { ImageDTO } from 'app/shared/models/ImageDTO';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class UserHttpService {
   public registerUser(user : UserSimpleDTO):Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(environment.apiUrl + "user/registration", user , {headers: headers});
-  } 
+  }
 
   public getAllActiveUsers(): Observable<UserSimpleDTO[]>{
     return this.http.get<UserSimpleDTO[]>(environment.apiUrl + "user/secure/allActive");

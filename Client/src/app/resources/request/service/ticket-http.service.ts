@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
-import {TicketSubtype} from "../../../shared/models/TicketSubtype";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {TicketForm} from "../model/Ticket";
+import {TicketForm, TicketSubtype} from "../model/Ticket";
 
 @Injectable({
   providedIn: 'root'

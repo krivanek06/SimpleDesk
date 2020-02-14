@@ -4,8 +4,7 @@ import {FileServiceService} from "../../../../core/services/file-service.service
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
 import {TicketHttpService} from "../../../../resources/request/service/ticket-http.service";
-import {TicketSubtype} from "../../../../shared/models/TicketSubtype";
-import {TicketForm} from "../../../../resources/request/model/Ticket";
+import {TicketForm, TicketSubtype} from "../../../../resources/request/model/Ticket";
 import {RequestTicketFormComponent} from "../../../../resources/request/view/form/request-ticket-form/request-ticket-form.component";
 
 @Component({

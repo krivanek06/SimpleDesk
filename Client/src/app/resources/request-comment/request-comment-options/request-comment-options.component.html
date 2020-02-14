@@ -1,4 +1,4 @@
-<ng-container>
+<ng-container *ngIf="requestComment">
   <img *ngIf='requestComment.isPrivate  &&  !isSolution'
        src="../../../../assets/images_design/share_icon.png"
        class='icon'

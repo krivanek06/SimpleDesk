@@ -7,8 +7,8 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 import {FinanceHttpService} from "../../../../resources/request/service/finance-http.service";
 import {UserHttpService} from "../../../../api/user-http.service";
 import {TicketHttpService} from "../../../../resources/request/service/ticket-http.service";
-import {FinanceType} from "../../../../shared/models/FinanceType";
-import {TicketType} from "../../../../shared/models/TicketSubtype";
+import {FinanceType} from "../../../../resources/request/model/Finance";
+import {TicketType} from "../../../../resources/request/model/Ticket";
 
 @Component({
   selector: 'app-group-registration',

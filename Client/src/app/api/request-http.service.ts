@@ -1,12 +1,10 @@
 import {Injectable} from '@angular/core';
 
-import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HttpClient,  HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from 'environments/environment';
 import {RequestDashboard, RequestTable} from 'app/shared/models/RequestTable';
 import {UserSimple, RequestDetails} from 'app/shared/models/RequestDetails';
-import {FinanceType} from 'app/shared/models/FinanceType';
-import {TicketSubtype} from 'app/shared/models/TicketSubtype';
 
 @Injectable({
   providedIn: 'root'
@@ -56,15 +54,5 @@ export class RequestHttpService {
   public removeSolver(requestid: number): Observable<any> {
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`, null);
   }
-
-
-  // Report modification
-
-
-  // Finance
-
-
-  // Tickets
-
 
 }

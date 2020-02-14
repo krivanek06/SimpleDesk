@@ -22,12 +22,6 @@ mat-form-field{
     font-weight: bold;
 }
 
-#uploader{
-    float: left;
-    width: 100%;
-    margin-left: 20px;
-}
-
 #reportSendingButton{
     position: absolute;
     right: 0px;
@@ -48,7 +42,7 @@ mat-form-field{
 }
 
 .oneLineLI{
-    list-style-type: none; 
+    list-style-type: none;
 }
 
 mat-checkbox{

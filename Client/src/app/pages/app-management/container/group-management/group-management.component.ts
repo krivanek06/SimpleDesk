@@ -7,6 +7,8 @@ import {map} from 'rxjs/operators';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SERDButtonsComponent} from 'app/shared/components/serdbuttons/serdbuttons.component';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {UserSimpleDTO} from "../../../../shared/models/UserGroups";
+import {UserHttpService} from "../../../../api/user-http.service";
 
 @Component({
   selector: 'app-group-management',
@@ -14,21 +16,26 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
   styleUrls: ['./group-management.component.scss']
 })
 export class GroupManagementComponent implements OnInit, AfterViewInit {
-  groups: Observable<string[]>;
+  groups$: Observable<string[]>;
+  users$: Observable<UserSimpleDTO[]>;
   isGhost$: Observable<boolean>;
 
   @ViewChild('groupPrivileges', {static: false}) groupPrivileges: PrivilegesComponent;
   @ViewChild('groupDetails', {static: false}) groupDetails: GroupDetailsComponent;
   @ViewChild('serdbuttonsGroup', {static: false}) serdbuttonsGroup: SERDButtonsComponent;
 
+  editGroupActivated = false;
+
   constructor(private groupService: GroupHttpService,
               private userService: UserStoreService,
+              private userHttp: UserHttpService,
               private swallNotification: SwallNotificationService,
   ) {
   }
 
   ngOnInit() {
-    this.groups = this.groupService.getAllGroups();
+    this.groups$ = this.groupService.getAllGroups();
+    this.users$ =  this.userHttp.getAllActiveUsers();
     this.isGhost$ = this.userService.isGhost();
   }
 
@@ -43,7 +50,7 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
         this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
         this.groupPrivileges.name = 'Skupiny';
         this.groupDetails.group = group;
-      })
+      });
   }
 
   editGroup() {
@@ -63,7 +70,7 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
         this.swallNotification.generateNotification(`Požiadavka editovanie skupiny zaslaná`);
         this.groupService.modifyGroup(this.groupDetails.group).subscribe(() => {
           this.swallNotification.generateNotification(`Skupina bola editovaná`);
-          this.groupDetails.editGroupActivated = false;
+          this.editGroupActivated = false;
           this.groupPrivileges.activateUnableClick = false;
           this.groupPrivileges.hideUnassignedPriv = true;
           this.serdbuttonsGroup.editActivated = false;
@@ -78,8 +85,8 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
         this.swallNotification.generateNotification(`Požiadavka zmazania skupiny zaslaná`);
         this.groupService.deleteGroup(this.groupDetails.group.name).subscribe(() => {
 
-          const grouName = this.groupDetails.group.name;
-          this.groups = this.groups.pipe(map(group => group.filter(name => name !== grouName)));
+          const groupName = this.groupDetails.group.name;
+          this.groups$ = this.groups$.pipe(map(group => group.filter(name => name !== groupName)));
           this.groupPrivileges.enabledPrivileges = undefined;
           this.groupPrivileges.disabledPrivileges = undefined;
           this.groupPrivileges.name = undefined;

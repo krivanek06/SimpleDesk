@@ -1,8 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
-import {GroupHttpService} from 'app/api/group-http.service';
-import {Group, GroupContainer} from 'app/shared/models/UserGroups';
-import {GroupDetailsComponent} from 'app/resources/group/view/group-details/group-details.component';
-import {Observable} from 'rxjs';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 
 
 @Component({
@@ -11,33 +7,24 @@ import {Observable} from 'rxjs';
   styleUrls: ['./request-comment-sharing.component.scss']
 })
 export class RequestCommentSharingComponent implements OnInit {
-  @Output() changeWindow: EventEmitter<boolean> = new EventEmitter<boolean>();
-  @Output() shareWithGroup: EventEmitter<Group> = new EventEmitter<Group>();
-  @ViewChild('groupDetails', {static: false}) groupDetails: GroupDetailsComponent;
-  public clickedGroup: Group;
+  @Output() shareEmitter: EventEmitter<any> = new EventEmitter<any>();
+  @Output() groupDetailsEmitter: EventEmitter<string> = new EventEmitter<string>();
 
-  public involvedInGroups$: Observable<string[]>;
+  @Input() clickedGroup: boolean;
+  @Input() involvedInGroups: string[] = [];
 
-  constructor(public groupService: GroupHttpService) {
+  constructor() {
   }
 
   ngOnInit() {
-    this.involvedInGroups$ = this.groupService.getAllGroupNamesForUser();
-  }
-
-  closeWindow() {
-    this.changeWindow.emit(false);
   }
 
   shareWith() {
-    this.shareWithGroup.emit(this.clickedGroup);
+    this.shareEmitter.emit();
   }
 
-  public getGroupDetails(groupName: string) {
-    this.groupService.getGroupDetails(groupName).subscribe(group => {
-      this.groupDetails.group = group;
-      this.clickedGroup = group;
-    });
+  getGroupDetails(groupName: string) {
+    this.groupDetailsEmitter.emit(groupName);
   }
 
 }

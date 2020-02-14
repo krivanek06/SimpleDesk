@@ -17,7 +17,7 @@
             <mat-option [value]="group.groupManager">
               {{group.groupManager.firstName}} {{group.groupManager.lastName}}
             </mat-option>
-            <mat-option *ngFor="let user of allUsers$ | async" [value]="user">
+            <mat-option *ngFor="let user of allUsers" [value]="user">
               {{ user.firstName }}  {{ user.lastName }}
             </mat-option>
           </mat-select>
@@ -46,7 +46,7 @@
         <mat-form-field *ngIf='editGroupActivated'>
           <mat-select [(ngModel)]="group.usersWatchGroup" multiple [compareWith]="compareUsersInSelect"
                       placeholder="Sledovatelia skupiny">
-            <mat-option *ngFor="let user of allUsers$ | async" [value]="user">
+            <mat-option *ngFor="let user of allUsers" [value]="user">
               {{ user.firstName }}  {{ user.lastName }}
             </mat-option>
           </mat-select>
@@ -65,7 +65,7 @@
         <mat-form-field *ngIf='editGroupActivated'>
           <mat-select [(ngModel)]="group.usersInGroup" multiple [compareWith]="compareUsersInSelect"
                       placeholder="Členovia skupiny">
-            <mat-option *ngFor="let user of allUsers$ | async" [value]="user">
+            <mat-option *ngFor="let user of allUsers" [value]="user">
               {{ user.firstName }}  {{ user.lastName }}
             </mat-option>
           </mat-select>
