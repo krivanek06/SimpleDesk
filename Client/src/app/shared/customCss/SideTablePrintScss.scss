@@ -14,22 +14,10 @@
 }
 
 
-
-.icon{
-    width: 25px;
-    height: 25px;
-    margin-right: 5px;
-    margin-top: -8px;
-}
-
 #detailTitle{
     margin-left: 5px;
 }
 
-.formInformationContainerSubcontent{
-    position: relative;
-    margin-bottom: 15px;
-}
 
 .rightContainer{
     margin-left: 15px;
@@ -58,4 +46,16 @@ li {
   }
 ul{
     margin-bottom: 0px;
+}
+
+
+@media(min-width:1919px) {
+    .formTitleSmall{
+        font-size: 21px;
+    }
+
+    .smallerContent{
+        font-size: 15px;
+    }
+
 }

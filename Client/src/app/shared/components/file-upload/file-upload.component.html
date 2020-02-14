@@ -1,18 +1,17 @@
 <!-- uploader -->
-<div  appDragDrop
-    class="uploadfilecontainer" 
-    (click)="fileInput.click()"  
-    (onFileDropped)="uploadFile($event)" 
-    [style.height.px]="uploaderHeight">
-    <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)" multiple >
+<div appDragDrop
+     class="uploadfilecontainer"
+     (click)="fileInput.click()"
+     [style.height.px]="uploaderHeight">
+  <input hidden type="file" #fileInput (change)="uploadFile($event.target.files)" multiple>
 </div>
 
 <!-- print file names -->
-<div  class="files-list" 
-        *ngFor="let file of files;let i=index" 
-        [hidden] = "hideIt">
-    <p>{{ file.name }}</p>
-    <button class="delete-file" (click)="deleteAttachment(i)">
+<div class="files-list"
+     *ngFor="let file of files;let i=index"
+     [hidden]="hideIt">
+  <p>{{ file.name }}</p>
+  <button class="delete-file" (click)="deleteAttachment(i)">
     <img src="../../../../assets/images_design/trash_icon.png">
-    </button>
+  </button>
 </div>

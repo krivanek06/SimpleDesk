@@ -1,0 +1,20 @@
+@import "./src/app/shared/customCss/SideTablePrintScss.scss";
+@import "./src/app/shared/customCss/ElevationButtonScss.scss";
+
+
+.groupTitle {
+  margin-bottom: 20px;
+  font-weight: bold;
+  margin-left: -10px;
+  color: #8a8a8a;
+  font-size: 22px;
+}
+
+#sendingButton {
+  float: right;
+  margin-right: 25px;
+  margin-top: 15px;
+  background-color: #0077ec;
+}
+
+

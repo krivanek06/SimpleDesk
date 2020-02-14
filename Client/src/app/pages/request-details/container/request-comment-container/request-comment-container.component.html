@@ -1,0 +1,54 @@
+<ng-container *ngIf="requestDetails$ | async as requestDetails">
+
+  <!-- request content -->
+  <app-request-content [requestDetail]='requestDetails'></app-request-content>
+
+  <div *ngFor="let requestComment of requestDetails.requestCommentDTOS"
+       [ngClass]="requestComment.creator.username === userStoreService.user.username ? 'floatRight' : 'floatLeft'"
+       class="commentBox ">
+
+    <!-- form options -> edit / delele / share / lock -->
+    <app-request-comment-options
+      class="commentIcons"
+      *ngIf='requestComment.creator.username === loggedInUsername && requestDetails.closed === null'
+      [requestComment]='requestComment'
+      [isSolution]='requestComment.id === requestDetails.solutionComment'
+      (shareEmitter)='changeFrames($event)'
+      (lockEmitter)='changeCommentPrivacy($event)'
+      (editEmitter)='editComment($event)'
+      (deleteEmitter)='deleteComment($event)'>
+    </app-request-comment-options>
+
+    <!-- comment content -->
+    <app-request-comment-body
+      [solutionId]='requestDetails.solutionComment'
+      [requestComment]='requestComment'>
+    </app-request-comment-body>
+  </div>
+
+  <!-- share comment with groups -->
+  <div id="myModal" class="modal" *ngIf="showWindowCommentSharing && requestDetails.closed === null">
+    <div class="modal-content">
+      <span class="close" (click)="changeFrames(undefined)">&times;</span>
+
+      <app-request-comment-sharing
+        class='displayCommentSharing'
+        [involvedInGroups]='involvedInGroups$ | async'
+        [clickedGroup]='clickedGroup'
+        (groupDetailsEmitter)='getGroupDetails($event)'
+        (shareEmitter)="shareWith()">
+      </app-request-comment-sharing>
+
+      <app-group-details class='groupDetails' [group]="selectedGroup"></app-group-details>
+    </div>
+  </div>
+
+  <!-- form to write commment -->
+  <app-request-comment-form
+    *ngIf='(requestDetails$ | async)?.closed === null &&
+              !(isGhost$ | async) &&
+              ( (requestDetails$ | async)?.allowCommenting || (isSolver$ | async) )'
+    (addedCommentEmitter)="addComment($event)">
+  </app-request-comment-form>
+</ng-container>
+

@@ -1,0 +1,26 @@
+@import './../../../../shared/customCss/iconScss.scss';
+@import './../../../../shared/customCss/formScss.scss';
+
+
+.formInformationContainer{
+    float: left;
+    width: 45%;
+    margin-right: 15px;
+    margin-bottom: 5px;
+} 
+
+.formInformationContainerSubcontent{
+    position: relative;
+    margin-bottom: 15px;
+}
+
+/*
+@media(min-width:1919px) {
+    .windowButtonChangers{
+        margin-bottom: 35px;
+    }
+
+    .formTitleSmall{
+        font-size: 30px;
+    }
+}*/

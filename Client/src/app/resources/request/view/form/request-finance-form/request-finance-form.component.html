@@ -1,0 +1,28 @@
+<form [formGroup]="financeForm" (ngSubmit)="submit()" #financeFormViewChild="ngForm">
+  <!-- finance type -->
+  <mat-form-field>
+    <mat-label>Typ požiadavky</mat-label>
+
+    <mat-select formControlName="financeType">
+      <mat-option *ngFor="let type of financeTypeArray" [value]="type.name">{{ type.name }} </mat-option>
+    </mat-select>
+
+    <mat-error *ngIf="financeType.invalid"> Prosím vyberte kategóriu pre Finančný typ</mat-error>
+  </mat-form-field>
+
+  <!--name -->
+  <mat-form-field>
+    <input matInput placeholder="Číslo zmluvy" formControlName="name">
+
+    <mat-error *ngIf="name.invalid"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>
+  </mat-form-field>
+
+  <!--Priority -->
+  <mat-checkbox (change)="changeToUrgent()" [checked]="checkUrgent" >Urgent</mat-checkbox>
+
+  <!-- submit button -->
+  <button mat-raised-button color="primary" id="ticketSendingButton" type="submit"> Odoslať</button>
+
+
+</form>
+

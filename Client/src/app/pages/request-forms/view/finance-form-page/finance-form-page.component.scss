@@ -1,0 +1,38 @@
+
+.formTitle{
+  margin-top: -20px;
+  margin-left: -10px;
+  font-weight: bold;
+}
+
+
+.InlineParameters{
+  display: block;
+  width: 40%;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+
+#fileUploader{
+  float: left;
+  width: 70%;
+  margin: 10px;
+}
+
+#FormImage{
+  position: absolute;
+  top:125px;
+  width: 325px;
+  left: 55%;
+  -webkit-transition: -webkit-transform .8s ease-in-out;
+  transition:  transform .8s ease-in-out;
+}
+
+@media(min-width:1919px) {
+  #FormImage{
+    width: 400px;
+
+  }
+
+}

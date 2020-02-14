@@ -1,11 +1,12 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserService } from 'app/core/services/user.service';
+import { UserStoreService } from 'app/core/services/user-store.service';
 import { Observable, Subscription, Subject } from 'rxjs';
 import { AuthenticationService } from 'app/core/services/authentication.service';
 import { UserSimpleDTO } from 'app/shared/models/UserGroups';
 import { takeUntil } from 'rxjs/operators';
+import { UserHttpService } from 'app/api/user-http.service';
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -31,12 +32,15 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   @Output() changedDate: EventEmitter<any> = new EventEmitter<any>();
   @Output() changedFormFilter: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private datepipe: DatePipe, private formBuilder: FormBuilder, private userService: UserService, private authService: AuthenticationService) { }
+  constructor(private datepipe: DatePipe, 
+              private formBuilder: FormBuilder, 
+              private userHttp: UserHttpService, 
+              private userStoreService: UserStoreService) { }
 
   ngOnInit() {
     this.initDateFilter();
-    this.isMoreThanNormalUser$ = this.authService.isMoreThanNormalUser();
-    this.allUsers$ = this.userService.getAllActiveUsers();
+    this.isMoreThanNormalUser$ = this.userStoreService.isMoreThanNormalUser();
+    this.allUsers$ = this.userHttp.getAllActiveUsers();
 
 
     this.filterForm = this.formBuilder.group({

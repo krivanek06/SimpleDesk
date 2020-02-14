@@ -1,0 +1,81 @@
+<ng-container *ngIf="group">
+  <div class=' smallerContent'>
+        <span class='formTitleSmall'>
+            <img src="../../../../../assets/images_design/group_icon_details.png" class="icon"/>
+            <span class='formTitleSmallText'>  Skupina {{ group.name }} </span>
+        </span>
+
+    <!-- select manager -->
+    <li class='informationsContainer topspace'>
+      <div class='informationTitle'>Manažér skupiny</div>
+      <ul class='informationsHolder' *ngIf='!editGroupActivated'>
+        <li> {{ group.groupManager.firstName }} {{ group.groupManager.lastName }}</li>
+      </ul>
+      <ul class='informationsHolder' *ngIf='editGroupActivated'>
+        <mat-form-field>
+          <mat-select [(ngModel)]="group.groupManager" placeholder="Manažér skupiny">
+            <mat-option [value]="group.groupManager">
+              {{group.groupManager.firstName}} {{group.groupManager.lastName}}
+            </mat-option>
+            <mat-option *ngFor="let user of allUsers" [value]="user">
+              {{ user.firstName }}  {{ user.lastName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ul>
+    </li>
+
+    <!-- description -->
+    <li class='informationsContainer topspace'
+        [hidden]="(group.description === null || group.description.length === 0) && !editGroupActivated">
+      <div class='informationTitle'>Popis skupiny</div>
+      <ul class='informationsHolder' *ngIf='!editGroupActivated'>
+        <li> {{ group.description }}</li>
+      </ul>
+      <ul class='informationsHolder' *ngIf='editGroupActivated'>
+        <mat-form-field>
+          <textarea matInput [(ngModel)]="group.description" placeholder="Popis skupiny"> </textarea>
+        </mat-form-field>
+      </ul>
+    </li>
+
+    <!-- watched group activity -->
+    <li class='informationsContainer topspace' [hidden]="group.usersWatchGroup.length === 0 && !editGroupActivated">
+      <div class='informationTitle'>Sledovatelia skupiny</div>
+      <ul class='informationsHolder'>
+        <mat-form-field *ngIf='editGroupActivated'>
+          <mat-select [(ngModel)]="group.usersWatchGroup" multiple [compareWith]="compareUsersInSelect"
+                      placeholder="Sledovatelia skupiny">
+            <mat-option *ngFor="let user of allUsers" [value]="user">
+              {{ user.firstName }}  {{ user.lastName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <li *ngFor="let user of group.usersWatchGroup">
+          {{ user.firstName }} {{ user.lastName }}
+        </li>
+      </ul>
+    </li>
+
+    <!-- users in group -->
+    <li class='informationsContainer topspace' [hidden]="group.usersInGroup.length === 0 && !editGroupActivated">
+      <div class='informationTitle'>Členovia skupiny</div>
+      <ul class='informationsHolder'>
+        <mat-form-field *ngIf='editGroupActivated'>
+          <mat-select [(ngModel)]="group.usersInGroup" multiple [compareWith]="compareUsersInSelect"
+                      placeholder="Členovia skupiny">
+            <mat-option *ngFor="let user of allUsers" [value]="user">
+              {{ user.firstName }}  {{ user.lastName }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <li *ngFor="let user of group.usersInGroup">
+          {{ user.firstName }} {{ user.lastName }}
+        </li>
+      </ul>
+    </li>
+
+  </div>
+</ng-container>

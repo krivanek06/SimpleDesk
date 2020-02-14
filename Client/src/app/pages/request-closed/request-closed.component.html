@@ -1,0 +1,33 @@
+<app-header></app-header>
+<app-navigation></app-navigation>
+
+
+<div id='contentContainer'>
+    <!-- filter -->
+    <div class='filterContent'>
+        <app-request-filter
+            #requestFilter
+            (changedDate) = "loadClosedRequests()"
+            (changedFormFilter) = "filterClosedRequests($event)">
+        </app-request-filter>
+    </div>
+
+     <!-- excel export button -->
+     <button mat-raised-button color="success" id='excelButton' (click)="exportTOExcel()">Exportovať ako Excel</button>
+
+    <!-- table with requests -->
+    <app-request-table
+        #closedRequests
+        (moveToDetails) = 'moveToDetials($event)'
+        headerColor="#E8F3FF"
+        [displayedColumns]= "viewTable"
+        displayAssignToMe='true'
+        tableTitle="Uzatvorené požiadavky">
+    </app-request-table>
+
+
+
+    <ngx-spinner  >
+        <p style="font-size: 20px; color: white">Načítavam požiadavky...</p>
+    </ngx-spinner>
+</div>

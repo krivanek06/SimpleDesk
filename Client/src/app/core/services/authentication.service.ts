@@ -25,6 +25,10 @@ export class AuthenticationService {
     return this.JWToken$.asObservable();
   }
 
+  get decodedTokenValue(): JWToken{
+    return this.JWToken$.getValue();
+  }
+
   public login (username: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
@@ -95,63 +99,5 @@ export class AuthenticationService {
   private getRefreshToken () {
     return localStorage.getItem('refresh_token');
   }
-
-
-  /* ----------------- privileges ------------------- */
-  public isSolverRightHand(): Observable<boolean> {
-    return combineLatest(
-      this.isSolver(),
-      this.isManagerRightHand(), 
-      this.isManager() , 
-      (one,two,three ) => (one && (two ||  three))
-    );
-  }
-
-  public isAdmin(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_ADMIN")));
-  }
-
-  public isGhost(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_GHOST")));
-  }
-
-  public isManager(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_MANAGER")));
-  }
-
-  public isManagerRightHand(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_MANAGER_RIGHT_HAND")));
-  }
-
-  public isSolver(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.AUTHORITIES.includes("ROLE_SOLVER")));
-  }
-
-  public hasPrivilegeAccess(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Privilege")));
-  }
-
-  public hasFinanceModuleAccess(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Finance")));
-  }
-
-  public hasTicketModuleAccess(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Ticket")));
-  }
-
-  public hasReportModuleAccess(): Observable<boolean> {
-    return this.getDecodedToken().pipe(map(x =>  x.MODULE_TYPES_TO_USE.includes("Report")));
-  }
-
-  public isMoreThanNormalUser(): Observable<boolean>{
-    return combineLatest(
-      this.isAdmin(), 
-      this.isGhost(), 
-      this.isSolver(), 
-      this.isManager(), 
-      this.isManagerRightHand(),
-      (one,two,three, four, five ) => (one || two ||  three || four || five));
-  }
-
 
 }

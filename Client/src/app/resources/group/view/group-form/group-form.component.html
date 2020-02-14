@@ -1,0 +1,168 @@
+<form [formGroup]="groupRegistrationForm" (ngSubmit)="submit()" #groupFormViewChild="ngForm">
+  <div class='inlineParameters formTitleContainer'>
+    <img src="../../../../../assets/images_design/registeru_user_icon.png" class='bigIcon'>
+    <span class='formTitle'>Registrovanie skupiny</span>
+  </div>
+
+
+  <div class='formInformationContainer'>
+    <!-- information -->
+    <div class='formInformationContainerSubcontent'>
+            <span>
+                <img src='../../../../../assets/images_design/info.png' class='icon'/>
+                Informácie skupiny
+            </span>
+
+      <mat-form-field class='inlineParameters extraSpace'>
+        <input matInput placeholder="Meno skupiny" formControlName="groupName">
+        <mat-error *ngIf="groupName.invalid"> Prosím zadefinujte meno skupiny</mat-error>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'>
+        <input matInput placeholder="Email skupiny" formControlName="groupEmail">
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'>
+        <textarea matInput placeholder="Popis skupiny" formControlName="groupDescription"></textarea>
+        <mat-error *ngIf="groupDescription.invalid"> Prosím zadefinujte krátky popis skupiny, minimálne 10 znakov
+        </mat-error>
+      </mat-form-field>
+      <hr>
+    </div>
+
+    <!-- user selection -->
+    <div class='formInformationContainerSubcontent'>
+            <span>
+                <img src='../../../../../assets/images_design/groups_icon_2.png' class='icon'/>
+                Uživatelia skupiny
+            </span>
+
+      <mat-form-field class='inlineParameters extraSpace'>
+        <mat-label>Manežér skupiny</mat-label>
+        <mat-select formControlName="groupManager">
+          <mat-option *ngFor="let user of allAvailableUsers" [value]="user">
+            {{ user.firstName }}  {{ user.lastName }}
+          </mat-option>
+
+          <mat-error *ngIf="groupManager.invalid"> Prosím vyberte menežéra skupiny</mat-error>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'>
+        <mat-label>Sledovatelia skupiny</mat-label>
+        <mat-select formControlName="usersWatchGroup" multiple>
+          <mat-option *ngFor="let user of allAvailableUsers" [value]="user">
+            {{ user.firstName }}  {{ user.lastName }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'>
+        <mat-label>Členovia skupiny</mat-label>
+        <mat-select formControlName="usersInGroup" multiple>
+          <mat-option *ngFor="let user of allAvailableUsers" [value]="user">
+            {{ user.firstName }}  {{ user.lastName }}
+          </mat-option>
+
+          <mat-error *ngIf="usersInGroup.invalid"> Prosím vyberte členov do skupiny</mat-error>
+        </mat-select>
+      </mat-form-field>
+      <hr>
+    </div>
+  </div>
+
+
+  <!-- privileges -->
+  <div class='formInformationContainer'>
+    <div class='formInformationContainerSubcontent'>
+            <span>
+                <img src='../../../../../assets/images_design/checkmark.png' class='icon'/>
+                Právomoc skupiny
+            </span>
+
+      <mat-form-field class='inlineParameters extraSpace'>
+        <mat-label>Moduly na používanie</mat-label>
+        <mat-select formControlName="moduleTypesToUse" multiple (selectionChange)="changeModuleTypesToUse()">
+          <mat-option value="Ticket"> Tikety</mat-option>
+          <mat-option value="Report"> Reporty</mat-option>
+          <mat-option value="Finance"> Učtáreň</mat-option>
+          <mat-option value="Správa aplikácie"
+                      matTooltip="Vybertu možnosť ak chcete spístupniť sekciu 'Správa aplikácie' pre uživateľov v danej skupine"
+                      matTooltipPosition="right"
+                      matTooltipClass="custom-tooltip"
+                      matTooltipShowDelay="150">
+            Správa aplikácie
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'
+                      *ngIf="moduleTypesToUse.value !== null && moduleTypesToUse.value.includes('Finance')" multiple>
+        <mat-label>Posielanie finančných typov</mat-label>
+        <mat-select formControlName="submitFinanceRequests" multiple>
+          <mat-option *ngFor="let financeType of financeTypes" [value]="financeType.name">
+            {{ financeType.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class='inlineParameters'>
+        <mat-label>Požiadavky na riešenie</mat-label>
+        <mat-select formControlName="requestTypesToSolve" multiple (selectionChange)="changeTicketTypeToSolve()">
+          <mat-option value="Ticket"> Tikety</mat-option>
+          <mat-option value="Report"> Reporty</mat-option>
+          <mat-option value="Finance"> Učtáreň</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+
+      <mat-form-field class='inlineParameters'
+                      *ngIf="requestTypesToSolve.value != null && requestTypesToSolve.value.includes('Ticket')">
+        <mat-label>Tikety na riešenie</mat-label>
+        <mat-select formControlName="solveTickets" multiple (selectionChange)="changeTicketTypeToSolve()">
+          <mat-option value="Software"> Software</mat-option>
+          <mat-option value="Hardware"> Hardware</mat-option>
+          <mat-option value="Server"> Server</mat-option>
+          <mat-option value="User"> Uživateľ</mat-option>
+          <mat-option value="Other"> Iné</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'
+                      *ngIf="solveTickets.value !== null && solveTickets.value.includes('Software')" multiple>
+        <mat-label>Riešenie softvéru</mat-label>
+        <mat-select formControlName="solveSoftware" multiple>
+          <mat-option *ngFor="let software of softwares" [value]="software.name">
+            {{ software.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'
+                      *ngIf="solveTickets.value !== null && solveTickets.value.includes('Hardware')" multiple>
+        <mat-label>Riešenie hardvéru</mat-label>
+        <mat-select formControlName="solveHardware" multiple>
+          <mat-option *ngFor="let hardware of hardwares" [value]="hardware.name">
+            {{ hardware.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class='inlineParameters'
+                      *ngIf="solveTickets.value !== null && solveTickets.value.includes('Server')" multiple>
+        <mat-label>Riešenie serverov</mat-label>
+        <mat-select formControlName="solveServer" multiple>
+          <mat-option *ngFor="let server of servers" [value]="server.name">
+            {{ server.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <hr>
+    </div>
+  </div>
+
+  <button mat-raised-button color="primary" class="sendingButton" type="submit">
+    Odoslať
+  </button>
+</form>
