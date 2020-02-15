@@ -11,8 +11,8 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 })
 export class RequestCommentFormComponent implements OnInit {
   commentInput = '';
-  isChecked = false; // if checkbotton is checked
-  isCheckedName = ''; // name of checkButton
+  isChecked = true; // if checkbotton is checked
+  isCheckedName = 'Notification'; // name of checkButton
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 

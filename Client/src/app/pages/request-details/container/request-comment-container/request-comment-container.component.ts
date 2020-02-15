@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {RequestComment, RequestDetails, RequestCommentWrapper} from 'app/shared/models/RequestDetails';
 import {Observable} from 'rxjs';
 import {Group} from 'app/shared/models/UserGroups';
@@ -15,10 +15,13 @@ import {GroupHttpService} from "../../../../api/group-http.service";
   styleUrls: ['./request-comment-container.component.scss']
 })
 export class RequestCommentContainerComponent implements OnInit {
+  @Input() applyZIndex = true;
+
   showWindowCommentSharing = false;
   clickedGroup = false;
   selectedGroup: Group;
   loggedInUsername: string;
+
 
   private sharingComment: RequestComment;
   private isAdmin$: Observable<boolean>;

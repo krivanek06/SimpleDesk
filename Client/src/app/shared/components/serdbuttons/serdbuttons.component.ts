@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
 
 @Component({
   selector: 'app-serdbuttons',
@@ -6,33 +6,35 @@ import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
   styleUrls: ['./serdbuttons.component.scss']
 })
 export class SERDButtonsComponent implements OnInit {
-  @Output() deleteEmittter: EventEmitter<any> = new EventEmitter();
-  @Output() saveEmittter: EventEmitter<any> = new EventEmitter();
-  @Output() resetEmittter: EventEmitter<any> = new EventEmitter();
-  @Output() editEmittter: EventEmitter<any> = new EventEmitter();
+  @Output() deleteEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() saveEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() resetEmitter: EventEmitter<any> = new EventEmitter();
+  @Output() editEmitter: EventEmitter<any> = new EventEmitter();
 
   @Input() editActivated = false;
-  constructor() { }
+
+  constructor() {
+  }
 
   ngOnInit() {
   }
 
-  save(){
-    this.saveEmittter.emit();
+  save() {
+    this.saveEmitter.emit();
   }
 
-  reset(){
+  reset() {
     this.editActivated = false;
-    this.resetEmittter.emit();
+    this.resetEmitter.emit();
   }
 
-  edit(){
+  edit() {
     this.editActivated = true;
-    this.editEmittter.emit();
+    this.editEmitter.emit();
   }
 
-  delete(){
-    this.deleteEmittter.emit();
+  delete() {
+    this.deleteEmitter.emit();
   }
 
 }

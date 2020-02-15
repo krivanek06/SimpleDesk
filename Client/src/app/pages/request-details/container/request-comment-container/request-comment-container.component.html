@@ -3,8 +3,11 @@
   <!-- request content -->
   <app-request-content [requestDetail]='requestDetails'></app-request-content>
 
+  <!-- [ngClass]="requestComment.creator.username === userStoreService.user.username ? 'floatRight' : 'floatLeft'" -->
   <div *ngFor="let requestComment of requestDetails.requestCommentDTOS"
-       [ngClass]="requestComment.creator.username === userStoreService.user.username ? 'floatRight' : 'floatLeft'"
+       [ngClass]="{'floatRight' : requestComment.creator.username === userStoreService.user.username,
+                    'floatLeft' : requestComment.creator.username !== userStoreService.user.username,
+                    'zIndex' : applyZIndex}"
        class="commentBox ">
 
     <!-- form options -> edit / delele / share / lock -->

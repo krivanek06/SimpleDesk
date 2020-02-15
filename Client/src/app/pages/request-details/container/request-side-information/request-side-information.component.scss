@@ -1,39 +1,4 @@
-
-li {
-  display: flex;
-  font-size: 13px;
-}
-
-.information {
-  word-break: break-all;
-  color: #676666;
-  margin-right: 5px;
-}
-
-.detailTitle {
-  font-weight: bold;
-  color: #8a8a8a;
-  margin-bottom: 10px;
-  font-size: 17px;
-}
-
-
-.informationAnswer {
-  flex: 0 0 150px;
-  font-weight: bold;
-
-}
-
-.content {
-  margin-top: 15px;
-  margin-bottom: 15px;
-  position: relative;
-}
-
-.titleIcon {
-  width: 23px;
-  margin-top: -5px;
-}
+@import "./src/app/shared/customCss/SideTablePrintScss";
 
 .avatar {
   height: 25px;
@@ -51,19 +16,12 @@ li {
 
 .uploaderContainer {
   margin-top: 20px;
-  width: 350px;
+  max-width: 300px;
 }
 
-
-@media(min-width: 1919px) {
-  .detailTitle {
-    font-size: 19px;
+@media(max-width: 840px) {
+  img{
+    display: none;
   }
 
-  li {
-    font-size: 14px;
-  }
-  .titleIcon {
-    width: 26px;
-  }
 }

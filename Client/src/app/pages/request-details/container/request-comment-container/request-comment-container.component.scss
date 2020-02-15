@@ -13,6 +13,10 @@
   margin-right: 25px;
 }
 
+.zIndex{
+  z-index:1;
+}
+
 .floatLeft {
   float: left;
 }
@@ -56,5 +60,17 @@
 
   }
 
-
 }
+@media(max-width: 1150px) {
+  .commentBox{
+    width: 85%;
+  }
+}
+
+@media(max-width: 840px) {
+  .commentBox{
+    width: 100%;
+  }
+}
+
+

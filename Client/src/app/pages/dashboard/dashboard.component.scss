@@ -6,3 +6,12 @@
     float: right;
 }
 
+
+@media(max-width: 840px) {
+  .hideOnSmallWindow{
+    display: none;
+  }
+  #contentContainer{
+    width: calc(100% - 5px);
+  }
+}

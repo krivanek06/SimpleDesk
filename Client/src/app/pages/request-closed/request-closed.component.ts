@@ -3,7 +3,6 @@ import {RequestTable, FilterRequests} from 'app/shared/models/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {RequestFilterComponent} from 'app/shared/components/request-filter/request-filter.component';
-import {RequestStoreService} from 'app/core/services/request-store.service';
 import {IgxExcelExporterService, IgxExcelExporterOptions} from "igniteui-angular";
 import * as _ from 'lodash';
 import {RequestHttpService} from 'app/api/request-http.service';
@@ -46,8 +45,8 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
     this.requestHttp.getClosedRequests(this.requestFilter.dateFrom, this.requestFilter.dateTo)
       .subscribe(requests => {
-        this.closedRequests.dataSource.data = requests as RequestTable[];
-        this.loadedRequests = requests;
+      //  this.closedRequests.dataSource.data = requests as RequestTable[];
+        this.loadedRequests = [...requests];
         this.filterClosedRequests(this.requestFilter.filterForm.value);
         this.spinner.hide();
       });
@@ -74,7 +73,7 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
     });
 
     // re-render table with data
-    this.closedRequests.dataSource.data = this.closedRequests.dataSource.data as RequestTable[]
+    this.closedRequests.dataSource.data = this.closedRequests.dataSource.data as RequestTable[];
   }
 
 

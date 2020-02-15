@@ -18,14 +18,14 @@
     position: relative;
 }
 .customRow {
-    display: flex; 
+    display: flex;
   }
-  
+
 .customCol {
     flex: 1;
   }
 
-.raisedbox { 
+.raisedbox {
 	color:#8a8a8a;
     padding: 10px;
     border-radius: 5px;
@@ -105,4 +105,9 @@ ng-sidebar-container{
     padding: 2em 1em;
   }
 
-  
+@media(max-width: 1080px) {
+  #sliderDiv2{
+    right: -25px;
+  }
+}
+

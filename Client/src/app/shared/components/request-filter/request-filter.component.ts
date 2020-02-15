@@ -1,12 +1,12 @@
-import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { UserStoreService } from 'app/core/services/user-store.service';
-import { Observable, Subscription, Subject } from 'rxjs';
-import { AuthenticationService } from 'app/core/services/authentication.service';
-import { UserSimpleDTO } from 'app/shared/models/UserGroups';
-import { takeUntil } from 'rxjs/operators';
-import { UserHttpService } from 'app/api/user-http.service';
+import {Component, OnInit, Output, EventEmitter, OnDestroy} from '@angular/core';
+import {DatePipe} from '@angular/common';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {UserStoreService} from 'app/core/services/user-store.service';
+import {Observable, Subject} from 'rxjs';
+import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {takeUntil} from 'rxjs/operators';
+import {UserHttpService} from 'app/api/user-http.service';
+import {MAT_DATE_FORMATS} from "saturn-datepicker";
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -14,11 +14,26 @@ export interface SatDatepickerRangeValue<D> {
   end: D | null;
 }
 
+export const DD_MM_YYYY_Format = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 @Component({
   selector: 'app-request-filter',
   templateUrl: './request-filter.component.html',
-  styleUrls: ['./request-filter.component.scss']
+  styleUrls: ['./request-filter.component.scss'],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
+  ]
 })
 export class RequestFilterComponent implements OnInit, OnDestroy {
   dateFrom: string;
@@ -32,10 +47,11 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   @Output() changedDate: EventEmitter<any> = new EventEmitter<any>();
   @Output() changedFormFilter: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor(private datepipe: DatePipe, 
-              private formBuilder: FormBuilder, 
-              private userHttp: UserHttpService, 
-              private userStoreService: UserStoreService) { }
+  constructor(private datepipe: DatePipe,
+              private formBuilder: FormBuilder,
+              private userHttp: UserHttpService,
+              private userStoreService: UserStoreService) {
+  }
 
   ngOnInit() {
     this.initDateFilter();
@@ -70,33 +86,25 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
     this.changedDate.emit();
   }
 
-  deleteFilterOption(option: string): void{
-    if(option === 'type'){
-      this.filterForm.patchValue({'type' : ''});
+  deleteFilterOption(option: string): void {
+    if (option === 'type') {
+      this.filterForm.patchValue({type: ''});
+    } else if (option === 'creator') {
+      this.filterForm.patchValue({creator: ''});
+    } else if (option === 'closed') {
+      this.filterForm.patchValue({closed: ''});
+    } else if (option === 'name') {
+      this.filterForm.patchValue({name: ''});
+    } else if (option === 'priority') {
+      this.filterForm.patchValue({priority: ''});
     }
 
-    else if(option === 'creator'){
-      this.filterForm.patchValue({'creator' : ''});
-    }
-
-    else if(option === 'closed'){
-      this.filterForm.patchValue({'closed' : ''});
-    }
-
-    else if(option === 'name'){
-      this.filterForm.patchValue({'name' : ''});
-    }
-
-    else if(option === 'priority'){
-      this.filterForm.patchValue({'priority' : ''});
-    }
-    
     this.changedFormFilter.emit(this.filterForm.value);
   }
 
 
   private initDateFilter(): void {
-    let today = new Date()
+    const today = new Date();
     this.dateTo = this.datepipe.transform(today, 'dd.MM.yyyy');
 
     today.setDate(today.getDate() - 30);
@@ -104,19 +112,23 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   }
 
 
-  get type(){
+  get type() {
     return this.filterForm.get("type");
-  }  
-  get creator(){
+  }
+
+  get creator() {
     return this.filterForm.get("creator");
-  }  
-  get closed(){
+  }
+
+  get closed() {
     return this.filterForm.get("closed");
-  }  
-  get name(){
+  }
+
+  get name() {
     return this.filterForm.get("name");
   }
-  get priority(){
+
+  get priority() {
     return this.filterForm.get("priority");
   }
 

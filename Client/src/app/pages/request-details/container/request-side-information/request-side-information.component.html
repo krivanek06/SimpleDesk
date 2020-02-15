@@ -1,22 +1,22 @@
-<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/information_icon.png" class="titleIcon"/>
+<div class='informationsContainer' *ngIf ='requestDetails$ | async as requestDetails'>
+    <h3 class='formTitleSmall'>
+        <img src="../../../../assets/images_design/information_icon.png" class="informationIcon"/>
         Všeobecné informácie
     </h3>
 
     <ul class='userInformations'>
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Meno požiadavky</div>
+            <div class='informationTitle'>Meno požiadavky</div>
             <ul ><li class='information'> {{ requestDetails.name }}</li> </ul>
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Typ</div>
+            <div class='informationTitle'>Typ</div>
             <ul ><li class='information'> {{ requestDetails.requestType}}</li> </ul>
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Priorita</div>
+            <div class='informationTitle'>Priorita</div>
             <ul>
                 <li class='information'>
                     <img src="../../../../assets/images_design/priority_low_icon_2.png" class="avatar"
@@ -31,23 +31,23 @@
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Stav</div>
+            <div class='informationTitle'>Stav</div>
             <ul> <li class='information'>{{ requestDetails.requestPosition }}  </li></ul>
         </li>
 
         <!-- Ticket informations -->
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '>
-            <div class='informationAnswer'>Typ ticketu</div>
+            <div class='informationTitle'>Typ ticketu</div>
             <ul ><li class='information'> {{ $any(requestDetails).ticketType }}</li> </ul>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Ticket" '>
-            <div class='informationAnswer'>{{ $any(requestDetails).ticketType }}</div>
+            <div class='informationTitle'>{{ $any(requestDetails).ticketType }}</div>
             <ul ><li class='information'> {{ $any(requestDetails).ticketSubtypeName }}</li> </ul>
         </li>
 
          <!-- Finance informations -->
          <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Finance" '>
-            <div class='informationAnswer'>Typ financií</div>
+            <div class='informationTitle'>Typ financií</div>
             <ul ><li class='information'> {{ $any(requestDetails).financeType }}</li> </ul>
         </li>
 
@@ -55,15 +55,15 @@
 
         <!-- Report informations -->
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Vlastník reportu</div>
+            <div class='informationTitle'>Vlastník reportu</div>
             <ul ><li class='information'> {{ $any(requestDetails).owner }}</li> </ul>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Frekvencia obnovenia</div>
+            <div class='informationTitle'>Frekvencia obnovenia</div>
             <ul ><li class='information'> {{ $any(requestDetails).reportRefresh }}</li> </ul>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Prístup pre</div>
+            <div class='informationTitle'>Prístup pre</div>
             <ul *ngIf = '$any(requestDetails).accessByPeople != null'>
                 <li class='information' *ngFor = "let access of $any(requestDetails).accessByPeople.split(',')">
                     {{ access }}
@@ -71,7 +71,7 @@
             </ul>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Prístup cez</div>
+            <div class='informationTitle'>Prístup cez</div>
             <ul *ngIf = '$any(requestDetails).accessMethods != null'>
                 <li class='information' *ngFor = "let access of $any(requestDetails).accessMethods.split(',')">
                     {{ access }}
@@ -80,16 +80,16 @@
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
              <ng-container *ngFor = 'let store of $any(requestDetails).reportAccessStored'>
-                <div class='informationAnswer'>{{ store.reportAccess }}</div>
+                <div class='informationTitle'>{{ store.reportAccess }}</div>
                 <ul ><li class='information'> {{  store.path }}</li> </ul>
              </ng-container>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Vyhodnotenie v dňoch</div>
+            <div class='informationTitle'>Vyhodnotenie v dňoch</div>
             <ul ><li class='information'> {{ $any(requestDetails).evaluation }}</li> </ul>
         </li>
         <li class='userInformationsContainer' *ngIf = 'requestDetails.requestType === "Report" '>
-            <div class='informationAnswer'>Deadline</div>
+            <div class='informationTitle'>Deadline</div>
             <ul ><li  class='information'> {{ $any(requestDetails).deadline | date:'MMM d, y '}}</li> </ul>
         </li>
 
@@ -97,15 +97,15 @@
 </div>
 
 
-<div class='content'  *ngIf ='requestDetails$ | async as requestDetails'>
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/user_infomatio_icon.png" class="titleIcon"/>
+<div class='informationsContainer'  *ngIf ='requestDetails$ | async as requestDetails'>
+    <h3 class='formTitleSmall'>
+        <img src="../../../../assets/images_design/user_infomatio_icon.png" class="informationIcon"/>
         Ľudia
     </h3>
 
     <ul class='userInformations'>
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Vytvoril</div>
+            <div class='informationTitle'>Vytvoril</div>
             <ul>
                 <li class='information'>
                     <img [src]="'data:image/jpeg;base64,'+requestDetails.creator.photoBytes" class='avatar'/>
@@ -115,7 +115,7 @@
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Pridelené</div>
+            <div class='informationTitle'>Pridelené</div>
             <ul *ngIf = 'requestDetails.assigned !== null'>
                 <li class='information'>
                     <img [src]="'data:image/jpeg;base64,'+requestDetails.assigned.photoBytes" class='avatar'/>
@@ -128,7 +128,7 @@
         </li>
 
         <li class='userInformationsContainer' [hidden] = 'true'>
-            <div class='informationAnswer'>Sledované</div>
+            <div class='informationTitle'>Sledované</div>
             <ul>
                 <li class='information ' *ngFor='let person of requestDetails.userToWatchRequest'>
                     <img [src]="'data:image/jpeg;base64,'+person.photoBytes" class='avatar'/>
@@ -138,7 +138,7 @@
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Uzavrel</div>
+            <div class='informationTitle'>Uzavrel</div>
             <ul *ngIf = 'requestDetails.closed !== null'>
                 <li class='information'>
                     <img [src]="'data:image/jpeg;base64,'+requestDetails.closed.photoBytes" class='avatar'/>
@@ -152,15 +152,15 @@
 
 
 
-<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/clock_icon.png" class="titleIcon"/>
+<div class='informationsContainer' *ngIf ='requestDetails$ | async as requestDetails'>
+    <h3 class='formTitleSmall'>
+        <img src="../../../../assets/images_design/clock_icon.png" class="informationIcon"/>
         Sledovanie času
     </h3>
 
     <ul class='userInformations'>
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Čas vytvorenia</div>
+            <div class='informationTitle'>Čas vytvorenia</div>
             <ul>
                 <li class='information'>
                     {{ requestDetails.timestampCreation | date:'MMM d, y, HH:mm:ss ' }}
@@ -169,7 +169,7 @@
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Čas uzatvorenia</div>
+            <div class='informationTitle'>Čas uzatvorenia</div>
             <ul>
                 <li class='information'>
                     {{ requestDetails.timestampClosed | date:'MMM d, y, HH:mm:ss '}}
@@ -178,7 +178,7 @@
         </li>
 
         <li class='userInformationsContainer'>
-            <div class='informationAnswer'>Čas otvorenia</div>
+            <div class='informationTitle'>Čas otvorenia</div>
             <ul>
                 <li class='information'>
                     {{ openDays }} dni
@@ -190,15 +190,15 @@
 
 
 
-<div class='content' *ngIf ='requestDetails$ | async as requestDetails'>
-    <h3 class='detailTitle'>
-        <img src="../../../../assets/images_design/download_document_icon.png" class="titleIcon"/>
+<div class='informationsContainer' *ngIf ='requestDetails$ | async as requestDetails'>
+    <h3 class='formTitleSmall'>
+        <img src="../../../../assets/images_design/download_document_icon.png" class="informationIcon"/>
         Dokumenty
     </h3>
 
     <ul class='userInformations'>
         <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
-            <div class='informationAnswer clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
+            <div class='informationTitle clicable' (click) = "downloadFile(document.name)"> {{ document.name }}</div>
             <ul>
                 <li class='information'>
                     {{ document.lastModified  |  date:'MMM d, y, HH:mm:ss ' }}

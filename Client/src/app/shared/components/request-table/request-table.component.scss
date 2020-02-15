@@ -65,17 +65,25 @@ mat-header-row {
 }
 
 .assignOnMe {
-  color: #3b73f3;
+  color: #628ef5;
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;
+  &:hover{
+    color: #004cff;
+    font-size: 13px;
+  }
 }
 
 .removeFromMe {
-  color: #f94646;
+  color: #f96a6a;
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;
+  &:hover{
+    color: #ff0000;
+    font-size: 13px;
+  }
 }
 
 .circle {
@@ -134,11 +142,14 @@ mat-row:nth-child(even) {
   max-height: 40px !important;
 }
 
-
 @media(min-width: 1360px) {
   .headerTitle {
     font-size: 19px;
-
   }
+}
 
+@media(max-width: 1080px) {
+  .hideOnSmallWindow{
+    display: none;
+  }
 }

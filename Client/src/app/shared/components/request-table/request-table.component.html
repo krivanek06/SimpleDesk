@@ -25,7 +25,7 @@
              class='userIcon requestIcon'/>
         <img *ngIf="element.requestType === 'Finance' " src="../../../../assets/images_design/finance_icon.png"
              class='userIcon requestIcon'/>
-        {{ element.requestType}}
+        <span class="hideOnSmallWindow">{{ element.requestType}}</span>
       </mat-cell>
     </ng-container>
 
@@ -38,7 +38,8 @@
     <ng-container matColumnDef="creator">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Vytvoril</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <img [src]='getImage(element.creatorImageByte)' class='userIcon'/>
+        <!--<img [src]='getImage(element.creatorImageByte)' class='userIcon'/>-->
+        <img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>
         {{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}
       </mat-cell>
     </ng-container>
@@ -49,8 +50,8 @@
     </ng-container>
 
     <ng-container matColumnDef="priority">
-      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Priorita</mat-header-cell>
-      <mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" class="hideOnSmallWindow"> Priorita</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="hideOnSmallWindow">
         <img *ngIf="element.requestPriority === 'nízka' " src="../../../../assets/images_design/priority_low_icon_2.png"
              class='userIcon'/>
         <img *ngIf="element.requestPriority === 'stredná' "
@@ -62,10 +63,11 @@
     </ng-container>
 
     <ng-container matColumnDef="assigned">
-      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Pridelené</mat-header-cell>
-      <mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" > Pridelené</mat-header-cell>
+      <mat-cell *matCellDef="let element" >
         <div *ngIf="element.assigned !== ' ' ">
-          <img [src]='getImage(element.assignedImageByte)' class='userIcon'/>
+         <!-- <img [src]='getImage(element.assignedImageByte)' class='userIcon'/> -->
+          <img [src]="'data:image/jpeg;base64,'+element.assignedImageByte" class='userIcon'/>
           {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}
         </div>
         <div *ngIf="element.assigned === ' ' && displayAssignToMe" class='assignOnMe' (click)="assignOnMe(element)">
@@ -75,11 +77,11 @@
     </ng-container>
 
     <ng-container matColumnDef="userAction">
-      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Zahodit</mat-header-cell>
-      <mat-cell *matCellDef="let element">
+      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"  class="hideOnSmallWindow" > </mat-header-cell>
+      <mat-cell *matCellDef="let element" class="hideOnSmallWindow" >
         <div *ngIf="element.assigned === userService.user.fullName " class='removeFromMe'
              (click)="removeFromMe(element)">
-          Vzdať sa
+          vzdať sa
         </div>
       </mat-cell>
     </ng-container>
@@ -87,14 +89,15 @@
     <ng-container matColumnDef="closed">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Uzatvoril</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <img [src]='getImage(element.closedImageByte)' class='userIcon'/>
+       <!-- <img [src]='getImage(element.closedImageByte)' class='userIcon'/> -->
+        <img [src]="'data:image/jpeg;base64,'+element.closedImageByte" class='userIcon'/>
         {{ element.closed  | slice:0:1 | titlecase}}. {{ element.closed.split(' ')[1] | titlecase}}
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="timeCreated">
-      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Vytvorené</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
+      <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" class="hideOnSmallWindow"> Vytvorené</mat-header-cell>
+      <mat-cell *matCellDef="let element" class="hideOnSmallWindow"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="timeClosed">

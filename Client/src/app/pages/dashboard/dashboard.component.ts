@@ -1,12 +1,9 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {AuthenticationService} from 'app/core/services/authentication.service';
 import {RequestTable} from 'app/shared/models/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from 'rxjs';
-import Swal from 'sweetalert2';
 import {UserStoreService} from 'app/core/services/user-store.service';
-import {RequestStoreService} from 'app/core/services/request-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
@@ -23,13 +20,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     'priority', 'assigned', 'timeCreated', 'details'];
   modifyTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'assigned', 'userAction', 'timeCreated', 'details'];
-  /*myOpenRequests: RequestTable[] = [];
-  meAssignedRequests: RequestTable[] = [];
-  otherOpenRequests: RequestTable[] = [];*/
 
-  @ViewChild('myOpenRequests',  {static: false}) myOpenRequests: RequestTableComponent;
-  @ViewChild('meAssignedRequests',  {static: false}) meAssignedRequests: RequestTableComponent;
-  @ViewChild('otherOpenRequests',  {static: false}) otherOpenRequests: RequestTableComponent;
+  @ViewChild('myOpenRequests', {static: false}) myOpenRequests: RequestTableComponent;
+  @ViewChild('meAssignedRequests', {static: false}) meAssignedRequests: RequestTableComponent;
+  @ViewChild('otherOpenRequests', {static: false}) otherOpenRequests: RequestTableComponent;
 
   isAdmin$: Observable<boolean>;
   isGhost$: Observable<boolean>;
@@ -65,14 +59,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     this.requestHttp.getRequestOnDashboard().subscribe(requests => {
-      this.myOpenRequests.dataSource.data = requests.myOpen as RequestTable[];
-      this.meAssignedRequests.dataSource.data = requests.assignedOnMe as RequestTable[];
-      this.otherOpenRequests.dataSource.data = requests.otherOpen as RequestTable[];
-      /*this.myOpenRequests = requests.myOpen as RequestTable[];
-      this.meAssignedRequests = requests.assignedOnMe as RequestTable[];
-      this.otherOpenRequests = requests.otherOpen as RequestTable[];*/
-      this.spinner.hide();
-    });
+        this.myOpenRequests.dataSource.data = [...requests.myOpen as RequestTable[]];
+        this.meAssignedRequests.dataSource.data = [...requests.assignedOnMe as RequestTable[]];
+        this.otherOpenRequests.dataSource.data = [...requests.otherOpen as RequestTable[]];
+        this.spinner.hide();
+      },
+      () => this.spinner.hide());
   }
 
 
@@ -92,12 +84,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
     request.assignedImageByte = this.userStoreService.user.photoBytes;
 
     this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
-    this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id );
+    this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id);
 
+    // sort
+    this.meAssignedRequests.dataSource.data.sort((a, b) => (b.id - a.id));
+
+    // rerender table
     this.meAssignedRequests.dataSource._updateChangeSubscription();
     this.otherOpenRequests.dataSource._updateChangeSubscription();
-    /*this.meAssignedRequests = [request, ...this.meAssignedRequests];
-    this.otherOpenRequests = this.otherOpenRequests.filter(req => req.id !== request.id);*/
   }
 
   private updateTableRemoveRequestFromMe(request: RequestTable) {
@@ -105,25 +99,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
     request.assignedImageString = null;
     request.assignedImageByte = null;
 
-     this.meAssignedRequests.dataSource.data = this.meAssignedRequests.dataSource.data.filter(req => req.id !== request.id );
-     this.otherOpenRequests.dataSource.data.push(request)
+    this.meAssignedRequests.dataSource.data = this.meAssignedRequests.dataSource.data.filter(req => req.id !== request.id);
+    this.otherOpenRequests.dataSource.data.push(request);
 
-     this.meAssignedRequests.dataSource._updateChangeSubscription();
-     this.otherOpenRequests.dataSource._updateChangeSubscription();
-    /*this.meAssignedRequests = this.meAssignedRequests.filter(req => req.id !== request.id);
-    this.otherOpenRequests = [request, ...this.otherOpenRequests];*/
+    // sort
+    this.otherOpenRequests.dataSource.data.sort((a, b) => (b.id - a.id));
+
+    // rerender table
+    this.meAssignedRequests.dataSource._updateChangeSubscription();
+    this.otherOpenRequests.dataSource._updateChangeSubscription();
   }
 
 
   removeFromMe(request: RequestTable): void {
-    this.swallNotification.generateQuestion(`Naozaj chcetete odstrániť zo seba požiadavku s id ${request.id} ?`).then((result) => {
-      if (result.value) {
-        this.requestHttp.assignOrRemoveRequestOnMe(request.id, false).subscribe(() => {
-          this.updateTableRemoveRequestFromMe(request);
-          this.swallNotification.generateNotification(`Úspešne ste odstránili zo seba požiadavku s id : ${+request.id}. `);
-        });
-      }
-    });
+    this.swallNotification.generateQuestion(`Naozaj chcetete odstrániť zo seba požiadavku s id ${request.id} ?`)
+      .then((result) => {
+        if (result.value) {
+          this.requestHttp.assignOrRemoveRequestOnMe(request.id, false).subscribe(() => {
+            this.updateTableRemoveRequestFromMe(request);
+            this.swallNotification.generateNotification(`Úspešne ste odstránili zo seba požiadavku s id : ${+request.id}. `);
+          });
+        }
+      });
   }
 
   moveToDetials(id: number) {

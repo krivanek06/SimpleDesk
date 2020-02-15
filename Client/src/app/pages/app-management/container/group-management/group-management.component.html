@@ -14,10 +14,10 @@
   id='serdbuttonsGroup'
   [editActivated] = 'editGroupActivated'
   *ngIf="groupDetails.group  && !(isGhost$ | async)"
-  (editEmittter)="editGroup()"
-  (resetEmittter)="resetGroup()"
-  (saveEmittter)="saveGroup()"
-  (deleteEmittter)="deleteGroup()">
+  (editEmitter)="editGroup()"
+  (resetEmitter)="resetGroup()"
+  (saveEmitter)="saveGroup()"
+  (deleteEmitter)="deleteGroup()">
 </app-serdbuttons>
 
 <app-group-details

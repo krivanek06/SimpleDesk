@@ -2,8 +2,6 @@ import {Component, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {RequestTable} from 'app/shared/models/RequestTable';
 import {UserStoreService} from 'app/core/services/user-store.service';
-import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
-
 
 @Component({
   selector: 'app-request-table',
@@ -29,7 +27,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   dateTo: string;
 
 
-  constructor(public userService: UserStoreService,  private sanitizer: DomSanitizer) {
+  constructor(public userService: UserStoreService) {
   }
 
   ngOnInit() {
@@ -39,7 +37,6 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
-
 
   assignOnMe(request: RequestTable) {
     this.assignOnMeEmitter.emit(request);
@@ -54,10 +51,11 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
     this.moveToDetails.emit(id);
   }
 
-  getImage(bytes: string): SafeUrl {
-    let objectURL = 'data:image/png;base64,' + bytes;
+  // whole dashboard lagged for this shit !!!
+  /*getImage(bytes: string): SafeUrl {
+    const objectURL = 'data:image/png;base64,' + bytes;
     return this.sanitizer.bypassSecurityTrustUrl(objectURL);
-  }
+  }*/
 
 
 }
