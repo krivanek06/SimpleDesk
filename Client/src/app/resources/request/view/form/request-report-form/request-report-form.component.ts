@@ -2,11 +2,28 @@ import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core'
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {accessValidator} from 'app/shared/validators/reportAccessValidator';
 import {ReportForm} from "../../../model/Report";
+import {MAT_DATE_FORMATS} from "saturn-datepicker";
+
+export const DD_MM_YYYY_Format = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
 
 @Component({
   selector: 'app-request-report-form',
   templateUrl: './request-report-form.component.html',
-  styleUrls: ['./request-report-form.component.scss']
+  styleUrls: ['./request-report-form.component.scss'],
+  providers: [
+    {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
+  ]
 })
 export class RequestReportFormComponent implements OnInit {
   reportForm: FormGroup;
@@ -55,7 +72,6 @@ export class RequestReportFormComponent implements OnInit {
         Validators.required,
       ]],
     });
-
   }
 
 

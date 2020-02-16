@@ -2,7 +2,10 @@
 <div class='filterContainer'>
     <!-- filter by time -->
     <mat-form-field >
-        <input matInput  placeholder="Filtrovanie dátumu"   [satDatepicker]="picker"   (dateChange)="saveDateAndFilter($event.value)">
+        <input matInput
+               placeholder="Filtrovanie dátumu"
+               [satDatepicker]="picker"
+               (dateChange)="saveDateAndFilter($event.value)">
         <sat-datepicker #picker [rangeMode]="true"></sat-datepicker>
         <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
     </mat-form-field>
@@ -37,10 +40,10 @@
     <mat-form-field class='filterContainer' *ngIf='selectedType === "creator" && isMoreThanNormalUser$ | async ' >
         <mat-label>Výtvorca</mat-label>
         <mat-select  formControlName="creator">
-            <mat-option 
-                *ngFor= 'let user of allUsers$ | async' 
-                [value] = 'user.firstName + " " + user.lastName'> 
-                    {{ user.firstName }} {{ user.lastName }} 
+            <mat-option
+                *ngFor= 'let user of allUsers$ | async'
+                [value] = 'user.firstName + " " + user.lastName'>
+                    {{ user.firstName }} {{ user.lastName }}
             </mat-option>
         </mat-select>
     </mat-form-field>
@@ -48,16 +51,16 @@
     <mat-form-field class='filterContainer' *ngIf='selectedType === "closed" && isMoreThanNormalUser$ | async '>
         <mat-label>Uzavrel</mat-label>
         <mat-select  formControlName="closed">
-            <mat-option 
-                *ngFor= 'let user of allUsers$ | async' 
-                [value] = 'user.firstName + " " + user.lastName' > 
-                    {{ user.firstName }} {{ user.lastName }} 
+            <mat-option
+                *ngFor= 'let user of allUsers$ | async'
+                [value] = 'user.firstName + " " + user.lastName' >
+                    {{ user.firstName }} {{ user.lastName }}
             </mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field *ngIf='selectedType === "name" ' >
-        <input  matInput placeholder="Názov požiadavky" formControlName = "name" >        
+        <input  matInput placeholder="Názov požiadavky" formControlName = "name" >
     </mat-form-field>
 
     <mat-form-field class='filterContainer' *ngIf='selectedType === "priority" ' >
@@ -73,24 +76,24 @@
 
 <!-- print filtering results -->
 <div class = 'filterContainer filterOptions'>
-    <li *ngIf="type.value !== '' "> 
-        <img src="../../../../assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('type')">
-            Typ {{type.value}} 
+    <li *ngIf="type.value !== '' ">
+        <img src="assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('type')">
+            Typ {{type.value}}
     </li>
-    <li *ngIf="creator.value !== '' "> 
-        <img src="../../../../assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('creator')">
-        Vytvoril {{creator.value}} 
+    <li *ngIf="creator.value !== '' ">
+        <img src="assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('creator')">
+        Vytvoril {{creator.value}}
     </li>
-    <li *ngIf="closed.value !== '' "> 
-        <img src="../../../../assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('closed')">
-        Uzavrel {{closed.value}} 
+    <li *ngIf="closed.value !== '' ">
+        <img src="assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('closed')">
+        Uzavrel {{closed.value}}
     </li>
     <li *ngIf="name.value !== '' ">
-        <img src="../../../../assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('name')">
-         Názov {{name.value}} 
+        <img src="assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('name')">
+         Názov {{name.value}}
     </li>
-    <li *ngIf="priority.value !== '' "> 
-        <img src="../../../../assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('priority')">
-        Priorita {{priority.value}} 
+    <li *ngIf="priority.value !== '' ">
+        <img src="assets/images_design/delete_icon.png" class='formdeleteButton' (click)="deleteFilterOption('priority')">
+        Priorita {{priority.value}}
     </li>
 </div>

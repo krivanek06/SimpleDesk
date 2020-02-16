@@ -46,10 +46,11 @@ export class RequestFinanceFormComponent implements OnInit {
       return;
     }
     const financeForm: FinanceForm = {
-      name: this.financeForm.get("name").value,
+      name: this.financeForm.get("name").value === null ? '' : this.financeForm.get("name").value,
       financeType: this.financeForm.get("financeType").value,
       requestPriority: this.financeForm.get("requestPriority").value,
     };
+
     this.formEmitter.emit(financeForm);
   }
 

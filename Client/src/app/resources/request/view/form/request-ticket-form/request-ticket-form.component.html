@@ -6,7 +6,7 @@
     <hr> -->
     <mat-form-field >
         <mat-label>Typ Tiketu</mat-label>
-        <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType($event.value)">
+        <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType()">
             <mat-option value="Software">Software</mat-option>
             <mat-option value="Hardware">Hardware</mat-option>
             <mat-option value="User">Uživateľ</mat-option>
@@ -14,7 +14,7 @@
             <mat-option value="Other">Iné</mat-option>
         </mat-select>
 
-        <mat-error *ngIf="ticketType.invalid && ticketType.touched"> Typ tiketu nemôže byť prázdny </mat-error>
+        <mat-error *ngIf="ticketType.invalid"> Typ tiketu nemôže byť prázdny </mat-error>
     </mat-form-field>
 
     <!--TICKET TYPE -->
@@ -27,7 +27,7 @@
             <mat-option  *ngFor="let software of softwareTypes" [value]="software.name"  >{{ software.name }} </mat-option>
         </mat-select>
 
-        <mat-error *ngIf="ticketSubtypeName.invalid && ticketSubtypeName.touched"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
+        <mat-error *ngIf="ticketSubtypeName.invalid"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
     </mat-form-field>
 
      <!--hardware  -->
@@ -38,7 +38,7 @@
             <mat-option  *ngFor="let hardware of hardwareTypes" [value]="hardware.name"  >{{ hardware.name }} </mat-option>
         </mat-select>
 
-        <mat-error *ngIf=" ticketSubtypeName.invalid && ticketSubtypeName.touched">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
+        <mat-error *ngIf=" ticketSubtypeName.invalid">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
     </mat-form-field>
 
      <!-- server -->
@@ -49,14 +49,14 @@
             <mat-option  *ngFor="let server of serverTypes" [value]="server.name"  >{{ server.name }} </mat-option>
         </mat-select>
 
-        <mat-error *ngIf=" ticketSubtypeName.invalid  && ticketSubtypeName.touched">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
+        <mat-error *ngIf=" ticketSubtypeName.invalid">Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
     </mat-form-field>
 
     <!-- username or other -->
     <mat-form-field *ngIf = "ticketForm.value.ticketType === 'User' || ticketForm.value.ticketType === 'Other' ">
         <input matInput placeholder="Zadajte bližšie informácie" formControlName = "ticketSubtypeName">
 
-        <mat-error *ngIf=" ticketSubtypeName.invalid  && ticketSubtypeName.touched"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
+        <mat-error *ngIf=" ticketSubtypeName.invalid"> Prosím vyberte kategóriu pre {{ ticketForm.value.ticketType  }}</mat-error>
     </mat-form-field>
 
 
@@ -69,7 +69,7 @@
             <mat-option value="vysoká">vysoká</mat-option>
         </mat-select>
 
-        <mat-error *ngIf=" requestPriority.invalid && requestPriority.touched"> Prosím vyberte prioritu tiketu</mat-error>
+        <mat-error *ngIf=" requestPriority.invalid"> Prosím vyberte prioritu tiketu</mat-error>
 
     </mat-form-field>
 
@@ -77,7 +77,7 @@
     <mat-form-field>
         <input  matInput placeholder="Názov tiketu" formControlName = "name">
 
-        <mat-error *ngIf=" name.invalid && name.touched"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>
+        <mat-error *ngIf=" name.invalid"> Prosím zadefinujte meno tiketu v dĺžke od 5 po 254 znakov</mat-error>
 
     </mat-form-field>
 
@@ -85,7 +85,7 @@
     <mat-form-field >
         <textarea  matInput placeholder="Popis problému" formControlName = "problem"></textarea>
 
-        <mat-error *ngIf="problem.invalid  && problem.touched"> Prosím zadefinujte váš problém, minimálne 10 zankov</mat-error>
+        <mat-error *ngIf="problem.invalid"> Prosím zadefinujte váš problém, minimálne 10 zankov</mat-error>
     </mat-form-field>
 
     <!-- submit button -->

@@ -11,16 +11,16 @@ import rc.bootsecurity.requestModule.commonModule.entity.Request;
 public class EmailService {
     private final String HELPDESK = "supportdesk@cofidis.sk";
 
-    private final String ASSIGN_EMAIL = " ,bola pridelená na uživateľa : ";
-    private final String CLOSE_EMAIL = " ,bola zatvorená uživateľom : ";
-    private final String SOLUTION_EMAIL = " ,bola vyriešená uživateľom : ";
-    private final String REOPEN_EMAIL = " ,bola znovu otvorená uživateľom : ";
+    private final String ASSIGN_EMAIL = " ,bola pridelena na uzivatelom : ";
+    private final String CLOSE_EMAIL = " ,bola zatvorena uzivatelom : ";
+    private final String SOLUTION_EMAIL = " ,bola vyriesena uzivatelom : ";
+    private final String REOPEN_EMAIL = " ,bola znovu otvorena uzivatelom : ";
 
     @Autowired
     private JavaMailSender javaMailSender;
 
     private String getEmailFooter(User whoInitiated){
-        return "\n\n" + "Email bol zaslaný od uživateľa : " + whoInitiated.getFullName();
+        return "\n\n" + "Email bol zaslany od uzivatela : " + whoInitiated.getFullName();
     }
 
     private SimpleMailMessage composeEmail(String ...sendToEmails) {
@@ -32,13 +32,13 @@ public class EmailService {
 
     private SimpleMailMessage composeRequestEmail(Request request, User whoInitiated, String action,   String ...sendToEmails) {
         SimpleMailMessage message = this.composeEmail(sendToEmails);
-        message.setSubject("Požiadavka " + request.getId());
-        message.setText(getRequestEmail(request,action , whoInitiated.getFullName() ));
+        message.setSubject("Poziadavka " + request.getId());
+        message.setText(getRequestEmail(request,action , whoInitiated));
         return message;
     }
 
-    private String getRequestEmail(Request request,String action ,String whoInitiated){
-        return "Požiadavka: " + request.getName() + action +  request.getAssigned().getFullName() + "\n\n" + "Email bol zaslaný od uživateľa : " + whoInitiated;
+    private String getRequestEmail(Request request,String action ,User whoInitiated){
+        return "Poziadavka: " + request.getName() + action +  request.getAssigned().getFullName() + this.getEmailFooter(whoInitiated);
     }
 
     public void sendAssignRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
@@ -55,8 +55,8 @@ public class EmailService {
 
     public void sendRequestCommentEmail(Request request, User whoInitiated, String comment,String ...sendToEmails ){
         SimpleMailMessage message = this.composeEmail(sendToEmails);
-        message.setSubject("Požiadavka " + request.getId());
-        message.setText("Komentár bol pridaný na požiadavku: " + request.getName() + "\n\n" + comment  + this.getEmailFooter(whoInitiated));
+        message.setSubject("Poziadavka " + request.getId());
+        message.setText("Komentar bol pridany na poziadavku: " + request.getName() + "\n\n" + comment  + this.getEmailFooter(whoInitiated));
 
       //  javaMailSender.send(message);
     }
@@ -64,11 +64,11 @@ public class EmailService {
     public void sendUserRegistrationEmail(User whoInitiated, User newUser){
         SimpleMailMessage message = this.composeEmail(newUser.getEmail());
         message.setSubject("Konto na helpdesk");
-        message.setText("Môžete vstúpiť do systemu helpdesk. \n" +
-                "prihlasovanie údaje sú nasledovné \n" +
+        message.setText("Mozete vstupit do systemu helpdesk. \n" +
+                "prihlasovanie udaje sú nasledovne \n" +
                 "prihlasovacie meno : " + newUser.getUsername() + "\n" +
                 "prihlasovacie heslo : " + newUser.getPassword() + "\n" +
-                "adresa stránky : http://10.134.216.210:8081" +
+                "adresa stranky : http://10.134.216.210:8081" +
                 this.getEmailFooter(whoInitiated) );
 
       //  javaMailSender.send(message);

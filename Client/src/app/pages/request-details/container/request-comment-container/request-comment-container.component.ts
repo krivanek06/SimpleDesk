@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, Input, OnInit} from '@angular/core';
 import {RequestComment, RequestDetails, RequestCommentWrapper} from 'app/shared/models/RequestDetails';
 import {Observable} from 'rxjs';
 import {Group} from 'app/shared/models/UserGroups';
@@ -15,17 +15,21 @@ import {GroupHttpService} from "../../../../api/group-http.service";
   styleUrls: ['./request-comment-container.component.scss']
 })
 export class RequestCommentContainerComponent implements OnInit {
+  @Input() applyZIndex = true;
+  @Input() requestDetails: RequestDetails;
+
   showWindowCommentSharing = false;
   clickedGroup = false;
   selectedGroup: Group;
   loggedInUsername: string;
+
 
   private sharingComment: RequestComment;
   private isAdmin$: Observable<boolean>;
   private isGhost$: Observable<boolean>;
   private isSolver$: Observable<boolean>;
 
-  requestDetails$: Observable<RequestDetails>;
+
   involvedInGroups$: Observable<string[]>;
 
 
@@ -41,7 +45,6 @@ export class RequestCommentContainerComponent implements OnInit {
     this.isAdmin$ = this.userStoreService.isAdmin();
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
-    this.requestDetails$ = this.requestStore.getRequestDetials();
     this.involvedInGroups$ = this.groupService.getAllGroupNamesForUser();
     this.loggedInUsername = this.userStoreService.user.username;
   }

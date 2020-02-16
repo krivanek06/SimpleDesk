@@ -53,7 +53,7 @@ export class RequestTicketFormComponent implements OnInit {
     this.ticketFormViewChild.resetForm();
   }
 
-  changeTicketType(value: string): void {
+  changeTicketType(): void {
     this.ticketForm.patchValue({ticketSubtypeName: ''});
   }
 

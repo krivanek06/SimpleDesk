@@ -18,6 +18,7 @@
     <!-- table with requests -->
     <app-request-table
         #closedRequests
+        [numberOfRequests] = 'closedRequests.dataSource.data.length'
         (moveToDetails) = 'moveToDetials($event)'
         headerColor="#E8F3FF"
         [displayedColumns]= "viewTable"
@@ -25,9 +26,7 @@
         tableTitle="Uzatvorené požiadavky">
     </app-request-table>
 
-
-
-    <ngx-spinner  >
-        <p style="font-size: 20px; color: white">Načítavam požiadavky...</p>
-    </ngx-spinner>
 </div>
+<ngx-spinner  >
+  <p style="font-size: 20px; color: white">Načítavam požiadavky...</p>
+</ngx-spinner>

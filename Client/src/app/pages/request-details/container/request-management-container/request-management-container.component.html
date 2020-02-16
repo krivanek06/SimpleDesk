@@ -1,4 +1,4 @@
-<ng-container *ngIf="requestDetails$ | async as requestDetails">
+<ng-container *ngIf="requestDetails">
   <app-request-management
     class='content'
     [isOpen]='requestDetails.closed === null'

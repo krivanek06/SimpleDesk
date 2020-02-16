@@ -25,9 +25,9 @@
 
     <!--deadline -->
     <mat-form-field>
-      <input matInput [matDatepicker]="picker" placeholder="Deadline" formControlName="deadline">
-      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker></mat-datepicker>
+      <input matInput [satDatepicker]="picker" placeholder="Deadline" formControlName="deadline">
+      <sat-datepicker #picker></sat-datepicker>
+      <sat-datepicker-toggle matSuffix [for]="picker"></sat-datepicker-toggle>
 
       <mat-error *ngIf="deadline.invalid">
         Prosím zadefinujte deadline reportu
@@ -122,13 +122,13 @@
 
     </mat-form-field>
     <!--  <button mat-raised-button type = "button" color="primary" class='formAssignedButton'>Pridať</button>-->
-    <img src="../../../../assets/images_design/add_icon.png" class='formAssignedButton' (click)="addPeopleToAccess()">
+    <img src="assets/images_design/add_icon.png" class='formAssignedButton' (click)="addPeopleToAccess()">
 
     <!-- display added people / remove them -->
     <div class='printingResults'>
       <ul>
         <li *ngFor="let item of accessByPeopleArray; let i = index" class="oneLineLI">
-          <img src="../../../../assets/images_design/delete_icon.png"
+          <img src="assets/images_design/delete_icon.png"
                class='formdeleteButton'
                (click)="deletePeopleItem(i)">
           {{item}}
@@ -147,13 +147,13 @@
       </mat-error>
 
     </mat-form-field>
-    <img src="../../../../assets/images_design/add_icon.png" class='formAssignedButton' (click)="addMethodToAccess()">
+    <img src="assets/images_design/add_icon.png" class='formAssignedButton' (click)="addMethodToAccess()">
 
     <!-- display added people / remove them -->
     <div class='printingResults'>
       <ul>
         <li *ngFor="let item of accessByMethodArray; let i = index" class="oneLineLI">
-          <img src="../../../../assets/images_design/delete_icon.png"
+          <img src="assets/images_design/delete_icon.png"
                class='formdeleteButton'
                (click)="deleteMethodItem(i)">
           {{item}}

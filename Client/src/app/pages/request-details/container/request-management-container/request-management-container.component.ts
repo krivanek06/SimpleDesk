@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, Input, OnDestroy, OnInit} from '@angular/core';
 import {UserSimpleDTO} from 'app/shared/models/UserGroups';
 import {RequestDetails, UserSimple} from 'app/shared/models/RequestDetails';
 import {UserStoreService} from 'app/core/services/user-store.service';
@@ -9,7 +9,6 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 import {RequestHttpService} from 'app/api/request-http.service';
 import {UserHttpService} from 'app/api/user-http.service';
 import {RequestService} from 'app/core/services/request.service';
-import {takeUntil} from "rxjs/operators";
 import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
 
 @Component({
@@ -24,7 +23,7 @@ export class RequestManagementContainerComponent implements OnInit {
   private isSolverRightHand$: Observable<boolean>;
 
 
-  requestDetails$: Observable<RequestDetails>;
+  @Input() requestDetails: RequestDetails;
   allusers$: Observable<UserSimpleDTO[]>;
 
 
@@ -43,7 +42,6 @@ export class RequestManagementContainerComponent implements OnInit {
     this.isManager$ = this.userStoreService.isManager();
     this.isAdmin$ = this.userStoreService.isAdmin();
     this.isSolverRightHand$ = this.userStoreService.isSolverRightHand();
-    this.requestDetails$ = this.requestStoreService.getRequestDetials();
   }
 
 

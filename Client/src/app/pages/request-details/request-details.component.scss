@@ -1,108 +1,58 @@
 
-#contentContainer{
-    height: 100%;
-    width: calc(100% - 85px);
-    padding: 5px;
-    float: right;
-}
-#requestLeftSide{
-    width: 60%;
-    float: left;
+#contentContainer {
+  height: 100%;
+  width: calc(100% - 85px);
+  padding: 5px;
+  float: right;
 }
 
-#requestRightSide{
+#requestLeftSide {
+  width: 60%;
+  float: left;
+}
+
+#requestRightSide {
   /*  width: 35%;*/
-    width: 30%;
-    margin-right: 5%;
-    float: right;
-    position: relative;
+  width: 30%;
+  margin-right: 5%;
+  float: right;
+  position: relative;
 }
-.customRow {
-    display: flex; 
+
+#sliderDiv1 {
+  position: absolute;
+  top: 0px;
+  right: 5px;
+  z-index: 1;
+  cursor: pointer;
+}
+
+.sliderButton {
+  font-size: 40px;
+  color: coral;
+
+  -webkit-transition: 0.4s ease-out;
+  -moz-transition: 0.4s ease-out;
+  -o-transition: 0.4s ease-out;
+  transition: 0.4s ease-out;
+
+  &:hover {
+    transform: scale(1.30);
+    -webkit-transition: 0.4s ease-out;
+    -moz-transition: 0.4s ease-out;
+    -o-transition: 0.4s ease-out;
+    transition: 0.4s ease-out;
   }
-  
-.customCol {
-    flex: 1;
-  }
-
-.raisedbox { 
-	color:#8a8a8a;
-    padding: 10px;
-    border-radius: 5px;
-    -webkit-box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
-    -moz-box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
-    box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
-
-    float: left;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    background-color: #FBFBFB;
-    font-size: 14px;
-    overflow-wrap: break-word;
-    white-space: pre-wrap;
 }
 
-.avatar {
-    height: 35px;
-    width: 35px;
-    margin-right: 5px;
+ng-sidebar-container {
+  height: 100vh;
 }
-
-.raisedboxName{
-    position: relative;
-    font-weight: bold;
-    font-size: 12px;
-    display: flex;
-}
-
-.mainInformationContainer{
-    margin-bottom: 20px;
-}
-
-#sliderDiv1{
-    position: absolute;
-    top: 0px;
-    right: 5px;
-    z-index: 1;
-    cursor: pointer;
-}
-
-#sliderDiv2{
-    position: absolute;
-    top: -18px;
-    right: 5px;
-    z-index: 1;
-    cursor: pointer;
-}
-
-.sliderButton{
-    font-size: 40px;
-    color: coral;
-
-    -webkit-transition:  0.4s ease-out;
-    -moz-transition:  0.4s ease-out;
-    -o-transition:  0.4s ease-out;
-    transition:  0.4s ease-out;
-
-    &:hover {
-        transform: scale(1.30);
-        -webkit-transition:  0.4s ease-out;
-        -moz-transition:  0.4s ease-out;
-        -o-transition:  0.4s ease-out;
-        transition:  0.4s ease-out;
-    }
-}
-
-ng-sidebar-container{
-    height: 100vh;
-}
-
-
-
 
 ::ng-deep aside {
-    background-color:#f6f6f6;
-    padding: 2em 1em;
-  }
+  background-color: #f6f6f6;
+  padding: 2em 1em;
+}
 
-  
+
+

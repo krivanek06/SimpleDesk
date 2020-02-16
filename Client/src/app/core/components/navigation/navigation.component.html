@@ -2,14 +2,14 @@
 
 <div id="navigationContainer">
     <!-- navigation background -->
-    <img src="./../../../../assets/images_design/navigation_background_3.png" 
+    <img src="assets/images_design/navigation_background_3.png" 
         alt="dashboard navigation icon"
         id="navigationBackground" >
 
 
         <!-- dashboard -->
         <a class='navigationIconContainer' routerLink="/dashboard" >
-            <img src="./../../../../assets/images_design/dashboard_2.png" 
+            <img src="assets/images_design/dashboard_2.png" 
                 alt="dashboard navigation icon" 
                 id='dashboardIcon'
                 class='navigationIcon'
@@ -24,7 +24,7 @@
         <a class='navigationIconContainer'  routerLink="/request_new" 
             *ngIf = "!(isGhost$ | async) && 
                 ((hasFinanceModuleAccess$ | async) || (hasTicketModuleAccess$ | async) || (hasReportModuleAccess$ | async))" >
-            <img src="./../../../../assets/images_design/request_new_icon.png" 
+            <img src="assets/images_design/request_new_icon.png" 
                 alt="dashboard navigation icon" 
                 id='requestNewIcon'
                 class='navigationIcon'
@@ -36,7 +36,7 @@
 
         <!-- request closed -->
         <a class='navigationIconContainer' routerLink="/request_closed">
-            <img src="./../../../../assets/images_design/request_closed_icon.png" 
+            <img src="assets/images_design/request_closed_icon.png" 
                 alt="dashboard navigation icon" 
                 id='requestClosedIcon'
                 class='navigationIcon'
@@ -48,7 +48,7 @@
 
         <!-- user profile -->
         <a class='navigationIconContainer'  routerLink="/user_profile">
-            <img src="./../../../../assets/images_design/user_profile_icon.png" 
+            <img src="assets/images_design/user_profile_icon.png" 
                 alt="dashboard navigation icon" 
                 id='userProfileIcon'
                 class='navigationIcon'
@@ -61,7 +61,7 @@
         <!-- app management -->
         <a class='navigationIconContainer' routerLink="/app_management"  
             *ngIf='(hasPrivilegeAccess$ | async) || (isAdmin$ | async) || (isGhost$ | async)'>
-            <img src="./../../../../assets/images_design/team_icon.png" 
+            <img src="assets/images_design/team_icon.png" 
                 alt="dashboard navigation icon" 
                 id='appManagementIcon'
                 class='navigationIcon'
