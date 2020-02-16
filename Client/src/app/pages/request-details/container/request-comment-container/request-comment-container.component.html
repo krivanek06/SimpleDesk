@@ -1,4 +1,4 @@
-<ng-container *ngIf="requestDetails$ | async as requestDetails">
+<ng-container *ngIf="requestDetails">
 
   <!-- request content -->
   <app-request-content [requestDetail]='requestDetails'></app-request-content>
@@ -48,9 +48,9 @@
 
   <!-- form to write commment -->
   <app-request-comment-form
-    *ngIf='(requestDetails$ | async)?.closed === null &&
+    *ngIf='requestDetails?.closed === null &&
               !(isGhost$ | async) &&
-              ( (requestDetails$ | async)?.allowCommenting || (isSolver$ | async) )'
+              ( requestDetails?.allowCommenting || (isSolver$ | async) )'
     (addedCommentEmitter)="addComment($event)">
   </app-request-comment-form>
 </ng-container>

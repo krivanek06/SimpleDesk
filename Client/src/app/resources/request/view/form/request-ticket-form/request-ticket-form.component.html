@@ -6,7 +6,7 @@
     <hr> -->
     <mat-form-field >
         <mat-label>Typ Tiketu</mat-label>
-        <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType($event.value)">
+        <mat-select formControlName="ticketType" (selectionChange)= "changeTicketType()">
             <mat-option value="Software">Software</mat-option>
             <mat-option value="Hardware">Hardware</mat-option>
             <mat-option value="User">Uživateľ</mat-option>

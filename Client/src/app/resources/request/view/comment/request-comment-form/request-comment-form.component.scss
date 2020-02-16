@@ -1,0 +1,26 @@
+.inlineParameters{
+    display: block;
+    width: 80%;
+    position: relative;
+    margin-bottom: 5px;
+    margin:auto;
+}
+
+#commentField{
+    height: 150px;
+}
+
+#sendingButton{
+    float: right;
+    background-color: #0077ec;
+    margin-bottom: 25px;
+}
+
+
+mat-form-field{
+    margin-top: 60px;
+}
+
+mat-checkbox{
+    margin-left: 10px;
+}

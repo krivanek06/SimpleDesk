@@ -16,6 +16,7 @@ import {GroupHttpService} from "../../../../api/group-http.service";
 })
 export class RequestCommentContainerComponent implements OnInit {
   @Input() applyZIndex = true;
+  @Input() requestDetails: RequestDetails;
 
   showWindowCommentSharing = false;
   clickedGroup = false;
@@ -28,7 +29,7 @@ export class RequestCommentContainerComponent implements OnInit {
   private isGhost$: Observable<boolean>;
   private isSolver$: Observable<boolean>;
 
-  requestDetails$: Observable<RequestDetails>;
+
   involvedInGroups$: Observable<string[]>;
 
 
@@ -44,7 +45,6 @@ export class RequestCommentContainerComponent implements OnInit {
     this.isAdmin$ = this.userStoreService.isAdmin();
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
-    this.requestDetails$ = this.requestStore.getRequestDetials();
     this.involvedInGroups$ = this.groupService.getAllGroupNamesForUser();
     this.loggedInUsername = this.userStoreService.user.username;
   }

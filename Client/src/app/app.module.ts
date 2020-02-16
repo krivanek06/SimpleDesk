@@ -49,8 +49,6 @@ import {UserFormComponent} from './resources/user/views/user-form/user-form.comp
 import {GroupFormComponent} from './resources/group/view/group-form/group-form.component';
 import {RequestFormsComponent} from './pages/request-forms/request-forms.component';
 import {LoginComponent} from './pages/login/login.component';
-import {LoginFormComponent} from './pages/login/login-form/login-form.component';
-import {LoginBackgroundComponent} from './pages/login/login-background/loginBackground.component';
 import {NavigationIconHoverDirective} from './shared/directives/navigation-icon-hover.directive';
 import {FileUploadComponent} from './shared/components/file-upload/file-upload.component';
 import {GroupManagementComponent} from './pages/app-management/container/group-management/group-management.component';
@@ -59,35 +57,34 @@ import {UserStoreService} from './core/services/user-store.service';
 import {RequestTableComponent} from './shared/components/request-table/request-table.component';
 import {FileServiceService} from './core/services/file-service.service';
 import {UserImagesComponent} from './resources/user/views/user-images/user-images.component';
-import {RequestSideInformationComponent} from './pages/request-details/container/request-side-information/request-side-information.component';
 import {RequestManagementContainerComponent} from './pages/request-details/container/request-management-container/request-management-container.component';
 import {RequestFilterComponent} from './shared/components/request-filter/request-filter.component';
 import {UnauthorizedComponent} from './pages/unauthorized/unauthorized.component';
 import {DotLoaderComponent} from './shared/components/dot-loader/dot-loader.component';
 import {SERDButtonsComponent} from './shared/components/serdbuttons/serdbuttons.component';
-import {RequestCommentFormComponent} from './resources/request-comment/request-comment-form/request-comment-form.component';
+import {RequestCommentFormComponent} from './resources/request/view/comment/request-comment-form/request-comment-form.component';
 import {UserManagementButtonsComponent} from './resources/user/views/user-management-buttons/user-management-buttons.component';
 import {UserManagementComponent} from './pages/app-management/container/user-management/user-management.component';
 import {UserGroupManagementComponent} from './pages/app-management/views/user-group-management/user-group-management.component';
 import {GroupFormDetailsComponent} from './resources/group/view/group-form-details/group-form-details.component';
 import {GroupRegistrationComponent} from './pages/app-management/views/group-registration/group-registration.component';
 import {UserRegistrationComponent} from './pages/app-management/views/user-registration/user-registration.component';
-import {RequestCommentBodyComponent} from './resources/request-comment/request-comment-body/request-comment-body.component';
-import {RequestCommentSharingComponent} from './resources/request-comment/request-comment-sharing/request-comment-sharing.component';
-import {RequestCommentOptionsComponent} from './resources/request-comment/request-comment-options/request-comment-options.component';
-import {RequestManagementComponent} from './resources/request/view/detial/request-management/request-management.component';
-import {RequestContentComponent} from './resources/request/view/detial/request-content/request-content.component';
+import {RequestCommentBodyComponent} from './resources/request/view/comment/request-comment-body/request-comment-body.component';
+import {RequestCommentSharingComponent} from './resources/request/view/comment/request-comment-sharing/request-comment-sharing.component';
+import {RequestCommentOptionsComponent} from './resources/request/view/comment/request-comment-options/request-comment-options.component';
+import {RequestManagementComponent} from './resources/request/view/detail/request-management/request-management.component';
+import {RequestContentComponent} from './resources/request/view/detail/request-content/request-content.component';
 import {RequestCommentContainerComponent} from './pages/request-details/container/request-comment-container/request-comment-container.component';
 import {TicketFormPageComponent} from './pages/request-forms/view/ticket-form-page/ticket-form-page.component';
 import {ReportFormPageComponent} from './pages/request-forms/view/report-form-page/report-form-page.component';
 import {FinanceFormPageComponent} from './pages/request-forms/view/finance-form-page/finance-form-page.component';
+import { RequestInformationComponent } from './resources/request/view/detail/request-information/request-information.component';
+import { RequestInformationContainerComponent } from './pages/request-details/container/request-information-container/request-information-container.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     routingComponents,
-    LoginFormComponent,
-    LoginBackgroundComponent,
     NavigationComponent,
     HeaderComponent,
     ChartComponent,
@@ -113,7 +110,6 @@ import {FinanceFormPageComponent} from './pages/request-forms/view/finance-form-
     GroupManagementComponent,
     RequestTableComponent,
     UserImagesComponent,
-    RequestSideInformationComponent,
     RequestCommentSharingComponent,
     RequestManagementContainerComponent,
     RequestFilterComponent,
@@ -133,7 +129,9 @@ import {FinanceFormPageComponent} from './pages/request-forms/view/finance-form-
     RequestCommentContainerComponent,
     TicketFormPageComponent,
     ReportFormPageComponent,
-    FinanceFormPageComponent
+    FinanceFormPageComponent,
+    RequestInformationComponent,
+    RequestInformationContainerComponent
   ],
   imports: [
     BrowserModule,

@@ -17,10 +17,11 @@ import {GroupRegistrationComponent} from './pages/app-management/views/group-reg
 import {TicketFormPageComponent} from "./pages/request-forms/view/ticket-form-page/ticket-form-page.component";
 import {ReportFormPageComponent} from "./pages/request-forms/view/report-form-page/report-form-page.component";
 import {FinanceFormPageComponent} from "./pages/request-forms/view/finance-form-page/finance-form-page.component";
+import {LoginGuardGuard} from "./core/guards/login-guard.guard";
 
 
 const routes: Routes = [
-  {path: 'login', component: LoginComponent},
+  {path: 'login', component: LoginComponent, canActivate: [LoginGuardGuard]},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {
     path: 'request_new', component: RequestFormsComponent, canActivate: [AuthGuard],

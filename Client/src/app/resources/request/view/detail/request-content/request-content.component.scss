@@ -1,0 +1,46 @@
+
+@import '../../../../../shared/customCss/iconScss';
+
+.customRow {
+    display: flex;
+  }
+
+.customCol {
+    flex: 1;
+  }
+
+.raisedbox {
+	color:#8a8a8a;
+    padding: 10px;
+    border-radius: 5px;
+    -webkit-box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
+    -moz-box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
+    box-shadow: 1px 1px 1px 2px rgba(119, 119, 119, 0.75);
+
+    float: left;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    background-color: #FBFBFB;
+    font-size: 14px;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+}
+
+
+.raisedboxName{
+    position: relative;
+    font-weight: bold;
+    font-size: 12px;
+    display: flex;
+}
+
+.mainInformationContainer{
+    margin-bottom: 20px;
+}
+
+/*
+::ng-deep aside {
+    background-color:#f6f6f6;
+    padding: 2em 1em;
+  }*/
+

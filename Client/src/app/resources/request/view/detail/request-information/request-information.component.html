@@ -1,0 +1,233 @@
+<ng-container *ngIf="requestDetails">
+  <div class='informationsContainer'>
+    <h3 class='formTitleSmall'>
+      <img src="assets/images_design/information_icon.png" class="informationIcon" alt="information_icon"/>
+      Všeobecné informácie
+    </h3>
+
+    <ul class='userInformations'>
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Meno požiadavky</div>
+        <ul>
+          <li class='information'> {{ requestDetails.name }}</li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Typ</div>
+        <ul>
+          <li class='information'> {{ requestDetails.requestType}}</li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Priorita</div>
+        <ul>
+          <li class='information'>
+            <img src="assets/images_design/priority_low_icon_2.png" class="avatar"
+                 *ngIf='requestDetails.requestPriority === "nízka"' alt="low priority"/>
+            <img src="assets/images_design/priority_medium_icon_2.png" class="avatar"
+                 *ngIf='requestDetails.requestPriority === "stredná"' alt="medium priority"/>
+            <img src="assets/images_design/priority_high_icon_2.png" class="avatar"
+                 *ngIf='requestDetails.requestPriority === "vysoká"' alt="high priority"/>
+            {{ requestDetails.requestPriority | titlecase }}
+          </li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Stav</div>
+        <ul>
+          <li class='information'>{{ requestDetails.requestPosition }}  </li>
+        </ul>
+      </li>
+
+      <!-- Ticket informations -->
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Ticket" '>
+        <div class='informationTitle'>Typ ticketu</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).ticketType }}</li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Ticket" '>
+        <div class='informationTitle'>{{ $any(requestDetails).ticketType }}</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).ticketSubtypeName }}</li>
+        </ul>
+      </li>
+
+      <!-- Finance informations -->
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Finance" '>
+        <div class='informationTitle'>Typ financií</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).financeType }}</li>
+        </ul>
+      </li>
+
+
+      <!-- Report informations -->
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Vlastník reportu</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).owner }}</li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Frekvencia obnovenia</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).reportRefresh }}</li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Prístup pre</div>
+        <ul *ngIf='$any(requestDetails).accessByPeople != null'>
+          <li class='information' *ngFor="let access of $any(requestDetails).accessByPeople.split(',')">
+            {{ access }}
+          </li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Prístup cez</div>
+        <ul *ngIf='$any(requestDetails).accessMethods != null'>
+          <li class='information' *ngFor="let access of $any(requestDetails).accessMethods.split(',')">
+            {{ access }}
+          </li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <ng-container *ngFor='let store of $any(requestDetails).reportAccessStored'>
+          <div class='informationTitle'>{{ store.reportAccess }}</div>
+          <ul>
+            <li class='information'> {{  store.path }}</li>
+          </ul>
+        </ng-container>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Vyhodnotenie v dňoch</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).evaluation }}</li>
+        </ul>
+      </li>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+        <div class='informationTitle'>Deadline</div>
+        <ul>
+          <li class='information'> {{ $any(requestDetails).deadline | date:'dd. MM. y '}}</li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+
+
+  <div class='informationsContainer'>
+    <h3 class='formTitleSmall'>
+      <img src="assets/images_design/user_infomatio_icon.png" class="informationIcon" alt="user informations photo"/>
+      Ľudia
+    </h3>
+
+    <ul class='userInformations'>
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Vytvoril</div>
+        <ul>
+          <li class='information'>
+            <img [src]="'data:image/jpeg;base64,'+requestDetails.creator.photoBytes" class='avatar'
+                 alt="creator user photo"/>
+            {{ requestDetails.creator.firstName }} {{ requestDetails.creator.lastName }}
+          </li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Pridelené</div>
+        <ul *ngIf='requestDetails.assigned !== null'>
+          <li class='information'>
+            <img [src]="'data:image/jpeg;base64,'+requestDetails.assigned.photoBytes" class='avatar'
+                 alt="assigned user photo"/>
+            {{ requestDetails.assigned.firstName }} {{ requestDetails.assigned.lastName }}
+          </li>
+        </ul>
+        <ul *ngIf='requestDetails.closed === null &&requestDetails.assigned === null && showAssignedOnMe'>
+          <li class='information clicable' (click)="assignOnMe()"> prideliť mne</li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer' [hidden]='true'>
+        <div class='informationTitle'>Sledované</div>
+        <ul>
+          <li class='information ' *ngFor='let person of requestDetails.userToWatchRequest'>
+            <img [src]="'data:image/jpeg;base64,'+person.photoBytes" class='avatar' alt="watched user photo"/>
+            {{ person.firstName }} {{ person.lastName }}
+          </li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Uzavrel</div>
+        <ul *ngIf='requestDetails.closed !== null'>
+          <li class='information'>
+            <img [src]="'data:image/jpeg;base64,'+requestDetails.closed.photoBytes" class='avatar'
+                 alt="closed user photo"/>
+            {{ requestDetails.closed.firstName }} {{ requestDetails.closed.lastName }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class='informationsContainer'>
+    <h3 class='formTitleSmall'>
+      <img src="assets/images_design/clock_icon.png" class="informationIcon" alt="clock icon"/>
+      Sledovanie času
+    </h3>
+
+    <ul class='userInformations'>
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Čas vytvorenia</div>
+        <ul>
+          <li class='information'>
+            {{ requestDetails.timestampCreation | date:'dd. MM. y, HH:mm:ss ' }}
+          </li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Čas uzatvorenia</div>
+        <ul>
+          <li class='information'>
+            {{ requestDetails.timestampClosed | date:'dd. MM. y, HH:mm:ss '}}
+          </li>
+        </ul>
+      </li>
+
+      <li class='userInformationsContainer'>
+        <div class='informationTitle'>Čas otvorenia</div>
+        <ul>
+          <li class='information'>
+            {{ openDays }} dni
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+
+  <div class='informationsContainer'>
+    <h3 class='formTitleSmall'>
+      <img src="assets/images_design/download_document_icon.png" class="informationIcon"
+           alt="download_document_icon"/>
+      Dokumenty
+    </h3>
+
+    <ul class='userInformations'>
+      <li class='userInformationsContainer' *ngFor='let document of requestDetails.documents'>
+        <div class='informationTitle clicable' (click)="downloadFile(document.name)"> {{ document.name }}</div>
+        <ul>
+          <li class='information'>
+            {{ document.lastModified  |  date:'dd. MM. y, HH:mm:ss ' }}
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</ng-container>

@@ -97,12 +97,12 @@
 
     <ng-container matColumnDef="timeCreated">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" class="hideOnSmallWindow"> Vytvorené</mat-header-cell>
-      <mat-cell *matCellDef="let element" class="hideOnSmallWindow"> {{element.timestampCreation | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
+      <mat-cell *matCellDef="let element" class="hideOnSmallWindow"> {{element.timestampCreation | date:'dd. MM. yyyy '}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="timeClosed">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Uzatvorené</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{element.timestampClosed | date:'MMM d, y, HH:mm:ss '}} </mat-cell>
+      <mat-cell *matCellDef="let element"> {{element.timestampClosed | date:'dd. MM. yyyy '}} </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="details">

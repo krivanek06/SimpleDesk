@@ -1,0 +1,29 @@
+<div class='flex'>
+  <!-- comment info -->
+  <div class="commentBoxName">
+    <img [src]="'data:image/jpeg;base64,'+requestComment.creator.photoBytes" class='avatar'/>
+    {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>
+    <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>
+  </div>
+
+  <!-- private comment info -->
+  <div class="commentBoxName" *ngIf='requestComment.isPrivate'>
+    <div class='light bigBold'>
+      Privátny komentár, zdieľané s : <br>
+    </div>
+    <div class='light'>
+      <span *ngFor='let groupName of requestComment.groupsToShare'> {{ groupName  }} </span>
+    </div>
+  </div>
+
+  <!-- solution flag -->
+  <div class="commentBoxName" *ngIf='requestComment.id === solutionId'>
+    <img src="assets/images_design/request_solution.png" id='solutionImg'/>
+    <span id='solutionText'>Riešenie</span>
+  </div>
+</div>
+
+
+<p> {{requestComment.comment}} </p>
+
+

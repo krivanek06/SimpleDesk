@@ -32,7 +32,6 @@ export class ReportFormPageComponent implements OnInit {
   }
 
   submitReport(reportForm: ReportForm) {
-    console.log(reportForm);
     this.swallNotification.generateQuestion(`Naozaj chcetete odoslať report ?`).then((result) => {
       if (result.value) {
         this.spinner.show();
