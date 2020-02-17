@@ -59,6 +59,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     this.requestHttp.getRequestOnDashboard().subscribe(requests => {
+        console.log(requests);
+        requests.otherOpen.forEach(request => {
+          request.creatorImageByte = 'data:image/jpeg;base64,' +  request.creatorImageByte;
+        });
         this.myOpenRequests.dataSource.data = [...requests.myOpen as RequestTable[]];
         this.meAssignedRequests.dataSource.data = [...requests.assignedOnMe as RequestTable[]];
         this.otherOpenRequests.dataSource.data = [...requests.otherOpen as RequestTable[]];

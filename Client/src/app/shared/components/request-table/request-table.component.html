@@ -39,7 +39,8 @@
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Vytvoril</mat-header-cell>
       <mat-cell *matCellDef="let element">
         <!--<img [src]='getImage(element.creatorImageByte)' class='userIcon'/>-->
-        <img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>
+        <!--<img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>-->
+        <img src="{{element.creatorImageByte}}" class='userIcon'/>
         {{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}
       </mat-cell>
     </ng-container>

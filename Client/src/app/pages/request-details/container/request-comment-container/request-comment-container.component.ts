@@ -25,16 +25,15 @@ export class RequestCommentContainerComponent implements OnInit {
 
 
   private sharingComment: RequestComment;
-  private isAdmin$: Observable<boolean>;
-  private isGhost$: Observable<boolean>;
-  private isSolver$: Observable<boolean>;
+  isGhost$: Observable<boolean>;
+  isSolver$: Observable<boolean>;
 
 
   involvedInGroups$: Observable<string[]>;
 
 
   constructor(private swallNotification: SwallNotificationService,
-              private userStoreService: UserStoreService,
+              public userStoreService: UserStoreService,
               private commentHttp: CommentHttpService,
               private requestService: RequestService,
               private groupService: GroupHttpService,
@@ -42,7 +41,6 @@ export class RequestCommentContainerComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isAdmin$ = this.userStoreService.isAdmin();
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
     this.involvedInGroups$ = this.groupService.getAllGroupNamesForUser();

@@ -21,6 +21,7 @@ import {LoginGuardGuard} from "./core/guards/login-guard.guard";
 
 
 const routes: Routes = [
+  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   {path: 'login', component: LoginComponent, canActivate: [LoginGuardGuard]},
   {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
   {
@@ -45,7 +46,6 @@ const routes: Routes = [
     ]
   },
   {path: 'unauthorized', component: UnauthorizedComponent, canActivate: [AuthGuard]},
-  {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
   {path: '**', redirectTo: 'dashboard'}
 ];
 

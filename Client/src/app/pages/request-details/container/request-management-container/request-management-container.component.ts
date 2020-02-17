@@ -17,10 +17,10 @@ import {ReportHttpService} from "../../../../resources/request/service/report-ht
   styleUrls: ['./request-management-container.component.scss']
 })
 export class RequestManagementContainerComponent implements OnInit {
-  private isSolver$: Observable<boolean>;
-  private isManager$: Observable<boolean>;
-  private isAdmin$: Observable<boolean>;
-  private isSolverRightHand$: Observable<boolean>;
+  isSolver$: Observable<boolean>;
+  isManager$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
+  isSolverRightHand$: Observable<boolean>;
 
 
   @Input() requestDetails: RequestDetails;

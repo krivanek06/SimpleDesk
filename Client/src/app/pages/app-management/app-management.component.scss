@@ -33,11 +33,16 @@
     left: 30px;
 }
 
-  
+.content{
+  position: relative;
+  margin-left: 25px;
+
+}
+
 @media(min-width:1919px) {
     .windowButtonChangers{
         margin-bottom: 35px;
-    } 
+    }
 
     .formTitleSmall{
         font-size: 30px;

@@ -2,6 +2,8 @@ import {Component, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {RequestTable} from 'app/shared/models/RequestTable';
 import {UserStoreService} from 'app/core/services/user-store.service';
+import {SafeUrl} from "@angular/platform-browser";
+import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-request-table',
@@ -27,7 +29,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   dateTo: string;
 
 
-  constructor(public userService: UserStoreService) {
+  constructor(public userService: UserStoreService, public sanitizer: DomSanitizer ) {
   }
 
   ngOnInit() {
@@ -51,11 +53,14 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
     this.moveToDetails.emit(id);
   }
 
+
+
   // whole dashboard lagged for this shit !!!
-  /*getImage(bytes: string): SafeUrl {
+  getImage(bytes: string): SafeUrl {
+    console.log('aaaaa')
     const objectURL = 'data:image/png;base64,' + bytes;
-    return this.sanitizer.bypassSecurityTrustUrl(objectURL);
-  }*/
+    return this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
+  }
 
 
 }
