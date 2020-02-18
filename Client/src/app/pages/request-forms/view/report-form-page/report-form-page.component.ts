@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
-import {ReportForm} from "../../../../resources/request/model/Report";
+import {ReportForm} from "../../../../resources/request/model/interface/Report";
 import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
 import {RequestReportFormComponent} from "../../../../resources/request/view/form/request-report-form/request-report-form.component";
 import {FileUploadComponent} from "../../../../shared/components/file-upload/file-upload.component";

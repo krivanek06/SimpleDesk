@@ -1,9 +1,7 @@
 import {Injectable} from '@angular/core';
 import {combineLatest, Observable, of} from 'rxjs';
-import {User} from 'app/shared/models/UserGroups';
+import {ImageDTO, User, UserSimple} from 'app/resources/user/model/User';
 import {catchError, map, mapTo, tap} from 'rxjs/operators';
-import {ImageDTO} from 'app/shared/models/ImageDTO';
-import {UserSimple} from 'app/shared/models/RequestDetails';
 import {UserHttpService} from 'app/api/user-http.service';
 import {AuthenticationService} from './authentication.service';
 

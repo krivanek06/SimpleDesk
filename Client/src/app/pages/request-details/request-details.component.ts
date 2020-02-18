@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {RequestDetails} from 'app/shared/models/RequestDetails';
+import {Request} from 'app/resources/request/model/interface/Request';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Observable} from 'rxjs';
@@ -16,7 +16,7 @@ export class RequestDetailsComponent implements OnInit, OnDestroy {
     isGhost$: Observable<boolean>;
     isAdmin$: Observable<boolean>;
 
-    requestDetail$: Observable<RequestDetails>;
+    requestDetail$: Observable<Request>;
 
     constructor(private requestStoreService: RequestStoreService,
                 private spinner: NgxSpinnerService,

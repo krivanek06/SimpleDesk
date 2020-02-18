@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ApplicationPrivilege} from 'app/shared/models/UserGroups';
+import {ApplicationPrivilege} from "../../model/Privilege";
 
 @Component({
   selector: 'app-privileges',
@@ -10,11 +10,12 @@ export class PrivilegesComponent implements OnInit {
   @Input() public name;
 
   @Input() public applyGreenColor = false;
-  public activateUnableClick = false; // true if editing privileges
-  public hideUnassignedPriv = false; // true only want to print assigned privileges
-  public enabledPrivileges: ApplicationPrivilege;
+  activateUnableClick = false; // true if editing privileges
+  hideUnassignedPriv = false; // true only want to print assigned privileges
+  enabledPrivileges: ApplicationPrivilege;
+  disabledPrivileges: ApplicationPrivilege;
+
   private enabledPrivilegesCopy: ApplicationPrivilege;
-  public disabledPrivileges: ApplicationPrivilege;
   private disabledPrivilegesCopy: ApplicationPrivilege;
 
 

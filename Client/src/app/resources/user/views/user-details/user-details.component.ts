@@ -1,7 +1,7 @@
 import {Component, OnInit, Output, Input} from '@angular/core';
 import {PasswordContainer} from 'app/resources/user/model/PasswordContainer';
 import {EventEmitter} from '@angular/core';
-import {User} from 'app/shared/models/UserGroups';
+import {User} from 'app/resources/user/model/User';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 
 @Component({

@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SERDButtonsComponent} from 'app/shared/components/serdbuttons/serdbuttons.component';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserSimpleDTO} from "../../../../shared/models/UserGroups";
+import {UserSimpleDTO} from "../../../../resources/user/model/User";
 import {UserHttpService} from "../../../../api/user-http.service";
 
 @Component({
@@ -20,9 +20,9 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
   users$: Observable<UserSimpleDTO[]>;
   isGhost$: Observable<boolean>;
 
-  @ViewChild('groupPrivileges', {static: false}) groupPrivileges: PrivilegesComponent;
-  @ViewChild('groupDetails', {static: false}) groupDetails: GroupDetailsComponent;
-  @ViewChild('serdbuttonsGroup', {static: false}) serdbuttonsGroup: SERDButtonsComponent;
+  @ViewChild('groupPrivileges') groupPrivileges: PrivilegesComponent;
+  @ViewChild('groupDetails') groupDetails: GroupDetailsComponent;
+  @ViewChild('serdbuttonsGroup') serdbuttonsGroup: SERDButtonsComponent;
 
   editGroupActivated = false;
 

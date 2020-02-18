@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, BehaviorSubject} from 'rxjs';
-import {RequestDetails, ReportDetails} from 'app/shared/models/RequestDetails';
+import {Request, ReportDetails} from 'app/resources/request/model/interface/Request';
 import {tap} from 'rxjs/operators';
 import {RequestHttpService} from 'app/api/request-http.service';
 
@@ -8,12 +8,12 @@ import {RequestHttpService} from 'app/api/request-http.service';
   providedIn: 'root'
 })
 export class RequestStoreService {
-  private requestDetails$: BehaviorSubject<RequestDetails> = new BehaviorSubject(null);
+  private requestDetails$: BehaviorSubject<Request> = new BehaviorSubject(null);
 
   constructor(private requestHttp: RequestHttpService) {
   }
 
-  public addRequestDetails(id: any): Observable<RequestDetails> {
+  public addRequestDetails(id: any): Observable<Request> {
     return this.requestHttp.getRequestDetails(id).pipe(
       tap(requestDetails => {
         // this.requestDetails = requestDetails;
@@ -26,15 +26,15 @@ export class RequestStoreService {
     this.requestDetails$.next(null);
   }
 
-  public getRequestDetials(): Observable<RequestDetails> {
+  public getRequestDetials(): Observable<Request> {
     return this.requestDetails$.asObservable();
   }
 
-  set requestDetails(requestDetails: RequestDetails) {
+  set requestDetails(requestDetails: Request) {
     this.requestDetails$.next(requestDetails);
   }
 
-  get requestDetails(): RequestDetails {
+  get requestDetails(): Request {
     return this.requestDetails$.getValue();
   }
 

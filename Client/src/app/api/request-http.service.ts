@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
-
 import {HttpClient,  HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from 'environments/environment';
-import {RequestDashboard, RequestTable} from 'app/shared/models/RequestTable';
-import {UserSimple, RequestDetails} from 'app/shared/models/RequestDetails';
+import {RequestDashboard, RequestTable} from 'app/resources/request/model/interface/RequestTable';
+import { Request} from 'app/resources/request/model/interface/Request';
+import {UserSimple} from "../resources/user/model/User";
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +18,8 @@ export class RequestHttpService {
     return this.http.get<RequestDashboard>(`${environment.apiUrl}requests/dashboard`);
   }
 
-  public getRequestDetails(id: any): Observable<RequestDetails> {
-    return this.http.get<RequestDetails>(`${environment.apiUrl}requests/requestDetails/${id}`);
+  public getRequestDetails(id: any): Observable<Request> {
+    return this.http.get<Request>(`${environment.apiUrl}requests/requestDetails/${id}`);
   }
 
   public getClosedRequests(dateFrom: string, dateTo: string): Observable<RequestTable[]> {

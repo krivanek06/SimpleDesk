@@ -1,10 +1,10 @@
-import {Component, Input, OnDestroy, OnInit} from '@angular/core';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
-import {RequestDetails, UserSimple} from 'app/shared/models/RequestDetails';
+import {Component, Input, OnInit} from '@angular/core';
+import {UserSimple, UserSimpleDTO} from 'app/resources/user/model/User';
+import {Request} from 'app/resources/request/model/interface/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestStoreService} from 'app/core/services/request-store.service';
-import {Observable, ReplaySubject} from 'rxjs';
-import {RequestPosition} from 'app/shared/enums/request-position.enum';
+import {Observable} from 'rxjs';
+import {RequestPosition} from 'app/resources/request/model/enum/request-position.enum';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {UserHttpService} from 'app/api/user-http.service';
@@ -17,13 +17,13 @@ import {ReportHttpService} from "../../../../resources/request/service/report-ht
   styleUrls: ['./request-management-container.component.scss']
 })
 export class RequestManagementContainerComponent implements OnInit {
-  private isSolver$: Observable<boolean>;
-  private isManager$: Observable<boolean>;
-  private isAdmin$: Observable<boolean>;
-  private isSolverRightHand$: Observable<boolean>;
+  isSolver$: Observable<boolean>;
+  isManager$: Observable<boolean>;
+  isAdmin$: Observable<boolean>;
+  isSolverRightHand$: Observable<boolean>;
 
 
-  @Input() requestDetails: RequestDetails;
+  @Input() requestDetails: Request;
   allusers$: Observable<UserSimpleDTO[]>;
 
 

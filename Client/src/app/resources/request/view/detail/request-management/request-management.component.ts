@@ -1,6 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {RequestDetails, UserSimple} from 'app/shared/models/RequestDetails';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {UserSimple, UserSimpleDTO} from 'app/resources/user/model/User';
 
 @Component({
   selector: 'app-request-management',

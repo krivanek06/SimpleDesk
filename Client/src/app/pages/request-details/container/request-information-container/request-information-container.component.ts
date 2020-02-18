@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable} from "rxjs";
-import {RequestDetails} from "../../../../shared/models/RequestDetails";
-import {RequestPosition} from "../../../../shared/enums/request-position.enum";
+import {Request} from "../../../../resources/request/model/interface/Request";
+import {RequestPosition} from "../../../../resources/request/model/enum/request-position.enum";
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {RequestHttpService} from "../../../../api/request-http.service";
 import {RequestService} from "../../../../core/services/request.service";
@@ -18,7 +18,7 @@ export class RequestInformationContainerComponent implements OnInit {
   isSolver$: Observable<boolean>;
   isGhost$: Observable<boolean>;
 
-  @Input() requestDetails: RequestDetails;
+  @Input() requestDetails: Request;
   @Output() closeBarEmitter: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private fileService: FileServiceService,

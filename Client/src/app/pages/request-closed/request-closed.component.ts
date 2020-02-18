@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {RequestTable, FilterRequests} from 'app/shared/models/RequestTable';
+import {RequestTable, FilterRequests} from 'app/resources/request/model/interface/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {RequestFilterComponent} from 'app/shared/components/request-filter/request-filter.component';
@@ -22,8 +22,8 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
   private loadedRequests: RequestTable[] = [];
   public viewTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'closed', 'timeCreated', 'timeClosed', 'details'];
-  @ViewChild('closedRequests', {static: false}) closedRequests: RequestTableComponent;
-  @ViewChild('requestFilter', {static: false}) requestFilter: RequestFilterComponent;
+  @ViewChild('closedRequests') closedRequests: RequestTableComponent;
+  @ViewChild('requestFilter') requestFilter: RequestFilterComponent;
 
 
   constructor(private spinner: NgxSpinnerService,

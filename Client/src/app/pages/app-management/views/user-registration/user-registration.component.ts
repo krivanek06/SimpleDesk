@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {UserSimpleDTO} from 'app/resources/user/model/User';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {UserFormComponent} from 'app/resources/user/views/user-form/user-form.component';
@@ -10,7 +10,7 @@ import {UserFormComponent} from 'app/resources/user/views/user-form/user-form.co
   styleUrls: ['./user-registration.component.scss']
 })
 export class UserRegistrationComponent implements OnInit {
-  @ViewChild('userForm', {static: false}) userForm: UserFormComponent;
+  @ViewChild('userForm') userForm: UserFormComponent;
 
   constructor(private userHttp: UserHttpService, private swallNotification: SwallNotificationService) {
   }

@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
-import {ReportForm} from "../model/Report";
+import {ReportForm} from "../model/interface/Report";
 
 @Injectable({
   providedIn: 'root'

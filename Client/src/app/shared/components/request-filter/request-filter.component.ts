@@ -3,7 +3,7 @@ import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {Observable, Subject} from 'rxjs';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {UserSimpleDTO} from 'app/resources/user/model/User';
 import {takeUntil} from 'rxjs/operators';
 import {UserHttpService} from 'app/api/user-http.service';
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
@@ -57,7 +57,6 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
     this.initDateFilter();
     this.isMoreThanNormalUser$ = this.userStoreService.isMoreThanNormalUser();
     this.allUsers$ = this.userHttp.getAllActiveUsers();
-
 
     this.filterForm = this.formBuilder.group({
       type: '',

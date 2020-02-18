@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {RequestTable} from 'app/shared/models/RequestTable';
+import {RequestTable} from 'app/resources/request/model/interface/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from 'rxjs';
@@ -21,9 +21,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   modifyTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'assigned', 'userAction', 'timeCreated', 'details'];
 
-  @ViewChild('myOpenRequests', {static: false}) myOpenRequests: RequestTableComponent;
-  @ViewChild('meAssignedRequests', {static: false}) meAssignedRequests: RequestTableComponent;
-  @ViewChild('otherOpenRequests', {static: false}) otherOpenRequests: RequestTableComponent;
+  @ViewChild('myOpenRequests') myOpenRequests: RequestTableComponent;
+  @ViewChild('meAssignedRequests') meAssignedRequests: RequestTableComponent;
+  @ViewChild('otherOpenRequests') otherOpenRequests: RequestTableComponent;
 
   isAdmin$: Observable<boolean>;
   isGhost$: Observable<boolean>;
@@ -80,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableAssignMeOnRequest(request: RequestTable) {
-    request.assigned = this.userStoreService.user.fullName;
+    request.assigned = this.userStoreService.user.firstName[0] + '. ' + this.userStoreService.user.lastName;
     request.assignedImageByte = this.userStoreService.user.photoBytes;
 
     this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
@@ -95,7 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableRemoveRequestFromMe(request: RequestTable) {
-    request.assigned = ' ';
+    request.assigned = '';
     request.assignedImageString = null;
     request.assignedImageByte = null;
 

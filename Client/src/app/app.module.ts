@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {AppRoutingModule, routingComponents} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {ParticlesModule} from 'angular-particle';
 import {AlertModule} from 'ngx-bootstrap';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {CommonModule} from '@angular/common';
@@ -24,6 +23,7 @@ import {
 } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import {IgxExcelExporterService} from "igniteui-angular";
+import { ParticlesModule } from 'angular-particle';
 
 // custom interceptors
 import {AuthInterceptor} from './core/interceptors/AuthInterceptor ';
@@ -138,11 +138,11 @@ import { RequestInformationContainerComponent } from './pages/request-details/co
     ReactiveFormsModule,
     AppRoutingModule,
     HttpClientModule,
-    ParticlesModule,
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
     IconSpriteModule,
+    ParticlesModule,
     AlertModule.forRoot(),
     BrowserAnimationsModule,
     BrowserModule,

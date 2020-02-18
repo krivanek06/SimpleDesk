@@ -2,9 +2,11 @@
 Client/node_modules/
 
 Backend/target/*
+Backend/src/main/resources/
 Backend/uploadedFiles/*
 Backend/src/main/resources/images/*
 Backend/src/main/webapp/*
+Client/src/environments/*
 Backend/src/main/resources/static/*
 BachelorSiteOverview
 Database

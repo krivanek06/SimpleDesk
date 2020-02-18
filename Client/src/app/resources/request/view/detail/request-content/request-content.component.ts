@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { RequestDetails } from 'app/shared/models/RequestDetails';
+import { Request } from 'app/resources/request/model/interface/Request';
 
 @Component({
   selector: 'app-request-content',
@@ -7,8 +7,8 @@ import { RequestDetails } from 'app/shared/models/RequestDetails';
   styleUrls: ['./request-content.component.scss']
 })
 export class RequestContentComponent implements OnInit {
-  @Input() requestDetail: RequestDetails;
-  
+  @Input() requestDetail: Request;
+
   constructor() { }
 
   ngOnInit() {

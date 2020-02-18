@@ -1,12 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {UserHttpService} from 'app/api/user-http.service';
-import {UserSimpleDTO, GroupContainer} from 'app/shared/models/UserGroups';
+import {UserSimpleDTO} from 'app/resources/user/model/User';
 import {Observable} from 'rxjs';
 import {UserGroupsComponent} from 'app/resources/user/views/user-groups/user-groups.component';
 import {PrivilegesComponent} from 'app/resources/privilege/view/privileges/privileges.component';
 import {UserDetailsComponent} from 'app/resources/user/views/user-details/user-details.component';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {GroupContainer} from "../../../../resources/group/model/Group";
 
 @Component({
   selector: 'app-user-management',
@@ -16,9 +17,9 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 export class UserManagementComponent implements OnInit {
   isGhost$: Observable<boolean>;
   users: Observable<UserSimpleDTO[]>;
-  @ViewChild('userDetails', {static: false}) userDetails: UserDetailsComponent;
-  @ViewChild('userPrivileges', {static: false}) userPrivileges: PrivilegesComponent;
-  @ViewChild('userGroups', {static: false}) userGroups: UserGroupsComponent;
+  @ViewChild('userDetails') userDetails: UserDetailsComponent;
+  @ViewChild('userPrivileges') userPrivileges: PrivilegesComponent;
+  @ViewChild('userGroups') userGroups: UserGroupsComponent;
 
 
   constructor(private userHttp: UserHttpService,

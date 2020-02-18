@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {RequestDetails} from "../../../../../shared/models/RequestDetails";
+import {Request} from "../../../model/interface/Request";
 
 @Component({
   selector: 'app-request-information',
@@ -7,7 +7,7 @@ import {RequestDetails} from "../../../../../shared/models/RequestDetails";
   styleUrls: ['./request-information.component.scss']
 })
 export class RequestInformationComponent implements OnInit {
-  @Input() requestDetails: RequestDetails;
+  @Input() requestDetails: Request;
   @Input() showAssignedOnMe: boolean;
 
   @Output() assignOnMeEmitter: EventEmitter<any> = new EventEmitter<any>();

@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {Validators, FormGroup, FormBuilder} from '@angular/forms';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {UserSimpleDTO} from 'app/resources/user/model/User';
 
 @Component({
   selector: 'app-user-form',
@@ -45,7 +45,8 @@ export class UserFormComponent implements OnInit {
       username: formValues.username.trim().toLowerCase(),
       firstName: formValues.firstname.trim(),
       lastName: formValues.lastname.trim(),
-      email: formValues.email.trim()
+      email: formValues.email.trim(),
+      fullNameShort: null,
     };
 
     this.userRegistrationEmitter.emit(userRegistraion);
