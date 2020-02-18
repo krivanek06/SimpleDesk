@@ -42,7 +42,7 @@
         <mat-select  formControlName="creator">
             <mat-option
                 *ngFor= 'let user of allUsers$ | async'
-                [value] = 'user.firstName + " " + user.lastName'>
+                [value] = 'user.fullNameShort'>
                     {{ user.firstName }} {{ user.lastName }}
             </mat-option>
         </mat-select>
@@ -53,7 +53,7 @@
         <mat-select  formControlName="closed">
             <mat-option
                 *ngFor= 'let user of allUsers$ | async'
-                [value] = 'user.firstName + " " + user.lastName' >
+                [value] = 'user.fullNameShort' >
                     {{ user.firstName }} {{ user.lastName }}
             </mat-option>
         </mat-select>

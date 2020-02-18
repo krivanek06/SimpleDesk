@@ -10,7 +10,7 @@ import {UserFormComponent} from 'app/resources/user/views/user-form/user-form.co
   styleUrls: ['./user-registration.component.scss']
 })
 export class UserRegistrationComponent implements OnInit {
-  @ViewChild('userForm', {static: false}) userForm: UserFormComponent;
+  @ViewChild('userForm') userForm: UserFormComponent;
 
   constructor(private userHttp: UserHttpService, private swallNotification: SwallNotificationService) {
   }

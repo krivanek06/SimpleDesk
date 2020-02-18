@@ -16,9 +16,9 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 export class UserManagementComponent implements OnInit {
   isGhost$: Observable<boolean>;
   users: Observable<UserSimpleDTO[]>;
-  @ViewChild('userDetails', {static: false}) userDetails: UserDetailsComponent;
-  @ViewChild('userPrivileges', {static: false}) userPrivileges: PrivilegesComponent;
-  @ViewChild('userGroups', {static: false}) userGroups: UserGroupsComponent;
+  @ViewChild('userDetails') userDetails: UserDetailsComponent;
+  @ViewChild('userPrivileges') userPrivileges: PrivilegesComponent;
+  @ViewChild('userGroups') userGroups: UserGroupsComponent;
 
 
   constructor(private userHttp: UserHttpService,

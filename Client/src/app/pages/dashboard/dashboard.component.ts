@@ -21,9 +21,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   modifyTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'assigned', 'userAction', 'timeCreated', 'details'];
 
-  @ViewChild('myOpenRequests', {static: false}) myOpenRequests: RequestTableComponent;
-  @ViewChild('meAssignedRequests', {static: false}) meAssignedRequests: RequestTableComponent;
-  @ViewChild('otherOpenRequests', {static: false}) otherOpenRequests: RequestTableComponent;
+  @ViewChild('myOpenRequests') myOpenRequests: RequestTableComponent;
+  @ViewChild('meAssignedRequests') meAssignedRequests: RequestTableComponent;
+  @ViewChild('otherOpenRequests') otherOpenRequests: RequestTableComponent;
 
   isAdmin$: Observable<boolean>;
   isGhost$: Observable<boolean>;
@@ -59,10 +59,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     this.requestHttp.getRequestOnDashboard().subscribe(requests => {
-        console.log(requests);
-        requests.otherOpen.forEach(request => {
-          request.creatorImageByte = 'data:image/jpeg;base64,' +  request.creatorImageByte;
-        });
         this.myOpenRequests.dataSource.data = [...requests.myOpen as RequestTable[]];
         this.meAssignedRequests.dataSource.data = [...requests.assignedOnMe as RequestTable[]];
         this.otherOpenRequests.dataSource.data = [...requests.otherOpen as RequestTable[]];
@@ -84,7 +80,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableAssignMeOnRequest(request: RequestTable) {
-    request.assigned = this.userStoreService.user.fullName;
+    request.assigned = this.userStoreService.user.firstName[0] + '. ' + this.userStoreService.user.lastName;
     request.assignedImageByte = this.userStoreService.user.photoBytes;
 
     this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
@@ -99,7 +95,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableRemoveRequestFromMe(request: RequestTable) {
-    request.assigned = ' ';
+    request.assigned = '';
     request.assignedImageString = null;
     request.assignedImageByte = null;
 

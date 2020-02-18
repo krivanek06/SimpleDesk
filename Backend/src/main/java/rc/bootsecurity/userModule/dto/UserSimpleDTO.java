@@ -8,4 +8,6 @@ public class UserSimpleDTO {
     private String firstName;
     private String lastName;
     private byte[] photoBytes;
+
+    private String fullNameShort;
 }

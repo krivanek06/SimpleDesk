@@ -22,8 +22,8 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
   private loadedRequests: RequestTable[] = [];
   public viewTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'closed', 'timeCreated', 'timeClosed', 'details'];
-  @ViewChild('closedRequests', {static: false}) closedRequests: RequestTableComponent;
-  @ViewChild('requestFilter', {static: false}) requestFilter: RequestFilterComponent;
+  @ViewChild('closedRequests') closedRequests: RequestTableComponent;
+  @ViewChild('requestFilter') requestFilter: RequestFilterComponent;
 
 
   constructor(private spinner: NgxSpinnerService,

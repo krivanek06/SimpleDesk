@@ -45,7 +45,8 @@ export class UserFormComponent implements OnInit {
       username: formValues.username.trim().toLowerCase(),
       firstName: formValues.firstname.trim(),
       lastName: formValues.lastname.trim(),
-      email: formValues.email.trim()
+      email: formValues.email.trim(),
+      fullNameShort: null,
     };
 
     this.userRegistrationEmitter.emit(userRegistraion);

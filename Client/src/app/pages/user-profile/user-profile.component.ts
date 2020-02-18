@@ -24,11 +24,11 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
   displayAvatarts = false;
   groupContainer$: Observable<GroupContainer>;
 
-  @ViewChild('userDetials', {static: false}) userDetials: UserDetailsComponent;
-  @ViewChild('userPrivileges', {static: false}) userPrivileges: PrivilegesComponent;
-  @ViewChild('groupPrivileges', {static: false}) groupPrivileges: PrivilegesComponent;
-  @ViewChild('groupDetails', {static: false}) groupDetails: GroupDetailsComponent;
-  @ViewChild('userAvatars', {static: false}) userAvatars: UserImagesComponent;
+  @ViewChild('userDetials') userDetials: UserDetailsComponent;
+  @ViewChild('userPrivileges') userPrivileges: PrivilegesComponent;
+  @ViewChild('groupPrivileges') groupPrivileges: PrivilegesComponent;
+  @ViewChild('groupDetails') groupDetails: GroupDetailsComponent;
+  @ViewChild('userAvatars') userAvatars: UserImagesComponent;
 
 
   constructor(private authService: AuthenticationService,

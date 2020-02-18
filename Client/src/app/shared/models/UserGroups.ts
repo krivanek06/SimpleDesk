@@ -14,6 +14,7 @@ export interface UserSimpleDTO {
   firstName: string,
   lastName: string,
   email: string,
+  fullNameShort: string,
 }
 
 export interface GroupContainer {

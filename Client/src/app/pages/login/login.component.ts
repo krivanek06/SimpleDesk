@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {AuthenticationService} from "../../core/services/authentication.service";
 import {UserStoreService} from "../../core/services/user-store.service";
+import {environment} from "../../../environments/environment";
 
 @Component({
   selector: 'app-login',
@@ -12,6 +13,7 @@ import {UserStoreService} from "../../core/services/user-store.service";
 export class LoginComponent implements OnInit {
   form: FormGroup;
   loggingIn = false;
+  version: number;
   style: object = {};
   params: object = {};
 
@@ -27,6 +29,7 @@ export class LoginComponent implements OnInit {
     });
     this.initStyle();
     this.initParams();
+    this.version = environment.version;
   }
 
   login() {

@@ -17,3 +17,10 @@
 .selectTitleSpace{
     margin-right: 15px;
 }
+
+@media(max-width: 1250px) {
+  #userModificationButtons{
+    right:  0;
+    position: relative;
+  }
+}

@@ -23,7 +23,7 @@ export class GroupRegistrationComponent implements OnInit {
   hardwares: TicketType[];
   servers: TicketType[];
 
-  @ViewChild('groupForm', {static: false}) groupForm: GroupFormComponent;
+  @ViewChild('groupForm') groupForm: GroupFormComponent;
 
   constructor(
     private groupHttp: GroupHttpService,

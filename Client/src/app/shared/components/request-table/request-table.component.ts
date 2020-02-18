@@ -1,9 +1,6 @@
 import {Component, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
 import {RequestTable} from 'app/shared/models/RequestTable';
-import {UserStoreService} from 'app/core/services/user-store.service';
-import {SafeUrl} from "@angular/platform-browser";
-import { DomSanitizer } from "@angular/platform-browser";
 
 @Component({
   selector: 'app-request-table',
@@ -20,7 +17,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   @Output() removeFromMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
   @Output() moveToDetails: EventEmitter<number> = new EventEmitter<number>();
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<RequestTable> = new MatTableDataSource<RequestTable>();
   @Input() numberOfRequests: number;
@@ -29,7 +26,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   dateTo: string;
 
 
-  constructor(public userService: UserStoreService, public sanitizer: DomSanitizer ) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -52,15 +49,4 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   navigateToDetails(id: number) {
     this.moveToDetails.emit(id);
   }
-
-
-
-  // whole dashboard lagged for this shit !!!
-  getImage(bytes: string): SafeUrl {
-    console.log('aaaaa')
-    const objectURL = 'data:image/png;base64,' + bytes;
-    return this.sanitizer.bypassSecurityTrustResourceUrl(objectURL);
-  }
-
-
 }

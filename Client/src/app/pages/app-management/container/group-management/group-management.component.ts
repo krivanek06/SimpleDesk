@@ -20,9 +20,9 @@ export class GroupManagementComponent implements OnInit, AfterViewInit {
   users$: Observable<UserSimpleDTO[]>;
   isGhost$: Observable<boolean>;
 
-  @ViewChild('groupPrivileges', {static: false}) groupPrivileges: PrivilegesComponent;
-  @ViewChild('groupDetails', {static: false}) groupDetails: GroupDetailsComponent;
-  @ViewChild('serdbuttonsGroup', {static: false}) serdbuttonsGroup: SERDButtonsComponent;
+  @ViewChild('groupPrivileges') groupPrivileges: PrivilegesComponent;
+  @ViewChild('groupDetails') groupDetails: GroupDetailsComponent;
+  @ViewChild('serdbuttonsGroup') serdbuttonsGroup: SERDButtonsComponent;
 
   editGroupActivated = false;
 

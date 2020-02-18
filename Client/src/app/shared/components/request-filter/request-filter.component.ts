@@ -58,7 +58,6 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
     this.isMoreThanNormalUser$ = this.userStoreService.isMoreThanNormalUser();
     this.allUsers$ = this.userHttp.getAllActiveUsers();
 
-
     this.filterForm = this.formBuilder.group({
       type: '',
       creator: '',

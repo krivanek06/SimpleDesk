@@ -26,6 +26,7 @@ public class UserConverter {
         userSimpleDTO.setFirstName(user.getFirstName());
         userSimpleDTO.setLastName(user.getLastName());
         userSimpleDTO.setPhotoBytes(null);
+        userSimpleDTO.setFullNameShort(user.getFirstName().substring(0,1) + ". " + user.getLastName());
         return userSimpleDTO;
     }
 
