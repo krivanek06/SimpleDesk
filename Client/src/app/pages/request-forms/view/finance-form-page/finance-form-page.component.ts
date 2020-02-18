@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
-import {FinanceForm, FinanceType} from "../../../../resources/request/model/Finance";
+import {FinanceForm, FinanceType} from "../../../../resources/request/model/interface/Finance";
 import {RequestFinanceFormComponent} from "../../../../resources/request/view/form/request-finance-form/request-finance-form.component";
 import {FinanceHttpService} from "../../../../resources/request/service/finance-http.service";
 import {FileUploadComponent} from "../../../../shared/components/file-upload/file-upload.component";

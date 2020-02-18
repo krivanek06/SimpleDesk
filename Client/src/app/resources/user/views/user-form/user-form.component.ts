@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
 import {Validators, FormGroup, FormBuilder} from '@angular/forms';
-import {UserSimpleDTO} from 'app/shared/models/UserGroups';
+import {UserSimpleDTO} from 'app/resources/user/model/User';
 
 @Component({
   selector: 'app-user-form',

@@ -8,16 +8,17 @@ import {UserStoreService} from '../services/user-store.service';
   providedIn: 'root'
 })
 export class FinanceGuardGuard implements CanActivate {
-  constructor(private router: Router, private userStoreService: UserStoreService) {}
+  constructor(private router: Router, private userStoreService: UserStoreService) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-    return <Observable<boolean>>this.userStoreService.hasFinanceModuleAccess().pipe(switchMap((res: boolean) => {
+    return <Observable<boolean>> this.userStoreService.hasFinanceModuleAccess().pipe(switchMap((res: boolean) => {
       if (res) {
         return of(true);
       }
       this.router.navigate(['/request_new/ticket']);
       return of(false);
-    }))
+    }));
 
   }
 }

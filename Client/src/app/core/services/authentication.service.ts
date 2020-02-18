@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, combineLatest } from 'rxjs';
-import { JWToken } from 'app/shared/models/JWToken';
+import { JWToken } from 'app/core/model/JWToken';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { JwtHelperService } from "@auth0/angular-jwt";
@@ -12,7 +12,7 @@ import { tap, mapTo, catchError, map } from 'rxjs/operators';
 export class AuthenticationService {
   private jwtHelper: JwtHelperService;
   private JWToken$: BehaviorSubject<JWToken>;
-  
+
 
   constructor( private http: HttpClient) {
     this.jwtHelper = new JwtHelperService();
@@ -32,8 +32,8 @@ export class AuthenticationService {
   public login (username: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    return this.http.post<Response>( environment.loginUrl + "login", 
-        {username: username.toLowerCase(), password: password}, 
+    return this.http.post<Response>( environment.loginUrl + "login",
+        {username: username.toLowerCase(), password: password},
         {headers, observe: 'response'}
       ).pipe(
         tap(ressponse => {

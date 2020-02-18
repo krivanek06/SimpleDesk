@@ -1,7 +1,8 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {RequestComment, RequestCommentWrapper, UserSimple} from 'app/shared/models/RequestDetails';
+import {RequestComment, RequestCommentWrapper} from 'app/resources/request/model/interface/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {UserSimple} from "../../../../user/model/User";
 
 
 @Component({

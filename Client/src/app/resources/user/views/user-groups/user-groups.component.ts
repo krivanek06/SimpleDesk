@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {GroupContainer} from 'app/shared/models/UserGroups';
+import {GroupContainer} from "../../../group/model/Group";
 
 @Component({
   selector: 'app-user-groups',

@@ -1,13 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RequestComment, RequestDetails, RequestCommentWrapper} from 'app/shared/models/RequestDetails';
+import {RequestComment, Request, RequestCommentWrapper} from 'app/resources/request/model/interface/Request';
 import {Observable} from 'rxjs';
-import {Group} from 'app/shared/models/UserGroups';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {CommentHttpService} from 'app/api/comment-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestService} from 'app/core/services/request.service';
 import {GroupHttpService} from "../../../../api/group-http.service";
+import {Group} from "../../../../resources/group/model/Group";
 
 @Component({
   selector: 'app-request-comment-container',
@@ -16,7 +16,7 @@ import {GroupHttpService} from "../../../../api/group-http.service";
 })
 export class RequestCommentContainerComponent implements OnInit {
   @Input() applyZIndex = true;
-  @Input() requestDetails: RequestDetails;
+  @Input() requestDetails: Request;
 
   showWindowCommentSharing = false;
   clickedGroup = false;

@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {RequestTable} from 'app/shared/models/RequestTable';
+import {RequestTable} from 'app/resources/request/model/interface/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from 'rxjs';

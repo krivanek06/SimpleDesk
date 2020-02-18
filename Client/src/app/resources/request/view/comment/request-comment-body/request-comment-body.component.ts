@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {RequestComment} from 'app/shared/models/RequestDetails';
+import {RequestComment} from 'app/resources/request/model/interface/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 
 

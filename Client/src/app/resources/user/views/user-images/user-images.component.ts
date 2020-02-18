@@ -1,5 +1,5 @@
 import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
-import {ImageDTO} from 'app/shared/models/ImageDTO';
+import {ImageDTO} from "../../model/User";
 
 @Component({
   selector: 'app-user-images',

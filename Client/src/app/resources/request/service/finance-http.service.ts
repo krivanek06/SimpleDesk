@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {FinanceForm, FinanceType} from "../model/Finance";
+import {FinanceForm, FinanceType} from "../model/interface/Finance";
 
 @Injectable({
   providedIn: 'root'

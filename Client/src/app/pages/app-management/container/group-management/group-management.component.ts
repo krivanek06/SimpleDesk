@@ -7,7 +7,7 @@ import {map} from 'rxjs/operators';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SERDButtonsComponent} from 'app/shared/components/serdbuttons/serdbuttons.component';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserSimpleDTO} from "../../../../shared/models/UserGroups";
+import {UserSimpleDTO} from "../../../../resources/user/model/User";
 import {UserHttpService} from "../../../../api/user-http.service";
 
 @Component({

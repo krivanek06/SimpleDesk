@@ -1,6 +1,6 @@
 import {Component, OnInit, ViewChild, Input, Output, EventEmitter, AfterViewInit} from '@angular/core';
 import {MatTableDataSource, MatPaginator} from '@angular/material';
-import {RequestTable} from 'app/shared/models/RequestTable';
+import {RequestTable} from 'app/resources/request/model/interface/RequestTable';
 
 @Component({
   selector: 'app-request-table',

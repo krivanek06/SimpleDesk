@@ -1,5 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Group, UserSimpleDTO} from 'app/shared/models/UserGroups';
+import { UserSimpleDTO} from 'app/resources/user/model/User';
+import {Group} from "../../model/Group";
 
 @Component({
   selector: 'app-group-details',

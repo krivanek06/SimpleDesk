@@ -3,7 +3,6 @@ import {AuthenticationService} from 'app/core/services/authentication.service';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {GroupHttpService} from 'app/api/group-http.service';
 import {PrivilegesComponent} from '../../resources/privilege/view/privileges/privileges.component';
-import {ApplicationPrivilege, GroupContainer} from 'app/shared/models/UserGroups';
 import {GroupDetailsComponent} from '../../resources/group/view/group-details/group-details.component';
 import {UserDetailsComponent} from '../../resources/user/views/user-details/user-details.component';
 import {Observable} from 'rxjs';
@@ -11,8 +10,10 @@ import {PasswordContainer} from 'app/resources/user/model/PasswordContainer';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {ImageDTO} from 'app/shared/models/ImageDTO';
 import {UserImagesComponent} from '../../resources/user/views/user-images/user-images.component';
+import {GroupContainer} from "../../resources/group/model/Group";
+import {ApplicationPrivilege} from "../../resources/privilege/model/Privilege";
+import {ImageDTO} from "../../resources/user/model/User";
 
 @Component({
   selector: 'app-user-profile',

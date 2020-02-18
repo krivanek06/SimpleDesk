@@ -1,5 +1,5 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {ApplicationPrivilege} from 'app/shared/models/UserGroups';
+import {ApplicationPrivilege} from "../../model/Privilege";
 
 @Component({
   selector: 'app-privileges',

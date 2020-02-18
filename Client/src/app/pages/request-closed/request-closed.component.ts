@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {RequestTable, FilterRequests} from 'app/shared/models/RequestTable';
+import {RequestTable, FilterRequests} from 'app/resources/request/model/interface/RequestTable';
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {RequestFilterComponent} from 'app/shared/components/request-filter/request-filter.component';
