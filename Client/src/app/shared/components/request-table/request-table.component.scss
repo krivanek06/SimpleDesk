@@ -1,3 +1,5 @@
+@import './src/app/shared/customCss/SuccessMatButton.scss';
+
 mat-header-row {
   min-height: 28px;
   border-bottom: 0;
@@ -42,6 +44,12 @@ mat-header-row {
 
 .fontWeight {
   font-weight: 500;
+}
+
+#excelButton{
+  position: absolute;
+  right: 5%;
+  top: -100px;
 }
 
 .detailButton {

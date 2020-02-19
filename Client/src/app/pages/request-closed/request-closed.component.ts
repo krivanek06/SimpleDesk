@@ -3,7 +3,6 @@ import {RequestTable, FilterRequests} from 'app/resources/request/model/interfac
 import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {RequestFilterComponent} from 'app/shared/components/request-filter/request-filter.component';
-import {IgxExcelExporterService, IgxExcelExporterOptions} from "igniteui-angular";
 import * as _ from 'lodash';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
@@ -28,8 +27,7 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
   constructor(private spinner: NgxSpinnerService,
               private router: Router,
-              private requestHttp: RequestHttpService,
-              private excelExportService: IgxExcelExporterService) {
+              private requestHttp: RequestHttpService) {
   }
 
   ngOnInit() {
@@ -79,12 +77,12 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
   exportTOExcel() {
     // filter important fields
-    const result = [];
+ /*   const result = [];
     this.closedRequests.dataSource.data.forEach(x => {
       result.push(_.pick(x, ['id', 'timestampCreation', 'timestampClosed',
         'additionalInformation', 'name', 'requestPriority', 'requestType', 'creator', 'closed']));
     });
-    this.excelExportService.exportData(result, new IgxExcelExporterOptions("ExportedDataFile"));
+    this.excelExportService.exportData(result, new IgxExcelExporterOptions("ExportedDataFile"));*/
   }
 
   moveToDetials(id: number) {

@@ -22,8 +22,8 @@ import {
   MAT_DATE_LOCALE
 } from 'saturn-datepicker';
 import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import {IgxExcelExporterService} from "igniteui-angular";
 import { ParticlesModule } from 'angular-particle';
+import {MatTableExporterModule} from 'mat-table-exporter';
 
 // custom interceptors
 import {AuthInterceptor} from './core/interceptors/AuthInterceptor ';
@@ -145,6 +145,7 @@ import { RequestInformationContainerComponent } from './pages/request-details/co
     ParticlesModule,
     AlertModule.forRoot(),
     BrowserAnimationsModule,
+    MatTableExporterModule,
     BrowserModule,
     BrowserAnimationsModule,
     MaterialModule,
@@ -160,7 +161,6 @@ import { RequestInformationContainerComponent } from './pages/request-details/co
     AuthenticationService,
     UserStoreService,
     FileServiceService,
-    IgxExcelExporterService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

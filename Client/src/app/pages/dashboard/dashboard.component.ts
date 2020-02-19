@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isGhost$: Observable<boolean>;
   isSolver$: Observable<boolean>;
   isManager$: Observable<boolean>;
-  isManagerRightHand$: Observable<boolean>;
 
 
   constructor(private spinner: NgxSpinnerService,
@@ -46,7 +45,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
     this.isManager$ = this.userStoreService.isManager();
-    this.isManagerRightHand$ = this.userStoreService.isManagerRightHand();
 
     this.refreshIntervalId = setInterval(() => this.getRequestOnDashboard(), 600000); // 10minutes 600000
   }

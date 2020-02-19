@@ -11,6 +11,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   @Input() displayedColumns = []; // table columns to diplay
   @Input() headerColor: string; // table header color
   @Input() displayAssignToMe = false;
+  @Input() displayDownloadExcel = false;
   @Input() tableTitle: string;
 
   @Output() assignOnMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();

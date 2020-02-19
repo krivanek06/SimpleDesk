@@ -13,7 +13,16 @@
     {{ numberOfRequests }}
   </div>
 
-  <mat-table #table [dataSource]="dataSource">
+  <!-- excel export button -->
+  <button mat-raised-button
+          color="success"
+          id='excelButton'
+          (click)="exporter.exportTable('xlsx', {fileName:'helpdesk_closed_requests'})"
+          *ngIf="displayDownloadExcel">
+    Exportovať ako Excel
+  </button>
+
+  <mat-table [dataSource]="dataSource" matTableExporter  #exporter="matTableExporter">
 
     <ng-container matColumnDef="id">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> #</mat-header-cell>
