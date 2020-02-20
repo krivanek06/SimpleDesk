@@ -1,0 +1,18 @@
+
+<div id='headerBackground'>
+
+    <div  id='headerContainer'>
+        <div id="headerTitle">
+           Vitaj, {{ fullName }}
+        </div>
+
+        <div id="headerLogout">
+            <div class="button_cont example_f" (click)= "logout()">
+                <span>
+                <img [src]="'data:image/jpeg;base64,'+ photoBytes" class='userIcon'/>
+                 Odhlásiť sa
+                </span>
+            </div>
+        </div>
+    </div>
+</div>

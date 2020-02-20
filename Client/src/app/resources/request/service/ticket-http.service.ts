@@ -3,9 +3,11 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {TicketForm, TicketSubtype} from "../model/interface/Ticket";
+import {RequestFormsModule} from "../../../modules/request-forms/request-forms.module";
+import {ResourcesModule} from "../../resources.module";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: ResourcesModule
 })
 export class TicketHttpService {
 

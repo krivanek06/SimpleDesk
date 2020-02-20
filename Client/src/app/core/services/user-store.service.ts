@@ -1,27 +1,39 @@
 import {Injectable} from '@angular/core';
-import {combineLatest, Observable, of} from 'rxjs';
+import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
 import {ImageDTO, User, UserSimple} from 'app/resources/user/model/User';
 import {catchError, map, mapTo, tap} from 'rxjs/operators';
 import {UserHttpService} from 'app/api/user-http.service';
 import {AuthenticationService} from './authentication.service';
+import {Request} from "../../resources/request/model/interface/Request";
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserStoreService {
   private userPrefix = 'logged_in_user';
-  public user: User;
+  private user$: BehaviorSubject<User> = new BehaviorSubject(null);
+
 
   constructor(private authService: AuthenticationService, private userHttp: UserHttpService) {
-    this.checkIfUserAvailable();
+    if (localStorage.getItem(this.userPrefix)) {
+      console.log('start')
+      this.user$.next(JSON.parse(localStorage.getItem(this.userPrefix) ) as User);
+    }
   }
 
+  get user(): User {
+    return this.user$.getValue();
+  }
 
-  public loadLoggedInUser(): Observable<boolean> {
+  getUser(): Observable<User> {
+    return this.user$.asObservable();
+  }
+
+  loadLoggedInUser(): Observable<boolean> {
     return this.userHttp.getBasicInformation().pipe(
       tap(user => {
         this.saveUserToLocalStorage(user);
-        this.user = user;
+        this.user$.next(user);
       }),
       mapTo(true),
       catchError(error => {
@@ -30,26 +42,21 @@ export class UserStoreService {
       }));
   }
 
-  private checkIfUserAvailable(): void {
-    if (this.user === undefined) {
-      this.user = JSON.parse(localStorage.getItem(this.userPrefix));
-    }
-  }
-
   private saveUserToLocalStorage(user: User): void {
     localStorage.setItem(this.userPrefix, JSON.stringify(user));
   }
 
-  public removeUserFromLocalStorage() {
+  removeUserFromLocalStorage() {
     localStorage.removeItem(this.userPrefix);
+    this.user$.next(null);
   }
 
-  public changeUserImage(image: ImageDTO) {
+  changeUserImage(image: ImageDTO) {
     this.user.photoBytes = image.imageBytes;
     this.saveUserToLocalStorage(this.user);
   }
 
-  public getUserSimple(): UserSimple {
+  getUserSimple(): UserSimple {
     return {
       username: this.user.username,
       firstName: this.user.firstName,
@@ -58,7 +65,7 @@ export class UserStoreService {
     };
   }
 
-  public isSolverRightHand(): Observable<boolean> {
+  isSolverRightHand(): Observable<boolean> {
     return combineLatest(
       this.isSolver(),
       this.isManagerRightHand(),
@@ -67,43 +74,43 @@ export class UserStoreService {
     );
   }
 
-  public isAdmin(): Observable<boolean> {
+  isAdmin(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_ADMIN")));
   }
 
-  public isGhost(): Observable<boolean> {
+  isGhost(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_GHOST")));
   }
 
-  public isManager(): Observable<boolean> {
+  isManager(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_MANAGER")));
   }
 
-  public isManagerRightHand(): Observable<boolean> {
+  isManagerRightHand(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_MANAGER_RIGHT_HAND")));
   }
 
-  public isSolver(): Observable<boolean> {
+  isSolver(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_SOLVER")));
   }
 
-  public hasPrivilegeAccess(): Observable<boolean> {
+  hasPrivilegeAccess(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Správa aplikácie")));
   }
 
-  public hasFinanceModuleAccess(): Observable<boolean> {
+  hasFinanceModuleAccess(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Finance")));
   }
 
-  public hasTicketModuleAccess(): Observable<boolean> {
+  hasTicketModuleAccess(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Ticket")));
   }
 
-  public hasReportModuleAccess(): Observable<boolean> {
+  hasReportModuleAccess(): Observable<boolean> {
     return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Report")));
   }
 
-  public isMoreThanNormalUser(): Observable<boolean> {
+  isMoreThanNormalUser(): Observable<boolean> {
     return combineLatest(
       this.isAdmin(),
       this.isGhost(),

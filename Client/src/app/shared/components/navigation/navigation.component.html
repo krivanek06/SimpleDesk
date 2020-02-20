@@ -1,0 +1,71 @@
+<div id="navigationContainer">
+  <!-- navigation background -->
+  <img src="assets/images_design/navigation_background_3.png"
+       alt="dashboard navigation icon"
+       id="navigationBackground">
+
+
+  <!-- dashboard -->
+  <a class='navigationIconContainer' routerLink="/dashboard">
+    <img src="assets/images_design/dashboard_2.png"
+         alt="dashboard navigation icon"
+         id='dashboardIcon'
+         class='navigationIcon'
+         matTooltip="Dashboard"
+         matTooltipPosition="right"
+         matTooltipClass="custom-tooltip"
+         matTooltipShowDelay="150"
+    > <!-- appNavigationIconHover -->
+  </a>
+
+  <!-- request new -->
+  <a class='navigationIconContainer' routerLink="/request_new"
+     *ngIf="!isGhost  && (hasFinanceModuleAccess  || hasTicketModuleAccess  || hasReportModuleAccess )">
+    <img src="assets/images_design/request_new_icon.png"
+         alt="dashboard navigation icon"
+         id='requestNewIcon'
+         class='navigationIcon'
+         matTooltip="Nová požiadavka"
+         matTooltipPosition="right"
+         matTooltipClass="custom-tooltip"
+         matTooltipShowDelay="150">
+  </a>
+
+  <!-- request closed -->
+  <a class='navigationIconContainer' routerLink="/request_closed">
+    <img src="assets/images_design/request_closed_icon.png"
+         alt="dashboard navigation icon"
+         id='requestClosedIcon'
+         class='navigationIcon'
+         matTooltip="Zatvorené požiadavky"
+         matTooltipPosition="right"
+         matTooltipClass="custom-tooltip"
+         matTooltipShowDelay="150">
+  </a>
+
+  <!-- user profile -->
+  <a class='navigationIconContainer' routerLink="/user_profile">
+    <img src="assets/images_design/user_profile_icon.png"
+         alt="dashboard navigation icon"
+         id='userProfileIcon'
+         class='navigationIcon'
+         matTooltip="Profil"
+         matTooltipPosition="right"
+         matTooltipClass="custom-tooltip"
+         matTooltipShowDelay="150">
+  </a>
+
+  <!-- app management -->
+  <a class='navigationIconContainer' routerLink="/app_management"
+     *ngIf='hasPrivilegeAccess || isAdmin  || isGhost '>
+    <img src="assets/images_design/team_icon.png"
+         alt="dashboard navigation icon"
+         id='appManagementIcon'
+         class='navigationIcon'
+         matTooltip="Správa aplikácie"
+         matTooltipPosition="right"
+         matTooltipClass="custom-tooltip"
+         matTooltipShowDelay="150">
+  </a>
+
+</div>

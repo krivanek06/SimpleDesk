@@ -1,0 +1,41 @@
+
+<div id='contentContainer'>
+   <app-request-table
+       #myOpenRequests
+       headerColor="#358BF0"
+       [numberOfRequests] = 'myOpenRequests.dataSource.data.length'
+       [displayedColumns]= "viewTable"
+       tableTitle="Moje požiadávky"
+       (moveToDetails) = 'moveToDetials($event)'
+       [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
+   </app-request-table>
+
+   <app-request-table
+       #meAssignedRequests
+       [hidden] = '!(isSolver$ | async) &&  meAssignedRequests.dataSource.data.length === 0'
+       [numberOfRequests] = 'meAssignedRequests.dataSource.data.length'
+       headerColor="#56A3FF"
+       [displayedColumns]= "modifyTable"
+       tableTitle="Požiadavky pridelené na mňa"
+       (moveToDetails) = 'moveToDetials($event)'
+       (removeFromMeEmitter) = "removeFromMe($event)">
+   </app-request-table>
+
+   <app-request-table
+       #otherOpenRequests
+       [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async) ||  otherOpenRequests.dataSource.data.length > 0)'
+       [numberOfRequests] = 'otherOpenRequests.dataSource.data.length'
+       headerColor="#E8F3FF"
+       [displayedColumns]= "viewTable"
+       [displayAssignToMe] ='(isSolver$ | async)'
+       tableTitle="Ostatné otvorené požiadavky"
+       (moveToDetails) = 'moveToDetials($event)'
+       (assignOnMeEmitter) = "assignOnMe($event)">
+   </app-request-table>
+
+
+</div>
+
+<ngx-spinner>
+  <p style="font-size: 20px; color: white">Načítavam požiadavky...</p>
+</ngx-spinner>
