@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {UserSimpleDTO} from 'app/resources/user/model/User';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserFormComponent} from 'app/resources/user/views/user-form/user-form.component';
+import {UserFormComponent} from 'app/pages/app-management/presentation/user/user-form/user-form.component';
 
 @Component({
   selector: 'app-user-registration',

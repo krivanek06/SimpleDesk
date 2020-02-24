@@ -1,6 +1,6 @@
-import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
+import {Component, OnInit, ViewChild, OnDestroy, NgZone} from '@angular/core';
 import {RequestTable} from 'app/resources/request/model/interface/RequestTable';
-import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
+import {RequestTableComponent} from 'app/resources/request/view/request-table/request-table.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from 'rxjs';
 import {UserStoreService} from 'app/core/services/user-store.service';
@@ -29,7 +29,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isGhost$: Observable<boolean>;
   isSolver$: Observable<boolean>;
   isManager$: Observable<boolean>;
-  isManagerRightHand$: Observable<boolean>;
 
 
   constructor(private spinner: NgxSpinnerService,
@@ -41,12 +40,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getRequestOnDashboard();
-
     this.isAdmin$ = this.userStoreService.isAdmin();
     this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
     this.isManager$ = this.userStoreService.isManager();
-    this.isManagerRightHand$ = this.userStoreService.isManagerRightHand();
 
     this.refreshIntervalId = setInterval(() => this.getRequestOnDashboard(), 600000); // 10minutes 600000
   }
@@ -62,6 +59,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.myOpenRequests.dataSource.data = [...requests.myOpen as RequestTable[]];
         this.meAssignedRequests.dataSource.data = [...requests.assignedOnMe as RequestTable[]];
         this.otherOpenRequests.dataSource.data = [...requests.otherOpen as RequestTable[]];
+
         this.spinner.hide();
       },
       () => this.spinner.hide());

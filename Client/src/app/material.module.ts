@@ -1,39 +1,40 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
+
 
 import {
-    MatCheckboxModule,
-    MatPseudoCheckboxModule,
-    MatButtonModule,
-    MatInputModule,
-    MatAutocompleteModule,
-    MatDatepickerModule,
-    MatFormFieldModule,
-    MatRadioModule,
-    MatSelectModule,
-    MatSliderModule,
-    MatSlideToggleModule,
-    MatMenuModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    MatGridListModule,
-    MatCardModule,
-    MatStepperModule,
-    MatTabsModule,
-    MatExpansionModule,
-    MatButtonToggleModule,
-    MatChipsModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatProgressBarModule,
-    MatDialogModule,
-    MatTooltipModule,
-    MatSnackBarModule,
-    MatTableModule,
-    MatSortModule,
-    MatPaginatorModule,
-    MatNativeDateModule,
-    MatRippleModule,
+  MatCheckboxModule,
+  MatPseudoCheckboxModule,
+  MatButtonModule,
+  MatInputModule,
+  MatAutocompleteModule,
+  MatDatepickerModule,
+  MatFormFieldModule,
+  MatRadioModule,
+  MatSelectModule,
+  MatSliderModule,
+  MatSlideToggleModule,
+  MatMenuModule,
+  MatSidenavModule,
+  MatToolbarModule,
+  MatListModule,
+  MatGridListModule,
+  MatCardModule,
+  MatStepperModule,
+  MatTabsModule,
+  MatExpansionModule,
+  MatButtonToggleModule,
+  MatChipsModule,
+  MatIconModule,
+  MatProgressSpinnerModule,
+  MatProgressBarModule,
+  MatDialogModule,
+  MatTooltipModule,
+  MatSnackBarModule,
+  MatTableModule,
+  MatSortModule,
+  MatPaginatorModule,
+  MatNativeDateModule,
+  MatRippleModule,
 } from '@angular/material';
 
 @NgModule({
@@ -71,13 +72,7 @@ import {
     MatPaginatorModule,
     MatNativeDateModule,
     MatFormFieldModule,
-     MatRippleModule,
-     
-    //MatPaginator,
-    //MatSort,
-   // MatTableDataSource,
-    //MatCell,
-   // MatRadioButton
+    MatRippleModule,
   ],
   exports: [
     MatPseudoCheckboxModule,
@@ -112,13 +107,9 @@ import {
     MatSortModule,
     MatPaginatorModule,
     MatFormFieldModule,
-     MatRippleModule,
-     MatCheckboxModule
-    //MatPaginator,
-   // MatSort,
-   // MatTableDataSource,
-   // MatCell,
-   // MatRadioButton
+    MatRippleModule,
+    MatCheckboxModule
   ]
 })
-export class MaterialModule {}
+export class MaterialModule {
+}

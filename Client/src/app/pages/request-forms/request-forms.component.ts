@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthenticationService } from 'app/core/services/authentication.service';
 import { Observable } from 'rxjs';
 import { UserStoreService } from 'app/core/services/user-store.service';
+import {User} from "../../resources/user/model/User";
 
 @Component({
   selector: 'app-request-forms',
@@ -9,9 +9,9 @@ import { UserStoreService } from 'app/core/services/user-store.service';
   styleUrls: ['./request-forms.component.scss']
 })
 export class RequestFormsComponent implements OnInit {
-  public hasFinanceModuleAccess$: Observable<boolean>;
-  public hasTicketModuleAccess$: Observable<boolean>;
-  public hasReportModuleAccess$: Observable<boolean>;
+  hasFinanceModuleAccess$: Observable<boolean>;
+  hasTicketModuleAccess$: Observable<boolean>;
+  hasReportModuleAccess$: Observable<boolean>;
 
   constructor( private userStoreService: UserStoreService ) { }
 
@@ -20,5 +20,6 @@ export class RequestFormsComponent implements OnInit {
     this.hasTicketModuleAccess$ = this.userStoreService.hasTicketModuleAccess();
     this.hasReportModuleAccess$ = this.userStoreService.hasReportModuleAccess();
   }
+
 
 }

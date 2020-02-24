@@ -9,7 +9,7 @@ import {GroupContainer} from "../../../group/model/Group";
 export class UserGroupsComponent implements OnInit {
   @Output() selectedGroupEmmiter: EventEmitter<string> = new EventEmitter<string>();
   @Input() groupContainer: GroupContainer;
-  @Input() elevationActivated: boolean = false;
+  @Input() elevationActivated = false;
 
   constructor() {
   }

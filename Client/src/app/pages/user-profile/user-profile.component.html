@@ -1,26 +1,27 @@
+
+
 <app-header></app-header>
+
 <app-navigation></app-navigation>
-
-
 
 <div id='contentContainer' >
 
     <!-- user details -->
     <div  class = 'windowLeft' id = 'userInforContainer'  >
-        
+
         <!-- useer informations -->
-        <app-user-details 
+        <app-user-details
             #userDetials
-            (changeImageEmitter) = "changeFrames()"  
+            (changeImageEmitter) = "changeFrames()"
             (changePasswordEmitter) = 'changePassword($event)'
-            [displayedUser] = "userService.user"  
-            addImageClick = 'true' 
+            [displayedUser] = "userService.user"
+            addImageClick = 'true'
             showPasswordChange = 'true'>
         </app-user-details>
 
         <!-- user privileges -->
-        <app-privileges 
-            #userPrivileges 
+        <app-privileges
+            #userPrivileges
             name = "uživateľa">
         </app-privileges>
 
@@ -30,9 +31,9 @@
     <div  class = 'windowLeft' >
 
         <!-- available groups -->
-        <app-user-groups 
-            (selectedGroupEmmiter) = "initGroupPrivileges($event)"  
-            [groupContainer] = "groupContainer$ | async" 
+        <app-user-groups
+            (selectedGroupEmmiter) = "initGroupPrivileges($event)"
+            [groupContainer] = "groupContainer$ | async"
             elevationActivated = "true">
         </app-user-groups>
 
@@ -44,13 +45,13 @@
 
 
     <!-- shows available avatars -->
-    <app-user-images 
+    <app-user-images
         #userAvatars
         [hidden]="!displayAvatarts"
         (changeWindowEmitter) = "changeFrames()"
         (selectImageEmitter) = "selectImage($event)">
     </app-user-images>
-   
+
 
 </div>
 <ngx-spinner><p style="font-size: 20px; color: white">Načítavanie...</p> </ngx-spinner>

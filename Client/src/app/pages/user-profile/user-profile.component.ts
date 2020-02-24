@@ -6,14 +6,13 @@ import {PrivilegesComponent} from '../../resources/privilege/view/privileges/pri
 import {GroupDetailsComponent} from '../../resources/group/view/group-details/group-details.component';
 import {UserDetailsComponent} from '../../resources/user/views/user-details/user-details.component';
 import {Observable} from 'rxjs';
-import {PasswordContainer} from 'app/resources/user/model/PasswordContainer';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {UserImagesComponent} from '../../resources/user/views/user-images/user-images.component';
+import {UserImagesComponent} from './presentation/user-images/user-images.component';
 import {GroupContainer} from "../../resources/group/model/Group";
 import {ApplicationPrivilege} from "../../resources/privilege/model/Privilege";
-import {ImageDTO} from "../../resources/user/model/User";
+import {ImageDTO, PasswordContainer} from "../../resources/user/model/User";
 
 @Component({
   selector: 'app-user-profile',

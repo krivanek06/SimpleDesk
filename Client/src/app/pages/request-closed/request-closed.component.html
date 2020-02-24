@@ -1,23 +1,23 @@
-<app-header></app-header>
-<app-navigation></app-navigation>
 
+<app-header></app-header>
+
+<app-navigation></app-navigation>
 
 <div id='contentContainer'>
     <!-- filter -->
     <div class='filterContent'>
         <app-request-filter
             #requestFilter
+            [allUsers]="allUsers$ | async"
             (changedDate) = "loadClosedRequests()"
             (changedFormFilter) = "filterClosedRequests($event)">
         </app-request-filter>
     </div>
 
-     <!-- excel export button -->
-     <button mat-raised-button color="success" id='excelButton' (click)="exportTOExcel()">Exportovať ako Excel</button>
-
     <!-- table with requests -->
     <app-request-table
         #closedRequests
+        [displayDownloadExcel]="true"
         [numberOfRequests] = 'closedRequests.dataSource.data.length'
         (moveToDetails) = 'moveToDetials($event)'
         headerColor="#E8F3FF"

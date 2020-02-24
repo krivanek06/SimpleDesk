@@ -1,6 +1,6 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
 import {UserSimpleDTO} from 'app/resources/user/model/User';
-import {GroupFormComponent} from 'app/resources/group/view/group-form/group-form.component';
+import {GroupFormComponent} from 'app/pages/app-management/presentation/group/group-form/group-form.component';
 import {GroupHttpService} from 'app/api/group-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {FinanceHttpService} from "../../../../resources/request/service/finance-http.service";

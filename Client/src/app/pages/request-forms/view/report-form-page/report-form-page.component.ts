@@ -4,7 +4,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
 import {ReportForm} from "../../../../resources/request/model/interface/Report";
 import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
-import {RequestReportFormComponent} from "../../../../resources/request/view/form/request-report-form/request-report-form.component";
+import {RequestReportFormComponent} from "../../presentation/request-report-form/request-report-form.component";
 import {FileUploadComponent} from "../../../../shared/components/file-upload/file-upload.component";
 
 @Component({

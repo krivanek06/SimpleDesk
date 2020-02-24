@@ -1,12 +1,13 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {RequestTable, FilterRequests} from 'app/resources/request/model/interface/RequestTable';
-import {RequestTableComponent} from 'app/shared/components/request-table/request-table.component';
+import {RequestTableComponent} from 'app/resources/request/view/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {RequestFilterComponent} from 'app/shared/components/request-filter/request-filter.component';
-import {IgxExcelExporterService, IgxExcelExporterOptions} from "igniteui-angular";
-import * as _ from 'lodash';
+import {RequestFilterComponent} from 'app/resources/request/view/request-filter/request-filter.component';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
+import {Observable} from "rxjs";
+import {UserHttpService} from "../../api/user-http.service";
+import {UserSimpleDTO} from "../../resources/user/model/User";
 
 export interface SatDatepickerRangeValue<D> {
   begin: D | null;
@@ -20,8 +21,11 @@ export interface SatDatepickerRangeValue<D> {
 })
 export class RequestClosedComponent implements OnInit, AfterViewInit {
   private loadedRequests: RequestTable[] = [];
-  public viewTable = ['id', 'additionalInformation', 'creator', 'name',
+
+  allUsers$: Observable<UserSimpleDTO[]>
+  viewTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'closed', 'timeCreated', 'timeClosed', 'details'];
+
   @ViewChild('closedRequests') closedRequests: RequestTableComponent;
   @ViewChild('requestFilter') requestFilter: RequestFilterComponent;
 
@@ -29,15 +33,16 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
   constructor(private spinner: NgxSpinnerService,
               private router: Router,
               private requestHttp: RequestHttpService,
-              private excelExportService: IgxExcelExporterService) {
+              private userHttp: UserHttpService) {
   }
 
   ngOnInit() {
-
+    this.allUsers$ = this.userHttp.getAllActiveUsers();
   }
 
   ngAfterViewInit(): void {
-    this.loadClosedRequests();
+   //  this.loadClosedRequests();
+    setTimeout(() => this.loadClosedRequests());
   }
 
   loadClosedRequests() {
@@ -74,17 +79,6 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
     // re-render table with data
     this.closedRequests.dataSource.data = this.closedRequests.dataSource.data as RequestTable[];
-  }
-
-
-  exportTOExcel() {
-    // filter important fields
-    const result = [];
-    this.closedRequests.dataSource.data.forEach(x => {
-      result.push(_.pick(x, ['id', 'timestampCreation', 'timestampClosed',
-        'additionalInformation', 'name', 'requestPriority', 'requestType', 'creator', 'closed']));
-    });
-    this.excelExportService.exportData(result, new IgxExcelExporterOptions("ExportedDataFile"));
   }
 
   moveToDetials(id: number) {
