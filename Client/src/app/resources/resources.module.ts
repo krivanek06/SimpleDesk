@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import {NgModule} from '@angular/core';
 import {GroupDetailsComponent} from "./group/view/group-details/group-details.component";
 import {PrivilegesComponent} from "./privilege/view/privileges/privileges.component";
 import {RequestFilterComponent} from "./request/view/request-filter/request-filter.component";
@@ -8,11 +8,17 @@ import {UserGroupsComponent} from "./user/views/user-groups/user-groups.componen
 import {MaterialModule} from "../material.module";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
 import {AlertModule} from "ngx-bootstrap";
-import {SatDatepickerModule, SatNativeDateModule} from "saturn-datepicker";
 import {SharedModule} from "../shared/shared.module";
 import {MatTableExporterModule} from "mat-table-exporter";
-import {FormsModule} from "@angular/forms";
-
+import {
+  DateAdapter,
+  MAT_DATE_FORMATS,
+  MAT_DATE_LOCALE, SatDatepickerModule, SatNativeDateModule
+} from 'saturn-datepicker';
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DatePipe} from "@angular/common";
+import {NavigationComponent} from "./navigation/navigation.component";
+import {HeaderComponent} from "./header/header.component";
 
 
 @NgModule({
@@ -23,6 +29,8 @@ import {FormsModule} from "@angular/forms";
     RequestTableComponent,
     UserDetailsComponent,
     UserGroupsComponent,
+    NavigationComponent,
+    HeaderComponent,
   ],
   imports: [
     IconSpriteModule,
@@ -39,12 +47,20 @@ import {FormsModule} from "@angular/forms";
     RequestTableComponent,
     UserDetailsComponent,
     UserGroupsComponent,
+    NavigationComponent,
+    HeaderComponent,
 
     SatNativeDateModule,
     SatDatepickerModule,
     MaterialModule,
     IconSpriteModule,
     AlertModule
+  ],
+  providers: [
+    DatePipe,
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ]
 })
-export class ResourcesModule { }
+export class ResourcesModule {
+}

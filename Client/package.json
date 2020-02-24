@@ -9,6 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
+    "compile": "ngcc",
+    "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
     "analyze": "webpack-bundle-analyzer dist/helpdeskAngular/stats.json",
     "generate:svg-sprite": "svg2sprite ./src/assets/icons ./src/assets/sprites/sprite.svg --stripAttrs fill --stripAttrs stroke --stripAttrs id"
   },
@@ -46,7 +48,7 @@
     "npm": "^6.13.7",
     "popper.js": "^1.16.1",
     "rxjs": "~6.5.4",
-    "saturn-datepicker": "^8.0.2",
+    "saturn-datepicker": "^8.0.1",
     "sweetalert2": "^9.7.2",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

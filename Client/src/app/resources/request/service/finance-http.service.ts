@@ -3,7 +3,7 @@ import {environment} from "../../../../environments/environment";
 import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FinanceForm, FinanceType} from "../model/interface/Finance";
-import {RequestFormsModule} from "../../../modules/request-forms/request-forms.module";
+import {RequestFormsModule} from "../../../pages/request-forms/request-forms.module";
 import {ResourcesModule} from "../../resources.module";
 
 @Injectable({

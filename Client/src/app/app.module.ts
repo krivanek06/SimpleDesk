@@ -1,71 +1,51 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
-import { HTTP_INTERCEPTORS} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {AlertModule} from 'ngx-bootstrap';
-import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModule} from './material.module';
 import {IconSpriteModule} from 'ng-svg-icon-sprite';
-import {SweetAlert2Module} from '@sweetalert2/ngx-sweetalert2';
-import {DatePipe} from '@angular/common';
-import {NgxSpinnerModule} from "ngx-spinner";
+import {CommonModule, DatePipe} from '@angular/common';
 import {RouterModule} from '@angular/router';
-import {SidebarModule} from 'ng-sidebar';
-import {
-  SatNativeDateModule,
-  SatDatepickerModule,
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE
-} from 'saturn-datepicker';
-import { MAT_MOMENT_DATE_FORMATS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import {MatTableExporterModule} from 'mat-table-exporter';
 
-// custom interceptors
-import {AuthInterceptor} from './core/interceptors/AuthInterceptor ';
-import {ErrorInterceptor} from './core/interceptors/ErrorInterceptor';
-
-// custom components
-import {AuthenticationService} from './core/services/authentication.service';
-import {UserStoreService} from './core/services/user-store.service';
-import {FileServiceService} from './core/services/file-service.service';
-import {SharedModule} from "./shared/shared.module";
-import {LoginComponent} from "./modules/login/login.component";
+// custom pages
 import {ParticlesModule} from "angular-particle";
-import {RequestStoreService} from "./core/services/request-store.service";
-import {RequestService} from "./core/services/request.service";
+import {LoginComponent} from "./pages/login/login.component";
+import {ReactiveFormsModule} from "@angular/forms";
+import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
+import {DotLoaderComponent} from "./pages/login/dot-loader/dot-loader.component";
+import {MaterialModule} from "./material.module";
+import {AuthInterceptor} from "./core/interceptors/AuthInterceptor ";
+import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
+import {HeaderComponent} from "./resources/header/header.component";
+import {NavigationComponent} from "./resources/navigation/navigation.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-   // LoginComponent
+    LoginComponent,
+    DotLoaderComponent,
+
   ],
   imports: [
+    CommonModule,
     BrowserModule,
- //   ParticlesModule,
- //   ReactiveFormsModule,
     AppRoutingModule,
+    ParticlesModule,
     IconSpriteModule,
+    MaterialModule,
     AlertModule.forRoot(),
     BrowserAnimationsModule,
-  //  SweetAlert2Module.forRoot(),
-  //  NgxSpinnerModule,
+    ReactiveFormsModule,
+    HttpClientModule,
+    SweetAlert2Module,
     RouterModule,
-    SharedModule
   ],
   providers: [
     DatePipe,
-    AuthenticationService,
-    RequestService,
-    UserStoreService,
-    RequestStoreService,
-    FileServiceService,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
   bootstrap: [AppComponent]
 })

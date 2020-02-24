@@ -18,7 +18,7 @@ export class AuthenticationService {
     this.jwtHelper = new JwtHelperService();
   }
 
-  public getDecodedToken(): Observable<JWToken> {
+  getDecodedToken(): Observable<JWToken> {
     if (this.JWToken$ === undefined) {
       this.JWToken$ = new BehaviorSubject<JWToken>(this.jwtHelper.decodeToken(this.getAccessToken()));
     }
@@ -29,11 +29,11 @@ export class AuthenticationService {
     return this.JWToken$.getValue();
   }
 
-  public login(username: string, password: string): Observable<boolean> {
+  login(username: string, password: string): Observable<boolean> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return this.http.post<Response>(environment.loginUrl + "login",
-      {username: username.toLowerCase(), password: password},
+      {username: username.toLowerCase(), password},
       {headers, observe: 'response'}
     ).pipe(
       tap(ressponse => {
@@ -47,17 +47,17 @@ export class AuthenticationService {
       }));
   }
 
-  public logout() {
+  logout() {
     this.setAccessToken(null);
     this.setRefreshToken(null);
     this.JWToken$.next(null);
   }
 
-  public isAuthenticated(): boolean {
+  isAuthenticated(): boolean {
     return !!this.getAccessToken();
   }
 
-  public isTokenValid(): boolean {
+  isTokenValid(): boolean {
     return !this.jwtHelper.isTokenExpired(this.getAccessToken());
   }
 
@@ -92,7 +92,7 @@ export class AuthenticationService {
     }
   }
 
-  public getAccessToken() {
+  getAccessToken() {
     return localStorage.getItem('access_token');
   }
 

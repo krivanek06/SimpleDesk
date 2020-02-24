@@ -1,21 +1,4 @@
 <!--The content below is only a placeholder and can be replaced.-->
 
-<ng-container *ngIf="user$ | async as user">
-  <app-header
-    (logoutEmitter)="logout()"
-    [fullName]='user.fullName'
-    [photoBytes]='user.photoBytes'
-  ></app-header>
-
-  <app-navigation
-    [hasPrivilegeAccess]="hasPrivilegeAccess$ | async"
-    [isAdmin]="isAdmin$ | async"
-    [isGhost]="isGhost$ | async"
-    [hasTicketModuleAccess]="hasTicketModuleAccess$ | async"
-    [hasReportModuleAccess]="hasReportModuleAccess$ | async"
-    [hasFinanceModuleAccess]="hasFinanceModuleAccess$ | async"
-  >
-  </app-navigation>
-</ng-container>
 
 <router-outlet></router-outlet>

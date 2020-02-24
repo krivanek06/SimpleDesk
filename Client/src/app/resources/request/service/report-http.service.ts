@@ -3,7 +3,6 @@ import {Observable} from "rxjs";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {ReportForm} from "../model/interface/Report";
-import {RequestFormsModule} from "../../../modules/request-forms/request-forms.module";
 import {ResourcesModule} from "../../resources.module";
 
 @Injectable({

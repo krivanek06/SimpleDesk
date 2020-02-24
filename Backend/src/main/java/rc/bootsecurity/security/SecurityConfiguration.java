@@ -1,6 +1,7 @@
 package rc.bootsecurity.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -50,10 +51,10 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .addFilter(new JwtAuthorizationFilter(authenticationManager()));
 
                     // configure access rules
-                   /* .authorizeRequests()
+                /*   .authorizeRequests()
+                    .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .antMatchers( "/login").permitAll()
-                    .antMatchers("/api/user/**").authenticated()
-                    .antMatchers("/api/requests/dashboard").authenticated()
+                    .antMatchers("/api/user/basicInformation").permitAll()
                     .anyRequest().authenticated();*/
     }
 

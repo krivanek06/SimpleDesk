@@ -4,7 +4,6 @@ import {ImageDTO, User, UserSimple} from 'app/resources/user/model/User';
 import {catchError, map, mapTo, tap} from 'rxjs/operators';
 import {UserHttpService} from 'app/api/user-http.service';
 import {AuthenticationService} from './authentication.service';
-import {Request} from "../../resources/request/model/interface/Request";
 
 @Injectable({
   providedIn: 'root'
@@ -16,8 +15,7 @@ export class UserStoreService {
 
   constructor(private authService: AuthenticationService, private userHttp: UserHttpService) {
     if (localStorage.getItem(this.userPrefix)) {
-      console.log('start')
-      this.user$.next(JSON.parse(localStorage.getItem(this.userPrefix) ) as User);
+      this.user$.next(JSON.parse(localStorage.getItem(this.userPrefix)) as User);
     }
   }
 
@@ -27,6 +25,11 @@ export class UserStoreService {
 
   getUser(): Observable<User> {
     return this.user$.asObservable();
+  }
+
+  logOut() {
+    localStorage.removeItem(this.userPrefix);
+    this.user$.next(null);
   }
 
   loadLoggedInUser(): Observable<boolean> {
@@ -44,11 +47,6 @@ export class UserStoreService {
 
   private saveUserToLocalStorage(user: User): void {
     localStorage.setItem(this.userPrefix, JSON.stringify(user));
-  }
-
-  removeUserFromLocalStorage() {
-    localStorage.removeItem(this.userPrefix);
-    this.user$.next(null);
   }
 
   changeUserImage(image: ImageDTO) {
@@ -75,39 +73,39 @@ export class UserStoreService {
   }
 
   isAdmin(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_ADMIN")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.AUTHORITIES.includes("ROLE_ADMIN") : false));
   }
 
   isGhost(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_GHOST")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.AUTHORITIES.includes("ROLE_GHOST") : false));
   }
 
   isManager(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_MANAGER")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.AUTHORITIES.includes("ROLE_MANAGER") : false));
   }
 
   isManagerRightHand(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_MANAGER_RIGHT_HAND")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.AUTHORITIES.includes("ROLE_MANAGER_RIGHT_HAND") : false));
   }
 
   isSolver(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.AUTHORITIES.includes("ROLE_SOLVER")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.AUTHORITIES.includes("ROLE_SOLVER") : false));
   }
 
   hasPrivilegeAccess(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Správa aplikácie")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.MODULE_TYPES_TO_USE.includes("Správa aplikácie") : false));
   }
 
   hasFinanceModuleAccess(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Finance")));
+    return this.authService.getDecodedToken().pipe(map(x =>  x ? x.MODULE_TYPES_TO_USE.includes("Finance") : false));
   }
 
   hasTicketModuleAccess(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Ticket")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.MODULE_TYPES_TO_USE.includes("Ticket") : false));
   }
 
   hasReportModuleAccess(): Observable<boolean> {
-    return this.authService.getDecodedToken().pipe(map(x => x.MODULE_TYPES_TO_USE.includes("Report")));
+    return this.authService.getDecodedToken().pipe(map(x => x ? x.MODULE_TYPES_TO_USE.includes("Report") : false));
   }
 
   isMoreThanNormalUser(): Observable<boolean> {

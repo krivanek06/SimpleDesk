@@ -1,9 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import {UserSimpleDTO, User, ImageDTO} from 'app/resources/user/model/User';
+import {UserSimpleDTO, User, ImageDTO, PasswordContainer} from 'app/resources/user/model/User';
 import {Observable} from 'rxjs';
 import {environment} from 'environments/environment';
-import {PasswordContainer} from 'app/resources/user/model/PasswordContainer';
 
 @Injectable({
   providedIn: 'root'
