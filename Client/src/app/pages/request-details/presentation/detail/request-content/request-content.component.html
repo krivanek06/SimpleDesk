@@ -1,6 +1,6 @@
 <ng-container *ngIf="requestDetail">
     <!-- TICKET -->
-    <div  *ngIf = " requestDetail.requestType === 'Ticket'" class='customRow mainInformationContainer' >
+    <div  *ngIf = " requestDetail.requestType === requestType.Ticket" class='customRow mainInformationContainer' >
         <div class="raisedbox customCol" [style.width.%] = 75>
             <p class="raisedboxName" >
                 <img [src]="'data:image/jpeg;base64,'+ requestDetail.creator.photoBytes" class='icon' />
@@ -13,18 +13,18 @@
     <!-- ------------------- -->
 
     <!-- REPORT -->
-    <div  *ngIf = " requestDetail.requestType === 'Report'" class='mainInformationContainer'>
+    <div  *ngIf = " requestDetail.requestType === requestType.Report " class='mainInformationContainer'>
     <div class='customRow'>
             <div class="raisedbox customCol" [style.width.%] = 45>
                 <p class="raisedboxName">Účeľ reportu</p>
-                <p class='test'>
+                <p>
                     {{ $any(requestDetail).purpose}}
                 </p>
             </div>
 
             <div class="raisedbox customCol" [style.width.%] = 45>
                 <p class="raisedboxName">Kritériá reportu</p>
-                <p  class='test'>
+                <p>
                     {{ $any(requestDetail).criteria}}
                 </p>
             </div>
@@ -32,13 +32,13 @@
         <div class='customRow'>
             <div class="raisedbox customCol" [style.width.%] = 45>
                 <p class="raisedboxName">Viditeľné údaje</p>
-                <p   class='test'>
+                <p>
                     {{ $any(requestDetail).visibleData}}
                 </p>
             </div>
             <div class="raisedbox customCol" [style.width.%] = 45 *ngIf="$any(requestDetail).otherInformation !== null && $any(requestDetail).otherInformation !== '' ">
                 <p class="raisedboxName">Dodatočné informácie</p>
-                <p class='test'> {{ $any(requestDetail).otherInformation}} </p>
+                <p> {{ $any(requestDetail).otherInformation}} </p>
             </div>
         </div>
     </div>

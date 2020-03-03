@@ -3,6 +3,7 @@ import {RequestComment, RequestCommentWrapper} from 'app/resources/request/model
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {UserSimple} from "../../../../../resources/user/model/User";
+import {RequestCommentType} from "../../../../../resources/request/model/enum/request.enum";
 
 
 @Component({
@@ -13,7 +14,8 @@ import {UserSimple} from "../../../../../resources/user/model/User";
 export class RequestCommentFormComponent implements OnInit {
   commentInput = '';
   isChecked = true; // if checkbotton is checked
-  isCheckedName = 'Notification'; // name of checkButton
+  isCheckedName = RequestCommentType.Notification; // name of checkButton
+  requestCommentType: typeof RequestCommentType = RequestCommentType;
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 
@@ -48,8 +50,8 @@ export class RequestCommentFormComponent implements OnInit {
   private constructRequestCommentWrapper(requestComment: RequestComment): RequestCommentWrapper {
     const requestCommentWrapper: RequestCommentWrapper = {
       requestComment,
-      sendEmail: this.isChecked && (this.isCheckedName === "Solution" || this.isCheckedName === "Notification"),
-      solution: this.isCheckedName === "Solution"
+      sendEmail: this.isChecked && (this.isCheckedName === RequestCommentType.Solution || this.isCheckedName === RequestCommentType.Notification),
+      solution: this.isCheckedName === RequestCommentType.Solution
     };
     return requestCommentWrapper;
   }
@@ -60,7 +62,7 @@ export class RequestCommentFormComponent implements OnInit {
       requestId: null,
       creator: userSimple,
       comment: this.commentInput,
-      isPrivate: this.isChecked && this.isCheckedName === "Private",
+      isPrivate: this.isChecked && this.isCheckedName === RequestCommentType.Private,
       groupsToShare: [],
       timestamp: new Date()
     };

@@ -4,7 +4,7 @@ import {Request} from 'app/resources/request/model/interface/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {Observable} from 'rxjs';
-import {RequestPosition} from 'app/resources/request/model/enum/request-position.enum';
+import {RequestPosition, RequestType} from 'app/resources/request/model/enum/request.enum';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {UserHttpService} from 'app/api/user-http.service';
@@ -21,7 +21,7 @@ export class RequestManagementContainerComponent implements OnInit {
   isManager$: Observable<boolean>;
   isAdmin$: Observable<boolean>;
   isSolverRightHand$: Observable<boolean>;
-
+  requestType: typeof RequestType = RequestType;
 
   @Input() requestDetails: Request;
   allusers$: Observable<UserSimpleDTO[]>;

@@ -29,9 +29,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         this.authenticationManager = authenticationManager;
     }
 
-    /* Trigger when we issue POST request to /login
-    We also need to pass in {"username":"dan", "password":"dan123"} in the request body
-     */
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
@@ -52,9 +49,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                 new ArrayList<>());
 
         // Authenticate user
-        Authentication auth = authenticationManager.authenticate(authenticationToken);
-
-        return auth;
+        return authenticationManager.authenticate(authenticationToken);
     }
 
     @Override
@@ -81,12 +76,5 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         // Add token in response
         response.addHeader(JwtProperties.HEADER_STRING, token);
-
     }
-
-
-
-
-
-
 }

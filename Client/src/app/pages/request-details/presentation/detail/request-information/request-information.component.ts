@@ -1,5 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Request} from "../../../../../resources/request/model/interface/Request";
+import {RequestPriority, RequestType} from "../../../../../resources/request/model/enum/request.enum";
 
 @Component({
   selector: 'app-request-information',
@@ -14,6 +15,8 @@ export class RequestInformationComponent implements OnInit {
   @Output() downloadFileEmitter: EventEmitter<string> = new EventEmitter<string>();
 
   openDays: number;
+  requestType: typeof RequestType = RequestType;
+  requestPriority: typeof RequestPriority = RequestPriority;
 
   constructor() {
   }

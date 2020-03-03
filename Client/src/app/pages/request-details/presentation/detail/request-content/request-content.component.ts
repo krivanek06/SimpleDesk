@@ -1,5 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Request } from 'app/resources/request/model/interface/Request';
+import {Component, OnInit, Input} from '@angular/core';
+import {Request} from 'app/resources/request/model/interface/Request';
+import {RequestType} from "../../../../../resources/request/model/enum/request.enum";
 
 @Component({
   selector: 'app-request-content',
@@ -7,9 +8,12 @@ import { Request } from 'app/resources/request/model/interface/Request';
   styleUrls: ['./request-content.component.scss']
 })
 export class RequestContentComponent implements OnInit {
+  requestType: typeof RequestType = RequestType;
+
   @Input() requestDetail: Request;
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
   }

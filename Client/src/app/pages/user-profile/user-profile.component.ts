@@ -21,7 +21,7 @@ import {ImageDTO, PasswordContainer} from "../../resources/user/model/User";
 })
 export class UserProfileComponent implements OnInit, AfterViewInit {
 
-  displayAvatarts = false;
+  displayAvatars = false;
   groupContainer$: Observable<GroupContainer>;
 
   @ViewChild('userDetials') userDetials: UserDetailsComponent;
@@ -91,7 +91,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
   }
 
   changeFrames(): void {
-    this.displayAvatarts = !this.displayAvatarts;
+    this.displayAvatars = !this.displayAvatars;
     // load images first time
     if (!this.userAvatars.avatars) {
       this.spinner.show();

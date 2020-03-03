@@ -1,7 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Observable} from "rxjs";
 import {Request} from "../../../../resources/request/model/interface/Request";
-import {RequestPosition} from "../../../../resources/request/model/enum/request-position.enum";
+import {RequestPosition} from "../../../../resources/request/model/enum/request.enum";
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {RequestHttpService} from "../../../../api/request-http.service";
 import {RequestService} from "../../../../core/services/request.service";
@@ -33,7 +33,7 @@ export class RequestInformationContainerComponent implements OnInit {
     this.isSolver$ = this.userStoreService.isSolver();
   }
 
-  closeSideBar(){
+  closeSideBar() {
     this.closeBarEmitter.emit();
   }
 

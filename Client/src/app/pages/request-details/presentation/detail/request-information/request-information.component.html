@@ -25,11 +25,11 @@
         <ul>
           <li class='information'>
             <img src="assets/images_design/priority_low_icon_2.png" class="avatar"
-                 *ngIf='requestDetails.requestPriority === "nízka"' alt="low priority"/>
+                 *ngIf='requestDetails.requestPriority === requestPriority.small ' alt="low priority"/>
             <img src="assets/images_design/priority_medium_icon_2.png" class="avatar"
-                 *ngIf='requestDetails.requestPriority === "stredná"' alt="medium priority"/>
+                 *ngIf='requestDetails.requestPriority === requestPriority.medium ' alt="medium priority"/>
             <img src="assets/images_design/priority_high_icon_2.png" class="avatar"
-                 *ngIf='requestDetails.requestPriority === "vysoká"' alt="high priority"/>
+                 *ngIf='requestDetails.requestPriority === requestPriority.high ' alt="high priority"/>
             {{ requestDetails.requestPriority | titlecase }}
           </li>
         </ul>
@@ -43,13 +43,13 @@
       </li>
 
       <!-- Ticket informations -->
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Ticket" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Ticket '>
         <div class='informationTitle'>Typ ticketu</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).ticketType }}</li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Ticket" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Ticket '>
         <div class='informationTitle'>{{ $any(requestDetails).ticketType }}</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).ticketSubtypeName }}</li>
@@ -57,7 +57,7 @@
       </li>
 
       <!-- Finance informations -->
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Finance" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Finance '>
         <div class='informationTitle'>Typ financií</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).financeType }}</li>
@@ -66,19 +66,19 @@
 
 
       <!-- Report informations -->
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Vlastník reportu</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).owner }}</li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Frekvencia obnovenia</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).reportRefresh }}</li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Prístup pre</div>
         <ul *ngIf='$any(requestDetails).accessByPeople != null'>
           <li class='information' *ngFor="let access of $any(requestDetails).accessByPeople.split(',')">
@@ -86,7 +86,7 @@
           </li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Prístup cez</div>
         <ul *ngIf='$any(requestDetails).accessMethods != null'>
           <li class='information' *ngFor="let access of $any(requestDetails).accessMethods.split(',')">
@@ -94,7 +94,7 @@
           </li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <ng-container *ngFor='let store of $any(requestDetails).reportAccessStored'>
           <div class='informationTitle'>{{ store.reportAccess }}</div>
           <ul>
@@ -102,13 +102,13 @@
           </ul>
         </ng-container>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Vyhodnotenie v dňoch</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).evaluation }}</li>
         </ul>
       </li>
-      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === "Report" '>
+      <li class='userInformationsContainer' *ngIf='requestDetails.requestType === requestType.Report '>
         <div class='informationTitle'>Deadline</div>
         <ul>
           <li class='information'> {{ $any(requestDetails).deadline | date:'dd. MM. y '}}</li>

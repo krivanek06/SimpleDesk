@@ -13,6 +13,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   @Input() displayAssignToMe = false;
   @Input() displayDownloadExcel = false;
   @Input() tableTitle: string;
+  @Input() numberOfRequests: number;
 
   @Output() assignOnMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
   @Output() removeFromMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
@@ -21,7 +22,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   dataSource: MatTableDataSource<RequestTable> = new MatTableDataSource<RequestTable>();
-  @Input() numberOfRequests: number;
+
 
   dateFrom: string;
   dateTo: string;

@@ -47,7 +47,7 @@
     <!-- shows available avatars -->
     <app-user-images
         #userAvatars
-        [hidden]="!displayAvatarts"
+        [hidden]="!displayAvatars"
         (changeWindowEmitter) = "changeFrames()"
         (selectImageEmitter) = "selectImage($event)">
     </app-user-images>

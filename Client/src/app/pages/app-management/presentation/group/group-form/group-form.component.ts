@@ -5,6 +5,7 @@ import {FinanceType} from "../../../../../resources/request/model/interface/Fina
 import {TicketType} from "../../../../../resources/request/model/interface/Ticket";
 import {Group} from "../../../../../resources/group/model/Group";
 import {ApplicationPrivilege} from "../../../../../resources/privilege/model/Privilege";
+import {RequestType} from "../../../../../resources/request/model/enum/request.enum";
 
 @Component({
   selector: 'app-group-form',
@@ -14,6 +15,8 @@ import {ApplicationPrivilege} from "../../../../../resources/privilege/model/Pri
 export class GroupFormComponent implements OnInit {
 
   groupRegistrationForm: FormGroup;
+
+
   @Input() allAvailableUsers: UserSimpleDTO[] = [];
   @Input() financeTypes: FinanceType[] = [];
   @Input() softwares: TicketType[];

@@ -17,6 +17,7 @@ export class RequestFinanceFormComponent implements OnInit {
 
   @ViewChild('financeFormViewChild', {static: true}) financeFormViewChild;
 
+
   constructor(private formBuilder: FormBuilder) {
   }
 
@@ -31,45 +32,45 @@ export class RequestFinanceFormComponent implements OnInit {
     });
   }
 
-  changeToUrgent() {
-    this.checkUrgent = !this.checkUrgent;
-    if (this.checkUrgent) {
-      this.financeForm.patchValue({requestPriority: 'vysoká'});
-    } else {
-      this.financeForm.patchValue({requestPriority: 'nízka'});
-    }
-  }
+   changeToUrgent() {
+     this.checkUrgent = !this.checkUrgent;
+     if (this.checkUrgent) {
+       this.financeForm.patchValue({requestPriority: 'vysoká'});
+     } else {
+       this.financeForm.patchValue({requestPriority: 'nízka'});
+     }
+   }
 
 
-  submit(): void {
-    if (this.financeForm.invalid) {
-      return;
-    }
-    const financeForm: FinanceForm = {
-      name: this.financeForm.get("name").value === null ? '' : this.financeForm.get("name").value,
-      financeType: this.financeForm.get("financeType").value,
-      requestPriority: this.financeForm.get("requestPriority").value,
-    };
+   submit(): void {
+     if (this.financeForm.invalid) {
+       return;
+     }
+     const financeForm: FinanceForm = {
+       name: this.financeForm.get("name").value === null ? '' : this.financeForm.get("name").value,
+       financeType: this.financeForm.get("financeType").value,
+       requestPriority: this.financeForm.get("requestPriority").value,
+     };
 
-    this.formEmitter.emit(financeForm);
-  }
+     this.formEmitter.emit(financeForm);
+   }
 
-  public resetForm() {
-    this.financeFormViewChild.resetForm();
-    this.financeForm.patchValue({requestPriority: 'nízka'});
-    this.checkUrgent = false;
-  }
+   public resetForm() {
+     this.financeFormViewChild.resetForm();
+     this.financeForm.patchValue({requestPriority: 'nízka'});
+     this.checkUrgent = false;
+   }
 
-  get financeType() {
-    return this.financeForm.get("financeType");
-  }
+   get financeType() {
+     return this.financeForm.get("financeType");
+   }
 
-  get requestPriority() {
-    return this.financeForm.get("requestPriority");
-  }
+   get requestPriority() {
+     return this.financeForm.get("requestPriority");
+   }
 
-  get name() {
-    return this.financeForm.get("name");
-  }
+   get name() {
+     return this.financeForm.get("name");
+   }
 
 }

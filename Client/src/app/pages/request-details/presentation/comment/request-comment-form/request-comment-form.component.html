@@ -8,8 +8,8 @@
   <mat-checkbox
     name='Solution'
     (change)="onChange($event)"
-    [checked]="isChecked && (isCheckedName==='Solution')"
-    [disabled]="isChecked && (isCheckedName!=='Solution')"
+    [checked]="isChecked && (isCheckedName === requestCommentType.Solution)"
+    [disabled]="isChecked && (isCheckedName !== requestCommentType.Solution)"
     matTooltip="Označiť komentár ako riešenie požiadavky.
                     Prebehne automatická emailová notifikácia riešiteľovi a výtvorcovi požiadavky"
     matTooltipPosition="right"
@@ -21,8 +21,8 @@
   <mat-checkbox
     name='Private'
     (change)="onChange($event)"
-    [checked]="isChecked && (isCheckedName==='Private')"
-    [disabled]="isChecked && (isCheckedName!=='Private')"
+    [checked]="isChecked && (isCheckedName === requestCommentType.Private)"
+    [disabled]="isChecked && (isCheckedName !== requestCommentType.Private)"
     matTooltip="Označiť komentár ako privátny.
                     Komentár bude viditeľný len vám pokiaľ ho nezdieľate, alebo neodomknete. "
     matTooltipPosition="right"
@@ -34,8 +34,8 @@
   <mat-checkbox
     name='Notification'
     (change)="onChange($event)"
-    [checked]="isChecked && (isCheckedName==='Notification')"
-    [disabled]="isChecked && (isCheckedName!=='Notification')"
+    [checked]="isChecked && (isCheckedName === requestCommentType.Notification)"
+    [disabled]="isChecked && (isCheckedName !== requestCommentType.Notification)"
     matTooltip="Zaškrnutím emailovo notifikujete priradeného riešiteľia a výtvorcu požiadavky"
     matTooltipPosition="right"
     matTooltipClass="custom-tooltip"

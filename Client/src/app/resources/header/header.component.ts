@@ -30,5 +30,4 @@ export class HeaderComponent implements OnInit {
     this.userStoreService.logOut();
     this.authService.logout();
   }
-
 }
