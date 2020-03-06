@@ -2,18 +2,20 @@ package rc.bootsecurity.requestModule.ticketModule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketDTO;
 import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketSubtype;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketSubtypeRepository;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketTypeRepository;
-import rc.bootsecurity.requestModule.commonModule.service.RequestStateService;
+import rc.bootsecurity.userModule.entity.User;
 
 import java.util.List;
 
 @Service
-public class TicketService extends RequestStateService {
+public class TicketService extends RequestManagementService {
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
     @Autowired
@@ -27,6 +29,8 @@ public class TicketService extends RequestStateService {
         ticket.setTicketSubtypeName(ticketDTO.getTicketSubtypeName());
         ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
         ticket.setProblem(ticketDTO.getProblem());
+
+        this.requestLogService.saveLogAndBroadCast(ticket, super.requestWebsockets.NEW_REQUEST + ((Request) ticket).getId());
 
         return ticket;
     }

@@ -7,7 +7,7 @@ import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
-
+import {RequestService} from "../../core/services/request.service";
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,12 +30,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isSolver$: Observable<boolean>;
   isManager$: Observable<boolean>;
 
+  requestWebsockets$: Observable<RequestTable>;
 
   constructor(private spinner: NgxSpinnerService,
               private userStoreService: UserStoreService,
               private requestHttp: RequestHttpService,
               private router: Router,
-              private swallNotification: SwallNotificationService) {
+              private swallNotification: SwallNotificationService,
+              private requestService: RequestService) {
   }
 
   ngOnInit() {
@@ -46,7 +48,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isManager$ = this.userStoreService.isManager();
 
     this.refreshIntervalId = setInterval(() => this.getRequestOnDashboard(), 600000); // 10minutes 600000
+
+
+    this.requestWebsockets$ = this.requestService.connectWebsockets();
+
+    this.requestWebsockets$.subscribe(x => {
+      console.log(x);
+    });
+
   }
+
 
   ngOnDestroy(): void {
     clearInterval(this.refreshIntervalId);

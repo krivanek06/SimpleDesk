@@ -2,20 +2,22 @@ package rc.bootsecurity.requestModule.financeModule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.financeModule.repository.FinanceTypeRepository;
-import rc.bootsecurity.requestModule.commonModule.service.RequestStateService;
 import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
+import rc.bootsecurity.userModule.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class FinanceService extends RequestStateService {
+public class FinanceService extends RequestManagementService {
     private RequestConverter requestConverter = new RequestConverter();
 
     @Autowired
@@ -27,6 +29,7 @@ public class FinanceService extends RequestStateService {
 
         finance.setFinanceType(this.financeTypeRepository.findByName(financeDTO.getFinanceType()));
 
+        this.requestLogService.saveLogAndBroadCast(finance, super.requestWebsockets.NEW_REQUEST + ((Request) finance).getId());
         return finance;
     }
 

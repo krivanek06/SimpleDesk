@@ -3,6 +3,10 @@ package rc.bootsecurity.requestModule.requestCommentModule.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rc.bootsecurity.requestModule.commonModule.entity.RequestLog;
+import rc.bootsecurity.requestModule.commonModule.repository.RequestLogRepository;
+import rc.bootsecurity.requestModule.commonModule.service.RequestLogService;
+import rc.bootsecurity.requestModule.commonModule.service.RequestWebsockets;
 import rc.bootsecurity.requestModule.requestCommentModule.exception.CommentNotFoundException;
 import rc.bootsecurity.groupModule.dto.GroupContainerDTO;
 import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
@@ -34,6 +38,10 @@ public class RequestCommentService {
     private GroupService groupService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private RequestWebsockets requestWebsockets;
+    @Autowired
+    private RequestLogService requestLogService;
 
 
     public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
@@ -78,11 +86,15 @@ public class RequestCommentService {
             requestComment.getRequest().setSolutionComment(requestComment.getId());
             this.requestService.saveRequest(requestComment.getRequest());
         }
-        //getting nested exception
+
         if(sendEmail || solution)
             this.informCreatorAndAssignedAboutComment(requestComment);
 
+        if(!requestCommentDTO.getIsPrivate())
+            this.requestLogService.saveLogAndBroadCast(requestComment.getRequest(),  this.requestWebsockets.ADDED_COMMENT + requestComment.getRequest().getId());
+
         requestCommentDTO.setId(requestComment.getId());
+
         return requestCommentDTO;
     }
 

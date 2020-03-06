@@ -47,9 +47,9 @@ public class UserService {
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
 
-    public List<User> getUsersWatchedRequest(Request request){
+   /* public List<User> getUsersWatchedRequest(Request request){
         return this.userRepository.findAllByWatchedRequests(request).orElseGet(ArrayList::new);
-    }
+    }*/
 
     public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.userRepository.findPrivilegesForUser(username));
@@ -183,6 +183,10 @@ public class UserService {
         User user = this.loadUserByUsername(username);
         user.setActive(!user.getActive());
         this.userRepository.save(user);
+    }
+
+    public List<String> getUsersToSendRequestChange(Integer requestId) {
+        return this.userRepository.getUsersToSendRequestChange(requestId);
     }
 
 

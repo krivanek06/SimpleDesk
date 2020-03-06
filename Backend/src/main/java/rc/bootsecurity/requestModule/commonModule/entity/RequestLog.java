@@ -20,16 +20,19 @@ public class RequestLog {
     private Request request;
 
     /**
-     * user who triggered this log
+     * user who should see the log
      */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(name = "log")
-    private String log;
+    @Column(name = "log_message")
+    private String logMessage;
 
-    @Column(name = "timestamp")
-    private Timestamp timestamp;
+    @Column(name = "timestamp_creation")
+    private Timestamp timestampCreation;
+
+    @Column(name = "timestamp_closed")
+    private Timestamp timestampClosed;
 
 }

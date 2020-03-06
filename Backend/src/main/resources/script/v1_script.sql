@@ -277,15 +277,19 @@ create table tbl_group_activity_watched_by_user(
 );
 DROP TABLE IF EXISTS tbl_request_logs CASCADE;
 create table tbl_request_logs(
-  id serial primary key,
-  request_id integer not null,
-  user_id integer not null,
-  log varchar not null,
-  timestamp TIMESTAMP default current_timestamp
+    id serial primary key,
+    request_id int,
+    user_id int,
+    log_message varchar,
+    timestamp_creation timestamp,
+    timestamp_closed timestamp
 );
 
-ALTER TABLE tbl_request_logs ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
-ALTER TABLE tbl_request_logs ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
+
+
+
+alter table tbl_request_logs add foreign key(request_id) references tbl_requests(id);
+alter table tbl_request_logs add foreign key(user_id) references tbl_users(id);
 
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
@@ -491,13 +495,13 @@ select json_build_object(
 'my_open_requests', (
 select json_agg( json_build_object(
 'id', id, 'requestPriority', requestPriority, 'additionalInformation' , additionalInformation ,'name' , subject,'requestType' , name, 'creator', creator,'creatorImageString', creatorImageString,
-'assigned' ,assigned, 'assignedImageString', assignedImageString,'timestampCreation', creation  , 'watched' , watched) ) as my_open_requests
+'assigned' ,assigned, 'assignedImageString', assignedImageString,'timestampCreation', creation ) ) as my_open_requests
 from (select r.id , trp.name as requestPriority,  t1.additionalInformation,  r.subject, rt.name,
 case when assigned.first_name is null then ''
 else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
 end as assigned,
 assigned.photo as assignedImageString ,
-concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation,  true as watched
+concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
 from tbl_requests r
 inner join tbl_module_type rt on rt.id = r.type_id
 inner join tbl_users creator on creator.id  = r.creator_uid
@@ -511,13 +515,13 @@ as t ),
 'assigned_on_me', (
 select json_agg( json_build_object(
 'id', id, 'requestPriority', requestPriority, 'additionalInformation' , additionalInformation , 'name' , subject,'requestType' , name, 'creator', creator,'creatorImageString', creatorImageString,
-'assigned' ,assigned,'assignedImageString', assignedImageString , 'timestampCreation', creation , 'watched' , watched) ) as assigned_on_me
+'assigned' ,assigned,'assignedImageString', assignedImageString , 'timestampCreation', creation ) ) as assigned_on_me
 from (select r.id , trp.name as requestPriority,  t1.additionalInformation, r.subject, rt.name,
 case when assigned.first_name is null then ''
      else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
     end as assigned,
 assigned.photo as assignedImageString,
-concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation, true as watched
+concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
 from tbl_requests r
   inner join tbl_module_type rt on rt.id = r.type_id
   inner join tbl_users creator on creator.id  = r.creator_uid
@@ -531,7 +535,7 @@ as t ),
 'all_open_requests', (
 select json_agg( json_build_object(
 'id', id, 'requestPriority', requestPriority, 'additionalInformation' , additionalInformation , 'name' , subject,'requestType' , name,'creator', creator, 'creatorImageString', creatorImageString,
-'assigned' , assigned, 'assignedImageString', assignedImageString , 'timestampCreation' , creation, 'watched' , watched) )
+'assigned' , assigned, 'assignedImageString', assignedImageString , 'timestampCreation' , creation) )
 as all_open_requests
 from (
 
@@ -540,8 +544,7 @@ select r.id , trp.name as requestPriority, t1.additionalInformation,  r.subject,
         else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
        end as assigned,
    assigned.photo as assignedImageString,
-   concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation,
-   case when tbl_request_watched_by_user.user_id is not null then true else false end as watched
+   concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
 from tbl_requests r
      inner join tbl_module_type rt on rt.id = r.type_id
      inner join tbl_users creator on creator.id  = r.creator_uid
@@ -549,7 +552,6 @@ from tbl_requests r
      left join tbl_users assigned on assigned.id = r.assigned_uid
      left join tbl_tickets on  tbl_tickets.request_id = r.id
      left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-     left join tbl_request_watched_by_user on tbl_request_watched_by_user.request_id = r.id
      cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
 where r.closed_uid is null and
 (
@@ -607,13 +609,13 @@ select json_build_object(
    'all_open_requests', (
    select json_agg( json_build_object(
            'id', id, 'requestPriority', requestPriority, 'additionalInformation' , additionalInformation ,'name' , subject,'requestType' , name, 'creator', creator,'creatorImageString', creatorImageString,
-           'assigned' ,assigned, 'assignedImageString', assignedImageString,'timestampCreation', creation  , 'watched' , watched) ) as my_open_requests
+           'assigned' ,assigned, 'assignedImageString', assignedImageString,'timestampCreation', creation  ) ) as my_open_requests
    from (select r.id , trp.name as requestPriority,  t1.additionalInformation,  r.subject, rt.name,
                 case when assigned.first_name is null then ''
                      else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
                     end as assigned,
              assigned.photo as assignedImageString ,
-            concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation,  true as watched
+            concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
      from tbl_requests r
               inner join tbl_module_type rt on rt.id = r.type_id
               inner join tbl_users creator on creator.id  = r.creator_uid
@@ -761,3 +763,58 @@ $$ LANGUAGE sql;
 
 
 
+
+-- select usernames who wil recaive request change through websockets
+drop function if exists get_users_to_send_request_change(integer);
+CREATE FUNCTION get_users_to_send_request_change(searching_request_id integer)
+    RETURNS TABLE(username varchar)  AS
+$$
+select distinct username from (
+      -- creator
+      select user1.username
+      from ( select * from tbl_requests where tbl_requests.id = searching_request_id) as request
+               inner join tbl_users user1 on user1.id = request.creator_uid
+
+      union
+      -- assaigned
+      select user2.username
+      from ( select * from tbl_requests where tbl_requests.id = searching_request_id) as request
+               left join tbl_users user2 on user2.id = request.assigned_uid
+
+      union
+      -- privileged users
+      select user4.username
+      from tbl_users user4
+               cross join  ( select tbl_requests.id , tbl_module_type.name from tbl_requests
+                                                                                    inner join tbl_module_type on tbl_module_type.id = tbl_requests.type_id
+                             where tbl_requests.id = searching_request_id) as request
+      where get_access_for_request( request.id , request.name , user4.username) is true
+
+      union
+      -- select manager of creator or assaigned
+      select user5.username from tbl_users user5
+                                     inner join tbl_groups on tbl_groups.manager_id = user5.id
+      where tbl_groups.id in (
+          select tg1.group_id from tbl_user_groups tg1
+          where tg1.user_id in (
+              select t1.creator_uid from tbl_requests t1 where t1.id = searching_request_id
+              union
+              select t2.assigned_uid from tbl_requests t2 where t2.id = searching_request_id
+          )
+      )
+
+      union
+      -- select  watched group of creator or assaigned
+      select distinct user6.username
+      from tbl_group_activity_watched_by_user watched
+      inner join tbl_users user6 on user6.id = watched.user_id
+      where watched.group_id in (
+          select tg1.group_id from tbl_user_groups tg1
+          where tg1.user_id in (
+              select t1.creator_uid from tbl_requests t1 where t1.id = searching_request_id
+              union
+              select t2.assigned_uid from tbl_requests t2 where t2.id = searching_request_id
+          )
+      )
+  ) as t where username is not null
+$$ LANGUAGE sql;

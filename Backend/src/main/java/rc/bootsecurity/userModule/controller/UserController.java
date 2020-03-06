@@ -5,6 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.userModule.exception.PasswordException;
@@ -18,6 +22,7 @@ import rc.bootsecurity.util.fileModule.FileService;
 
 import java.util.List;
 
+@EnableScheduling
 @RestController
 @RequestMapping("api/user")
 public class UserController {
@@ -25,6 +30,20 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+
+  /*  @Autowired
+    private SimpMessageSendingOperations  messagingTemplate;
+
+    @Scheduled(fixedDelay = 2000L)
+    public void sendWebsocket(){
+        UserDTO userDTO = new UserDTO();
+        userDTO.setUsername("edko");
+        messagingTemplate.convertAndSend("/request/mirvalpe", userDTO);
+    }*/
+
+
+
 
     @GetMapping("/basicInformation")
     public UserDTO getLoggedInUserDetails(){

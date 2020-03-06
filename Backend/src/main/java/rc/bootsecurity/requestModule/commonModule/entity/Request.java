@@ -88,13 +88,13 @@ public abstract class Request {
     /**
      * get users who watch this request
      */
-    @ManyToMany(fetch = FetchType.LAZY)
+   /* @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "tbl_request_watched_by_user",
             joinColumns = { @JoinColumn(name = "request_id")},
             inverseJoinColumns = { @JoinColumn(name = "user_id")})
     @OrderBy("id ASC")
     @EqualsAndHashCode.Exclude
-    private Set<User> userWhoWatchThisRequest;
+    private Set<User> userWhoWatchThisRequest;*/
 
 
 

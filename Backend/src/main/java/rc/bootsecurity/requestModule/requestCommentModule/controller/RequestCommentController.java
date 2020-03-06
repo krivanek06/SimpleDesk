@@ -62,7 +62,7 @@ public class RequestCommentController {
         } catch (Exception e) {
             LOGGER.error("Failed method changeCommentPrivacy, to add comment: " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse z zmazanie komentára", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zmene stavu komentára", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/share")

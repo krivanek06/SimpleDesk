@@ -22,7 +22,7 @@ export interface RequestTable {
   closedImageByte: string;
   closedImageString: string;
   closed: string;
-  watched: boolean;
+  logMessage: string;
 
 }
 

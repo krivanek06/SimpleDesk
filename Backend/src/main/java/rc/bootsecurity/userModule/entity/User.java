@@ -72,10 +72,10 @@ public class User {
     /**
      * get requests which I am watching
      */
-    @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
+   /* @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
     @OrderBy(value = "id ASC")
     @EqualsAndHashCode.Exclude
-    private Set<Request> watchedRequests;
+    private Set<Request> watchedRequests;*/
 
     /**
      * Documents which are shared with me

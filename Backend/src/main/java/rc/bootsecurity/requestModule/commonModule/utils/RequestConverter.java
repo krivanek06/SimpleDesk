@@ -40,15 +40,15 @@ public class RequestConverter {
         requestDTO.setRequestPriority(request.getRequestPriority().getName());
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
-        requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
+        /*requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
                 request.getUserWhoWatchThisRequest().stream().map(user -> this.userConverter.convertUserToSimpleDTO(user))
-                        .collect(Collectors.toList()) : null);
+                        .collect(Collectors.toList()) : null);*/
         requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
                 request.getRequestComments().stream().map(this::convertRequestCommentToDTO)
                         .collect(Collectors.toList()) : null);
     }
 
-    public RequestTableDTO convertRequestToRequestTableDTO(Request request, Boolean watch){
+    public RequestTableDTO convertRequestToRequestTableDTO(Request request){
         RequestTableDTO requestTableDTO = new RequestTableDTO();
         requestTableDTO.setId(request.getId());
         requestTableDTO.setTimestampCreation(request.getTimestampCreation());
@@ -58,9 +58,8 @@ public class RequestConverter {
         requestTableDTO.setRequestPosition(request.getRequestPosition().getName());
         requestTableDTO.setRequestType(request.getModuleType().getName());
         requestTableDTO.setCreator(request.getCreator().getFullName());
-        requestTableDTO.setAssigned(request.getAssigned().getFullName());
-        requestTableDTO.setClosed(request.getClosed().getFullName());
-        requestTableDTO.setWatched(watch);
+        requestTableDTO.setAssigned(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
+        requestTableDTO.setClosed(request.getClosed() != null ? request.getClosed().getFullName() : null);
 
         return requestTableDTO;
     }

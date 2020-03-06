@@ -2,6 +2,7 @@ package rc.bootsecurity.requestModule.commonModule.dto;
 
 import lombok.Data;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.sql.Timestamp;
 
@@ -35,5 +36,6 @@ public class RequestTableDTO {
     private String closedImageString;
     private String closed;
 
-    private Boolean watched;
+    private String[] logMessage;
+
 }

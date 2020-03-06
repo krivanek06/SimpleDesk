@@ -18,8 +18,8 @@ import {DotLoaderComponent} from "./pages/login/dot-loader/dot-loader.component"
 import {MaterialModule} from "./material.module";
 import {AuthInterceptor} from "./core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
-import {HeaderComponent} from "./resources/header/header.component";
-import {NavigationComponent} from "./resources/navigation/navigation.component";
+import {stompConfig} from "./core/config/stompConfig";
+import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from "@stomp/ng2-stompjs";
 
 @NgModule({
   declarations: [
@@ -46,6 +46,16 @@ import {NavigationComponent} from "./resources/navigation/navigation.component";
     DatePipe,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {
+      provide: InjectableRxStompConfig,
+      useValue: stompConfig
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
+    },
+
   ],
   bootstrap: [AppComponent]
 })

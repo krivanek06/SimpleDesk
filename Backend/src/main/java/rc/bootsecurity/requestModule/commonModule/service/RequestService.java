@@ -3,6 +3,7 @@ package rc.bootsecurity.requestModule.commonModule.service;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.requestModule.commonModule.entity.RequestLog;
 import rc.bootsecurity.requestModule.commonModule.exception.RequestNotFoundException;
 import rc.bootsecurity.requestModule.commonModule.repository.RequestLogRepository;
 import rc.bootsecurity.requestModule.commonModule.repository.RequestRepository;
@@ -50,6 +51,7 @@ public class RequestService {
     public Request loadRequestById(Integer requestId){
         return this.requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Could not found request with id : " + requestId));
     }
+
 
     public RequestDashboardDTO getRequestOnDashboard(){
         String username = this.userService.getPrincipalUsername();
@@ -104,7 +106,7 @@ public class RequestService {
             throw new UnauthorizedException("User " + username + " does not have access for request " + request.getId());
        }
 
-       request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
+     //  request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
        request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request, username));
 
        RequestDTO requestDTO =  this.requestConverter.convertRequestToRequestDTO(request);
