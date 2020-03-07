@@ -58,45 +58,52 @@ public class RequestManagementService{
         return this.requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Not found request with id : " + requestId));
     }
 
+    private void setUserAndInform(Request request, User user, String message, String position){
+        // load users who can see changes
+        List<User> usersBefore = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
+                .filter(x -> !x.getUsername().equalsIgnoreCase(this.userService.getPrincipalUsername())).collect(Collectors.toList());
+
+        request.setAssigned(user);
+        request.setRequestPosition(this.requestPositionRepository.findByName(position));
+        this.saveOrUpdateRequest(request);
+
+        // inform new users
+        this.requestLogService.saveLogAndBroadCast(request,  message);
+
+        // remove request from old users
+        List<User> usersAfter = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
+                .filter(x -> !x.getUsername().equalsIgnoreCase(this.userService.getPrincipalUsername())).collect(Collectors.toList());
+        usersBefore.removeAll(usersAfter);
+
+        usersBefore.forEach(x -> this.requestWebsockets.sendRequest(x, request , "DELETE"));
+    }
+
     public void removeMeAsAssignUserAndSave(Integer requestId){
         Request request = this.findRequest(requestId);
         String username = this.userService.getPrincipalUsername();
         if(request.getAssigned().getUsername().equalsIgnoreCase(username)) {
-            request.setAssigned(null);
-            request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Nepriradené.name()));
-            this.saveOrUpdateRequest(request);
-
-            this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.REMOVED_SOLVER + requestId);
+            this.setUserAndInform(request, null, this.requestWebsockets.REMOVED_SOLVER, REQUEST_POSITION.Nepriradené.name());
         }
     }
 
     public void removeAssignUserAndSave(Integer requestId){
-        Request request = this.findRequest(requestId);
-        request.setAssigned(null);
-        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Nepriradené.name()));
-        this.saveOrUpdateRequest(request);
-
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.REMOVED_SOLVER + requestId);
+        this.setUserAndInform( this.findRequest(requestId), null, this.requestWebsockets.REMOVED_SOLVER, REQUEST_POSITION.Nepriradené.name());
     }
 
     public void setAssignUserAndSave(Integer requestId){
         User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
-        request.setAssigned(user);
-        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
-        this.saveOrUpdateRequest(request);
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.ADDED_SOLVER + requestId);
+
+        this.setUserAndInform(request, user, this.requestWebsockets.ADDED_SOLVER, REQUEST_POSITION.Priradené.name());
     }
 
     public UserSimpleDTO setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
         User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
         User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
-        request.setAssigned(user);
-        request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
-        this.saveOrUpdateRequest(request);
+
+        this.setUserAndInform(request, user, this.requestWebsockets.ADDED_SOLVER, REQUEST_POSITION.Priradené.name());
         this.emailService.sendAssignRequestEmail(request, principal,user.getEmail() );
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.ADDED_SOLVER + requestId);
 
         return this.userConverter.convertUserToSimpleDTO(user);
     }
@@ -117,7 +124,7 @@ public class RequestManagementService{
         fileService.uploadFileForRequest(requestId , uploadingFiles);
         Request request = this.findRequest(requestId);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.ADDED_ATTACHMENT + requestId);
+        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.ADDED_ATTACHMENT);
     }
 
     public void closeRequest(Integer requestId){
@@ -135,7 +142,7 @@ public class RequestManagementService{
 
         this.emailService.sendClosedRequestEmail(request, user, assigned, creator, closed);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.CLOSED_REQUEST + requestId);
+        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.DELETE);
     }
 
     public void reopenRequest(Integer requestId){
@@ -155,9 +162,8 @@ public class RequestManagementService{
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.REOPEN_REQUEST + requestId);
+        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.REOPEN_REQUEST);
     }
-
 
 
     public void changePriority(Integer requestId, String priority){
@@ -167,8 +173,7 @@ public class RequestManagementService{
         request.setRequestPriority(requestPriority);
         this.saveOrUpdateRequest(request);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.CHANGED_PRIORITY + requestId);
-
+        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.CHANGED_PRIORITY);
     }
 
     public void changeCommenting(Integer requestId){
@@ -176,6 +181,5 @@ public class RequestManagementService{
         request.setAllowCommenting(!request.getAllowCommenting());
         this.saveOrUpdateRequest(request);
     }
-
 
 }

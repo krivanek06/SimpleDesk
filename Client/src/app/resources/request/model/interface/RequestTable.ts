@@ -22,7 +22,7 @@ export interface RequestTable {
   closedImageByte: string;
   closedImageString: string;
   closed: string;
-  logMessage: string;
+  logs: string;
 
 }
 

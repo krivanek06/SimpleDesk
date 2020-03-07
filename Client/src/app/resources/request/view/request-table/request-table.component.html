@@ -35,13 +35,25 @@
         <img *ngIf="element.requestType === 'Finance' " src="../../../../../assets/images_design/finance_icon.png"
              class='userIcon requestIcon'/>
         <span class="hideOnSmallWindow">{{ element.requestType}}</span>
+
+        <div *ngIf="element.logs"
+             class="notification hideOnSmallWindow"
+             matTooltipPosition="right"
+             matTooltip="{{element.logs.join('. ') }}"
+             matTooltipClass="custom-tooltip"
+             matTooltipShowDelay="100">
+          {{ element.logs.length }}
+        </div>
+
       </mat-cell>
     </ng-container>
 
 
     <ng-container matColumnDef="additionalInformation">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Typ</mat-header-cell>
-      <mat-cell *matCellDef="let element"> {{ element.additionalInformation}}  </mat-cell>
+      <mat-cell *matCellDef="let element">
+        {{ element.additionalInformation}}
+      </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="creator">

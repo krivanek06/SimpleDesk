@@ -34,6 +34,8 @@ public class ReportService extends RequestManagementService {
         report.setOwner(reportDTO.getOwner());
         report.setDeadline(reportDTO.getDeadline());
 
+        super.saveOrUpdateRequest(report);
+
         this.requestLogService.saveLogAndBroadCast(report, super.requestWebsockets.NEW_REQUEST + ((Request) report).getId());
         return report;
     }

@@ -36,6 +36,6 @@ public class RequestTableDTO {
     private String closedImageString;
     private String closed;
 
-    private String[] logMessage;
+    private String[] logs;
 
 }

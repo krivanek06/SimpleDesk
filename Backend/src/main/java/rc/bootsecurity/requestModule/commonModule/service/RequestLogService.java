@@ -40,8 +40,7 @@ public class RequestLogService {
         List<User> users = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
                 .filter(x -> !x.getUsername().equalsIgnoreCase(principal.getUsername())).collect(Collectors.toList());
 
-        message = principal.getFullName() + message;
-        String finalMessage = message;
+        String finalMessage = message + principal.getFullName();
         users.forEach(x -> this.requestWebsockets.sendRequest(x, request , finalMessage));
         List<RequestLog> requestLogs = users.stream().map(x -> this.createRequestLog(request, x, finalMessage)).collect(Collectors.toList());
         this.saveRequestLogs(requestLogs);

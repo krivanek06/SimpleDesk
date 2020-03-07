@@ -91,7 +91,7 @@ public class RequestCommentService {
             this.informCreatorAndAssignedAboutComment(requestComment);
 
         if(!requestCommentDTO.getIsPrivate())
-            this.requestLogService.saveLogAndBroadCast(requestComment.getRequest(),  this.requestWebsockets.ADDED_COMMENT + requestComment.getRequest().getId());
+            this.requestLogService.saveLogAndBroadCast(requestComment.getRequest(),  this.requestWebsockets.ADDED_COMMENT);
 
         requestCommentDTO.setId(requestComment.getId());
 

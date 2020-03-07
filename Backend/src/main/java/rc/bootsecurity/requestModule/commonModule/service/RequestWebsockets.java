@@ -24,24 +24,25 @@ public class RequestWebsockets {
     protected final String DESTINATION_PREFIX = "/request/";
 
     public final String NEW_REQUEST = "Nová požiadavka v schránke";
-    public final String CHANGED_PRIORITY = " zmenil prioritu na požiadavku s id: ";
-    public final String ADDED_SOLVER = " bol pridelený na požiadavku s id: ";
-    public final String CLOSED_REQUEST = " uzatvoril požiadavku s id: ";
-    public final String REOPEN_REQUEST = " uzatvoril požiadavku s id: ";
-    public final String REMOVED_SOLVER = " sa vzdal požiadavku s id: ";
-    public final String ADDED_ATTACHMENT = " pridal prílohu na požiadavku s id: ";
-    public final String ADDED_COMMENT = " pridal komentár na požiadavku s id: ";
-    public final String ADDED_EVALUATION = " nacenil požiadavku s id: ";
+    public final String CHANGED_PRIORITY = "Zmena priority uživateľom ";
+    public final String ADDED_SOLVER = "Priradenie uživateľa ";
+    public final String REOPEN_REQUEST = "Otvorenie požiadavky uživateľom ";
+    public final String REMOVED_SOLVER = "Odstránenie rešiteľa uživateľom ";
+    public final String ADDED_ATTACHMENT = "Pridanie prílohy uživateľom ";
+    public final String ADDED_COMMENT = "Pridanie komentára uživateľom ";
+    public final String ADDED_EVALUATION = "Nacenenie reportu uživateľom ";
+    public final String DELETE = "DELETE";
 
     private RequestTableDTO constructRequestTableWebsocketsDTO(String message, Request request, User user){
         RequestConverter requestConverter = new RequestConverter();
         RequestTableDTO requestTableDTO = requestConverter.convertRequestToRequestTableDTO(request);
+        // get all previous logs and add new log
         List<String> logs = this.requestLogRepository.findAllByRequestAndUserAndTimestampClosedIsNotNull(request, user).stream().map(RequestLog::getLogMessage).collect(Collectors.toList());
         logs.add(message);
 
         String[] logsArray = new String[logs.size()];
         logs.toArray(logsArray);
-        requestTableDTO.setLogMessage(logsArray);
+        requestTableDTO.setLogs(logsArray);
         return requestTableDTO;
     }
 

@@ -26,13 +26,4 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
     @Query(nativeQuery = true, value = "select * from get_access_for_request(?1, ?2, ?3)")
     Boolean hasAccessForRequest(Integer requestId, String requestType, String username);
 
-
-
-    /**
-     * @return list of userId who will get message notification though websockets about request change
-     */
-    /*@Query(nativeQuery = true, value = "select tbl_users.username from tbl_request_watched_by_user " +
-            "inner join tbl_users on tbl_users.id = tbl_request_watched_by_user.user_id where request_id = ?1")
-    List<String> getUsersToSendRequestChangeNotification(Integer requestId);*/
-
 }

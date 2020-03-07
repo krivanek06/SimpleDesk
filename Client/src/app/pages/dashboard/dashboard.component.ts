@@ -8,6 +8,7 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
 import {RequestService} from "../../core/services/request.service";
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -67,6 +68,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.spinner.show();
 
     this.requestHttp.getRequestOnDashboard().subscribe(requests => {
+        console.log(requests);
         this.myOpenRequests.dataSource.data = [...requests.myOpen as RequestTable[]];
         this.meAssignedRequests.dataSource.data = [...requests.assignedOnMe as RequestTable[]];
         this.otherOpenRequests.dataSource.data = [...requests.otherOpen as RequestTable[]];

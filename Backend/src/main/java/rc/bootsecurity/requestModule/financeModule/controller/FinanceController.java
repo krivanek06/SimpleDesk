@@ -36,14 +36,11 @@ public class FinanceController {
     public ResponseEntity<?> submitTicket(@RequestBody FinanceDTO financeDTO){
         try {
             Finance finance = this.financeService.createFinance(financeDTO);
-            this.financeService.saveOrUpdateRequest(finance);
             return new ResponseEntity<>(finance.getId(), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
         }
-
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní finančnej požidavky, kontaktujte administrátora."
-                ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní finančnej požidavky, kontaktujte administrátora.",HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("secure/types")

@@ -30,6 +30,8 @@ public class TicketService extends RequestManagementService {
         ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
         ticket.setProblem(ticketDTO.getProblem());
 
+        super.saveOrUpdateRequest(ticket);
+
         this.requestLogService.saveLogAndBroadCast(ticket, super.requestWebsockets.NEW_REQUEST + ((Request) ticket).getId());
 
         return ticket;

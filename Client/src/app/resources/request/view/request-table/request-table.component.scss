@@ -95,16 +95,27 @@ mat-header-row {
 }
 
 .circle {
-  width: 35px;
-  height: 35px;
+  width: 33px;
+  height: 33px;
   border-radius: 50%;
   color: #fff;
   line-height: 35px;
   text-align: center;
-  background: #FF3232;
+  background: #003552;
   position: absolute;
   top: -20px;
   left: -15px;
+}
+
+.notification{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 25px;
+  text-align: center;
+  background: #FF3232 ;
+  margin-left: 10px;
 }
 
 
@@ -117,7 +128,7 @@ mat-cell:last-of-type, mat-footer-cell:last-of-type, mat-header-cell:last-of-typ
 }
 
 mat-cell {
-
+  position: relative;
   font-size: 11px;
   color: #515151;
 }

@@ -28,7 +28,6 @@ public class TicketController {
     public ResponseEntity<?> submitTicket(@RequestBody TicketDTO ticketDTO){
         try {
             Ticket ticket = this.ticketService.createTicket(ticketDTO);
-            this.ticketService.saveOrUpdateRequest(ticket);
             return new ResponseEntity<>(ticket.getId(), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());

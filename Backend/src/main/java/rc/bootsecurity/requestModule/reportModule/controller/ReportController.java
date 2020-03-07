@@ -22,7 +22,6 @@ public class ReportController {
     public ResponseEntity<?> submitReport(@RequestBody ReportDTO reportDTO){
         try {
             Report report = this.reportService.createReport(reportDTO);
-            this.reportService.saveOrUpdateRequest(report);
             return new ResponseEntity<>(report.getId(), HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save report into database, error : " + e.getMessage());
