@@ -37,7 +37,7 @@ public class RequestWebsockets {
         RequestConverter requestConverter = new RequestConverter();
         RequestTableDTO requestTableDTO = requestConverter.convertRequestToRequestTableDTO(request);
         // get all previous logs and add new log
-        List<String> logs = this.requestLogRepository.findAllByRequestAndUserAndTimestampClosedIsNotNull(request, user).stream().map(RequestLog::getLogMessage).collect(Collectors.toList());
+        List<String> logs = this.requestLogRepository.findAllByRequestAndUser(request, user).stream().map(RequestLog::getLogMessage).collect(Collectors.toList());
         logs.add(message);
 
         String[] logsArray = new String[logs.size()];

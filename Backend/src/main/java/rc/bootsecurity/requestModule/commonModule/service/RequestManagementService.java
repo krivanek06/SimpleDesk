@@ -142,7 +142,7 @@ public class RequestManagementService{
 
         this.emailService.sendClosedRequestEmail(request, user, assigned, creator, closed);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.DELETE);
+        this.requestLogService.deleteLogsAndBroadCast(request);
     }
 
     public void reopenRequest(Integer requestId){
@@ -180,6 +180,12 @@ public class RequestManagementService{
         Request request = this.findRequest(requestId);
         request.setAllowCommenting(!request.getAllowCommenting());
         this.saveOrUpdateRequest(request);
+    }
+
+    public void removeLogsOnRequestForPrincipal(Integer requestId){
+        Request request = this.findRequest(requestId);
+        User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        this.requestLogService.deleteLogsForUser(request, principal);
     }
 
 }

@@ -609,8 +609,6 @@ CREATE OR REPLACE FUNCTION get_all_requests_on_dashboard()
 select json_build_object(
    'my_open_requests',null,
    'assigned_on_me',null,
-   'sent_by_my_team',null,
-   'assigned_on_my_team',null,
    'all_open_requests', (
    select json_agg( json_build_object(
            'id', id, 'requestPriority', requestPriority, 'additionalInformation' , additionalInformation ,'name' , subject,'requestType' , name, 'creator', creator,'creatorImageString', creatorImageString,

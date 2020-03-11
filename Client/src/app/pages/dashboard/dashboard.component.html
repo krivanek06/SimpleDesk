@@ -9,6 +9,7 @@
        [numberOfRequests] = 'myOpenRequests.dataSource.data.length'
        [displayedColumns]= "viewTable"
        tableTitle="Moje požiadávky"
+       (seenLogsEmitter) = 'removeLogs($event)'
        (moveToDetails) = 'moveToDetials($event)'
        [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
    </app-request-table>
@@ -20,6 +21,7 @@
        headerColor="#56A3FF"
        [displayedColumns]= "modifyTable"
        tableTitle="Požiadavky pridelené na mňa"
+       (seenLogsEmitter) = 'removeLogs($event)'
        (moveToDetails) = 'moveToDetials($event)'
        (removeFromMeEmitter) = "removeFromMe($event)">
    </app-request-table>
@@ -32,6 +34,7 @@
        [displayedColumns]= "viewTable"
        [displayAssignToMe] ='(isSolver$ | async)'
        tableTitle="Ostatné otvorené požiadavky"
+       (seenLogsEmitter) = 'removeLogs($event)'
        (moveToDetails) = 'moveToDetials($event)'
        (assignOnMeEmitter) = "assignOnMe($event)">
    </app-request-table>

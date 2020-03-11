@@ -1,4 +1,5 @@
 import {Component, OnInit} from '@angular/core';
+import {RequestService} from "./core/services/request.service";
 
 @Component({
   selector: 'app-root',
@@ -8,11 +9,11 @@ import {Component, OnInit} from '@angular/core';
 export class AppComponent implements OnInit {
   title = 'helpdesk';
 
-  constructor() {
+  constructor( private requestService: RequestService) {
   }
 
   ngOnInit() {
-
+    this.requestService.activateConnection();
   }
 
 

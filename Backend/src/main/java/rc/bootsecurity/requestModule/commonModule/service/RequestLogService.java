@@ -2,6 +2,7 @@ package rc.bootsecurity.requestModule.commonModule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.commonModule.entity.RequestLog;
 import rc.bootsecurity.requestModule.commonModule.repository.RequestLogRepository;
@@ -21,9 +22,6 @@ public class RequestLogService {
     @Autowired
     private RequestWebsockets requestWebsockets;
 
-    public void saveRequestLogs(List<RequestLog> requestLogList){
-        this.requestLogRepository.saveAll(requestLogList);
-    }
 
     private RequestLog createRequestLog(Request request, User user, String message){
         RequestLog requestLog = new RequestLog();
@@ -43,6 +41,23 @@ public class RequestLogService {
         String finalMessage = message + principal.getFullName();
         users.forEach(x -> this.requestWebsockets.sendRequest(x, request , finalMessage));
         List<RequestLog> requestLogs = users.stream().map(x -> this.createRequestLog(request, x, finalMessage)).collect(Collectors.toList());
-        this.saveRequestLogs(requestLogs);
+        this.requestLogRepository.saveAll(requestLogs);
     }
+
+    @Transactional
+    public void deleteLogsAndBroadCast(Request request){
+        User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        List<User> users = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
+                .filter(x -> !x.getUsername().equalsIgnoreCase(principal.getUsername())).collect(Collectors.toList());
+
+        this.requestLogRepository.deleteAllByRequest(request);
+        users.forEach(x -> this.requestWebsockets.sendRequest(x, request , this.requestWebsockets.DELETE));
+    }
+
+    @Transactional
+    public void deleteLogsForUser(Request request, User user){
+        this.requestLogRepository.deleteAllByRequestAndUser(request, user);
+    }
+
+
 }

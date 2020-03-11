@@ -4,6 +4,7 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "../../core/services/authentication.service";
 import {UserStoreService} from "../../core/services/user-store.service";
 import {environment} from "../../../environments/environment";
+import {RequestService} from "../../core/services/request.service";
 
 @Component({
   selector: 'app-login',
@@ -20,7 +21,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private router: Router,
               private authService: AuthenticationService,
-              private userService: UserStoreService) {}
+              private userService: UserStoreService,
+              private requestService: RequestService) {}
 
   ngOnInit() {
     this.form = this.fb.group({
@@ -41,6 +43,7 @@ export class LoginComponent implements OnInit {
             this.loggingIn = false;
             if (result && subs) {
               this.router.navigateByUrl('/dashboard');
+              this.requestService.activateConnection();
               // this.location.replaceState('/'); // clears browser history so they can't navigate with back button
               // this.router.navigate(['/dashboard']); // tells them they've been logged out (somehow)
               // window.location.href = `${environment.dashboard}dashboard`;

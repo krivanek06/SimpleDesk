@@ -25,7 +25,7 @@ export class CommentHttpService {
   }
 
   public deleteComment(requestComment: RequestComment): Observable<any> {
-    return this.http.request('delete', environment.apiUrl + `requests/comment`, {body: requestComment})
+    return this.http.request('delete', environment.apiUrl + `requests/comment`, {body: requestComment});
   }
 
   public changePrivacy(requestComment: RequestComment): Observable<any> {
@@ -33,7 +33,7 @@ export class CommentHttpService {
   }
 
   public shareComment(requestComment: RequestComment): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/comment/share`, requestComment)
+    return this.http.put(environment.apiUrl + `requests/comment/share`, requestComment);
   }
 
 

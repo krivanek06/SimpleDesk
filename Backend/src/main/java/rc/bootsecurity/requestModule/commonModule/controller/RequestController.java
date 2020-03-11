@@ -133,6 +133,20 @@ public class RequestController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní komentovania, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * remove logs on request for principal
+     */
+    @DeleteMapping("/modification/{id}/logs")
+    public ResponseEntity<?> removeLogs(@PathVariable("id") Integer id) {
+        try {
+            this.requestManagementService.removeLogsOnRequestForPrincipal(id);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to removeLogs for request, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri odstránení logov, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 
     /**
      * add chosen solver

@@ -37,6 +37,7 @@
         <span class="hideOnSmallWindow">{{ element.requestType}}</span>
 
         <div *ngIf="element.logs"
+             (mouseleave) ="removeLogs(element)"
              class="notification hideOnSmallWindow"
              matTooltipPosition="right"
              matTooltip="{{element.logs.join('. ') }}"

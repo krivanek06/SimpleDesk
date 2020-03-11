@@ -17,6 +17,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
 
   @Output() assignOnMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
   @Output() removeFromMeEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
+  @Output() seenLogsEmitter: EventEmitter<RequestTable> = new EventEmitter<RequestTable>();
   @Output() moveToDetails: EventEmitter<number> = new EventEmitter<number>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -34,6 +35,9 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   ngOnInit() {
   }
 
+  removeLogs(request: RequestTable) {
+    this.seenLogsEmitter.emit(request);
+  }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -42,7 +46,6 @@ export class RequestTableComponent implements OnInit, AfterViewInit {
   assignOnMe(request: RequestTable) {
     this.assignOnMeEmitter.emit(request);
   }
-
 
   removeFromMe(request: RequestTable) {
     this.removeFromMeEmitter.emit(request);

@@ -55,7 +55,6 @@ import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from "@
       useFactory: rxStompServiceFactory,
       deps: [InjectableRxStompConfig]
     },
-
   ],
   bootstrap: [AppComponent]
 })

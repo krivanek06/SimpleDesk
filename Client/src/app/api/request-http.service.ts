@@ -38,13 +38,18 @@ export class RequestHttpService {
     return this.http.put(environment.apiUrl + `requests/modification/${requestid}/priority`, null, {params});
   }
 
-  public changeState(requestid: number, close: boolean): Observable<any> {
+  public changeState(requestId: number, close: boolean): Observable<any> {
     const params = new HttpParams().set('close', String(close));
-    return this.http.put(environment.apiUrl + `requests/modification/${requestid}/state`, null, {params});
+    return this.http.put(environment.apiUrl + `requests/modification/${requestId}/state`, null, {params});
   }
 
-  public changeCommenting(requestid: number): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/modification/${requestid}/commenting`, null);
+  public changeCommenting(requestId: number): Observable<any> {
+    return this.http.put(environment.apiUrl + `requests/modification/${requestId}/commenting`, null);
+  }
+
+  public removeLogs(requestId: number): Observable<any> {
+    // return this.http.delete(environment.apiUrl + `requests/modification/${requestId}/logs`);
+    return this.http.request('delete', environment.apiUrl + `requests/modification/${requestId}/logs`, );
   }
 
   public assignSolver(requestid: number, userSimple: UserSimple): Observable<UserSimple> {
@@ -54,5 +59,7 @@ export class RequestHttpService {
   public removeSolver(requestid: number): Observable<any> {
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`, null);
   }
+
+
 
 }

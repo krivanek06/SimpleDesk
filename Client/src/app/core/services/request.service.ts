@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {RequestStoreService} from './request-store.service';
-import {BehaviorSubject, Observable, of, Subject} from 'rxjs';
+import {Subscription} from 'rxjs';
 import {UserStoreService} from './user-store.service';
 import {RxStompService} from "@stomp/ng2-stompjs";
 
@@ -8,11 +8,13 @@ import {RxStompService} from "@stomp/ng2-stompjs";
   providedIn: 'root'
 })
 export class RequestService {
-  private requestWebsockets$: Observable<any>;
+  private requestWebsockets$: Subscription;
 
   constructor(private requestStore: RequestStoreService,
               private userStore: UserStoreService,
               private rxStompService: RxStompService) {
+
+
   }
 
   public addFilesToRequest(fileList: FileList) {
@@ -25,17 +27,21 @@ export class RequestService {
     }
   }
 
-  public connectWebsockets(): Observable<any> {
-    if (!this.requestWebsockets$) {
-      console.log("new subscription");
-      this.requestWebsockets$ = this.rxStompService.watch('/request/' + this.userStore.user.username);
+  public activateConnection(): void {
+    if (this.requestWebsockets$ || !this.userStore.user) {
+      console.log('already subscibed');
+      return;
     }
-    return this.requestWebsockets$;
+
+    this.requestWebsockets$ = this.rxStompService.watch('/request/' + this.userStore.user.username).subscribe(x => {
+      console.log(JSON.parse(x.body));
+    });
   }
 
+
   public disconnectWebsockets() {
-    this.requestWebsockets$ = null;
-    this.rxStompService.deactivate();
+    this.requestWebsockets$.unsubscribe();
+    this.requestWebsockets$ = undefined;
   }
 
 
