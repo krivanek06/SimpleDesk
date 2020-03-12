@@ -19,12 +19,10 @@ import {SharedModule} from "../../shared/shared.module";
 import {AuthGuard} from "../../core/guards/AuthGuard";
 import {GroupRegistrationComponent} from "./views/group-registration/group-registration.component";
 import {PrivilegeManagerGuard} from "./guard/privilege-manager.guard";
-import {ResourcesModule} from "../../resources/resources.module";
 import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
-//import {CoreModule} from "../../core/core.module";
 
 
 export const routes: Routes = [
@@ -63,8 +61,6 @@ export const routes: Routes = [
     SatNativeDateModule,
     SatDatepickerModule,
     SharedModule,
-    ResourcesModule,
-    // CoreModule,
   ],
   exports: [
     RouterModule,

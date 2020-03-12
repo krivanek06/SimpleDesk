@@ -20,13 +20,14 @@ import {AuthInterceptor} from "./core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
 import {stompConfig} from "./core/config/stompConfig";
 import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from "@stomp/ng2-stompjs";
+import {HeaderComponent} from "./shared/components-smart/header/header.component";
+import {NavigationComponent} from "./shared/components-smart/navigation/navigation.component";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     DotLoaderComponent,
-
   ],
   imports: [
     CommonModule,

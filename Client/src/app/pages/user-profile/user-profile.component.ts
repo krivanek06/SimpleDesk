@@ -2,17 +2,17 @@ import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
 import {AuthenticationService} from 'app/core/services/authentication.service';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {GroupHttpService} from 'app/api/group-http.service';
-import {PrivilegesComponent} from '../../resources/privilege/view/privileges/privileges.component';
-import {GroupDetailsComponent} from '../../resources/group/view/group-details/group-details.component';
-import {UserDetailsComponent} from '../../resources/user/views/user-details/user-details.component';
+import {PrivilegesComponent} from '../../shared/components-presentation/privileges/privileges.component';
+import {GroupDetailsComponent} from '../../shared/components-presentation/group-details/group-details.component';
+import {UserDetailsComponent} from '../../shared/components-presentation/user-details/user-details.component';
 import {Observable} from 'rxjs';
 import {UserHttpService} from 'app/api/user-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {UserImagesComponent} from './presentation/user-images/user-images.component';
-import {GroupContainer} from "../../resources/group/model/Group";
-import {ApplicationPrivilege} from "../../resources/privilege/model/Privilege";
-import {ImageDTO, PasswordContainer} from "../../resources/user/model/User";
+import {GroupContainer} from "../../core/model/Group";
+import {ImageDTO, PasswordContainer} from "../../core/model/User";
+import {ApplicationPrivilege} from "../../core/model/Request";
 
 @Component({
   selector: 'app-user-profile',

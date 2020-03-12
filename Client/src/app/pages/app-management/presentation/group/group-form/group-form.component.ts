@@ -1,11 +1,8 @@
 import {Component, OnInit, ViewChild, Output, EventEmitter, Input} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {UserSimpleDTO} from 'app/resources/user/model/User';
-import {FinanceType} from "../../../../../resources/request/model/interface/Finance";
-import {TicketType} from "../../../../../resources/request/model/interface/Ticket";
-import {Group} from "../../../../../resources/group/model/Group";
-import {ApplicationPrivilege} from "../../../../../resources/privilege/model/Privilege";
-import {RequestType} from "../../../../../resources/request/model/enum/request.enum";
+import {UserSimpleDTO} from 'app/core/model/User';
+import {Group} from "../../../../../core/model/Group";
+import {ApplicationPrivilege, FinanceType, TicketType} from "../../../../../core/model/Request";
 
 @Component({
   selector: 'app-group-form',

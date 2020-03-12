@@ -1,6 +1,6 @@
 import {Component, OnInit, Input} from '@angular/core';
-import {Request} from 'app/resources/request/model/interface/Request';
-import {RequestType} from "../../../../../resources/request/model/enum/request.enum";
+import {Request} from 'app/core/model/Request';
+import {RequestType} from "../../../../../core/enum/request.enum";
 
 @Component({
   selector: 'app-request-content',

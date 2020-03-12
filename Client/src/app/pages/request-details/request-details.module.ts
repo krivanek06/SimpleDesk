@@ -19,7 +19,6 @@ import {RequestInformationContainerComponent} from "./container/request-informat
 import {RequestCommentContainerComponent} from "./container/request-comment-container/request-comment-container.component";
 import {RequestDetailsComponent} from "./request-details.component";
 import {AuthGuard} from "../../core/guards/AuthGuard";
-import {ResourcesModule} from "../../resources/resources.module";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
@@ -56,7 +55,6 @@ export const routes: Routes = [
     SatNativeDateModule,
     SatDatepickerModule,
     SharedModule,
-    ResourcesModule,
   ],
   exports: [
     RouterModule,

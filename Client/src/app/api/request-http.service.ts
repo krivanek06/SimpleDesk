@@ -1,10 +1,9 @@
 import {Injectable} from '@angular/core';
-import {HttpClient,  HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {environment} from 'environments/environment';
-import {RequestDashboard, RequestTable} from 'app/resources/request/model/interface/RequestTable';
-import { Request} from 'app/resources/request/model/interface/Request';
-import {UserSimple} from "../resources/user/model/User";
+import {Request, RequestDashboard, RequestTable} from 'app/core/model/Request';
+import {UserSimple} from "../core/model/User";
 
 @Injectable({
   providedIn: 'root'
@@ -48,8 +47,7 @@ export class RequestHttpService {
   }
 
   public removeLogs(requestId: number): Observable<any> {
-    // return this.http.delete(environment.apiUrl + `requests/modification/${requestId}/logs`);
-    return this.http.request('delete', environment.apiUrl + `requests/modification/${requestId}/logs`, );
+    return this.http.request('delete', environment.apiUrl + `requests/modification/${requestId}/logs`);
   }
 
   public assignSolver(requestid: number, userSimple: UserSimple): Observable<UserSimple> {
@@ -59,7 +57,4 @@ export class RequestHttpService {
   public removeSolver(requestid: number): Observable<any> {
     return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`, null);
   }
-
-
-
 }

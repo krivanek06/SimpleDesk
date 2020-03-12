@@ -1,5 +1,5 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {RequestComment, Request, RequestCommentWrapper} from 'app/resources/request/model/interface/Request';
+import {RequestComment, Request, RequestCommentWrapper} from 'app/core/model/Request';
 import {Observable} from 'rxjs';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {CommentHttpService} from 'app/api/comment-http.service';
@@ -7,7 +7,7 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestService} from 'app/core/services/request.service';
 import {GroupHttpService} from "../../../../api/group-http.service";
-import {Group} from "../../../../resources/group/model/Group";
+import {Group} from "../../../../core/model/Group";
 
 @Component({
   selector: 'app-request-comment-container',

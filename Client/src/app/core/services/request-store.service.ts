@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Observable, BehaviorSubject} from 'rxjs';
-import {Request, ReportDetails} from 'app/resources/request/model/interface/Request';
+import {Request, ReportDetails} from 'app/core/model/Request';
 import {tap} from 'rxjs/operators';
 import {RequestHttpService} from 'app/api/request-http.service';
 

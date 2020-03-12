@@ -1,8 +1,8 @@
 import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {accessValidator} from 'app/pages/request-forms/validators/reportAccessValidator';
-import {ReportForm} from "../../../../resources/request/model/interface/Report";
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
+import {ReportForm} from "../../../../core/model/Request";
 
 export const DD_MM_YYYY_Format = {
   parse: {

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Request} from "../../../../../resources/request/model/interface/Request";
-import {RequestPriority, RequestType} from "../../../../../resources/request/model/enum/request.enum";
+import {Request} from "../../../../../core/model/Request";
+import {RequestPriority, RequestType} from "../../../../../core/enum/request.enum";
 
 @Component({
   selector: 'app-request-information',

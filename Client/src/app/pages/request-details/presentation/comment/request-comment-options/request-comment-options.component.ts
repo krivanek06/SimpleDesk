@@ -1,5 +1,5 @@
 import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
-import {RequestComment} from 'app/resources/request/model/interface/Request';
+import {RequestComment} from 'app/core/model/Request';
 
 @Component({
   selector: 'app-request-comment-options',

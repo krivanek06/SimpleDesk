@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserStoreService } from 'app/core/services/user-store.service';
-import {User} from "../../resources/user/model/User";
+import {User} from "../../core/model/User";
 
 @Component({
   selector: 'app-request-forms',

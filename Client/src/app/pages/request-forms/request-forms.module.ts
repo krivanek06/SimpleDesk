@@ -15,17 +15,7 @@ import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {SharedModule} from "../../shared/shared.module";
 import {RequestFormsComponent} from "./request-forms.component";
 import {AuthGuard} from "../../core/guards/AuthGuard";
-import {ResourcesModule} from "../../resources/resources.module";
-//import {CoreModule} from "../../core/core.module";
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  SatDatepickerModule,
-  SatNativeDateModule
-} from "saturn-datepicker";
 import {DatePipe} from "@angular/common";
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-moment-adapter";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
@@ -54,8 +44,6 @@ export const routes: Routes = [
     AlertModule.forRoot(),
     SweetAlert2Module.forRoot(),
     SharedModule,
-    ResourcesModule,
-    //CoreModule,
   ],
   declarations: [
     RequestFormsComponent,

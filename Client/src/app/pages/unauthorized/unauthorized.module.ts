@@ -3,7 +3,6 @@ import {UnauthorizedComponent} from "./unauthorized.component";
 import {RouterModule, Routes} from "@angular/router";
 import {AuthGuard} from "../../core/guards/AuthGuard";
 import {SharedModule} from "../../shared/shared.module";
-import {ResourcesModule} from "../../resources/resources.module";
 import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
@@ -23,7 +22,6 @@ export const routes: Routes = [
   imports: [
     RouterModule.forChild(routes),
     SharedModule,
-    ResourcesModule,
   ],
   exports: [
     RouterModule,

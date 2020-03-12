@@ -1,9 +1,9 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {RequestComment, RequestCommentWrapper} from 'app/resources/request/model/interface/Request';
+import {RequestComment, RequestCommentWrapper} from 'app/core/model/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserSimple} from "../../../../../resources/user/model/User";
-import {RequestCommentType} from "../../../../../resources/request/model/enum/request.enum";
+import {UserSimple} from "../../../../../core/model/User";
+import {RequestCommentType} from "../../../../../core/enum/request.enum";
 
 
 @Component({

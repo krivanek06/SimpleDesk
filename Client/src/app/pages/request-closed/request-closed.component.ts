@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {RequestTable, FilterRequests} from 'app/resources/request/model/interface/RequestTable';
-import {RequestTableComponent} from 'app/resources/request/view/request-table/request-table.component';
+import {RequestTableComponent} from 'app/shared/components-presentation/request-table/request-table.component';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {RequestFilterComponent} from 'app/resources/request/view/request-filter/request-filter.component';
+import {RequestFilterComponent} from 'app/shared/components-presentation/request-filter/request-filter.component';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {UserHttpService} from "../../api/user-http.service";
-import {UserSimpleDTO} from "../../resources/user/model/User";
+import {UserSimpleDTO} from "../../core/model/User";
+import {FilterRequests, RequestTable} from "../../core/model/Request";
 
 export interface SatDatepickerRangeValue<D> {
   begin: D | null;

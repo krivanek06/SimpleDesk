@@ -1,12 +1,12 @@
 import {Component, OnInit, ViewChild, OnDestroy, NgZone} from '@angular/core';
-import {RequestTable} from 'app/resources/request/model/interface/RequestTable';
-import {RequestTableComponent} from 'app/resources/request/view/request-table/request-table.component';
+import {RequestTableComponent} from 'app/shared/components-presentation/request-table/request-table.component';
 import {NgxSpinnerService} from "ngx-spinner";
 import {Observable} from 'rxjs';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {Router} from "@angular/router";
+import {RequestTable} from "../../core/model/Request";
 
 @Component({
   selector: 'app-dashboard',

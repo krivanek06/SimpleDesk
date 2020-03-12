@@ -2,10 +2,10 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
-import {ReportForm} from "../../../../resources/request/model/interface/Report";
-import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
+import {ReportHttpService} from "../../../../api/report-http.service";
 import {RequestReportFormComponent} from "../../presentation/request-report-form/request-report-form.component";
-import {FileUploadComponent} from "../../../../shared/components/file-upload/file-upload.component";
+import {FileUploadComponent} from "../../../../shared/components-presentation/file-upload/file-upload.component";
+import {ReportForm} from "../../../../core/model/Request";
 
 @Component({
   selector: 'app-report-form-page',

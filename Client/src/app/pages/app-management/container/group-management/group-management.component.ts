@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {PrivilegesComponent} from 'app/resources/privilege/view/privileges/privileges.component';
-import {GroupDetailsComponent} from 'app/resources/group/view/group-details/group-details.component';
+import {PrivilegesComponent} from 'app/shared/components-presentation/privileges/privileges.component';
+import {GroupDetailsComponent} from 'app/shared/components-presentation/group-details/group-details.component';
 import {GroupHttpService} from 'app/api/group-http.service';
 import {Observable,} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {UserStoreService} from 'app/core/services/user-store.service';
-import {SERDButtonsComponent} from 'app/shared/components/serdbuttons/serdbuttons.component';
+import {SERDButtonsComponent} from 'app/shared/components-presentation/serdbuttons/serdbuttons.component';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserSimpleDTO} from "../../../../resources/user/model/User";
+import {UserSimpleDTO} from "../../../../core/model/User";
 import {UserHttpService} from "../../../../api/user-http.service";
 
 @Component({

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {ImageDTO, User, UserSimple} from 'app/resources/user/model/User';
+import {ImageDTO, User, UserSimple} from 'app/core/model/User';
 import {catchError, map, mapTo, tap} from 'rxjs/operators';
 import {UserHttpService} from 'app/api/user-http.service';
 import {AuthenticationService} from './authentication.service';

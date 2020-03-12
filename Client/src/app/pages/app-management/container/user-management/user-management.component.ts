@@ -1,13 +1,13 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import {UserHttpService} from 'app/api/user-http.service';
-import {UserSimpleDTO} from 'app/resources/user/model/User';
+import {UserSimpleDTO} from 'app/core/model/User';
 import {Observable} from 'rxjs';
-import {UserGroupsComponent} from 'app/resources/user/views/user-groups/user-groups.component';
-import {PrivilegesComponent} from 'app/resources/privilege/view/privileges/privileges.component';
-import {UserDetailsComponent} from 'app/resources/user/views/user-details/user-details.component';
+import {UserGroupsComponent} from 'app/shared/components-presentation/user-groups/user-groups.component';
+import {PrivilegesComponent} from 'app/shared/components-presentation/privileges/privileges.component';
+import {UserDetailsComponent} from 'app/shared/components-presentation/user-details/user-details.component';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {GroupContainer} from "../../../../resources/group/model/Group";
+import {GroupContainer} from "../../../../core/model/Group";
 
 @Component({
   selector: 'app-user-management',

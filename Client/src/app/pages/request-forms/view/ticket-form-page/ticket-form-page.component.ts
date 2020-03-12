@@ -1,11 +1,11 @@
   import {Component, OnInit, ViewChild} from '@angular/core';
-import {FileUploadComponent} from "../../../../shared/components/file-upload/file-upload.component";
+import {FileUploadComponent} from "../../../../shared/components-presentation/file-upload/file-upload.component";
 import {FileServiceService} from "../../../../core/services/file-service.service";
 import {NgxSpinnerService} from "ngx-spinner";
 import {SwallNotificationService} from "../../../../shared/services/swall-notification.service";
-import {TicketHttpService} from "../../../../resources/request/service/ticket-http.service";
-import {TicketForm, TicketSubtype} from "../../../../resources/request/model/interface/Ticket";
+import {TicketHttpService} from "../../../../api/ticket-http.service";
 import {RequestTicketFormComponent} from "../../presentation/request-ticket-form/request-ticket-form.component";
+  import {TicketForm, TicketSubtype} from "../../../../core/model/Request";
 
 @Component({
   selector: 'app-ticket-form-page',

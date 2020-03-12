@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, OnDestroy} from '@angular/core';
-import {Request} from 'app/resources/request/model/interface/Request';
+import {Request} from 'app/core/model/Request';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Observable} from 'rxjs';

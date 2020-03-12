@@ -1,15 +1,15 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {UserSimple, UserSimpleDTO} from 'app/resources/user/model/User';
-import {Request} from 'app/resources/request/model/interface/Request';
+import {UserSimple, UserSimpleDTO} from 'app/core/model/User';
+import {Request} from 'app/core/model/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {RequestStoreService} from 'app/core/services/request-store.service';
 import {Observable} from 'rxjs';
-import {RequestPosition, RequestType} from 'app/resources/request/model/enum/request.enum';
+import {RequestPosition, RequestType} from 'app/core/enum/request.enum';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
 import {UserHttpService} from 'app/api/user-http.service';
 import {RequestService} from 'app/core/services/request.service';
-import {ReportHttpService} from "../../../../resources/request/service/report-http.service";
+import {ReportHttpService} from "../../../../api/report-http.service";
 
 @Component({
   selector: 'app-request-management-container',

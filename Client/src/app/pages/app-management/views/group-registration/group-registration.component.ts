@@ -1,14 +1,13 @@
 import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UserSimpleDTO} from 'app/resources/user/model/User';
+import {UserSimpleDTO} from 'app/core/model/User';
 import {GroupFormComponent} from 'app/pages/app-management/presentation/group/group-form/group-form.component';
 import {GroupHttpService} from 'app/api/group-http.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {FinanceHttpService} from "../../../../resources/request/service/finance-http.service";
+import {FinanceHttpService} from "../../../../api/finance-http.service";
 import {UserHttpService} from "../../../../api/user-http.service";
-import {TicketHttpService} from "../../../../resources/request/service/ticket-http.service";
-import {FinanceType} from "../../../../resources/request/model/interface/Finance";
-import {TicketType} from "../../../../resources/request/model/interface/Ticket";
-import {Group} from "../../../../resources/group/model/Group";
+import {TicketHttpService} from "../../../../api/ticket-http.service";
+import {Group} from "../../../../core/model/Group";
+import {FinanceType, TicketType} from "../../../../core/model/Request";
 
 @Component({
   selector: 'app-group-registration',
