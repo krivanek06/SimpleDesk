@@ -79,8 +79,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableAssignMeOnRequest(request: RequestTable) {
-    request.assigned = this.userStoreService.user.firstName[0] + '. ' + this.userStoreService.user.lastName;
-    request.assignedImageByte = this.userStoreService.user.photoBytes;
+    request.assigned.userShortedName = this.userStoreService.user.firstName[0] + '. ' + this.userStoreService.user.lastName;
+    request.assigned.userImageByte = this.userStoreService.user.photoBytes;
 
     this.meAssignedRequests.dataSource.data = [request].concat(this.meAssignedRequests.dataSource.data);
     this.otherOpenRequests.dataSource.data = this.otherOpenRequests.dataSource.data.filter(req => req.id !== request.id);
@@ -94,9 +94,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private updateTableRemoveRequestFromMe(request: RequestTable) {
-    request.assigned = '';
-    request.assignedImageString = null;
-    request.assignedImageByte = null;
+    request.assigned.userShortedName = null;
+    request.assigned.userImageByte = null;
+    request.assigned.userImageString = null;
 
     this.meAssignedRequests.dataSource.data = this.meAssignedRequests.dataSource.data.filter(req => req.id !== request.id);
     this.otherOpenRequests.dataSource.data.push(request);

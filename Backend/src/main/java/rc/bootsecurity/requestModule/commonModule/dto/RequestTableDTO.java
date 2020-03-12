@@ -1,6 +1,7 @@
 package rc.bootsecurity.requestModule.commonModule.dto;
 
 import lombok.Data;
+import rc.bootsecurity.userModule.dto.UserImageDTO;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -24,17 +25,11 @@ public class RequestTableDTO {
 
     private String requestType;
 
-    private byte[] creatorImageByte;
-    private String creatorImageString;
-    private String creator;
+    private UserImageDTO creator;
 
-    private byte[] assignedImageByte;
-    private String assignedImageString;
-    private String assigned;
+    private UserImageDTO assigned;
 
-    private byte[] closedImageByte;
-    private String closedImageString;
-    private String closed;
+    private UserImageDTO closed;
 
     private String[] logs;
 

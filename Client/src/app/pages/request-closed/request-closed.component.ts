@@ -22,7 +22,7 @@ export interface SatDatepickerRangeValue<D> {
 export class RequestClosedComponent implements OnInit, AfterViewInit {
   private loadedRequests: RequestTable[] = [];
 
-  allUsers$: Observable<UserSimpleDTO[]>
+  allUsers$: Observable<UserSimpleDTO[]>;
   viewTable = ['id', 'additionalInformation', 'creator', 'name',
     'priority', 'closed', 'timeCreated', 'timeClosed', 'details'];
 
@@ -64,9 +64,9 @@ export class RequestClosedComponent implements OnInit, AfterViewInit {
 
     // filter requests
     this.loadedRequests.forEach(request => {
-      if (filter.closed !== '' && filter.closed !== request.closed) {
+      if (filter.closed !== '' && filter.closed !== request.closed.userImageString) {
         this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
-      } else if (filter.creator !== '' && filter.creator !== request.creator) {
+      } else if (filter.creator !== '' && filter.creator !== request.creator.userImageString) {
         this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);
       } else if (filter.type !== '' && filter.type !== request.requestType) {
         this.closedRequests.dataSource.data.splice(this.closedRequests.dataSource.data.indexOf(request), 1);

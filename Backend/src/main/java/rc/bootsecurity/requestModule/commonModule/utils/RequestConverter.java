@@ -18,7 +18,9 @@ import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketPrivileges;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
+import rc.bootsecurity.userModule.dto.UserImageDTO;
 import rc.bootsecurity.userModule.util.UserConverter;
+import rc.bootsecurity.util.fileModule.FileService;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -40,9 +42,6 @@ public class RequestConverter {
         requestDTO.setRequestPriority(request.getRequestPriority().getName());
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
-        /*requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
-                request.getUserWhoWatchThisRequest().stream().map(user -> this.userConverter.convertUserToSimpleDTO(user))
-                        .collect(Collectors.toList()) : null);*/
         requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
                 request.getRequestComments().stream().map(this::convertRequestCommentToDTO)
                         .collect(Collectors.toList()) : null);
@@ -50,6 +49,11 @@ public class RequestConverter {
 
     public RequestTableDTO convertRequestToRequestTableDTO(Request request){
         RequestTableDTO requestTableDTO = new RequestTableDTO();
+
+        requestTableDTO.setCreator(new UserImageDTO());
+        requestTableDTO.setAssigned(new UserImageDTO());
+        requestTableDTO.setClosed(new UserImageDTO());
+
         requestTableDTO.setId(request.getId());
         requestTableDTO.setTimestampCreation(request.getTimestampCreation());
         requestTableDTO.setTimestampClosed(request.getTimestampClosed());
@@ -57,12 +61,27 @@ public class RequestConverter {
         requestTableDTO.setRequestPriority(request.getRequestPriority().getName());
         requestTableDTO.setRequestPosition(request.getRequestPosition().getName());
         requestTableDTO.setRequestType(request.getModuleType().getName());
-        requestTableDTO.setCreator(request.getCreator().getFullName());
-        requestTableDTO.setAssigned(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
-        requestTableDTO.setClosed(request.getClosed() != null ? request.getClosed().getFullName() : null);
+        requestTableDTO.getCreator().setUserShortedName(request.getCreator().getFullName());
+        requestTableDTO.getAssigned().setUserShortedName(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
+        requestTableDTO.getClosed().setUserShortedName(request.getClosed() != null ? request.getClosed().getFullName() : null);
+
+        this.addImage(requestTableDTO);
 
         return requestTableDTO;
     }
+
+    public void addImage(RequestTableDTO requestTableDTO){
+        FileService fileService = new FileService();
+        requestTableDTO.getCreator().setUserImageByte(fileService.getUserImage(requestTableDTO.getCreator().getUserImageString()));
+        if(requestTableDTO.getAssigned() != null) {
+            requestTableDTO.getAssigned().setUserImageByte(fileService.getUserImage(requestTableDTO.getAssigned().getUserImageString()));
+        }
+        if(requestTableDTO.getClosed() != null) {
+            requestTableDTO.getClosed().setUserImageByte(fileService.getUserImage(requestTableDTO.getClosed().getUserImageString()));
+        }
+    }
+
+
 
     private TicketDTO convertTicketToTicketDTO(Ticket ticket){
         TicketDTO ticketDTO = new TicketDTO();

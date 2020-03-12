@@ -61,9 +61,9 @@ public class RequestService {
 
         RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestDashboardDTO(rawJson);
 
-        this.setImageForRequestTableDTO(requestDashboardDTO.getMyOpen());
-        this.setImageForRequestTableDTO(requestDashboardDTO.getAssignedOnMe());
-        this.setImageForRequestTableDTO(requestDashboardDTO.getOtherOpen());
+        requestDashboardDTO.getMyOpen().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
+        requestDashboardDTO.getAssignedOnMe().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
+        requestDashboardDTO.getOtherOpen().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
 
         return requestDashboardDTO;
     }
@@ -76,22 +76,9 @@ public class RequestService {
 
         JSONObject requestJsonObject = new JSONObject(rawJson);
         List<RequestTableDTO> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(requestJsonObject,"closed_requests" );
-        this.setImageForRequestTableDTO(requestTableDTOS);
+        requestTableDTOS.forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
+
         return requestTableDTOS;
-    }
-
-    private void setImageForRequestTableDTO(List<RequestTableDTO> list){
-        FileService fileService = new FileService();
-
-        for(RequestTableDTO requestTableDTO: list){
-            requestTableDTO.setCreatorImageByte(fileService.getUserImage(requestTableDTO.getCreatorImageString()));
-            if(requestTableDTO.getAssignedImageString() != null) {
-                requestTableDTO.setAssignedImageByte(fileService.getUserImage(requestTableDTO.getAssignedImageString()));
-            }
-            if(requestTableDTO.getClosedImageString() != null) {
-                requestTableDTO.setClosedImageByte(fileService.getUserImage(requestTableDTO.getClosedImageString()));
-            }
-        }
     }
 
    public byte[] getFileForRequest(Integer id, String name){

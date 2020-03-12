@@ -28,6 +28,12 @@ export const routes: Routes = [
     IconSpriteModule,
     AlertModule.forRoot(),
     SharedModule,
+   /* StoreModule.forRoot({
+      request : requestReducer
+    }),*/
+    /*EffectsModule.forRoot({
+
+    })*/
   ],
   exports: [
     RouterModule,

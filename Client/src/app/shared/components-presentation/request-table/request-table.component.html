@@ -60,14 +60,8 @@
     <ng-container matColumnDef="creator">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Vytvoril</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <!--<img [src]='getImage(element.creatorImageByte)' class='userIcon'/>-->
-        <!--<img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>-->
-        <!--<ng-container *ngFor="let image of [].constructor(getImage(element.creatorImageByte as string))">
-          <img [src]="image" class='userIcon'/>
-        </ng-container>-->
-        <img [src]="'data:image/jpeg;base64,'+element.creatorImageByte" class='userIcon'/>
-        {{ element.creator }}
-        <!--{{ element.creator  | slice:0:1 | titlecase}}. {{ element.creator.split(' ')[1] | titlecase}}-->
+        <img [src]="'data:image/jpeg;base64,'+element.creator.userImageByte" class='userIcon'/>
+        {{ element.creator.userShortedName }}
       </mat-cell>
     </ng-container>
 
@@ -92,12 +86,11 @@
     <ng-container matColumnDef="assigned">
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" > Pridelené</mat-header-cell>
       <mat-cell *matCellDef="let element" >
-        <div *ngIf="element.assigned !== '' ">
-         <img [src]="'data:image/jpeg;base64,'+element.assignedImageByte" class='userIcon'/>
-          {{ element.assigned }}
-          <!--  {{ element.assigned  | slice:0:1 | titlecase}}. {{ element.assigned.split(' ')[1] | titlecase}}-->
+        <div *ngIf="element.assigned.userShortedName">
+         <img [src]="'data:image/jpeg;base64,'+element.assigned.userImageByte" class='userIcon'/>
+          {{ element.assigned.userShortedName }}
          </div>
-         <div *ngIf="element.assigned === '' && displayAssignToMe" class='assignOnMe' (click)="assignOnMe(element)">
+         <div *ngIf="!element.assigned.userShortedName && displayAssignToMe" class='assignOnMe' (click)="assignOnMe(element)">
            pridelit mne
          </div>
        </mat-cell>
@@ -115,10 +108,8 @@
      <ng-container matColumnDef="closed">
        <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Uzatvoril</mat-header-cell>
        <mat-cell *matCellDef="let element">
-        <!-- <img [src]='getImage(element.closedImageByte)' class='userIcon'/> -->
-        <img [src]="'data:image/jpeg;base64,'+element.closedImageByte" class='userIcon'/>
-         {{ element.closed }}
-         <!--  {{ element.closed  | slice:0:1 | titlecase}}. {{ element.closed.split(' ')[1] | titlecase}}-->
+        <img [src]="'data:image/jpeg;base64,'+element.closed.userImageByte " class='userIcon'/>
+         {{ element.closed.userShortedName }}
        </mat-cell>
      </ng-container>
 

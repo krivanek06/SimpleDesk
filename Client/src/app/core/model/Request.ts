@@ -76,7 +76,7 @@ export interface TicketForm {
 }
 
 
-export interface TicketSubtype{
+export interface TicketSubtype {
   id: number;
   name: string;
   sequence: number;
@@ -84,7 +84,7 @@ export interface TicketSubtype{
   ticketType: TicketType;
 }
 
-export interface TicketType{
+export interface TicketType {
   id: number;
   name: string;
   sequence: number;
@@ -141,17 +141,19 @@ export interface RequestTable {
   requestPriority: string;
   requestPosition: string;
   requestType: string;
-  creatorImageByte: string;
-  creatorImageString: string;
-  creator: string;
-  assignedImageByte: string;
-  assignedImageString: string;
-  assigned: string;
-  closedImageByte: string;
-  closedImageString: string;
-  closed: string;
-  logs: string;
 
+  creator: UserImageDTO;
+  assigned?: UserImageDTO;
+  closed?: UserImageDTO;
+
+  logs: string;
+}
+
+
+export interface UserImageDTO {
+  userImageByte: string;
+  userImageString: string;
+  userShortedName: string;
 }
 
 export interface FilterRequests {
