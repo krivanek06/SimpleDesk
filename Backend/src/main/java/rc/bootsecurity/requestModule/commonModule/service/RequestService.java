@@ -1,17 +1,13 @@
 package rc.bootsecurity.requestModule.commonModule.service;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.requestModule.commonModule.entity.RequestLog;
 import rc.bootsecurity.requestModule.commonModule.exception.RequestNotFoundException;
 import rc.bootsecurity.requestModule.commonModule.repository.RequestLogRepository;
 import rc.bootsecurity.requestModule.commonModule.repository.RequestRepository;
 import rc.bootsecurity.requestModule.requestCommentModule.service.RequestCommentService;
 import rc.bootsecurity.userModule.exception.UnauthorizedException;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestDashboardDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.userModule.entity.User;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
@@ -53,30 +49,33 @@ public class RequestService {
     }
 
 
-    public RequestDashboardDTO getRequestOnDashboard(){
+    public List<HashMap>  getRequestOnDashboard(){
         String username = this.userService.getPrincipalUsername();
 
         String rawJson = (username.equalsIgnoreCase(USER_TYPE.Ghost.name()) || username.equalsIgnoreCase(USER_TYPE.Admin.name())) ?
                       this.requestRepository.findAllOpenRequestOnDashboard() : this.requestRepository.findOpenRequestOnDashboard(username);
 
-        RequestDashboardDTO requestDashboardDTO = this.jsonStringParser.parseFromRawJsonToRequestDashboardDTO(rawJson);
-
-        requestDashboardDTO.getMyOpen().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
-        requestDashboardDTO.getAssignedOnMe().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
-        requestDashboardDTO.getOtherOpen().forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
+        List<HashMap> requestDashboardDTO = this.jsonStringParser.convertRawJsonToRequestTableDTO(rawJson, "open_requests");
+        requestDashboardDTO.forEach(requestTableDTO -> {
+            requestTableDTO.put("documents", this.fileService.getFileForRequest((Integer) requestTableDTO.get("id")));
+            this.requestConverter.addImage(requestTableDTO);
+        });
 
         return requestDashboardDTO;
     }
 
-    public List<RequestTableDTO> getClosedRequests(String dateClosed1, String dateClosed2){
+    public List<HashMap> getClosedRequests(String dateClosed1, String dateClosed2){
         User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         String rawJson = (user.getUsername().equalsIgnoreCase(USER_TYPE.Ghost.name()) || user.getUsername().equalsIgnoreCase(USER_TYPE.Admin.name())) ?
                  this.requestRepository.findAllClosedRequestsBetweenDate(dateClosed1, dateClosed2) :
                     this.requestRepository.findClosedRequestsBetweenDate(user.getId(), user.getUsername(), dateClosed1, dateClosed2);
 
-        JSONObject requestJsonObject = new JSONObject(rawJson);
-        List<RequestTableDTO> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(requestJsonObject,"closed_requests" );
-        requestTableDTOS.forEach(requestTableDTO -> this.requestConverter.addImage(requestTableDTO));
+
+        List<HashMap> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(rawJson,"closed_requests" );
+        requestTableDTOS.forEach(requestTableDTO -> {
+            requestTableDTO.put("documents", this.fileService.getFileForRequest((Integer) requestTableDTO.get("id")));
+            this.requestConverter.addImage(requestTableDTO);
+        });
 
         return requestTableDTOS;
     }
@@ -85,7 +84,7 @@ public class RequestService {
         return this.fileService.getFileForRequest(id, name);
    }
 
-   public RequestDTO getRequestDetails(Integer requestId) throws UnauthorizedException{
+   /*public RequestDTO getRequestDetails(Integer requestId) throws UnauthorizedException{
        Request request =  this.loadRequestById(requestId);
        String username = this.userService.getPrincipalUsername();
        Boolean access = this.hasAccessForDetails(request, username);
@@ -93,14 +92,13 @@ public class RequestService {
             throw new UnauthorizedException("User " + username + " does not have access for request " + request.getId());
        }
 
-     //  request.setUserWhoWatchThisRequest(new HashSet<>(this.userService.getUsersWatchedRequest(request)));
        request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request, username));
 
        RequestDTO requestDTO =  this.requestConverter.convertRequestToRequestDTO(request);
        requestDTO.setDocuments(this.fileService.getFileForRequest(requestId));
 
        return requestDTO;
-   }
+   }*/
 
     /**
      * return true only if user is  admin or ghost
@@ -108,7 +106,7 @@ public class RequestService {
      * I am a manager / has view access for groups where creator / assigned / closed belongs
      * I have privileges
      */
-   private Boolean hasAccessForDetails(Request request, String username ){
+  /* private Boolean hasAccessForDetails(Request request, String username ){
         if(username.equalsIgnoreCase("admin") || username.equalsIgnoreCase("ghost")){
             return true;
         }
@@ -132,6 +130,6 @@ public class RequestService {
         }
 
         return this.requestRepository.hasAccessForRequest(request.getId(), request.getModuleType().getName(), username);
-   }
+   }*/
 
 }

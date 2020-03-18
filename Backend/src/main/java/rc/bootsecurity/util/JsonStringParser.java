@@ -6,8 +6,7 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestDashboardDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
 import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
 
 import java.io.IOException;
@@ -67,15 +66,14 @@ public class JsonStringParser {
 
 
 
-    public List<RequestTableDTO> convertRawJsonToRequestTableDTO(JSONObject requestsJson , String jsonField){
-        List<RequestTableDTO> result = new ArrayList<>();
+    public List<HashMap> convertRawJsonToRequestTableDTO(String rawJson , String jsonField){
+        List<HashMap> result = new ArrayList<>();
+        JSONObject requestsJson = new JSONObject(rawJson);
         ObjectMapper objectMapper = new ObjectMapper();
 
         if(!requestsJson.isNull(jsonField)) {
-            JSONArray myOpenRequestsJson = requestsJson.getJSONArray(jsonField);
             try {
-                RequestTableDTO[] requests = objectMapper.readValue(myOpenRequestsJson.toString(), RequestTableDTO[].class);
-                result = new ArrayList<>(Arrays.asList(requests));
+                result = objectMapper.readValue( requestsJson.getJSONArray(jsonField).toString(), List.class);
             }catch (IOException e){
                 LOGGER.error("error in method parseFromRawJsonToRequestTableDTO : " + e.getMessage());
             }
@@ -83,15 +81,5 @@ public class JsonStringParser {
         return result;
     }
 
-    public RequestDashboardDTO parseFromRawJsonToRequestDashboardDTO(String rawJson) {
-        RequestDashboardDTO requestDashboardDTO = new RequestDashboardDTO();
-        JSONObject requestJsonObject = new JSONObject(rawJson);
-
-        requestDashboardDTO.setMyOpen(this.convertRawJsonToRequestTableDTO(requestJsonObject,"my_open_requests" ));
-        requestDashboardDTO.setAssignedOnMe(this.convertRawJsonToRequestTableDTO(requestJsonObject,"assigned_on_me" ));
-        requestDashboardDTO.setOtherOpen(this.convertRawJsonToRequestTableDTO(requestJsonObject,"all_open_requests" ));
-
-        return requestDashboardDTO;
-    }
 
 }

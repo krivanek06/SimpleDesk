@@ -3,7 +3,7 @@ export enum RequestPosition {
     Assigned = "Priradené",
     Closed = "Uzatvorené",
     UnAssigned = "Nepriradené",
-    Solved = "Vyriešené",
+   //  Solved = "Vyriešené",
 }
 
 export enum TicketPrivilegesEnum {

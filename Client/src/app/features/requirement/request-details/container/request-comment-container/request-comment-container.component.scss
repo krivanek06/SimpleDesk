@@ -1,0 +1,76 @@
+@import "../../../../../shared/customCss/ModalScss";
+
+.commentBox {
+  position: relative;
+  width: 70%;
+  color: #8a8a8a;
+  padding: 10px;
+  margin-bottom: 25px;
+  font-size: 14px;
+  border-bottom: 1px solid #bdbdbd;
+  white-space: pre-wrap;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.zIndex{
+  z-index:1;
+}
+
+.floatLeft {
+  float: left;
+}
+
+.floatRight {
+  float: right;
+}
+
+/*------------------------*/
+.commentIcons {
+  position: absolute;
+  top: -20px;
+  right: -15px;
+  display: inline-grid;
+}
+
+.displayCommentSharing{
+  width: 45%;
+  float: left;
+  margin-right: 2%;
+}
+
+.groupDetails {
+  float: left;
+  width: 45%;
+}
+
+::ng-deep .custom-tooltip-icon {
+  background-color: #818181;
+  font-size: 14px;
+  padding: 5px;
+}
+
+
+@media(min-width: 1919px) {
+  .commentIcons {
+    position: absolute;
+    top: -10px;
+    right: 0px;
+    display: block;
+
+  }
+
+}
+@media(max-width: 1150px) {
+  .commentBox{
+    width: 85%;
+  }
+}
+
+@media(max-width: 840px) {
+  .commentBox{
+    width: 100%;
+  }
+}
+
+

@@ -5,16 +5,12 @@ export interface UserSimpleDTO {
   username: string;
   firstName: string;
   lastName: string;
-  email: string;
-  fullNameShort: string;
+  userImageByte?: string;
+  userImageString?: string;
+  userShortedName?: string;
+  email?: string;
 }
 
-export interface UserSimple {
-  username: string;
-  firstName: string;
-  lastName: string;
-  photoBytes: string;
-}
 
 export interface User {
   username: string;

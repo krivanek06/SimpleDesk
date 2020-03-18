@@ -1,9 +1,11 @@
 package rc.bootsecurity.requestModule.commonModule.utils;
 
+import rc.bootsecurity.requestModule.financeModule.dto.FinanceExtendedInformationDTO;
+import rc.bootsecurity.requestModule.reportModule.dto.ReportExtendedInformationDTO;
+import rc.bootsecurity.requestModule.ticketModule.dto.TicketExtendedInformationDTO;
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
@@ -18,11 +20,12 @@ import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketPrivileges;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
-import rc.bootsecurity.userModule.dto.UserImageDTO;
 import rc.bootsecurity.userModule.util.UserConverter;
 import rc.bootsecurity.util.fileModule.FileService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
@@ -43,42 +46,35 @@ public class RequestConverter {
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
         requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
-                request.getRequestComments().stream().map(this::convertRequestCommentToDTO)
-                        .collect(Collectors.toList()) : null);
+                request.getRequestComments().stream().map(this::convertRequestCommentToDTO).collect(Collectors.toList()) : null);
+
     }
 
-    public RequestTableDTO convertRequestToRequestTableDTO(Request request){
-        RequestTableDTO requestTableDTO = new RequestTableDTO();
-
-        requestTableDTO.setCreator(new UserImageDTO());
-        requestTableDTO.setAssigned(new UserImageDTO());
-        requestTableDTO.setClosed(new UserImageDTO());
-
-        requestTableDTO.setId(request.getId());
-        requestTableDTO.setTimestampCreation(request.getTimestampCreation());
-        requestTableDTO.setTimestampClosed(request.getTimestampClosed());
-        requestTableDTO.setName(request.getName());
-        requestTableDTO.setRequestPriority(request.getRequestPriority().getName());
-        requestTableDTO.setRequestPosition(request.getRequestPosition().getName());
-        requestTableDTO.setRequestType(request.getModuleType().getName());
-        requestTableDTO.getCreator().setUserShortedName(request.getCreator().getFullName());
-        requestTableDTO.getAssigned().setUserShortedName(request.getAssigned() != null ? request.getAssigned().getFullName() : null);
-        requestTableDTO.getClosed().setUserShortedName(request.getClosed() != null ? request.getClosed().getFullName() : null);
-
-        this.addImage(requestTableDTO);
-
-        return requestTableDTO;
-    }
-
-    public void addImage(RequestTableDTO requestTableDTO){
+    public void addImage(HashMap requestDTO){
         FileService fileService = new FileService();
-        requestTableDTO.getCreator().setUserImageByte(fileService.getUserImage(requestTableDTO.getCreator().getUserImageString()));
-        if(requestTableDTO.getAssigned() != null) {
-            requestTableDTO.getAssigned().setUserImageByte(fileService.getUserImage(requestTableDTO.getAssigned().getUserImageString()));
+
+        HashMap creator = (HashMap) requestDTO.get("creator");
+        creator.put("userImageByte", fileService.getUserImage((String) creator.get("userImageString")));
+
+
+        if(requestDTO.get("assigned") != null){
+            HashMap assigned = (HashMap) requestDTO.get("assigned");
+            assigned.put("userImageByte", fileService.getUserImage((String) assigned.get("userImageString")));
         }
-        if(requestTableDTO.getClosed() != null) {
-            requestTableDTO.getClosed().setUserImageByte(fileService.getUserImage(requestTableDTO.getClosed().getUserImageString()));
+
+        if(requestDTO.get("closed") != null){
+            HashMap closed = (HashMap) requestDTO.get("closed");
+            closed.put("userImageByte", fileService.getUserImage((String) closed.get("userImageString")));
         }
+
+        if(requestDTO.get("requestCommentDTOS") != null){
+            List<HashMap> requestCommentDTOS = (List) requestDTO.get("requestCommentDTOS");
+            for(HashMap comment: requestCommentDTOS){
+                HashMap commentCreator = (HashMap) comment.get("creator");
+                commentCreator.put("userImageByte", fileService.getUserImage((String) commentCreator.get("userImageString")));
+            }
+        }
+
     }
 
 
@@ -87,18 +83,20 @@ public class RequestConverter {
         TicketDTO ticketDTO = new TicketDTO();
         this.setRequestDTOValuesFromRequest(ticketDTO, ticket);
 
-        ticketDTO.setTicketSubtypeName(ticket.getTicketSubtypeName());
-        ticketDTO.setProblem(ticket.getProblem());
-        ticketDTO.setTicketType(ticket.getTicketType().getName());
+        TicketExtendedInformationDTO ticketExtendedInformationDTO = new TicketExtendedInformationDTO();
+        ticketExtendedInformationDTO.setTicketSubtypeName(ticket.getTicketSubtypeName());
+        ticketExtendedInformationDTO.setTicketType(ticket.getTicketType().getName());
+        ticketExtendedInformationDTO.setProblem(ticket.getProblem());
 
-        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.User.name())){
-            ticketDTO.setTicketType("Uživateľ");
+        if(ticketExtendedInformationDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.User.name())){
+            ticketExtendedInformationDTO.setTicketType("Uživateľ");
         }
 
-        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.Other.name())){
-            ticketDTO.setTicketType("Iné");
+        if(ticketExtendedInformationDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.Other.name())){
+            ticketExtendedInformationDTO.setTicketType("Iné");
         }
 
+        ticketDTO.setExtendedInformation(ticketExtendedInformationDTO);
 
         return ticketDTO;
     }
@@ -107,17 +105,20 @@ public class RequestConverter {
         ReportDTO reportDTO = new ReportDTO();
         this.setRequestDTOValuesFromRequest(reportDTO,report);
 
-        reportDTO.setAccessMethods(report.getAccessMethods());
-        reportDTO.setAccessByPeople(report.getAccessByPeople());
-        reportDTO.setCriteria(report.getCriteria());
-        reportDTO.setDeadline(report.getDeadline());
-        reportDTO.setOtherInformation(report.getOtherInformation());
-        reportDTO.setOwner(report.getOwner());
-        reportDTO.setPurpose(report.getPurpose());
-        reportDTO.setReportRefresh(report.getReportRefresh().getName());
-        reportDTO.setVisibleData(report.getVisibleData());
-        reportDTO.setEvaluation(report.getEvaluation());
-        reportDTO.setReportType(report.getReportType().getName());
+        ReportExtendedInformationDTO reportExtendedInformationDTO = new ReportExtendedInformationDTO();
+        reportExtendedInformationDTO.setAccessMethods(report.getAccessMethods());
+        reportExtendedInformationDTO.setAccessByPeople(report.getAccessByPeople());
+        reportExtendedInformationDTO.setCriteria(report.getCriteria());
+        reportExtendedInformationDTO.setDeadline(report.getDeadline());
+        reportExtendedInformationDTO.setOtherInformation(report.getOtherInformation());
+        reportExtendedInformationDTO.setOwner(report.getOwner());
+        reportExtendedInformationDTO.setPurpose(report.getPurpose());
+        reportExtendedInformationDTO.setReportRefresh(report.getReportRefresh().getName());
+        reportExtendedInformationDTO.setVisibleData(report.getVisibleData());
+        reportExtendedInformationDTO.setEvaluation(report.getEvaluation());
+        reportExtendedInformationDTO.setReportType(report.getReportType().getName());
+
+        reportDTO.setExtendedInformation(reportExtendedInformationDTO);
 
         return reportDTO;
     }
@@ -126,8 +127,10 @@ public class RequestConverter {
         FinanceDTO financeDTO = new FinanceDTO();
         this.setRequestDTOValuesFromRequest(financeDTO, finance);
 
-        financeDTO.setFinanceType(finance.getFinanceType().getName());
+        FinanceExtendedInformationDTO financeExtendedInformationDTO = new FinanceExtendedInformationDTO();
+        financeExtendedInformationDTO.setFinanceType(finance.getFinanceType().getName());
 
+        financeDTO.setExtendedInformation(financeExtendedInformationDTO);
         return financeDTO;
     }
 

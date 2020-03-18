@@ -11,8 +11,6 @@ import {MaterialModule} from "../material.module";
 import {RouterModule} from "@angular/router";
 import {GroupDetailsComponent} from "./components-presentation/group-details/group-details.component";
 import {PrivilegesComponent} from "./components-presentation/privileges/privileges.component";
-import {RequestFilterComponent} from "./components-presentation/request-filter/request-filter.component";
-import {RequestTableComponent} from "./components-presentation/request-table/request-table.component";
 import {UserDetailsComponent} from "./components-presentation/user-details/user-details.component";
 import {UserGroupsComponent} from "./components-presentation/user-groups/user-groups.component";
 import {NavigationComponent} from "./components-smart/navigation/navigation.component";
@@ -26,7 +24,6 @@ import {
   SatDatepickerModule,
   SatNativeDateModule
 } from "saturn-datepicker";
-import {MatTableExporterModule} from "mat-table-exporter";
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-moment-adapter";
 
 @NgModule({
@@ -36,8 +33,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     SERDButtonsComponent,
     GroupDetailsComponent,
     PrivilegesComponent,
-    RequestFilterComponent,
-    RequestTableComponent,
     UserDetailsComponent,
     UserGroupsComponent,
     NavigationComponent,
@@ -48,7 +43,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     AlertModule.forRoot(),
     SatNativeDateModule,
     SatDatepickerModule,
-    MatTableExporterModule,
     ReactiveFormsModule,
     RouterModule,
 
@@ -76,8 +70,6 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     SERDButtonsComponent,
     GroupDetailsComponent,
     PrivilegesComponent,
-    RequestFilterComponent,
-    RequestTableComponent,
     UserDetailsComponent,
     UserGroupsComponent,
     NavigationComponent,

@@ -9,13 +9,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestDashboardDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
 import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.commonModule.service.RequestService;
 import rc.bootsecurity.userModule.dto.UserSimpleDTO;
-import rc.bootsecurity.util.fileModule.FileService;
 
+import java.util.HashMap;
 import java.util.List;
 
 @RestController
@@ -31,24 +29,25 @@ public class RequestController {
 
 
     @GetMapping("/dashboard")
-    public RequestDashboardDTO getRequestOnDashboard(){
-        return this.requestService.getRequestOnDashboard();
+    public ResponseEntity<?>  getRequestOnDashboard(){
+        try {
+            List<HashMap> requestDTOS = this.requestService.getRequestOnDashboard();
+            return new ResponseEntity<>(requestDTOS, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to getRequestOnDashboard, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní otvorených požiadavok ",HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/closed")
-    public List<RequestTableDTO> getClosedRequests(@RequestParam String dateFrom, @RequestParam String dateTo){
-        return this.requestService.getClosedRequests(dateFrom, dateTo);
-    }
-
-    @GetMapping("/requestDetails/{id}")
-    public ResponseEntity<?> getRequestDetails(@PathVariable("id") Integer id) {
+    public ResponseEntity<?> getClosedRequests(@RequestParam String dateFrom, @RequestParam String dateTo){
         try {
-            RequestDTO requestDTO = this.requestService.getRequestDetails(id);
-            return new ResponseEntity<>(requestDTO, HttpStatus.OK);
+            List<HashMap> requestDTOS = this.requestService.getClosedRequests(dateFrom, dateTo);
+            return new ResponseEntity<>(requestDTOS, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("error retrieving request detials : " + e.getMessage());
+            LOGGER.error("Failed to getClosedRequests, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Nemáte dostatočné práva na prezretie požiadavky s id : " + id ,HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní zatvorených požiadavok ",HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/requestDetails/{id}/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
@@ -78,7 +77,7 @@ public class RequestController {
             } else {
                 this.requestManagementService.removeMeAsAssignUserAndSave(id);
             }
-            return new ResponseEntity<>(id, HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to modifyMeAsSolver, error : " + e.getMessage());
         }
@@ -152,18 +151,19 @@ public class RequestController {
      * add chosen solver
      */
     @PutMapping("/modification/secure/{id}/addSolver")
-    public UserSimpleDTO addSolver(@PathVariable("id") Integer id, @RequestBody UserSimpleDTO userSimpleDTO){
+    public ResponseEntity<?> addSolver(@PathVariable("id") Integer id, @RequestBody UserSimpleDTO userSimpleDTO){
         try {
-            return this.requestManagementService.setAssignUserAndSave(id, userSimpleDTO);
+            UserSimpleDTO assignedUser =  this.requestManagementService.setAssignUserAndSave(id, userSimpleDTO);
+            return new ResponseEntity<>(assignedUser, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to addSolver, error : " + e.getMessage());
         }
-        return null;
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zmene riešiteľa, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
+
     }
 
-    /**
+    /*
      * remove solver
-     */
     @PutMapping("/modification/secure/{id}/removeSolver")
     public ResponseEntity<?> removeSolver(@PathVariable("id") Integer id){
         try {
@@ -173,7 +173,7 @@ public class RequestController {
             LOGGER.error("Failed to removeSolver, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+    }*/
 
 
 

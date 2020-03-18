@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, combineLatest, Observable, of} from 'rxjs';
-import {ImageDTO, User, UserSimple} from 'app/core/model/User';
+import {ImageDTO, User, UserSimpleDTO} from 'app/core/model/User';
 import {catchError, map, mapTo, tap} from 'rxjs/operators';
 import {UserHttpService} from 'app/api/user-http.service';
 import {AuthenticationService} from './authentication.service';
@@ -54,12 +54,14 @@ export class UserStoreService {
     this.saveUserToLocalStorage(this.user);
   }
 
-  getUserSimple(): UserSimple {
+  getUserSimple(): UserSimpleDTO {
     return {
       username: this.user.username,
       firstName: this.user.firstName,
       lastName: this.user.lastName,
-      photoBytes: this.user.photoBytes,
+      userImageByte: this.user.photoBytes,
+      userShortedName: this.user.firstName[0] + '. ' + this.user.lastName,
+      userImageString: this.user.photo
     };
   }
 

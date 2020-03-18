@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {RequestStoreService} from './request-store.service';
 import {Subscription} from 'rxjs';
 import {UserStoreService} from './user-store.service';
 import {RxStompService} from "@stomp/ng2-stompjs";
@@ -10,21 +9,9 @@ import {RxStompService} from "@stomp/ng2-stompjs";
 export class RequestService {
   private requestWebsockets$: Subscription;
 
-  constructor(private requestStore: RequestStoreService,
-              private userStore: UserStoreService,
+  constructor(private userStore: UserStoreService,
               private rxStompService: RxStompService) {
 
-
-  }
-
-  public addFilesToRequest(fileList: FileList) {
-    for (let i = 0; i < fileList.length; i++) {
-      const file = fileList.item(i);
-      this.requestStore.requestDetails.documents.push({
-        name: file.name,
-        lastModified: new Date().getTime()
-      });
-    }
   }
 
   public activateConnection(): void {

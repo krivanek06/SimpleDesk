@@ -485,192 +485,6 @@ $$ LANGUAGE sql;
 
 
 
--- get all open requests on dashboard page
-drop function if exists get_requests_on_dashboard_for_user_varchar(varchar);
-CREATE OR REPLACE FUNCTION get_requests_on_dashboard_for_user_varchar(searching_name varchar)
-    RETURNS varchar AS $$
-select json_build_object(
--- my open requests
-'my_open_requests', (
-select json_agg( json_build_object(
-    'id', id,
-    'requestPriority', requestPriority,
-    'additionalInformation' , additionalInformation ,
-    'name' , subject,
-    'requestType' , name,
-    'creator',(json_build_object(
-            'userShortedName', creator,
-            'userImageString', creatorImageString)),
-    'assigned',(json_build_object(
-            'userShortedName' ,assigned,
-            'userImageString', assignedImageString)),
-    'timestampCreation', creation,
-    'logs', (select json_agg(log_message) from tbl_request_logs
-             where request_id = t.id and user_id = (select id from tbl_users where username = searching_name) and timestamp_closed is null)
-) ) as my_open_requests
-from (
-     select r.id , trp.name as requestPriority,  t1.additionalInformation,  r.subject, rt.name,
-            case when assigned.first_name is null then ''
-                 else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
-                end as assigned,
-            assigned.photo as assignedImageString ,
-            concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
-     from tbl_requests r
-              inner join tbl_module_type rt on rt.id = r.type_id
-              inner join tbl_users creator on creator.id  = r.creator_uid
-              inner join tbl_request_priorities trp on trp.id = r.priority_id
-              cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
-              left join tbl_users assigned on assigned.id = r.assigned_uid
-     where r.creator_uid = (select id from tbl_users where tbl_users.username = searching_name) and closed_uid is null
-     order by id desc
- ) as t
-),
--- assigned on me and still open
-'assigned_on_me', (
-   select json_agg( json_build_object(
-           'id', id,
-           'requestPriority', requestPriority,
-           'additionalInformation' , additionalInformation ,
-           'name' , subject,
-           'requestType' , name,
-           'creator',(json_build_object(
-                   'userShortedName', creator,
-                   'userImageString', creatorImageString)),
-           'assigned',(json_build_object(
-                   'userShortedName' ,assigned,
-                   'userImageString', assignedImageString)),
-           'timestampCreation', creation,
-           'logs',(select json_agg(log_message) from tbl_request_logs
-                   where request_id = t.id and user_id = (select id from tbl_users where username = searching_name) and timestamp_closed is null)
-       ) ) as assigned_on_me
-   from (select r.id , trp.name as requestPriority,  t1.additionalInformation, r.subject, rt.name,
-                case when assigned.first_name is null then ''
-                     else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
-                    end as assigned,
-                assigned.photo as assignedImageString,
-                concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
-         from tbl_requests r
-                  inner join tbl_module_type rt on rt.id = r.type_id
-                  inner join tbl_users creator on creator.id  = r.creator_uid
-                  inner join tbl_request_priorities trp on trp.id = r.priority_id
-                  cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
-                  left join tbl_users assigned on assigned.id = r.assigned_uid
-         where r.assigned_uid = (select id from tbl_users where tbl_users.username = searching_name) and closed_uid is null
-         order by id desc)
-            as t ),
--- open requests assigned by members of my team
-'all_open_requests', (
-   select json_agg( json_build_object(
-           'id', id,
-           'requestPriority', requestPriority,
-           'additionalInformation' , additionalInformation ,
-           'name' , subject,
-           'requestType' , name,
-           'creator',(json_build_object(
-                   'userShortedName', creator,
-                   'userImageString', creatorImageString)),
-           'assigned',(json_build_object(
-                   'userShortedName' ,assigned,
-                   'userImageString', assignedImageString)),
-           'timestampCreation' , creation,
-           'logs',(select json_agg(log_message) from tbl_request_logs
-                   where request_id = t.id and user_id = (select id from tbl_users where username = searching_name) and timestamp_closed is null)
-       ) )
-              as all_open_requests
-   from (
-
-            select r.id , trp.name as requestPriority, t1.additionalInformation,  r.subject, rt.name,
-                   case when assigned.first_name is null then ''
-                        else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
-                       end as assigned,
-                   assigned.photo as assignedImageString,
-                   concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation
-            from tbl_requests r
-                     inner join tbl_module_type rt on rt.id = r.type_id
-                     inner join tbl_users creator on creator.id  = r.creator_uid
-                     inner join tbl_request_priorities trp on trp.id = r.priority_id
-                     left join tbl_users assigned on assigned.id = r.assigned_uid
-                     left join tbl_tickets on  tbl_tickets.request_id = r.id
-                     left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-                     cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
-            where r.closed_uid is null and
-                (
--- get privileges
-                        (
--- get privileges if I can solve reports or tickets
-(rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name from get_all_privileges_for_user_varchar( searching_name)) ) OR
--- get privileges on ticket types
-    (rt.name = 'Ticket' AND (select case
-    when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other'
-    then ( select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-                   like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar( searching_name))
-    else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-              like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar( searching_name))
-    end as contain)
-    )
-)
-OR -- assigned / sent on member in group where i am manager or watching
-(
-    r.creator_uid in (select user_id from tbl_user_groups where group_id in (
-    select id from tbl_groups
-    where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
-    UNION
-    select group_id from tbl_group_activity_watched_by_user
-    where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
-    OR
-    r.assigned_uid in (select user_id from tbl_user_groups where group_id in (
-    select id from tbl_groups
-    where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
-    UNION
-    select group_id from tbl_group_activity_watched_by_user
-    where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
-    ))
-and  -- remove another table
-(r.assigned_uid is null or  r.assigned_uid  != (select id from tbl_users where tbl_users.username = searching_name)) and
-r.creator_uid != (select id from tbl_users where tbl_users.username = searching_name)
-order by id desc) as t ))::varchar;
-$$ LANGUAGE sql;
-
-
-drop function if exists get_all_requests_on_dashboard();
-CREATE OR REPLACE FUNCTION get_all_requests_on_dashboard()
-    RETURNS varchar AS $$
-select json_build_object(
-'my_open_requests',null,
-'assigned_on_me',null,
-'all_open_requests', (
-select json_agg(
-      json_build_object(
-      'id', id,
-      'requestPriority', requestPriority,
-      'additionalInformation' , additionalInformation ,
-      'name' , subject,
-      'requestType' , name,
-      'creator',(json_build_object(
-          'userShortedName', creator,
-          'userImageString', creatorImageString)),
-      'assigned',(json_build_object(
-          'userShortedName' ,assigned,
-          'userImageString', assignedImageString)),
-      'timestampCreation', creation  )
-  ) as my_open_requests
-from (select r.id , trp.name as requestPriority,  t1.additionalInformation,  r.subject, rt.name,
-    case when assigned.first_name is null then ''
-         else concat(substring(assigned.first_name from 1 for 1), '. ',assigned.last_name )
-        end as assigned,
-    assigned.photo as assignedImageString ,
-    concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator,
-             creator.photo as creatorImageString, r.timestamp_creation as creation
-from tbl_requests r
-      inner join tbl_module_type rt on rt.id = r.type_id
-      inner join tbl_users creator on creator.id  = r.creator_uid
-      inner join tbl_request_priorities trp on trp.id = r.priority_id
-      cross join lateral (select get_additional_information_for_request as additionalInformation
-                          from get_additional_information_for_request(r.id)) as t1
-      left join tbl_users assigned on assigned.id = r.assigned_uid
-where closed_uid is null order by id desc) as t
-))::varchar;
-$$ LANGUAGE sql;
 
 
 
@@ -686,124 +500,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-
-
--- applied for admin / ghost
-drop function if exists get_all_closed_requests(varchar, varchar);
-CREATE FUNCTION get_all_closed_requests(date_closed1 varchar, date_closed2 varchar)
-    RETURNS varchar AS $$
-select json_build_object( 'closed_requests' , (
-select json_agg( json_build_object(
-    'id', id,
-    'requestPriority', requestPriority,
-    'additionalInformation' , additionalInformation ,
-    'name' , subject,
-    'requestType' , name,
-    'creator',(json_build_object(
-            'userShortedName', creator,
-            'userImageString', creatorImageString)),
-    'closed' , (json_build_object(
-        'userShortedName', closed,
-        'userImageString', closedImageString)),
-    'timestampCreation' , creation,
-    'timestampClosed', closing) )
-       as closed_requests
-from (
-     select r.id , trp.name as requestPriority, t1.additionalInformation,  r.subject, rt.name, concat(substring(closed.first_name from 1 for 1), '. ',closed.last_name ) as closed, closed.photo as closedImageString,
-            concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation, r.timestamp_closed as closing
-     from tbl_requests r
-              inner join tbl_module_type rt on rt.id = r.type_id
-              inner join tbl_users creator on creator.id  = r.creator_uid
-              inner join tbl_request_priorities trp on trp.id = r.priority_id
-              inner join tbl_users closed on closed.id = r.closed_uid
-              left join tbl_users assigned on assigned.id = r.assigned_uid
-              left join tbl_tickets on  tbl_tickets.request_id = r.id
-              left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-              cross join lateral (select get_additional_information_for_request as additionalInformation
-                from get_additional_information_for_request(r.id)) as t1
-     where r.closed_uid is not null and r.timestamp_closed >= date_closed1::timestamp
-        and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
-     order by timestamp_closed desc) as t))::varchar
-$$ LANGUAGE sql;
-
-
-
-
-drop function if exists get_closed_requests_for_user_varchar(Integer, varchar, varchar, varchar);
-CREATE FUNCTION get_closed_requests_for_user_varchar(searching_id Integer, searching_name varchar, date_closed1 varchar, date_closed2 varchar)
-RETURNS varchar AS $$
-select json_build_object( 'closed_requests' , (
-select json_agg( json_build_object(
-    'id', id,
-    'requestPriority', requestPriority,
-    'additionalInformation' , additionalInformation ,
-    'name' , subject,
-    'requestType' , name,
-    'creator',(json_build_object(
-                'userShortedName', creator,
-                'userImageString', creatorImageString)),
-    'closed' , (json_build_object(
-                'userShortedName', closed,
-                'userImageString', closedImageString)),
-    'timestampCreation' , creation,
-    'timestampClosed', closing) )
-as closed_requests
-from (
-select r.id , trp.name as requestPriority, t1.additionalInformation,  r.subject, rt.name, concat(substring(closed.first_name from 1 for 1), '. ',closed.last_name ) as closed, closed.photo as closedImageString,
-concat(substring(creator.first_name from 1 for 1), '. ',creator.last_name ) as creator, creator.photo as creatorImageString, r.timestamp_creation as creation, r.timestamp_closed as closing
-from tbl_requests r
-inner join tbl_module_type rt on rt.id = r.type_id
-inner join tbl_users creator on creator.id  = r.creator_uid
-inner join tbl_request_priorities trp on trp.id = r.priority_id
-inner join tbl_users closed on closed.id = r.closed_uid
-left join tbl_users assigned on assigned.id = r.assigned_uid
-left join tbl_tickets on  tbl_tickets.request_id = r.id
-left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
-where r.closed_uid is not null and ((
--- get privileges if I can solve reports or tickets
-(rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
-from get_all_privileges_for_user_varchar( searching_name)) )
-OR
--- get privileges on ticket types
-    (rt.name = 'Ticket' AND (select case
-    when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
-    select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-    like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(searching_name))
-    else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
-    like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(searching_name))
-    end as contain
-    )  )
-) or
--- assigned somebody from my team
-r.assigned_uid  in (select distinct user_id from  tbl_user_groups where group_id in (
-select id from  tbl_groups where manager_id = searching_id
-        union
-        select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
-    union
-    select searching_id
-)
--- sent somebody from my team
-or r.creator_uid in (select distinct user_id from  tbl_user_groups where group_id in(
-        select id from  tbl_groups where manager_id =  searching_id
-        union
-        select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
-    union
-    select searching_id
-)
--- closed somebody from my team
-    or r.closed_uid in (select distinct user_id from  tbl_user_groups where group_id in (
-        select id from  tbl_groups where manager_id =  searching_id
-        union
-        select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
-    union
-    select searching_id
-    )
-
-    ) and r.timestamp_closed >= date_closed1::timestamp and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
-    order by timestamp_closed desc
-    ) as t))::varchar
-$$ LANGUAGE sql;
 
 
 drop function if exists get_access_for_request(searching_request_id integer, request_type varchar, user_name varchar);
@@ -831,7 +527,7 @@ $$ LANGUAGE sql;
 
 
 
--- select usernames who wil recaive request change through websockets
+-- select user names who will receive request change through websockets
 drop function if exists get_users_to_send_request_change(integer);
 CREATE FUNCTION get_users_to_send_request_change(searching_request_id integer)
     RETURNS TABLE(username varchar)  AS
@@ -884,4 +580,370 @@ select distinct username from (
           )
       )
   ) as t where username is not null
+$$ LANGUAGE sql;
+
+
+-- get UserSimpleDTO
+drop function if exists get_user_simple_dto(integer);
+CREATE OR REPLACE FUNCTION get_user_simple_dto( searching_user_id integer)
+    RETURNS json AS $$
+select json_build_object(
+   'username', username,
+   'firstName', first_name,
+   'lastName', last_name,
+   'userShortedName', ( case when first_name is null then null else concat(substring(first_name from 1 for 1), '. ',last_name ) end ) ,
+   'userImageString', photo ) as user_simple_dto
+from tbl_users where id = searching_user_id
+$$ LANGUAGE sql;
+
+
+
+drop function if exists get_request_comment_dto_all(integer);
+CREATE OR REPLACE FUNCTION get_request_comment_dto_all( searching_request_id integer)
+    RETURNS json AS $$
+select json_agg( json_build_object(
+    'id', r_comments.id,
+    'requestId' , r_comments.request_id,
+    'comment' , r_comments.comment,
+    'creator' , (select * from get_user_simple_dto(r_comments.user_id)),
+    'isPrivate', r_comments.is_private,
+    'groupsToShare', (
+        select array_agg(tbl_groups.name)
+        from tbl_request_comments_shared shared
+                 left join tbl_groups on tbl_groups.id = shared.group_id
+        where shared.request_comment_id = r_comments.id
+    ),
+    'timestamp', r_comments.timestamp
+)) as request_comment_dto
+from tbl_request_comments as r_comments where request_id = searching_request_id
+$$ LANGUAGE sql;
+
+
+
+-- get comments for requests, remove those which are not shared with me
+drop function if exists get_request_comment_dto(integer, varchar);
+CREATE OR REPLACE FUNCTION get_request_comment_dto( searching_request_id integer, searching_user_name varchar)
+RETURNS json AS $$
+select json_agg( json_build_object(
+    'id', r_comments.id,
+    'requestId' , r_comments.request_id,
+    'comment' , r_comments.comment,
+    'creator' , (select * from get_user_simple_dto(r_comments.user_id)),
+    'isPrivate', r_comments.is_private,
+    'groupsToShare', (
+        select array_agg(tbl_groups.name)
+        from tbl_request_comments_shared shared
+                 left join tbl_groups on tbl_groups.id = shared.group_id
+        where shared.request_comment_id = r_comments.id
+    ),
+    'timestamp', r_comments.timestamp
+)) as request_comment_dto
+from tbl_request_comments as r_comments where request_id = searching_request_id and ( is_private = false or exists (
+    select group_id from tbl_request_comments_shared where tbl_request_comments_shared.request_comment_id = r_comments.id and
+        tbl_request_comments_shared.group_id in (
+        select group_id from tbl_user_groups where tbl_user_groups.user_id = (select id from tbl_users where username = searching_user_name)
+    )
+) )
+$$ LANGUAGE sql;
+
+
+
+drop function if exists get_request_extended_information(integer, varchar);
+CREATE OR REPLACE FUNCTION get_request_extended_information( searching_request_id integer, request_type varchar)
+    RETURNS varchar AS $$
+select
+    case when request_type = 'Report' then ( select json_build_object(
+        'owner', r_owner ,
+        'reportRefresh', tbl_report_refreshes.name,
+        'reportType', tbl_report_types.name,
+        'accessByPeople', r_access_people,
+        'accessMethods', r_access_method,
+        'evaluation', r_evaluation,
+        'deadline', r_deadline,
+        'purpose', r_purpose,
+        'criteria', r_criteria,
+        'visibleData', r_visible_data,
+        'otherInformation', r_other_info
+    ) from tbl_reports
+    inner join tbl_report_types on tbl_report_types.id = tbl_reports.r_type_id
+    inner join tbl_report_refreshes on tbl_report_refreshes.id = tbl_reports.r_refresh_id
+    where tbl_reports.request_id = searching_request_id )::varchar
+
+    when request_type = 'Ticket' then ( select json_build_object(
+        'ticketType', tbl_ticket_types.name,
+        'ticketSubtypeName', t_application_name,
+        'problem' , t_request
+    ) from tbl_tickets
+    inner join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+    where tbl_tickets.request_id = searching_request_id )::varchar
+
+    when request_type = 'Finance' then ( select json_build_object(
+        'financeType' , tbl_finance_types.name
+    ) from tbl_finances
+    inner join tbl_finance_types on tbl_finance_types.id = tbl_finances.finance_type_id
+    where tbl_finances.request_id = searching_request_id )::varchar
+
+end as request_extended_information
+$$ LANGUAGE sql;
+
+
+
+
+drop function if exists get_all_requests_on_dashboard();
+CREATE OR REPLACE FUNCTION get_all_requests_on_dashboard()
+    RETURNS varchar AS $$
+select json_build_object('open_requests', (
+select json_agg(
+json_build_object(
+  'id', id,
+  'requestPriority', requestPriority,
+  'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
+  'name' , subject,
+  'requestType' , name,
+  'creator',(select * from get_user_simple_dto(creator_id)),
+  'assigned',(select * from get_user_simple_dto(assigned_id)),
+  'timestampCreation', creation,
+  'allowCommenting', allowCommenting,
+  'requestPosition', requestPosition,
+  'solutionComment', solutionComment,
+  'requestCommentDTOS', (select * from get_request_comment_dto_all(id)),
+  'extendedInformation' , (select * from get_request_extended_information(id, name))
+)) as my_open_requests
+from (
+select r.id ,
+    trp.name as requestPriority,
+    r.subject,
+    rt.name,
+    r.assigned_uid as assigned_id ,
+    r.creator_uid as creator_id,
+    r.timestamp_creation as creation,
+    r.solution_comment_id as solutionComment,
+    r.allow_commenting as allowCommenting,
+    tbl_request_positions.name as requestPosition
+    from tbl_requests r
+    inner join tbl_module_type rt on rt.id = r.type_id
+    inner join tbl_request_priorities trp on trp.id = r.priority_id
+    inner join tbl_request_positions  on tbl_request_positions.id = r.position_id
+    where closed_uid is null order by id desc
+) as t
+))::varchar;
+$$ LANGUAGE sql;
+
+
+drop function if exists get_requests_on_dashboard_for_user_varchar(varchar);
+CREATE OR REPLACE FUNCTION get_requests_on_dashboard_for_user_varchar(searching_name varchar)
+    RETURNS varchar AS $$
+select json_build_object('open_requests', (
+select json_agg( json_build_object(
+    'id', id,
+    'requestPriority', requestPriority,
+    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
+    'name' , subject,
+    'requestType' , name,
+    'creator',(select * from get_user_simple_dto(creator_id)),
+    'assigned',(select * from get_user_simple_dto(assigned_id)),
+    'timestampCreation', creation,
+    'allowCommenting', allowCommenting,
+    'requestPosition', requestPosition,
+    'solutionComment', solutionComment,
+    'requestCommentDTOS', (select * from get_request_comment_dto(id, searching_name)),
+    'extendedInformation' , (select * from get_request_extended_information(id, name)),
+    'logs', (select json_agg(log_message) from tbl_request_logs
+             where request_id = t.id and user_id = (select id from tbl_users where username = searching_name) and timestamp_closed is null)
+) ) as my_open_requests
+from (select r.id ,
+     trp.name as requestPriority,
+     r.subject,
+     rt.name,
+     r.assigned_uid as assigned_id ,
+     r.creator_uid as creator_id,
+     r.timestamp_creation as creation,
+     r.solution_comment_id as solutionComment,
+     r.allow_commenting as allowCommenting,
+     tbl_request_positions.name as requestPosition
+from tbl_requests r
+       inner join tbl_module_type rt on rt.id = r.type_id
+       inner join tbl_request_priorities trp on trp.id = r.priority_id
+       inner join tbl_request_positions on tbl_request_positions.id = r.position_id
+       left join tbl_tickets on  tbl_tickets.request_id = r.id
+       left join tbl_ticket_types on tbl_ticket_types.id = r.type_id
+       cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
+where (
+    r.creator_uid = (select id from tbl_users where tbl_users.username = searching_name) or
+    r.assigned_uid = (select id from tbl_users where tbl_users.username = searching_name) or
+    (
+    (
+          (
+          -- get privileges if I can solve reports or tickets
+              (rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name from get_all_privileges_for_user_varchar( searching_name)) ) OR
+              -- get privileges on ticket types
+              (rt.name = 'Ticket' AND (select case
+                  when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other'
+                      then ( select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                                         like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar( searching_name))
+                  else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                                    like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar( searching_name))
+                  end as contain)
+             )
+          )
+          OR -- assigned / sent on member in group where i am manager or watching
+          (
+              r.creator_uid in (select user_id from tbl_user_groups where group_id in (
+              select id from tbl_groups
+              where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
+              UNION
+              select group_id from tbl_group_activity_watched_by_user
+              where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
+          OR
+              r.assigned_uid in (select user_id from tbl_user_groups where group_id in (
+                  select id from tbl_groups
+                  where manager_id = (select id from tbl_users where tbl_users.username = searching_name)
+                  UNION
+                  select group_id from tbl_group_activity_watched_by_user
+                  where user_id = (select id from tbl_users where tbl_users.username = searching_name)))
+        ))
+        and  -- remove another table
+        (r.assigned_uid is null or  r.assigned_uid  != (select id from tbl_users where tbl_users.username = searching_name)) and
+        r.creator_uid != (select id from tbl_users where tbl_users.username = searching_name)
+        )
+  ) and closed_uid is null
+order by id desc
+) as t ))::varchar;
+$$ LANGUAGE sql;
+
+
+
+drop function if exists get_closed_requests_for_user_varchar(Integer, varchar, varchar, varchar);
+CREATE FUNCTION get_closed_requests_for_user_varchar(searching_id Integer, searching_name varchar, date_closed1 varchar, date_closed2 varchar)
+RETURNS varchar AS $$
+select json_build_object( 'closed_requests' , (
+select json_agg( json_build_object(
+    'id', id,
+    'requestPriority', requestPriority,
+    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
+    'name' , subject,
+    'requestType' , name,
+    'creator',(select * from get_user_simple_dto(creator_id)),
+    'assigned',(select * from get_user_simple_dto(assigned_id)),
+    'timestampCreation', creation,
+    'allowCommenting', allowCommenting,
+    'requestPosition', requestPosition,
+    'solutionComment', solutionComment,
+    'requestCommentDTOS', (select * from get_request_comment_dto(id, searching_name)),
+    'extendedInformation' , (select * from get_request_extended_information(id, name)),
+    'closed' , (select * from get_user_simple_dto(closed_id)),
+    'timestampClosed', closing) )
+       as closed_requests
+from (
+ select
+     r.id ,
+     trp.name as requestPriority,
+     r.subject,
+     rt.name,
+     r.assigned_uid as assigned_id ,
+     r.creator_uid as creator_id,
+     r.closed_uid as closed_id,
+     r.timestamp_creation as creation,
+     r.solution_comment_id as solutionComment,
+     r.allow_commenting as allowCommenting,
+     tbl_request_positions.name as requestPosition,
+     r.timestamp_closed as closing
+ from tbl_requests r
+          inner join tbl_module_type rt on rt.id = r.type_id
+          inner join tbl_request_priorities trp on trp.id = r.priority_id
+          inner join tbl_request_positions  on tbl_request_positions.id = r.position_id
+          left join tbl_tickets on  tbl_tickets.request_id = r.id
+          left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+          cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
+ where r.closed_uid is not null and ((
+-- get privileges if I can solve reports or tickets
+             (rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
+                                        from get_all_privileges_for_user_varchar( searching_name)) )
+             OR
+-- get privileges on ticket types
+             (rt.name = 'Ticket' AND (select case
+         when  tbl_ticket_types.name = 'User' or tbl_ticket_types.name = 'Other' then (
+             select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                         like concat('%',tbl_ticket_types.name,'%')  from get_all_privileges_for_user_varchar(searching_name))
+         else (select  get_all_privileges_for_user_varchar::jsonb->>'ticketTypeToSolve'
+                           like concat('%',t_application_name,'%') from get_all_privileges_for_user_varchar(searching_name))
+         end as contain
+)  )
+) or
+-- assigned somebody from my team
+     r.assigned_uid  in (select distinct user_id from  tbl_user_groups where group_id in (
+         select id from  tbl_groups where manager_id = searching_id
+         union
+         select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
+                         union
+                         select searching_id
+     )
+-- sent somebody from my team
+or r.creator_uid in (select distinct user_id from  tbl_user_groups where group_id in(
+ select id from  tbl_groups where manager_id =  searching_id
+ union
+ select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
+                  union
+                  select searching_id
+)
+-- closed somebody from my team
+or r.closed_uid in (select distinct user_id from  tbl_user_groups where group_id in (
+ select id from  tbl_groups where manager_id =  searching_id
+ union
+ select group_id from tbl_group_activity_watched_by_user where user_id = searching_id)
+                 union
+                 select searching_id
+)
+
+     ) and r.timestamp_closed >= date_closed1::timestamp and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
+ order by timestamp_closed desc
+) as t))::varchar
+$$ LANGUAGE sql;
+
+
+
+drop function if exists get_all_closed_requests(varchar, varchar);
+CREATE FUNCTION get_all_closed_requests(date_closed1 varchar, date_closed2 varchar)
+    RETURNS varchar AS $$
+select json_build_object( 'closed_requests' , (
+select json_agg( json_build_object(
+    'id', id,
+    'requestPriority', requestPriority,
+    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
+    'name' , subject,
+    'requestType' , name,
+    'creator',(select * from get_user_simple_dto(creator_id)),
+    'assigned',(select * from get_user_simple_dto(assigned_id)),
+    'timestampCreation', creation,
+    'allowCommenting', allowCommenting,
+    'requestPosition', requestPosition,
+    'solutionComment', solutionComment,
+    'requestCommentDTOS', (select * from get_request_comment_dto_all(id)),
+    'extendedInformation' , (select * from get_request_extended_information(id, name)),
+    'closed' , (select * from get_user_simple_dto(closed_id)),
+    'timestampClosed', closing) ) as closed_requests
+from (select
+      r.id ,
+      trp.name as requestPriority,
+      r.subject,
+      rt.name,
+      r.assigned_uid as assigned_id ,
+      r.creator_uid as creator_id,
+      r.closed_uid as closed_id,
+      r.timestamp_creation as creation,
+      r.solution_comment_id as solutionComment,
+      r.allow_commenting as allowCommenting,
+      tbl_request_positions.name as requestPosition,
+      r.timestamp_closed as closing
+  from tbl_requests r
+           inner join tbl_module_type rt on rt.id = r.type_id
+           inner join tbl_request_priorities trp on trp.id = r.priority_id
+           inner join tbl_request_positions  on tbl_request_positions.id = r.position_id
+           left join tbl_tickets on  tbl_tickets.request_id = r.id
+           left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
+           cross join lateral (select get_additional_information_for_request as additionalInformation
+                               from get_additional_information_for_request(r.id)) as t1
+  where r.closed_uid is not null and r.timestamp_closed >= date_closed1::timestamp
+    and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
+  order by timestamp_closed desc) as t))::varchar
 $$ LANGUAGE sql;

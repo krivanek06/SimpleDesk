@@ -5,8 +5,8 @@
        id="navigationBackground">
 
 
-  <!-- dashboard -->
-  <a class='navigationIconContainer' routerLink="/dashboard">
+  <!-- request-open -->
+  <a class='navigationIconContainer' routerLink="/requests/dashboard">
     <img src="assets/images_design/dashboard_2.png"
          alt="dashboard navigation icon"
          id='dashboardIcon'
@@ -19,7 +19,7 @@
   </a>
 
   <!-- request new -->
-  <a class='navigationIconContainer' routerLink="/request_new"
+  <a class='navigationIconContainer' routerLink="/requests/request_new"
      *ngIf="!(isGhost$ | async)  && ((hasFinanceModuleAccess$ | async)  || (hasTicketModuleAccess$ | async)  || (hasReportModuleAccess$ | async) )">
     <img src="assets/images_design/request_new_icon.png"
          alt="dashboard navigation icon"
@@ -32,7 +32,7 @@
   </a>
 
   <!-- request closed -->
-  <a class='navigationIconContainer' routerLink="/request_closed">
+  <a class='navigationIconContainer' routerLink="/requests/request_closed">
     <img src="assets/images_design/request_closed_icon.png"
          alt="dashboard navigation icon"
          id='requestClosedIcon'

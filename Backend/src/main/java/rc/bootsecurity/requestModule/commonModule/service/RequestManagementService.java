@@ -4,12 +4,9 @@ package rc.bootsecurity.requestModule.commonModule.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
-import rc.bootsecurity.requestModule.commonModule.entity.RequestLog;
 import rc.bootsecurity.requestModule.commonModule.entity.RequestPriority;
 import rc.bootsecurity.requestModule.commonModule.exception.RequestNotFoundException;
 import rc.bootsecurity.requestModule.commonModule.repository.*;
-import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
 import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 import rc.bootsecurity.userModule.entity.User;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
@@ -20,9 +17,6 @@ import rc.bootsecurity.notificationModule.emailModule.EmailService;
 import rc.bootsecurity.util.fileModule.FileService;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 

@@ -5,11 +5,13 @@ import org.springframework.stereotype.Service;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
+import rc.bootsecurity.requestModule.financeModule.dto.FinanceFormDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.financeModule.repository.FinanceTypeRepository;
 import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
+import rc.bootsecurity.requestModule.reportModule.dto.ReportDTO;
 import rc.bootsecurity.userModule.entity.User;
 
 import java.util.ArrayList;
@@ -23,15 +25,15 @@ public class FinanceService extends RequestManagementService {
     @Autowired
     private FinanceTypeRepository financeTypeRepository;
 
-    public Finance createFinance(FinanceDTO financeDTO){
+    public FinanceDTO createFinance(FinanceFormDTO financeFormDTO){
         Finance finance = new Finance();
-        this.setAttributesForRequest(finance, MODULE_TYPE.Finance.name(),financeDTO.getName(), financeDTO.getRequestPriority());
+        this.setAttributesForRequest(finance, MODULE_TYPE.Finance.name(),financeFormDTO.getName(), financeFormDTO.getRequestPriority());
 
-        finance.setFinanceType(this.financeTypeRepository.findByName(financeDTO.getFinanceType()));
+        finance.setFinanceType(this.financeTypeRepository.findByName(financeFormDTO.getFinanceType()));
 
         super.saveOrUpdateRequest(finance);
         this.requestLogService.saveLogAndBroadCast(finance, super.requestWebsockets.NEW_REQUEST + ((Request) finance).getId());
-        return finance;
+        return (FinanceDTO) requestConverter.convertRequestToRequestDTO(finance);
     }
 
     public List<FinanceTypeDTO> getFinanceTypesToSubmitForLoggedInUser(){

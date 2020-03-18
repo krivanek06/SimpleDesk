@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketDTO;
+import rc.bootsecurity.requestModule.ticketModule.dto.TicketFormDTO;
 import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketSubtype;
 import rc.bootsecurity.requestModule.ticketModule.service.TicketService;
@@ -25,10 +26,10 @@ public class TicketController {
 
 
     @PostMapping("")
-    public ResponseEntity<?> submitTicket(@RequestBody TicketDTO ticketDTO){
+    public ResponseEntity<?> submitTicket(@RequestBody TicketFormDTO ticketFormDTO){
         try {
-            Ticket ticket = this.ticketService.createTicket(ticketDTO);
-            return new ResponseEntity<>(ticket.getId(), HttpStatus.OK);
+            TicketDTO ticketDTO = this.ticketService.createTicket(ticketFormDTO);
+            return new ResponseEntity<>(ticketDTO, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
         }

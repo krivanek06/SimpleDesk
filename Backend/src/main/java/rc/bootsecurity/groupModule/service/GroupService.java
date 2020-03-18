@@ -60,33 +60,6 @@ public class GroupService {
         return this.groupRepository.findAllByUsersInGroup(user).orElseGet(ArrayList::new);
     }
 
-    /*public void modifyGroupDescription(String groupName, String description){
-        Group group = this.groupRepository.findByGroupName(groupName);
-        group.setDescription(description);
-        this.groupRepository.save(group);
-    }
-
-    public void modifyUsersInvolvedInGroupAndSave(String groupName, List<UserSimpleDTO> userDTO){
-        Group group = this.groupRepository.findByGroupName(groupName);
-        List<User> users = this.userService.loadUsersByUsername(userDTO.stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList()));
-        group.setUsersInGroup(new HashSet<>(users));
-        this.groupRepository.save(group);
-    }
-
-    public void modifyManagerInGroupAndSave(String groupName, UserSimpleDTO userDTO){
-        Group group = this.groupRepository.findByGroupName(groupName);
-        User users = this.userService.loadUserByUsername(userDTO.getUsername());
-        group.setGroupManager(users);
-        this.groupRepository.save(group);
-    }
-
-    public void modifyUsersWatchGroupActivityAndSave(String groupName, List<UserSimpleDTO> userDTO){
-        Group group = this.groupRepository.findByGroupName(groupName);
-        List<User> users = this.userService.loadUsersByUsername(userDTO.stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList()));
-        group.setUsersWatchingGroupActivity(new HashSet<>(users));
-        this.groupRepository.save(group);
-    }*/
-
     @Transactional
     public void removeGroup(String groupName){
         Group group = this.groupRepository.findByGroupName(groupName);

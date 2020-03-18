@@ -32,19 +32,6 @@ public class UserController {
     private UserService userService;
 
 
-  /*  @Autowired
-    private SimpMessageSendingOperations  messagingTemplate;
-
-    @Scheduled(fixedDelay = 2000L)
-    public void sendWebsocket(){
-        UserDTO userDTO = new UserDTO();
-        userDTO.setUsername("edko");
-        messagingTemplate.convertAndSend("/request/mirvalpe", userDTO);
-    }*/
-
-
-
-
     @GetMapping("/basicInformation")
     public UserDTO getLoggedInUserDetails(){
         return this.userService.getLoggedInUserDetails();
@@ -98,9 +85,9 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO){
+    public ResponseEntity<?> registerUser(@RequestBody UserSimpleDTO userSimpleDTO){
         try {
-            this.userService.registerUser(userDTO);
+            this.userService.registerUser(userSimpleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (UserException e) {
             return new ResponseEntity<>("Prihlasovacie meno existuje v databáze, prosím zadajte iné",HttpStatus.BAD_REQUEST);

@@ -1,0 +1,38 @@
+<app-header></app-header>
+
+<app-navigation></app-navigation>
+
+<div id='contentContainer'>
+
+   <app-request-table
+       headerColor="#358BF0"
+       [data] = 'myCreatedRequests$ | async'
+       [displayedColumns]= "viewTable"
+       tableTitle="Moje požiadávky"
+       (seenLogsEmitter) = 'removeLogs($event)'
+       [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
+   </app-request-table>
+
+   <app-request-table
+       [hidden] = '!(isSolver$ | async)'
+       headerColor="#56A3FF"
+       [displayedColumns]= "modifyTable"
+       [data] = 'meAssignedRequests$ | async'
+       tableTitle="Požiadavky pridelené na mňa"
+       (seenLogsEmitter) = 'removeLogs($event)'
+       (removeFromMeEmitter) = "modifyMeAsSolver($event, false)">
+   </app-request-table>
+
+   <app-request-table
+       [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async))'
+       headerColor="#E8F3FF"
+       [displayedColumns]= "viewTable"
+       [data] = 'otherOpenRequests$ | async'
+       [displayAssignToMe] ='(isSolver$ | async)'
+       tableTitle="Ostatné otvorené požiadavky"
+       (seenLogsEmitter) = 'removeLogs($event)'
+       (assignOnMeEmitter) = "modifyMeAsSolver($event, true)">
+   </app-request-table>
+</div>
+
+<ngx-spinner ><p style="font-size: 20px; color: white">Načítavam požiadavky...</p></ngx-spinner>

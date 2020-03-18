@@ -4,8 +4,8 @@ public enum REQUEST_POSITION {
     Vytvorené("Vytvorené"),
     Priradené("Priradené"),
     Uzatvorené("Uzatvorené"),
-    Nepriradené("Nepriradené"),
-    Vyriešené("Vyriešené");
+    Nepriradené("Nepriradené");
+    // Vyriešené("Vyriešené");
 
     private final String text;
 

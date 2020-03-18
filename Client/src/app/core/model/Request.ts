@@ -1,4 +1,4 @@
-import {UserSimple} from "./User";
+import { UserSimpleDTO} from "./User";
 
 export interface Request {
   id: number;
@@ -9,22 +9,24 @@ export interface Request {
   allowCommenting: boolean;
   requestPriority: string;
   requestPosition: string;
+  additionalInformation: string;
   requestType: string;
-  creator: UserSimple;
-  assigned: UserSimple;
-  closed: UserSimple;
-  userToWatchRequest: UserSimple[];
-  requestCommentDTOS: RequestComment[];
-  documents: CustomDocument[];
+  creator: UserSimpleDTO;
+  assigned?: UserSimpleDTO;
+  closed?: UserSimpleDTO;
+  requestCommentDTOS?: RequestComment[];
+  documents?: CustomDocument[];
+  extendedInformation: TicketDetails | ReportDetails | FinanceDetails;
+  logs?: string;
 }
 
-export interface TicketDetails extends Request {
+export interface TicketDetails {
   ticketSubtypeName: string;
   problem: string;
   ticketType: string;
 }
 
-export interface ReportDetails extends Request {
+export interface ReportDetails {
   owner: string;
   purpose: string;
   criteria: string;
@@ -39,7 +41,7 @@ export interface ReportDetails extends Request {
 }
 
 
-export interface FinanceDetails extends Request {
+export interface FinanceDetails {
   financeType: string;
 }
 
@@ -47,7 +49,7 @@ export interface RequestComment {
   id: number;
   requestId: number;
   comment: string;
-  creator: UserSimple;
+  creator: UserSimpleDTO;
   isPrivate: boolean;
   groupsToShare: string[];
   timestamp: Date;
@@ -125,36 +127,7 @@ export interface ReportForm {
 }
 
 // -----------------------------
-// Request table
-export interface RequestDashboard {
-  myOpen: RequestTable[];
-  assignedOnMe: RequestTable[];
-  otherOpen: RequestTable[];
-}
 
-export interface RequestTable {
-  id: number;
-  additionalInformation: string;
-  timestampCreation: Date;
-  timestampClosed: Date;
-  name: string;
-  requestPriority: string;
-  requestPosition: string;
-  requestType: string;
-
-  creator: UserImageDTO;
-  assigned?: UserImageDTO;
-  closed?: UserImageDTO;
-
-  logs: string;
-}
-
-
-export interface UserImageDTO {
-  userImageByte: string;
-  userImageString: string;
-  userShortedName: string;
-}
 
 export interface FilterRequests {
   type: string;

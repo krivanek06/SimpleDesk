@@ -122,7 +122,7 @@ public class RequestCommentService {
             return;
 
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-
+        // share with users which are in last pushed group name through websockets
         String lastGroupNameInserted = requestCommentDTO.getGroupsToShare().get(requestCommentDTO.getGroupsToShare().size() -1);
         requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(lastGroupNameInserted));
         this.saveOrUpdateComment(requestComment);
