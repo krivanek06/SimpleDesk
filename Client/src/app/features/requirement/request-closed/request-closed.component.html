@@ -7,20 +7,19 @@
     <!-- filter -->
     <div class='filterContent'>
         <app-request-filter
-            #requestFilter
             [allUsers]="allUsers$ | async"
-            (changedDate) = "loadClosedRequests()"
+            [filterRequests]="filterRequests$ | async"
+            (changedDate) = "changeDate($event)"
             (changedFormFilter) = "filterClosedRequests($event)">
         </app-request-filter>
     </div>
 
     <!-- table with requests -->
     <app-request-table
-        #closedRequests
+        [data] = 'closedRequests$ | async'
         [displayDownloadExcel]="true"
         headerColor="#E8F3FF"
         [displayedColumns]= "viewTable"
-        displayAssignToMe='true'
         tableTitle="Uzatvorené požiadavky">
     </app-request-table>
 

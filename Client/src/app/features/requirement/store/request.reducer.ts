@@ -1,11 +1,12 @@
 import * as RequestAction from './request.action';
-import {Request, RequestComment} from "../../../core/model/Request";
+import {FilterRequest, Request, RequestComment} from "../../../core/model/Request";
 import {Action, createFeatureSelector, createReducer, createSelector, on, State} from '@ngrx/store';
 import {RequestState} from "../../../core/model/appState.model";
 import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
 import {routerSelector} from "../../../shared/utils/router.serializer";
-import {saveAs} from 'file-saver';
+
 import {RequestPosition} from "../../../core/enum/request.enum";
+import {filter} from "rxjs/operators";
 
 export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>();
 export const commentAdapter: EntityAdapter<RequestComment> = createEntityAdapter<RequestComment>();
@@ -14,14 +15,19 @@ export const initialState: RequestState = requestAdapter.getInitialState({
   error: undefined,
   loadedDashboard: false,
   loadedClosed: false,
-  closedRequestDateFrom: undefined,
-  closedRequestDateTo: undefined,
+  customDate: undefined,
+  closedFilterRequests: {
+    type: '',
+    creator: '',
+    closed: '',
+    name: '',
+    priority: '',
+  },
 });
 
 
 const requestReducer = createReducer(initialState,
   on(RequestAction.getOpenRequests,
-    RequestAction.getClosedRequests,
     RequestAction.closeRequest,
     RequestAction.reopenRequest,
     RequestAction.assignMeOnRequest,
@@ -40,46 +46,45 @@ const requestReducer = createReducer(initialState,
     RequestAction.toggleCommenting,
     RequestAction.addReportEvaluation,
     RequestAction.addRandomSolver,
-    RequestAction.attachCommentAsSolution,
+    RequestAction.downloadFilesSuccess,
     (state) => ({...state})
+  ),
+  on(RequestAction.getClosedRequests,
+    (state) => ({...state, loadedClosed: false})
   ),
   on(RequestAction.getOpenRequestsSuccess,
     (state, {requests}) => (
       requestAdapter.addMany(requests, {...state, loadedDashboard: true})
     )
   ),
+  on(RequestAction.changeClosedRequestFilter,
+    (state, {filterRequests}) => (
+      {...state, closedFilterRequests: filterRequests}
+    )
+  ),
   on(RequestAction.getClosedRequestsSuccess,
-    (state, {requests, dateFrom, dateTo}) => (
+    (state, {requests, customDate}) => (
       requestAdapter.upsertMany(requests, {
         ...state,
         loadedClosed: true,
-        closedRequestDateFrom: dateFrom,
-        closedRequestDateTo: dateTo
+        customDate
       })
     )
   ),
-  on(
-    RequestAction.attachCommentAsSolutionSuccess,
-    (state, {requestComment, request}) => (
-      requestAdapter.updateOne({
-        id: request.id,
-        changes: {
-          ...state.entities[request.id],
-          solutionComment: requestComment.id
-        }
-      }, state)
-    )
-  ),
   on(RequestAction.createRequestSuccess,
-    (state, {request}) => (
-      requestAdapter.addOne(request, state)
+    (state, {request, customDocuments}) => (
+      requestAdapter.addOne({...request, documents: customDocuments}, state)
     )
   ),
   on(RequestAction.modifiedSolverOnRequestSuccess,
     (state, {requestId, userSimpleDTO, requestPosition}) => (
       requestAdapter.updateOne({
         id: requestId,
-        changes: {...state.entities[requestId], assigned: userSimpleDTO, requestPosition}
+        changes: {
+          ...state.entities[requestId],
+          assigned: userSimpleDTO,
+          requestPosition
+        }
       }, state)
     )
   ),
@@ -125,12 +130,13 @@ const requestReducer = createReducer(initialState,
   ),
   on(
     RequestAction.addCommentSuccess,
-    (state, {requestComment}) => (
+    (state, {requestComment, solutionComment}) => (
       requestAdapter.updateOne({
         id: requestComment.requestId,
         changes: {
           ...state.entities[requestComment.requestId],
-          requestCommentDTOS: [...[requestComment]] // [...state.entities[requestComment.requestId].requestCommentDTOS, requestComment]
+          requestCommentDTOS: [...state.entities[requestComment.requestId].requestCommentDTOS, requestComment],
+          solutionComment
         }
       }, state)
     )
@@ -144,7 +150,11 @@ const requestReducer = createReducer(initialState,
           ...state.entities[requestComment.requestId],
           requestCommentDTOS: [
             ...state.entities[requestComment.requestId].requestCommentDTOS.filter(item => item.id !== requestComment.id),
-            state.entities[requestComment.requestId].requestCommentDTOS.find(item => item.id === requestComment.id).isPrivate = privacy
+            {
+              ...state.entities[requestComment.requestId].requestCommentDTOS.find(item => item.id === requestComment.id),
+              isPrivate: privacy,
+              groupsToShare: []
+            }
           ].sort((a: RequestComment, b: RequestComment) => a.id - b.id)
         }
       }, state)
@@ -159,8 +169,16 @@ const requestReducer = createReducer(initialState,
           ...state.entities[requestComment.requestId],
           requestCommentDTOS: [
             ...state.entities[requestComment.requestId].requestCommentDTOS.filter(item => item.id !== requestComment.id),
-            state.entities[requestComment.requestId].requestCommentDTOS.find(
-              item => item.id === requestComment.id).groupsToShare = [...groupName]
+            {
+              ...state.entities[requestComment.requestId].requestCommentDTOS.find(
+                item => item.id === requestComment.id),
+              groupsToShare:
+                [
+                  ...state.entities[requestComment.requestId].requestCommentDTOS.find(
+                    item => item.id === requestComment.id).groupsToShare,
+                  groupName
+                ].filter(name => !!name)
+            }
           ].sort((a: RequestComment, b: RequestComment) => a.id - b.id)
         }
       }, state)
@@ -175,7 +193,10 @@ const requestReducer = createReducer(initialState,
           ...state.entities[requestComment.requestId],
           requestCommentDTOS: [
             ...state.entities[requestComment.requestId].requestCommentDTOS.filter(item => item.id !== requestComment.id),
-            state.entities[requestComment.requestId].requestCommentDTOS.find(item => item.id === requestComment.id).comment = comment
+            {
+              ...state.entities[requestComment.requestId].requestCommentDTOS.find(item => item.id === requestComment.id),
+              comment
+            }
           ].sort((a: RequestComment, b: RequestComment) => a.id - b.id)
         }
       }, state)
@@ -196,20 +217,16 @@ const requestReducer = createReducer(initialState,
     )
   ),
   on(
-    RequestAction.downloadFilesSuccess,
-    (state, {file, fileName}) => (saveAs(file, fileName))
-  ),
-  on(
     RequestAction.uploadFileSuccess,
     (state, {requestId, customDocuments}) => (
       requestAdapter.updateOne({
         id: requestId,
         changes: {
           ...state.entities[requestId],
-          documents: {
+          documents: [
             ...state.entities[requestId].documents,
             ...customDocuments
-          }
+          ]
         }
       }, state)
     )
@@ -245,7 +262,6 @@ const requestReducer = createReducer(initialState,
     RequestAction.downloadFilesFailure,
     RequestAction.uploadFileFailure,
     RequestAction.createRequestFailure,
-    RequestAction.attachCommentAsSolutionFailure,
     (state, {error}) => ({...state, error})
   )
   )
@@ -261,6 +277,9 @@ export const getRequestState = createFeatureSelector<RequestState>('requirement'
 
 export const isDashboardLoaded = createSelector(getRequestState, (state: RequestState) => state.loadedDashboard);
 export const isClosedLoaded = createSelector(getRequestState, (state: RequestState) => state.loadedClosed);
+export const getClosedRequestDateRange = createSelector(getRequestState, (state: RequestState) => state.customDate);
+export const getClosedRequestFilterState = createSelector(getRequestState, (state: RequestState) => state.closedFilterRequests);
+
 
 const getAllEntities = createSelector(
   getRequestState,
@@ -288,6 +307,30 @@ export const getOtherRequests = (username: string) => createSelector(
   (state: Request[]) => state.filter(
     item => !(item.assigned && item.assigned.username === username) && item.creator.username !== username && !item.closed
   )
+);
+
+
+export const getClosedRequests = createSelector(
+  getAllRequests,
+  getClosedRequestFilterState,
+  (requests: Request[], filterRequest: FilterRequest) => requests.filter(request => {
+    if (!request.closed) {
+      return false;
+    }
+    if (filterRequest.closed !== '' && filterRequest.closed !== request.closed.userShortedName) {
+      return false;
+    }
+    if (filterRequest.creator !== '' && filterRequest.creator !== request.creator.userShortedName) {
+      return false;
+    }
+    if (filterRequest.type !== '' && filterRequest.type !== request.requestType) {
+      return false;
+    }
+    if (filterRequest.priority !== '' && filterRequest.priority !== request.requestPriority) {
+      return false;
+    }
+    return request.name.includes(filterRequest.name);
+  })
 );
 
 

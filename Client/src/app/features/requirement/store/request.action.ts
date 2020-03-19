@@ -1,6 +1,6 @@
 import {Action, createAction, props} from "@ngrx/store";
 import {
-  CustomDocument,
+  CustomDocument, FilterRequest,
   FinanceForm,
   ReportForm,
   Request,
@@ -10,11 +10,12 @@ import {
 } from "../../../core/model/Request";
 import {UserSimpleDTO} from "../../../core/model/User";
 import {RequestPosition, RequestType} from "../../../core/enum/request.enum";
+import {CustomDate} from "../../../core/model/appState.model";
 
 
 export const uploadFile = createAction(
   '[Request Detail] Upload files',
-  props<{ requestId: number, fileList: FileList }>()
+  props<{ requestId: number, customDocuments: CustomDocument[] }>()
 );
 export const uploadFileSuccess = createAction(
   '[Request Details] Upload files success',
@@ -32,7 +33,6 @@ export const downloadFiles = createAction(
 );
 export const downloadFilesSuccess = createAction(
   '[Request Details] Download file success',
-  props<{ file: string , fileName: string}>()
 );
 export const downloadFilesFailure = createAction(
   '[Request Details] Download file failure',
@@ -54,30 +54,15 @@ export const toggleCommentingFailure = createAction(
 
 export const addComment = createAction(
   '[Request Detail] Add comment',
-  props<{ requestCommentWrapper: RequestCommentWrapper }>()
+  props<{ request: Request, requestCommentWrapper: RequestCommentWrapper }>()
 );
 export const addCommentSuccess = createAction(
   '[Request Detail] Add comment success',
-  props<{ requestComment: RequestComment }>()
+  props<{ requestComment: RequestComment, solutionComment: number }>()
 );
 export const addCommentFailure = createAction(
   '[Request Detail] Add comment failure',
   props<{ error: Error }>()
-);
-
-export const attachCommentAsSolution = createAction(
-  '[Request Detail] Attach comment as solution',
-  props<{requestComment: RequestComment, request: Request}>()
-);
-
-export const attachCommentAsSolutionSuccess = createAction(
-  '[Request Detail] Attach comment as solution success',
-  props<{requestComment: RequestComment, request: Request}>()
-);
-
-export const attachCommentAsSolutionFailure = createAction(
-  '[Request Detail] Attach comment as solution',
-  props<{error: Error}>()
 );
 
 export const editComment = createAction(
@@ -90,8 +75,8 @@ export const editCommentSuccess = createAction(
 );
 export const editCommentFailure = createAction(
   '[Request Detail] Edit comment failure',
-  props<{ error: Error }>())
-;
+  props<{ error: Error }>()
+);
 
 export const deleteComment = createAction(
   '[Request Detail] Delete comment',
@@ -108,7 +93,7 @@ export const deleteCommentFailure = createAction(
 
 export const shareComment = createAction(
   '[Request Detail] Share comment',
-  props<{ requestComment: RequestComment, groupName: string  }>()
+  props<{ requestComment: RequestComment, groupName: string }>()
 );
 export const shareCommentSuccess = createAction(
   '[Request Detail] Share comment success',
@@ -150,15 +135,15 @@ export const addReportEvaluationFailure = createAction(
 
 export const closeRequest = createAction(
   '[Request Detail] Close request',
-  props<{ requestId: number, date: Date , userSimpleDTO: UserSimpleDTO }>()
+  props<{ requestId: number, date: Date, userSimpleDTO: UserSimpleDTO }>()
 );
 export const reopenRequest = createAction(
   '[Request Details] Reopen request',
-  props<{ requestId: number,  date: Date , userSimpleDTO: UserSimpleDTO }>()
+  props<{ requestId: number, date: Date, userSimpleDTO: UserSimpleDTO }>()
 );
 export const modifiedStateRequestSuccess = createAction(
   '[Request] Modified state on request success',
-  props<{ requestId: number, userSimpleDTO: UserSimpleDTO , date: Date, requestPosition: RequestPosition}>()
+  props<{ requestId: number, userSimpleDTO: UserSimpleDTO, date: Date, requestPosition: RequestPosition }>()
 );
 export const modifiedStateRequestFailure = createAction(
   '[Request] Modified state on request failure',
@@ -182,19 +167,19 @@ export const changePriorityFailure = createAction(
 
 export const createTicket = createAction(
   '[Request new] Create ticket',
-  props<{ ticketForm: TicketForm, fileList: FileList }>()
+  props<{ ticketForm: TicketForm, customDocuments: CustomDocument[] }>()
 );
 export const createReport = createAction(
   '[Request new] Create report',
-  props<{ reportForm: ReportForm, fileList: FileList }>()
+  props<{ reportForm: ReportForm, customDocuments: CustomDocument[] }>()
 );
 export const createFinance = createAction(
   '[Request new] Create finance',
-  props<{ financeForm: FinanceForm, fileList: FileList }>()
+  props<{ financeForm: FinanceForm, customDocuments: CustomDocument[] }>()
 );
 export const createRequestSuccess = createAction(
   '[Request new] Create request success',
-  props<{ request: Request }>()
+  props<{ request: Request, customDocuments: CustomDocument[] }>()
 );
 export const createRequestFailure = createAction(
   '[Request new] Create request failure',
@@ -235,7 +220,7 @@ export const removeMeOnRequest = createAction(
 );
 export const modifiedSolverOnRequestSuccess = createAction(
   '[Request] Modified solver on request success',
-  props<{ requestId: number, userSimpleDTO: UserSimpleDTO, requestPosition: RequestPosition}>()
+  props<{ requestId: number, userSimpleDTO: UserSimpleDTO, requestPosition: RequestPosition }>()
 );
 export const modifiedSolverOnRequestFailure = createAction(
   '[Request] Modified solver on request failure',
@@ -257,14 +242,18 @@ export const getOpenRequestsError = createAction(
 
 export const getClosedRequests = createAction(
   '[Closed Request Page] Get closed requests',
-  props<{ dateFrom: string, dateTo: string }>()
+  props<{ customDate: CustomDate }>()
 );
 export const getClosedRequestsSuccess = createAction(
   '[Closed Request Page] Get closed requests success',
-  props<{ requests: Request[] , dateFrom: string, dateTo: string}>()
+  props<{ requests: Request[], customDate: CustomDate }>()
 );
 export const getClosedRequestsError = createAction(
   '[Closed Request Page] Get closed requests failure',
   props<{ error: Error }>()
 );
 
+export const changeClosedRequestFilter = createAction(
+  '[Closed Request Page] Change date range',
+  props<{ filterRequests: FilterRequest }>()
+);

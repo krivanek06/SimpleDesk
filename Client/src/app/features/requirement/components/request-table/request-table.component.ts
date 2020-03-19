@@ -12,6 +12,7 @@ import {
 } from '@angular/core';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Request} from "../../../../core/model/Request";
+import {RequestType} from "../../../../core/enum/request.enum";
 
 @Component({
   selector: 'app-request-table',
@@ -25,7 +26,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() displayAssignToMe = false;
   @Input() displayDownloadExcel = false;
   @Input() tableTitle: string;
-  @Input() data: Request[];
+  @Input() data: Request[] = [];
 
   @Output() assignOnMeEmitter: EventEmitter<Request> = new EventEmitter<Request>();
   @Output() removeFromMeEmitter: EventEmitter<Request> = new EventEmitter<Request>();
@@ -35,7 +36,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   dataSource: MatTableDataSource<Request> = new MatTableDataSource<Request>();
 
-
+  requestType: typeof RequestType = RequestType;
   dateFrom: string;
   dateTo: string;
 

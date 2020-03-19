@@ -2,17 +2,15 @@ package rc.bootsecurity.requestModule.financeModule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
-import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceFormDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.financeModule.repository.FinanceTypeRepository;
 import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
-import rc.bootsecurity.requestModule.reportModule.dto.ReportDTO;
-import rc.bootsecurity.userModule.entity.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ public class FinanceService extends RequestManagementService {
     @Autowired
     private FinanceTypeRepository financeTypeRepository;
 
-    public FinanceDTO createFinance(FinanceFormDTO financeFormDTO){
+    public RequestDTO createFinance(FinanceFormDTO financeFormDTO){
         Finance finance = new Finance();
         this.setAttributesForRequest(finance, MODULE_TYPE.Finance.name(),financeFormDTO.getName(), financeFormDTO.getRequestPriority());
 
@@ -33,7 +31,7 @@ public class FinanceService extends RequestManagementService {
 
         super.saveOrUpdateRequest(finance);
         this.requestLogService.saveLogAndBroadCast(finance, super.requestWebsockets.NEW_REQUEST + ((Request) finance).getId());
-        return (FinanceDTO) requestConverter.convertRequestToRequestDTO(finance);
+        return requestConverter.convertRequestToRequestDTO(finance);
     }
 
     public List<FinanceTypeDTO> getFinanceTypesToSubmitForLoggedInUser(){

@@ -5,6 +5,8 @@ import {Subject} from 'rxjs';
 import {UserSimpleDTO} from 'app/core/model/User';
 import {takeUntil} from 'rxjs/operators';
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
+import {FilterRequest} from "../../../../core/model/Request";
+import {CustomDate} from "../../../../core/model/appState.model";
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -42,28 +44,26 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
   @Input() allUsers: UserSimpleDTO[];
-  @Output() changedDate: EventEmitter<any> = new EventEmitter<any>();
-  @Output() changedFormFilter: EventEmitter<any> = new EventEmitter<any>();
+  @Input() filterRequests: FilterRequest;
+  @Output() changedDate: EventEmitter<CustomDate> = new EventEmitter<CustomDate>();
+  @Output() changedFormFilter: EventEmitter<FilterRequest> = new EventEmitter<FilterRequest>();
 
   constructor(private datepipe: DatePipe, private formBuilder: FormBuilder) {
   }
 
   ngOnInit() {
-    this.initDateFilter();
-
-
     this.filterForm = this.formBuilder.group({
-      type: '',
-      creator: '',
-      closed: '',
-      name: '',
-      priority: '',
+      type: this.filterRequests.type,
+      creator: this.filterRequests.creator,
+      closed: this.filterRequests.closed,
+      name: this.filterRequests.name,
+      priority: this.filterRequests.priority,
     });
 
     this.filterForm.valueChanges.pipe(
       takeUntil(this.destroy$)
     ).subscribe(form => {
-      this.changedFormFilter.emit(form);
+      this.changedFormFilter.emit(form as FilterRequest);
     });
   }
 
@@ -73,10 +73,10 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
   }
 
   saveDateAndFilter(event): void {
-    this.dateFrom = this.datepipe.transform(new Date(event.begin), 'dd.MM.yyyy');
-    this.dateTo = this.datepipe.transform(new Date(event.end), 'dd.MM.yyyy');
+    const dateFrom = this.datepipe.transform(new Date(event.begin), 'dd.MM.yyyy');
+    const dateTo = this.datepipe.transform(new Date(event.end), 'dd.MM.yyyy');
 
-    this.changedDate.emit();
+    this.changedDate.emit({dateFrom, dateTo});
   }
 
   deleteFilterOption(option: string): void {
@@ -92,18 +92,8 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
       this.filterForm.patchValue({priority: ''});
     }
 
-    this.changedFormFilter.emit(this.filterForm.value);
+    this.changedFormFilter.emit(this.filterForm.value as FilterRequest);
   }
-
-
-  private initDateFilter(): void {
-    const today = new Date();
-    this.dateTo = this.datepipe.transform(today, 'dd.MM.yyyy');
-
-    today.setDate(today.getDate() - 30);
-    this.dateFrom = this.datepipe.transform(today, 'dd.MM.yyyy');
-  }
-
 
   get type() {
     return this.filterForm.get("type");

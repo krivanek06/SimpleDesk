@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceFormDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
-import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.financeModule.service.FinanceService;
 
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class FinanceController {
     @PostMapping("")
     public ResponseEntity<?> submitTicket(@RequestBody FinanceFormDTO financeFormDTO){
         try {
-            FinanceDTO financeDTO = this.financeService.createFinance(financeFormDTO);
+            RequestDTO financeDTO = this.financeService.createFinance(financeFormDTO);
             return new ResponseEntity<>(financeDTO, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());

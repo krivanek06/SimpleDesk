@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-public abstract class RequestDTO {
+public class RequestDTO {
     private Integer id;
 
     private Timestamp timestampCreation;

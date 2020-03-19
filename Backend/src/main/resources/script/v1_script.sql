@@ -459,35 +459,6 @@ select json_build_object(
 $$ LANGUAGE sql;
 
 
-
--- decide on request type [ticket, report, finance] what additional information to return
-drop function if exists get_additional_information_for_request(searching_id integer);
-CREATE FUNCTION get_additional_information_for_request(searching_id integer)
-    RETURNS varchar AS $$
-select
-    case
-        when rt.name = 'Ticket' then tbl_tickets.t_application_name
-        when rt.name = 'Report' then tbl_report_types.name
-        when rt.name = 'Finance' then tbl_finance_types.name
-        else null
-        end as additional_info
-
-from tbl_requests r
-         inner join tbl_module_type rt on rt.id = r.type_id
-         left join tbl_tickets on tbl_tickets.request_id = r.id
-         left join tbl_reports on tbl_reports.request_id = r.id
-         left join tbl_report_types on tbl_report_types.id = tbl_reports.r_type_id
-         left join tbl_finances on tbl_finances.request_id = r.id
-         left join tbl_finance_types on tbl_finance_types.id = tbl_finances.finance_type_id
-where r.id = searching_id
-order by r.id asc;
-$$ LANGUAGE sql;
-
-
-
-
-
-
 drop function if exists get_finance_types_to_submit_for_user(varchar);
 CREATE OR REPLACE FUNCTION get_finance_types_to_submit_for_user(searching_name varchar)
 RETURNS TABLE(id integer, name varchar, active boolean) AS $$
@@ -614,7 +585,7 @@ select json_agg( json_build_object(
         where shared.request_comment_id = r_comments.id
     ),
     'timestamp', r_comments.timestamp
-)) as request_comment_dto
+) order by r_comments.id ) as request_comment_dto
 from tbl_request_comments as r_comments where request_id = searching_request_id
 $$ LANGUAGE sql;
 
@@ -637,7 +608,7 @@ select json_agg( json_build_object(
         where shared.request_comment_id = r_comments.id
     ),
     'timestamp', r_comments.timestamp
-)) as request_comment_dto
+) order by r_comments.id ) as request_comment_dto
 from tbl_request_comments as r_comments where request_id = searching_request_id and ( is_private = false or exists (
     select group_id from tbl_request_comments_shared where tbl_request_comments_shared.request_comment_id = r_comments.id and
         tbl_request_comments_shared.group_id in (
@@ -697,7 +668,6 @@ select json_agg(
 json_build_object(
   'id', id,
   'requestPriority', requestPriority,
-  'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
   'name' , subject,
   'requestType' , name,
   'creator',(select * from get_user_simple_dto(creator_id)),
@@ -737,7 +707,6 @@ select json_build_object('open_requests', (
 select json_agg( json_build_object(
     'id', id,
     'requestPriority', requestPriority,
-    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
     'name' , subject,
     'requestType' , name,
     'creator',(select * from get_user_simple_dto(creator_id)),
@@ -767,7 +736,6 @@ from tbl_requests r
        inner join tbl_request_positions on tbl_request_positions.id = r.position_id
        left join tbl_tickets on  tbl_tickets.request_id = r.id
        left join tbl_ticket_types on tbl_ticket_types.id = r.type_id
-       cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
 where (
     r.creator_uid = (select id from tbl_users where tbl_users.username = searching_name) or
     r.assigned_uid = (select id from tbl_users where tbl_users.username = searching_name) or
@@ -820,7 +788,6 @@ select json_build_object( 'closed_requests' , (
 select json_agg( json_build_object(
     'id', id,
     'requestPriority', requestPriority,
-    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
     'name' , subject,
     'requestType' , name,
     'creator',(select * from get_user_simple_dto(creator_id)),
@@ -854,7 +821,6 @@ from (
           inner join tbl_request_positions  on tbl_request_positions.id = r.position_id
           left join tbl_tickets on  tbl_tickets.request_id = r.id
           left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-          cross join lateral (select get_additional_information_for_request as additionalInformation from get_additional_information_for_request(r.id)) as t1
  where r.closed_uid is not null and ((
 -- get privileges if I can solve reports or tickets
              (rt.name != 'Ticket' AND ( select get_all_privileges_for_user_varchar::jsonb->'requestTypeToSolve' ? rt.name
@@ -909,7 +875,6 @@ select json_build_object( 'closed_requests' , (
 select json_agg( json_build_object(
     'id', id,
     'requestPriority', requestPriority,
-    'additionalInformation' , (select get_additional_information_for_request from get_additional_information_for_request(id)) ,
     'name' , subject,
     'requestType' , name,
     'creator',(select * from get_user_simple_dto(creator_id)),
@@ -941,8 +906,6 @@ from (select
            inner join tbl_request_positions  on tbl_request_positions.id = r.position_id
            left join tbl_tickets on  tbl_tickets.request_id = r.id
            left join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-           cross join lateral (select get_additional_information_for_request as additionalInformation
-                               from get_additional_information_for_request(r.id)) as t1
   where r.closed_uid is not null and r.timestamp_closed >= date_closed1::timestamp
     and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
   order by timestamp_closed desc) as t))::varchar

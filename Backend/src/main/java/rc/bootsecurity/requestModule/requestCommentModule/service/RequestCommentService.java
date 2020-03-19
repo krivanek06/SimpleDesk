@@ -109,7 +109,7 @@ public class RequestCommentService {
     public void modifyComment(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
         requestComment.setComment(requestCommentDTO.getComment());
-        requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
+        requestComment.setIsPrivate(!requestCommentDTO.getIsPrivate());
         if(!requestCommentDTO.getIsPrivate()){
             requestComment.setGroupsToViewRequestComment(null);
         }
@@ -117,14 +117,12 @@ public class RequestCommentService {
         this.saveOrUpdateComment(requestComment);
     }
 
-    public void shareCommentWith(RequestCommentDTO requestCommentDTO){
-        if(requestCommentDTO.getGroupsToShare().size() == 0)
+    public void shareCommentWith(Integer commentId, String groupName){
+        if(commentId == null || groupName == null)
             return;
 
-        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        // share with users which are in last pushed group name through websockets
-        String lastGroupNameInserted = requestCommentDTO.getGroupsToShare().get(requestCommentDTO.getGroupsToShare().size() -1);
-        requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(lastGroupNameInserted));
+        RequestComment requestComment = this.getRequestComment(commentId);
+        requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(groupName));
         this.saveOrUpdateComment(requestComment);
     }
 

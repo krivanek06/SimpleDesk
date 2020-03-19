@@ -2,7 +2,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {FileUploadComponent} from "../../../../../shared/components-presentation/file-upload/file-upload.component";
 import {SwallNotificationService} from "../../../../../shared/services/swall-notification.service";
 import {RequestTicketFormComponent} from "../../presentation/request-ticket-form/request-ticket-form.component";
-import {TicketForm, TicketSubtype} from "../../../../../core/model/Request";
+import {CustomDocument, TicketForm, TicketSubtype} from "../../../../../core/model/Request";
 import {RequestHttpService} from "../../../../../api/request-http.service";
 import {Store} from "@ngrx/store";
 import {RequestState} from "../../../../../core/model/appState.model";
@@ -17,7 +17,7 @@ export class TicketFormPageComponent implements OnInit {
   @ViewChild('ticketFormComponent', {static: true}) ticketFormComponent: RequestTicketFormComponent;
   @ViewChild('fileUploadComponent', {static: true}) fileUploadComponent: FileUploadComponent;
 
-  fileList: FileList;
+  private customDocuments: CustomDocument[];
 
   softwareTypes: TicketSubtype[] = [];
   hardwareTypes: TicketSubtype[] = [];
@@ -34,14 +34,14 @@ export class TicketFormPageComponent implements OnInit {
     this.requestHttpService.getTicketSubtype('Server').subscribe(server => this.serverTypes = server);
   }
 
-  fileInserted(fileList: FileList) {
-    this.fileList = fileList;
+  fileInserted(customDocuments: CustomDocument[]) {
+    this.customDocuments = customDocuments;
   }
 
   submitTicket(ticketForm: TicketForm) {
     this.swallNotification.generateQuestion(`Naozaj chcetete odoslať ticket ?`).then((result) => {
       if (result.value) {
-        this.store.dispatch(RequestAction.createTicket({ticketForm, fileList: this.fileList}));
+        this.store.dispatch(RequestAction.createTicket({ticketForm, customDocuments: this.customDocuments}));
         this.ticketFormComponent.resetForm();
         this.fileUploadComponent.removeFiles();
       }

@@ -1,6 +1,7 @@
 import {Component, OnInit, Input, Output} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {CustomDocument} from "../../../core/model/Request";
 
 @Component({
   selector: 'app-file-upload',
@@ -12,30 +13,40 @@ export class FileUploadComponent {
   constructor(private swallNotification: SwallNotificationService) {
   }
 
-  @Output() public fileInserted: EventEmitter<FileList> = new EventEmitter<FileList>();
+  @Output() public fileInserted: EventEmitter<CustomDocument[]> = new EventEmitter<CustomDocument[]>();
   @Input() public uploaderHeight: number;
   @Input() public requiredUpload: boolean;
   @Input() public hideIt = false;
 
   files: File[] = [];
 
-  uploadFile(files: FileList) {
-    // if more than 20MB
-    let fileSize = 0;
-    for (let i = 0; i < files.length; i++) {
-      fileSize += files.item(i).size;
+  uploadFile(fileList: FileList) {
+
+    // collect uncollected
+    for (let i = 0; i < fileList.length; i++) {
+      if (!this.files.includes(fileList.item(i))) {
+        this.files = [...this.files, fileList.item(i)];
+      }
     }
 
-    const sizeMB: number = Math.round(fileSize / 1000000);
+    // if more than 20MB
+    const sizeMB = Math.round(this.files.reduce((acc, item) => acc + item.size, 0) / 1000000);
     if (sizeMB > 20) {
       this.swallNotification.generateErrorNotification(`Veľkosť vášho súboru je ${sizeMB}MB, maximálna povolená veľkosť je 20MB. `);
+      this.removeFiles();
       return;
     }
-    for (let i = 0; i < files.length; i++) {
-      this.files.push(files.item(i));
-    }
 
-    this.fileInserted.emit(files);
+    // convert into custom format
+    const customDocuments: CustomDocument[] = this.files.map(file => {
+      return {
+        name: file.name,
+        lastModified: new Date().getTime(),
+        file
+      };
+    });
+
+    this.fileInserted.emit(customDocuments);
   }
 
   deleteAttachment(index) {

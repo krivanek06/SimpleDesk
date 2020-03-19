@@ -1,4 +1,4 @@
-<ng-container *ngIf="request">
+<ng-container *ngIf="request$ | async as request">
   <app-request-management
     class='content'
     [isOpen]='!request.closed'
@@ -10,11 +10,11 @@
     [enableChangeSolver]='(this.isAdmin$ | async) || ((isSolver$ | async) && ((isManager$ | async) || (isSolverRightHand$ | async)))'
     [enableChangePriority]='(isAdmin$ | async) || ((isSolver$ | async) && request.assigned?.username === userStoreService.user.username) '
     [enableEvaluation]='request.requestType === requestType.Report &&  (( isAdmin$ | async ) || request.assigned?.username === userStoreService.user.username ) '
-    (changeStateEmitter)='changeState()'
-    (commentingEmitter)='changeCommenting()'
-    (removeMeOnRequestEmitter)='removeMeOnRequest()'
-    (changeSolverEmitter)='changeSolver($event)'
-    (changePriorityEmitter)='changePriority($event)'
-    (evaluationEmitter)='addReportEvaluation($event)'>
+    (changeStateEmitter)='changeState(request)'
+    (commentingEmitter)='changeCommenting(request)'
+    (removeMeOnRequestEmitter)='removeMeOnRequest(request)'
+    (changeSolverEmitter)='changeSolver(request, $event)'
+    (changePriorityEmitter)='changePriority(request, $event)'
+    (evaluationEmitter)='addReportEvaluation(request, $event)'>
   </app-request-management>
 </ng-container>

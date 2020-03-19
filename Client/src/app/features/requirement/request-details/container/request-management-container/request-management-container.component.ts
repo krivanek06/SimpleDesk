@@ -17,16 +17,15 @@ import {takeUntil} from "rxjs/operators";
   templateUrl: './request-management-container.component.html',
   styleUrls: ['./request-management-container.component.scss']
 })
-export class RequestManagementContainerComponent implements OnInit, OnDestroy {
+export class RequestManagementContainerComponent implements OnInit {
   isSolver$: Observable<boolean>;
   isManager$: Observable<boolean>;
   isAdmin$: Observable<boolean>;
   isSolverRightHand$: Observable<boolean>;
   requestType: typeof RequestType = RequestType;
 
-  request: Request;
+  request$: Observable<Request>;
   allusers$: Observable<UserSimpleDTO[]>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
 
 
   constructor(private userHttp: UserHttpService,
@@ -41,52 +40,44 @@ export class RequestManagementContainerComponent implements OnInit, OnDestroy {
     this.isManager$ = this.userStoreService.isManager();
     this.isAdmin$ = this.userStoreService.isAdmin();
     this.isSolverRightHand$ = this.userStoreService.isSolverRightHand();
-    this.store.select(getRequestById).pipe(
-      takeUntil(this.destroy$)
-    ).subscribe(request => this.request = request);
+    this.request$ = this.store.select(getRequestById);
   }
 
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
+  changePriority(request: Request, priority: string) {
+    this.store.dispatch(RequestAction.changePriority({requestId: request.id, priority}));
   }
 
-
-  changePriority(priority: string) {
-    this.store.dispatch(RequestAction.changePriority({requestId: this.request.id, priority}));
+  changeSolver(request: Request, userSimpleDTO: UserSimpleDTO) {
+    this.store.dispatch(RequestAction.addRandomSolver({requestId: request.id, userSimpleDTO}));
   }
 
-  changeSolver(userSimpleDTO: UserSimpleDTO) {
-    this.store.dispatch(RequestAction.addRandomSolver({requestId: this.request.id, userSimpleDTO}));
+  changeCommenting(request: Request) {
+    this.store.dispatch(RequestAction.toggleCommenting({request}));
   }
 
-  changeCommenting() {
-    this.store.dispatch(RequestAction.toggleCommenting({request: this.request}));
+  addReportEvaluation(request: Request, days: number) {
+    this.store.dispatch(RequestAction.addReportEvaluation({requestId: request.id, days}));
   }
 
-  addReportEvaluation(days: number) {
-    this.store.dispatch(RequestAction.addReportEvaluation({requestId: this.request.id, days}));
+  removeMeOnRequest(request: Request) {
+    this.store.dispatch(RequestAction.removeMeOnRequest({request, userSimpleDTO: undefined}));
   }
 
-  removeMeOnRequest() {
-    this.store.dispatch(RequestAction.removeMeOnRequest({request: this.request, userSimpleDTO: undefined}));
-  }
-
-  changeState() {
-    const state = this.request.closed ? 'otvoriť' : 'uzatvoriť';
+  changeState(request: Request) {
+    const state = request.closed ? 'otvoriť' : 'uzatvoriť';
     this.swallNotification.generateQuestion(`Naozaj chcetete ${state} požiadavku ?`).then((result) => {
       if (result.value) {
-        if (this.request.closed) {
+        if (request.closed) {
           // reopen Request
           this.store.dispatch(RequestAction.reopenRequest({
-            requestId: this.request.id,
+            requestId: request.id,
             date: undefined,
             userSimpleDTO: undefined
           }));
         } else {
           // close Request
           this.store.dispatch(RequestAction.closeRequest({
-            requestId: this.request.id,
+            requestId: request.id,
             userSimpleDTO: this.userStoreService.getUserSimple(),
             date: new Date(),
           }));

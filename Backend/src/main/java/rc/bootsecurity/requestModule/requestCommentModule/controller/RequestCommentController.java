@@ -66,9 +66,10 @@ public class RequestCommentController {
     }
 
     @PutMapping("/share")
-    public ResponseEntity<?> shareComment(@RequestBody RequestCommentDTO requestCommentDTO) {
+    public ResponseEntity<?> shareComment(@RequestParam("commentId") Integer commentId,
+                                          @RequestParam("groupName") String groupName) {
         try{
-            this.requestCommentService.shareCommentWith(requestCommentDTO);
+            this.requestCommentService.shareCommentWith(commentId, groupName);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method shareComment : " + e.getMessage());

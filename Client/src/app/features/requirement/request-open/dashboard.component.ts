@@ -29,7 +29,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   isGhost$: Observable<boolean>;
   isSolver$: Observable<boolean>;
   isManager$: Observable<boolean>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
+  private destroy$: Subject<boolean> = new Subject<boolean>();
 
   otherOpenRequests$: Observable<Request[]>;
   meAssignedRequests$: Observable<Request[]>;

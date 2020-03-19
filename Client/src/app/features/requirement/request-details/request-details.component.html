@@ -1,9 +1,9 @@
-<ng-sidebar-container *ngIf='request$ | async as requestDetails'>
+<ng-sidebar-container>
 
   <ng-sidebar [opened]="sideBarBoolean" mode="over" keyClose="false" position="right" [dock]='false'
               [dockedSize]="'50px'"
               autoCollapseHeight="null" autoCollapseWidth="null" [closeOnClickOutside]='false' [showBackdrop]='true'
-              [ariaLabel]="'My sidebar'" *ngIf="!(isGhost$ | async)">
+              [ariaLabel]="'My sidebar'" >
 
     <div id='sliderDiv1' (click)='openSideBar()'>
       <i class="material-icons sliderButton"> reorder</i>

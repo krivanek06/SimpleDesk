@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
 import {environment} from 'environments/environment';
 import {
+  CustomDocument,
   FinanceForm,
   FinanceType,
   ReportForm,
@@ -59,18 +60,15 @@ export class RequestHttpService {
     return this.http.put<UserSimpleDTO>(environment.apiUrl + `requests/modification/secure/${requestiId}/addSolver`, userSimpleDTO);
   }
 
-  public uploadFileForRequest(id: number, fileList: FileList): Observable<boolean> {
-    if (!fileList || fileList.length === 0) {
+  public uploadFileForRequest(id: number, customDocuments: CustomDocument[]): Observable<any> {
+    if (!customDocuments || customDocuments.length === 0) {
       return of(false);
     }
 
     const formData: FormData = new FormData();
-    for (let i = 0; i < fileList.length; i++) {
-      formData.append("filesToUpload", fileList.item(i));
-    }
-    return this.http.post(environment.apiUrl + `requests/requestDetails/${id}/files`, formData).pipe(map(() => {
-      return true;
-    }));
+    customDocuments.forEach(item => formData.append("filesToUpload", item.file));
+
+    return this.http.post(environment.apiUrl + `requests/requestDetails/${id}/files`, formData);
   }
 
 
@@ -151,8 +149,11 @@ export class RequestHttpService {
     return this.http.put(environment.apiUrl + `requests/comment/privacy`, requestComment);
   }
 
-  public shareComment(requestComment: RequestComment): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/comment/share`, requestComment);
+  public shareComment(commentId: number, groupName: string): Observable<any> {
+    const params = new HttpParams()
+      .set("commentId", String(commentId))
+      .set("groupName", groupName);
+    return this.http.put(environment.apiUrl + `requests/comment/share`, null, {params});
   }
 
 }

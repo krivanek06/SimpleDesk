@@ -74,6 +74,10 @@ public class JsonStringParser {
         if(!requestsJson.isNull(jsonField)) {
             try {
                 result = objectMapper.readValue( requestsJson.getJSONArray(jsonField).toString(), List.class);
+
+                for(HashMap request: result){
+                    request.computeIfAbsent("requestCommentDTOS", k -> new ArrayList<>());
+                }
             }catch (IOException e){
                 LOGGER.error("error in method parseFromRawJsonToRequestTableDTO : " + e.getMessage());
             }

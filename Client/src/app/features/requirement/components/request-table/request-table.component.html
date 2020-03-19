@@ -51,10 +51,19 @@
     </ng-container>
 
 
-    <ng-container matColumnDef="additionalInformation">
+    <ng-container matColumnDef="additionalInformation" >
       <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Typ</mat-header-cell>
       <mat-cell *matCellDef="let element">
-        {{ element.additionalInformation}}
+
+        <ng-container *ngIf="element.requestType === requestType.Ticket">
+          {{ $any(element.extendedInformation).ticketSubtypeName }}
+        </ng-container>
+        <ng-container *ngIf="element.requestType === requestType.Report">
+          {{ $any(element.extendedInformation).reportType }}
+        </ng-container>
+        <ng-container *ngIf="element.requestType === requestType.Finance">
+          {{ $any(element.extendedInformation).financeType }}
+        </ng-container>
       </mat-cell>
     </ng-container>
 

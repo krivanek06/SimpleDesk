@@ -65,6 +65,7 @@ export interface RequestCommentWrapper {
 export interface CustomDocument {
   name: string;
   lastModified: number;
+  file?: File;
 }
 
 // ---------------------------------
@@ -129,13 +130,15 @@ export interface ReportForm {
 // -----------------------------
 
 
-export interface FilterRequests {
+export interface FilterRequest {
   type: string;
   creator: string;
   closed: string;
   name: string;
   priority: string;
 }
+
+
 
 // ----------------------------
 // Privileges

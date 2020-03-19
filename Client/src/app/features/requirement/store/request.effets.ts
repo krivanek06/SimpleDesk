@@ -8,10 +8,10 @@ import {catchError, filter, map, mergeMap, switchMap, withLatestFrom} from "rxjs
 import {isDashboardLoaded} from "./request.reducer";
 import {Action, Store} from "@ngrx/store";
 import {RequestState} from "../../../core/model/appState.model";
-import {CustomDocument} from "../../../core/model/Request";
+import {CustomDocument, TicketForm} from "../../../core/model/Request";
 import {SwallNotificationService} from "../../../shared/services/swall-notification.service";
 import {RequestPosition} from "../../../core/enum/request.enum";
-
+import {saveAs} from 'file-saver';
 
 @Injectable()
 export class RequestEffects {
@@ -36,12 +36,11 @@ export class RequestEffects {
 
   getClosedRequest$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.getClosedRequests),
-    switchMap(action => this.requestHttpService.getClosedRequests(action.dateFrom, action.dateTo)
+    switchMap(action => this.requestHttpService.getClosedRequests(action.customDate.dateFrom, action.customDate.dateTo)
       .pipe(
         map((requests) => RequestAction.getClosedRequestsSuccess({
           requests,
-          dateTo: action.dateTo,
-          dateFrom: action.dateFrom
+          customDate: action.customDate
         })),
         catchError((error) => of(RequestAction.getClosedRequestsError({error})))
       )
@@ -72,11 +71,14 @@ export class RequestEffects {
     ofType(RequestAction.addRandomSolver),
     switchMap((action) => this.requestHttpService.assignSolver(action.requestId, action.userSimpleDTO)
       .pipe(
-        map((solver) => RequestAction.modifiedSolverOnRequestSuccess({
-          requestId: action.requestId,
-          userSimpleDTO: solver,
-          requestPosition: RequestPosition.Assigned,
-        })),
+        map((solver) => {
+          this.swallNotification.generateNotification(`Požiadavka pridelená na užívateľa ${solver.userShortedName}`);
+          return RequestAction.modifiedSolverOnRequestSuccess({
+            requestId: action.requestId,
+            userSimpleDTO: solver,
+            requestPosition: RequestPosition.Assigned,
+          });
+        }),
         catchError(error => of(RequestAction.modifiedSolverOnRequestFailure({error})))
       )
     )));
@@ -86,11 +88,11 @@ export class RequestEffects {
     ofType(RequestAction.createTicket),
     switchMap(action =>
       this.requestHttpService.submitTicket(action.ticketForm).pipe(
-        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.fileList)
+        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -101,11 +103,11 @@ export class RequestEffects {
     ofType(RequestAction.createReport),
     switchMap(action =>
       this.requestHttpService.submitReport(action.reportForm).pipe(
-        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.fileList)
+        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -116,11 +118,11 @@ export class RequestEffects {
     ofType(RequestAction.createFinance),
     switchMap(action =>
       this.requestHttpService.submitFinance(action.financeForm).pipe(
-        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.fileList)
+        switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -139,19 +141,12 @@ export class RequestEffects {
 
   uploadFilesForRequest$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.uploadFile),
-    switchMap(action => this.requestHttpService.uploadFileForRequest(action.requestId, action.fileList)
+    switchMap(action => this.requestHttpService.uploadFileForRequest(action.requestId, action.customDocuments)
       .pipe(
-        map(() => {
-          const customDocuments: CustomDocument[] = [];
-          for (let i = 0; i < action.fileList.length; i++) {
-            const file = action.fileList.item(i);
-            customDocuments.push({
-              name: file.name,
-              lastModified: new Date().getTime()
-            });
-          }
-          return requestAction.uploadFileSuccess({requestId: action.requestId, customDocuments});
-        }),
+        map(() => requestAction.uploadFileSuccess({
+          requestId: action.requestId,
+          customDocuments: action.customDocuments
+        })),
         catchError(error => of(requestAction.uploadFileFailure({error})))
       )
     )));
@@ -160,7 +155,10 @@ export class RequestEffects {
     ofType(RequestAction.downloadFiles),
     switchMap(action => this.requestHttpService.downloadFileForRequest(action.id, action.fileName)
       .pipe(
-        map((file) => requestAction.downloadFilesSuccess({file, fileName: action.fileName})),
+        map((file) => {
+          saveAs(file, action.fileName);
+          return requestAction.downloadFilesSuccess();
+        }),
         catchError(error => of(requestAction.downloadFilesFailure({error})))
       )
     )));
@@ -185,7 +183,8 @@ export class RequestEffects {
       .pipe(
         map((requestComment) => {
           this.swallNotification.generateNotification(`Komentár bol odoslaný`);
-          return RequestAction.addCommentSuccess({requestComment});
+          const solutionComment = action.requestCommentWrapper.solution ? requestComment.id : action.request.solutionComment;
+          return RequestAction.addCommentSuccess({requestComment, solutionComment});
         }),
         catchError((error) => of(RequestAction.addCommentFailure({error})))
       )
@@ -220,7 +219,7 @@ export class RequestEffects {
 
   shareComment$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.shareComment),
-    switchMap(action => this.requestHttpService.shareComment(action.requestComment)
+    switchMap(action => this.requestHttpService.shareComment(action.requestComment.id, action.groupName)
       .pipe(
         map(() => {
           this.swallNotification.generateNotification(`Komentár bol vyzdieľaný`);

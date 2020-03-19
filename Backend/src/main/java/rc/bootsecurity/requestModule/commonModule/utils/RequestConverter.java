@@ -6,16 +6,13 @@ import rc.bootsecurity.requestModule.ticketModule.dto.TicketExtendedInformationD
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
-import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.financeModule.entity.FinanceType;
-import rc.bootsecurity.requestModule.reportModule.dto.ReportDTO;
 import rc.bootsecurity.requestModule.reportModule.entity.Report;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
 import rc.bootsecurity.requestModule.requestCommentModule.entity.RequestComment;
-import rc.bootsecurity.requestModule.ticketModule.dto.TicketDTO;
 import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketPrivileges;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
@@ -31,6 +28,7 @@ import java.util.stream.Collectors;
 
 public class RequestConverter {
     private UserConverter userConverter = new UserConverter();
+    private FileService fileService = new FileService();
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
         requestDTO.setRequestType(request.getModuleType().getName());
@@ -45,8 +43,9 @@ public class RequestConverter {
         requestDTO.setRequestPriority(request.getRequestPriority().getName());
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
+        requestDTO.setDocuments(this.fileService.getFileForRequest(request.getId()));
         requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
-                request.getRequestComments().stream().map(this::convertRequestCommentToDTO).collect(Collectors.toList()) : null);
+                request.getRequestComments().stream().map(this::convertRequestCommentToDTO).collect(Collectors.toList()) : new ArrayList<>());
 
     }
 
@@ -79,8 +78,8 @@ public class RequestConverter {
 
 
 
-    private TicketDTO convertTicketToTicketDTO(Ticket ticket){
-        TicketDTO ticketDTO = new TicketDTO();
+    private RequestDTO convertTicketToTicketDTO(Ticket ticket){
+        RequestDTO ticketDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(ticketDTO, ticket);
 
         TicketExtendedInformationDTO ticketExtendedInformationDTO = new TicketExtendedInformationDTO();
@@ -101,8 +100,8 @@ public class RequestConverter {
         return ticketDTO;
     }
 
-    private ReportDTO convertReportToReportDTO(Report report){
-        ReportDTO reportDTO = new ReportDTO();
+    private RequestDTO convertReportToReportDTO(Report report){
+        RequestDTO reportDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(reportDTO,report);
 
         ReportExtendedInformationDTO reportExtendedInformationDTO = new ReportExtendedInformationDTO();
@@ -123,8 +122,8 @@ public class RequestConverter {
         return reportDTO;
     }
 
-    private FinanceDTO convertFinanceToFinanceDTO(Finance finance){
-        FinanceDTO financeDTO = new FinanceDTO();
+    private RequestDTO convertFinanceToFinanceDTO(Finance finance){
+        RequestDTO financeDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(financeDTO, finance);
 
         FinanceExtendedInformationDTO financeExtendedInformationDTO = new FinanceExtendedInformationDTO();
