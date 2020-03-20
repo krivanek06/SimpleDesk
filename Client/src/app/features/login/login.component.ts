@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "../../core/services/authentication.service";
 import {UserStoreService} from "../../core/services/user-store.service";
 import {environment} from "../../../environments/environment";
-import {RequestService} from "../../core/services/request.service";
+import {RequestService} from "../requirement/services/request.service";
 
 @Component({
   selector: 'app-login',

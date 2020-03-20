@@ -62,14 +62,14 @@ public class RequestManagementService{
         this.saveOrUpdateRequest(request);
 
         // inform new users
-        this.requestLogService.saveLogAndBroadCast(request,  message);
+        this.requestLogService.BroadcastRequest(request,  message);
 
         // remove request from old users
         List<User> usersAfter = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
                 .filter(x -> !x.getUsername().equalsIgnoreCase(this.userService.getPrincipalUsername())).collect(Collectors.toList());
         usersBefore.removeAll(usersAfter);
 
-        usersBefore.forEach(x -> this.requestWebsockets.sendRequest(x, request , "DELETE"));
+        usersBefore.forEach(x -> this.requestWebsockets.sendRequest(x, request , this.requestWebsockets.DELETE));
     }
 
     public void removeMeAsAssignUserAndSave(Integer requestId){
@@ -118,7 +118,7 @@ public class RequestManagementService{
         fileService.uploadFileForRequest(requestId , uploadingFiles);
         Request request = this.findRequest(requestId);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.ADDED_ATTACHMENT);
+        this.requestLogService.BroadcastRequest(request,  this.requestWebsockets.ADDED_ATTACHMENT);
     }
 
     public void closeRequest(Integer requestId){
@@ -156,7 +156,7 @@ public class RequestManagementService{
         request.setRequestPosition(this.requestPositionRepository.findByName(REQUEST_POSITION.Priradené.name()));
         this.saveOrUpdateRequest(request);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.REOPEN_REQUEST);
+        this.requestLogService.BroadcastRequest(request,  this.requestWebsockets.REOPEN_REQUEST);
     }
 
 
@@ -167,7 +167,7 @@ public class RequestManagementService{
         request.setRequestPriority(requestPriority);
         this.saveOrUpdateRequest(request);
 
-        this.requestLogService.saveLogAndBroadCast(request,  this.requestWebsockets.CHANGED_PRIORITY);
+        this.requestLogService.BroadcastRequest(request,  this.requestWebsockets.CHANGED_PRIORITY);
     }
 
     public void changeCommenting(Integer requestId){

@@ -1,7 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Observable} from "rxjs";
 import {CustomDocument, Request} from "../../../../../core/model/Request";
-import {RequestService} from "../../../../../core/services/request.service";
+import {RequestService} from "../../../services/request.service";
 import {SwallNotificationService} from "../../../../../shared/services/swall-notification.service";
 import {UserStoreService} from "../../../../../core/services/user-store.service";
 import * as RequestAction from '../../../store/request.action';

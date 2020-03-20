@@ -589,6 +589,14 @@ select json_agg( json_build_object(
 from tbl_request_comments as r_comments where request_id = searching_request_id
 $$ LANGUAGE sql;
 
+drop function if exists get_request_comment_dto_all_varchar(integer, varchar);
+CREATE OR REPLACE FUNCTION get_request_comment_dto_all_varchar( searching_request_id integer)
+    RETURNS varchar AS $$
+select get_request_comment_dto_all::varchar
+from get_request_comment_dto_all(searching_request_id)
+$$ LANGUAGE sql;
+
+
 
 
 -- get comments for requests, remove those which are not shared with me
@@ -616,6 +624,14 @@ from tbl_request_comments as r_comments where request_id = searching_request_id 
     )
 ) )
 $$ LANGUAGE sql;
+
+drop function if exists get_request_comment_dto_varchar(integer, varchar);
+CREATE OR REPLACE FUNCTION get_request_comment_dto_varchar( searching_request_id integer, searching_user_name varchar)
+    RETURNS varchar AS $$
+    select get_request_comment_dto::varchar
+    from get_request_comment_dto(searching_request_id, searching_user_name)
+$$ LANGUAGE sql;
+
 
 
 

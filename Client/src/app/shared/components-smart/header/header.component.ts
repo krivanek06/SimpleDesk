@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 import {AuthenticationService} from "../../../core/services/authentication.service";
 import {Observable} from "rxjs";
 import {User} from "../../../core/model/User";
-import {RequestService} from "../../../core/services/request.service";
+import {RequestService} from "../../../features/requirement/services/request.service";
 
 @Component({
   selector: 'app-header',

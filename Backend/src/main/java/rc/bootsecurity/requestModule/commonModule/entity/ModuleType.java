@@ -27,23 +27,23 @@ public class ModuleType {
     @Column(name = "active")
     private Boolean active;
 
-    @EqualsAndHashCode.Exclude
+  /*  @EqualsAndHashCode.Exclude
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "moduleType")
-    private List<Request> requests;
+    private List<Request> requests; */
 
     /**
      * which group can what request submit
      */
-    @EqualsAndHashCode.Exclude
+   /* @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "moduleTypesToUse")
-    private Set<Group> groupsToSubmitDifferentRequests;
+    private Set<Group> groupsToSubmitDifferentRequests; */
 
     /**
      * which group can what request solve
      */
-    @EqualsAndHashCode.Exclude
+   /* @EqualsAndHashCode.Exclude
     @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "requestTypesToSolve")
-    private Set<Group> groupsToManageDifferentModules;
+    private Set<Group> groupsToManageDifferentModules; */
 
 
 

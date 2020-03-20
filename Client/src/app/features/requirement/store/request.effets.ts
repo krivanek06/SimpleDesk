@@ -219,7 +219,7 @@ export class RequestEffects {
 
   shareComment$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.shareComment),
-    switchMap(action => this.requestHttpService.shareComment(action.requestComment.id, action.groupName)
+    switchMap(action => this.requestHttpService.shareComment(action.requestComment, action.groupName)
       .pipe(
         map(() => {
           this.swallNotification.generateNotification(`Komentár bol vyzdieľaný`);

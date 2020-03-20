@@ -17,7 +17,7 @@ export interface Request {
   requestCommentDTOS?: RequestComment[];
   documents?: CustomDocument[];
   extendedInformation: TicketDetails | ReportDetails | FinanceDetails;
-  logs?: string;
+  logs?: string[];
 }
 
 export interface TicketDetails {

@@ -25,11 +25,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
   viewTable = ['id', 'additionalInformation', 'creator', 'name', 'priority', 'assigned', 'timeCreated', 'details'];
   modifyTable = ['id', 'additionalInformation', 'creator', 'name', 'priority', 'assigned', 'userAction', 'timeCreated', 'details'];
 
-  isAdmin$: Observable<boolean>;
-  isGhost$: Observable<boolean>;
+
   isSolver$: Observable<boolean>;
-  isManager$: Observable<boolean>;
-  private destroy$: Subject<boolean> = new Subject<boolean>();
+  destroy$: Subject<boolean> = new Subject<boolean>();
 
   otherOpenRequests$: Observable<Request[]>;
   meAssignedRequests$: Observable<Request[]>;
@@ -44,16 +42,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isAdmin$ = this.userStoreService.isAdmin();
-    this.isGhost$ = this.userStoreService.isGhost();
     this.isSolver$ = this.userStoreService.isSolver();
-    this.isManager$ = this.userStoreService.isManager();
-
     this.myCreatedRequests$ = this.store.pipe(select(getMyCreatedRequests(this.userStoreService.user.username)));
     this.meAssignedRequests$ = this.store.pipe(select(getMeAssignedRequests(this.userStoreService.user.username)));
     this.otherOpenRequests$ = this.store.pipe(select(getOtherRequests(this.userStoreService.user.username)));
-
-    this.store.subscribe(x => console.log(x));
 
     this.spinner.show();
 
@@ -77,7 +69,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.swallNotification.generateQuestion(`Naozaj chcetete ${text} seba požiadavku s id: ${request.id}. ?`).then((result) => {
       if (result.value) {
         if (assign) {
-          this.store.dispatch(RequestAction.assignMeOnRequest({request, userSimpleDTO: this.userStoreService.getUserSimple()}));
+          this.store.dispatch(RequestAction.assignMeOnRequest({
+            request,
+            userSimpleDTO: this.userStoreService.getUserSimple()
+          }));
         } else {
           this.store.dispatch(RequestAction.removeMeOnRequest({request, userSimpleDTO: undefined}));
         }

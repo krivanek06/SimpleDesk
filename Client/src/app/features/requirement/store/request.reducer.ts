@@ -5,8 +5,7 @@ import {RequestState} from "../../../core/model/appState.model";
 import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
 import {routerSelector} from "../../../shared/utils/router.serializer";
 
-import {RequestPosition} from "../../../core/enum/request.enum";
-import {filter} from "rxjs/operators";
+
 
 export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>();
 export const commentAdapter: EntityAdapter<RequestComment> = createEntityAdapter<RequestComment>();
@@ -69,6 +68,18 @@ const requestReducer = createReducer(initialState,
         loadedClosed: true,
         customDate
       })
+    )
+  ),
+  on(
+    RequestAction.updateRequestFromAPI,
+    (state, {request}) => (
+      requestAdapter.upsertOne(request, state)
+    )
+  ),
+  on(
+    RequestAction.deleteRequestFromAPI,
+    (state, {request}) => (
+      requestAdapter.removeOne(request.id, state)
     )
   ),
   on(RequestAction.createRequestSuccess,

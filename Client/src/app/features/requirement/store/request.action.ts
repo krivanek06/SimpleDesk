@@ -187,10 +187,15 @@ export const createRequestFailure = createAction(
 );
 
 
-export const changedRequestAPI = createAction(
-  '[API] Changed request',
+export const updateRequestFromAPI = createAction(
+  '[API] Update request',
   props<{ request: Request }>()
 );
+export const deleteRequestFromAPI = createAction(
+  '[API] Delete request',
+  props<{ request: Request }>()
+);
+
 export const addRandomSolver = createAction(
   '[Request Details] Assign request to somebody',
   props<{ requestId: number, userSimpleDTO: UserSimpleDTO }>()

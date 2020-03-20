@@ -17,7 +17,7 @@ public class RequestPriority {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestPriority")
-    private List<Request> requests;
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "requestPriority")
+    //private List<Request> requests;
 
 }

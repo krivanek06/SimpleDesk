@@ -26,21 +26,28 @@ public class RequestWebsockets {
 
     protected final String DESTINATION_PREFIX = "/request/";
 
-    public final String NEW_REQUEST = "Nová požiadavka v schránke";
+    public final String NEW_REQUEST = "Nová požiadavka vytvorená užívateľom ";
     public final String CHANGED_PRIORITY = "Zmena priority uživateľom ";
-    public final String ADDED_SOLVER = "Priradenie uživateľa ";
-    public final String REOPEN_REQUEST = "Otvorenie požiadavky uživateľom ";
-    public final String REMOVED_SOLVER = "Odstránenie rešiteľa uživateľom ";
-    public final String ADDED_ATTACHMENT = "Pridanie prílohy uživateľom ";
-    public final String ADDED_COMMENT = "Pridanie komentára uživateľom ";
-    public final String ADDED_EVALUATION = "Nacenenie reportu uživateľom ";
+
+    public final String ADDED_SOLVER = "Priradenie riešiteľa užívateľa ";
+    public final String REMOVED_SOLVER = "Odstránenie rešiteľa užívateľom ";
+
+    public final String REOPEN_REQUEST = "Otvorenie požiadavky užívateľom ";
+    public final String CLOSED_REQUEST = "Požiadavka uzavretá užívateľom ";
+
+    public final String ADDED_ATTACHMENT = "Pridanie prílohy užívateľom ";
+    public final String ADDED_COMMENT = "Pridanie komentára užívateľom ";
+    public final String SHARED_COMMENT = "Vyzdieľaný komentára užívateľom ";
+    public final String ADDED_EVALUATION = "Nacenenie reportu užívateľom ";
+
     public final String DELETE = "DELETE";
 
     private RequestDTO constructRequestTableWebsocketsDTO(String message, Request request, User user){
         RequestConverter requestConverter = new RequestConverter();
 
-        request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request, user.getUsername()));
+        // request.setRequestComments(this.requestCommentService.getRequestCommentsForRequest(request, user.getUsername()));
         RequestDTO requestDTO = requestConverter.convertRequestToRequestDTO(request);
+        requestDTO.setRequestCommentDTOS(this.requestCommentService.getRequestCommentDTOForRequest(request, user.getUsername()));
         // get all previous logs and add new log
         List<String> logs = this.requestLogRepository.findAllByRequestAndUser(request, user).stream().map(RequestLog::getLogMessage).collect(Collectors.toList());
         logs.add(message);
@@ -53,6 +60,14 @@ public class RequestWebsockets {
 
     public void sendRequest(User user, Request request, String message){
         this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(), this.constructRequestTableWebsocketsDTO(message, request, user));
+    }
+
+    public void sendRequest(User user, Request request){
+        RequestConverter requestConverter = new RequestConverter();
+        RequestDTO requestDTO = requestConverter.convertRequestToRequestDTO(request);
+        requestDTO.setRequestCommentDTOS(this.requestCommentService.getRequestCommentDTOForRequest(request, user.getUsername()));
+
+        this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(), requestDTO);
     }
 
 }

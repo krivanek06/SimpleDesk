@@ -13,16 +13,7 @@ import java.util.Set;
 
 @Repository
 public interface ModuleTypeRepository extends JpaRepository<ModuleType, Integer> {
-    Optional<List<ModuleType>> findAllByGroupsToManageDifferentModules(Group group);
-    Optional<List<ModuleType>> findAllByGroupsToManageDifferentModules(Set<Group> group);
 
-    Optional<List<ModuleType>> findAllByGroupsToSubmitDifferentRequests(Group group);
-    Optional<List<ModuleType>> findAllByGroupsToSubmitDifferentRequestsIn(Set<Group> group);
-
-    @Query("Select r From ModuleType r where r.name = :name ")
-    ModuleType selectByName(@Param("name") String name);
-
-    ModuleType findRequestTypesByName(String name);
     ModuleType findByName(String name);
     List<ModuleType> findAllByNameIn(List<String> names);
     List<ModuleType> findAllByNameIn(Set<String> names);

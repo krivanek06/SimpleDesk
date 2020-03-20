@@ -35,7 +35,7 @@ public class TicketService extends RequestManagementService {
 
         super.saveOrUpdateRequest(ticket);
 
-        this.requestLogService.saveLogAndBroadCast(ticket, super.requestWebsockets.NEW_REQUEST + ((Request) ticket).getId());
+        this.requestLogService.BroadcastRequest(ticket, super.requestWebsockets.NEW_REQUEST);
 
         return requestConverter.convertRequestToRequestDTO(ticket);
     }

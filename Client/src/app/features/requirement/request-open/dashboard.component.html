@@ -9,12 +9,10 @@
        [data] = 'myCreatedRequests$ | async'
        [displayedColumns]= "viewTable"
        tableTitle="Moje požiadávky"
-       (seenLogsEmitter) = 'removeLogs($event)'
-       [hidden] = " (isGhost$ | async) || (isAdmin$ | async) ">
+       (seenLogsEmitter) = 'removeLogs($event)'>
    </app-request-table>
 
    <app-request-table
-       [hidden] = '!(isSolver$ | async)'
        headerColor="#56A3FF"
        [displayedColumns]= "modifyTable"
        [data] = 'meAssignedRequests$ | async'
@@ -24,7 +22,6 @@
    </app-request-table>
 
    <app-request-table
-       [hidden] = '!((isSolver$ | async)  || (isGhost$ | async)  || (isAdmin$ | async))'
        headerColor="#E8F3FF"
        [displayedColumns]= "viewTable"
        [data] = 'otherOpenRequests$ | async'

@@ -1,5 +1,6 @@
 package rc.bootsecurity.util;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -7,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
+import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
 import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
 
 import java.io.IOException;
@@ -82,6 +84,23 @@ public class JsonStringParser {
                 LOGGER.error("error in method parseFromRawJsonToRequestTableDTO : " + e.getMessage());
             }
         }
+        return result;
+    }
+
+    public List<RequestCommentDTO> convertRawJsonToRequestCommentDTO(String rawJson){
+       if(rawJson == null){
+            return new ArrayList<>();
+        }
+
+        List<RequestCommentDTO> result = new ArrayList<>();
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        try {
+            result = Arrays.asList(objectMapper.readValue(rawJson, RequestCommentDTO[].class));
+        }catch (IOException e){
+            LOGGER.error("error in method parseFromRawJsonToRequestTableDTO : " + e.getMessage());
+        }
+
         return result;
     }
 

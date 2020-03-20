@@ -37,9 +37,6 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   dataSource: MatTableDataSource<Request> = new MatTableDataSource<Request>();
 
   requestType: typeof RequestType = RequestType;
-  dateFrom: string;
-  dateTo: string;
-
 
   constructor() {
   }
@@ -48,12 +45,9 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    console.log('ngOnChanges');
-
     this.dataSource.data = [...this.data];
     this.dataSource.data.sort((a, b) => (b.id - a.id));
     this.dataSource._updateChangeSubscription();
-
   }
 
   ngAfterViewInit() {

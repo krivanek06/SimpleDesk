@@ -30,7 +30,7 @@ public class FinanceService extends RequestManagementService {
         finance.setFinanceType(this.financeTypeRepository.findByName(financeFormDTO.getFinanceType()));
 
         super.saveOrUpdateRequest(finance);
-        this.requestLogService.saveLogAndBroadCast(finance, super.requestWebsockets.NEW_REQUEST + ((Request) finance).getId());
+        this.requestLogService.BroadcastRequest(finance, super.requestWebsockets.NEW_REQUEST);
         return requestConverter.convertRequestToRequestDTO(finance);
     }
 

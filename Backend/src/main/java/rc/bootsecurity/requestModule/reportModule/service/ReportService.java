@@ -38,7 +38,7 @@ public class ReportService extends RequestManagementService {
 
         super.saveOrUpdateRequest(report);
 
-        this.requestLogService.saveLogAndBroadCast(report, super.requestWebsockets.NEW_REQUEST + ((Request) report).getId());
+        this.requestLogService.BroadcastRequest(report, super.requestWebsockets.NEW_REQUEST);
 
         return requestConverter.convertRequestToRequestDTO(report);
     }
@@ -48,7 +48,7 @@ public class ReportService extends RequestManagementService {
         report.setEvaluation(days);
         this.saveOrUpdateRequest(report);
 
-        this.requestLogService.saveLogAndBroadCast(report, super.requestWebsockets.ADDED_EVALUATION + ((Request) report).getId());
+        this.requestLogService.BroadcastRequest(report, super.requestWebsockets.ADDED_EVALUATION);
     }
 
 }

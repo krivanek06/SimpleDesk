@@ -33,7 +33,7 @@ public class RequestLogService {
     }
 
 
-    public void saveLogAndBroadCast(Request request, String message){
+    public void BroadcastRequest(Request request, String message){
         User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         List<User> users = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
                 .filter(x -> !x.getUsername().equalsIgnoreCase(principal.getUsername())).collect(Collectors.toList());
@@ -44,6 +44,14 @@ public class RequestLogService {
         this.requestLogRepository.saveAll(requestLogs);
     }
 
+    public void BroadcastRequest(Request request){
+        User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        List<User> users = this.userService.loadUsersByUsername(this.userService.getUsersToSendRequestChange(request.getId())).stream()
+                .filter(x -> !x.getUsername().equalsIgnoreCase(principal.getUsername())).collect(Collectors.toList());
+
+        users.forEach(x -> this.requestWebsockets.sendRequest(x, request));
+    }
+
     @Transactional
     public void deleteLogsAndBroadCast(Request request){
         User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
@@ -51,7 +59,7 @@ public class RequestLogService {
                 .filter(x -> !x.getUsername().equalsIgnoreCase(principal.getUsername())).collect(Collectors.toList());
 
         this.requestLogRepository.deleteAllByRequest(request);
-        users.forEach(x -> this.requestWebsockets.sendRequest(x, request , this.requestWebsockets.DELETE));
+        users.forEach(x -> this.requestWebsockets.sendRequest(x, request , this.requestWebsockets.CLOSED_REQUEST + principal.getFullName()));
     }
 
     @Transactional

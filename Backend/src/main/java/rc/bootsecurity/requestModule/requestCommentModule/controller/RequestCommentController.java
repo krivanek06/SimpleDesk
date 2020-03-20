@@ -35,7 +35,7 @@ public class RequestCommentController {
     @PutMapping
     public ResponseEntity<?> editComment(@RequestBody RequestCommentDTO requestCommentDTO) {
         try {
-            this.requestCommentService.modifyComment(requestCommentDTO);
+            this.requestCommentService.editComment(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method editComment, to add comment: " + e.getMessage());
@@ -57,7 +57,7 @@ public class RequestCommentController {
     @PutMapping("/privacy")
     public ResponseEntity<?> changeCommentPrivacy(@RequestBody RequestCommentDTO requestCommentDTO) {
         try{
-            this.requestCommentService.modifyComment(requestCommentDTO);
+            this.requestCommentService.changePrivacy(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method changeCommentPrivacy, to add comment: " + e.getMessage());
@@ -66,10 +66,10 @@ public class RequestCommentController {
     }
 
     @PutMapping("/share")
-    public ResponseEntity<?> shareComment(@RequestParam("commentId") Integer commentId,
+    public ResponseEntity<?> shareComment(@RequestBody RequestCommentDTO requestCommentDTO,
                                           @RequestParam("groupName") String groupName) {
         try{
-            this.requestCommentService.shareCommentWith(commentId, groupName);
+            this.requestCommentService.shareCommentWith(requestCommentDTO, groupName);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method shareComment : " + e.getMessage());

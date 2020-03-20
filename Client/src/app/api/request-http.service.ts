@@ -149,11 +149,9 @@ export class RequestHttpService {
     return this.http.put(environment.apiUrl + `requests/comment/privacy`, requestComment);
   }
 
-  public shareComment(commentId: number, groupName: string): Observable<any> {
-    const params = new HttpParams()
-      .set("commentId", String(commentId))
-      .set("groupName", groupName);
-    return this.http.put(environment.apiUrl + `requests/comment/share`, null, {params});
+  public shareComment(requestComment: RequestComment, groupName: string): Observable<any> {
+    const params = new HttpParams().set("groupName", groupName);
+    return this.http.put(environment.apiUrl + `requests/comment/share`, requestComment, {params});
   }
 
 }

@@ -3,7 +3,7 @@ import {RequestComment, Request, RequestCommentWrapper} from 'app/core/model/Req
 import {Observable} from 'rxjs';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {UserStoreService} from 'app/core/services/user-store.service';
-import {RequestService} from 'app/core/services/request.service';
+import {RequestService} from 'app/features/requirement/services/request.service';
 import {GroupHttpService} from "../../../../../api/group-http.service";
 import {Group} from "../../../../../core/model/Group";
 import {Store} from "@ngrx/store";

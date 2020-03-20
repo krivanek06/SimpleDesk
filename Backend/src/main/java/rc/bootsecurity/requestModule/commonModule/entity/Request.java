@@ -81,9 +81,9 @@ public abstract class Request {
     /**
      * comments to request
      */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
+   /* @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
     @EqualsAndHashCode.Exclude
-    private List<RequestComment> requestComments;
+    private List<RequestComment> requestComments;*/
 
     /**
      * get users who watch this request
