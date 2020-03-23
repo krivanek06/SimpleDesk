@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import { Observable } from 'rxjs';
 import { UserStoreService } from 'app/core/services/user-store.service';
 
 @Component({
   selector: 'app-request-forms',
   templateUrl: './request-forms.component.html',
-  styleUrls: ['./request-forms.component.scss']
+  styleUrls: ['./request-forms.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestFormsComponent implements OnInit {
   hasFinanceModuleAccess$: Observable<boolean>;

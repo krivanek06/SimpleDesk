@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {RequestComment, RequestCommentWrapper} from 'app/core/model/Request';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
@@ -9,7 +9,8 @@ import {UserSimpleDTO} from "../../../../../../core/model/User";
 @Component({
   selector: 'app-request-comment-form',
   templateUrl: './request-comment-form.component.html',
-  styleUrls: ['./request-comment-form.component.scss']
+  styleUrls: ['./request-comment-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestCommentFormComponent implements OnInit {
   commentInput = '';

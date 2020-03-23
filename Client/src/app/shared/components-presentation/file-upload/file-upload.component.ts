@@ -1,4 +1,4 @@
-import {Component, OnInit, Input, Output} from '@angular/core';
+import {Component, OnInit, Input, Output, ChangeDetectionStrategy} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {CustomDocument} from "../../../core/model/Request";
@@ -6,17 +6,18 @@ import {CustomDocument} from "../../../core/model/Request";
 @Component({
   selector: 'app-file-upload',
   templateUrl: './file-upload.component.html',
-  styleUrls: ['./file-upload.component.scss']
+  styleUrls: ['./file-upload.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FileUploadComponent {
 
   constructor(private swallNotification: SwallNotificationService) {
   }
 
-  @Output() public fileInserted: EventEmitter<CustomDocument[]> = new EventEmitter<CustomDocument[]>();
-  @Input() public uploaderHeight: number;
-  @Input() public requiredUpload: boolean;
-  @Input() public hideIt = false;
+  @Output() fileInserted: EventEmitter<CustomDocument[]> = new EventEmitter<CustomDocument[]>();
+  @Input() uploaderHeight: number;
+  @Input() requiredUpload: boolean;
+  @Input() hideIt = false;
 
   files: File[] = [];
 

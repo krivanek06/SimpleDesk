@@ -113,11 +113,11 @@ public class RequestCommentService {
         this.requestLogService.BroadcastRequest(request);
     }
 
-    public void editComment(RequestCommentDTO requestCommentDTO){
-        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        requestComment.setComment(requestCommentDTO.getComment());
+    public void editComment(Integer requestId, Integer commentId, String comment){
+        RequestComment requestComment = this.getRequestComment(commentId);
+        requestComment.setComment(comment);
         this.saveOrUpdateComment(requestComment);
-        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
+        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestId));
     }
 
     public void changePrivacy(RequestCommentDTO requestCommentDTO){
@@ -137,9 +137,7 @@ public class RequestCommentService {
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
         requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(groupName));
         this.saveOrUpdateComment(requestComment);
-        this.requestLogService.BroadcastRequest(
-                this.requestService.loadRequestById(requestCommentDTO.getRequestId()),
-                this.requestWebsockets.SHARED_COMMENT);
+        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
     }
 
 

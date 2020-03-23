@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
@@ -11,7 +11,7 @@ import {
   getClosedRequestDateRange,
   getClosedRequestFilterState,
   getClosedRequests,
-  isClosedLoaded
+  isClosedLoaded, isDashboardLoaded
 } from "../store/request.reducer";
 import {filter, takeUntil} from "rxjs/operators";
 import {DatePipe} from "@angular/common";
@@ -21,7 +21,8 @@ import * as RequestAction from '../store/request.action';
 @Component({
   selector: 'app-request-closed',
   templateUrl: './request-closed.component.html',
-  styleUrls: ['./request-closed.component.scss']
+  styleUrls: ['./request-closed.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestClosedComponent implements OnInit, OnDestroy {
 
@@ -47,6 +48,7 @@ export class RequestClosedComponent implements OnInit, OnDestroy {
     this.customDate$ = this.store.pipe(select(getClosedRequestDateRange));
     this.filterRequests$ = this.store.pipe(select(getClosedRequestFilterState));
 
+    this.spinner.show();
     this.store.pipe(
       select(isClosedLoaded),
       takeUntil(this.destroy$)

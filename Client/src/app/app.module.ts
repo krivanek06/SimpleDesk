@@ -48,7 +48,7 @@ import {RouterCustomSerializer} from "./shared/utils/router.serializer";
     RouterModule,
 
     StoreModule.forRoot({
-      router: routerReducer
+      router: routerReducer,
     }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({

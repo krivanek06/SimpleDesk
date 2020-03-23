@@ -11,7 +11,7 @@ import {SwallNotificationService} from 'app/shared/services/swall-notification.s
 import {NgxSpinnerService} from 'ngx-spinner';
 import {UserImagesComponent} from './presentation/user-images/user-images.component';
 import {GroupContainer} from "../../core/model/Group";
-import {ImageDTO, PasswordContainer} from "../../core/model/User";
+import {ImageDTO, PasswordContainer, User} from "../../core/model/User";
 import {ApplicationPrivilege} from "../../core/model/Request";
 
 @Component({
@@ -23,6 +23,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
 
   displayAvatars = false;
   groupContainer$: Observable<GroupContainer>;
+  user$: Observable<User>;
 
   @ViewChild('userDetials') userDetials: UserDetailsComponent;
   @ViewChild('userPrivileges') userPrivileges: PrivilegesComponent;
@@ -32,7 +33,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
 
 
   constructor(private authService: AuthenticationService,
-              public userService: UserStoreService,
+              private userService: UserStoreService,
               private groupService: GroupHttpService,
               private userHttp: UserHttpService,
               private swallNotification: SwallNotificationService,
@@ -40,6 +41,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit() {
+    this.user$ = this.userService.getUser();
     this.groupContainer$ = this.groupService.getAllGroupContainersForUser();
   }
 

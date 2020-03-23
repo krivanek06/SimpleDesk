@@ -1,11 +1,12 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
 import { UserSimpleDTO} from 'app/core/model/User';
 import {Group} from "../../../core/model/Group";
 
 @Component({
   selector: 'app-group-details',
   templateUrl: './group-details.component.html',
-  styleUrls: ['./group-details.component.scss']
+  styleUrls: ['./group-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupDetailsComponent implements OnInit {
 

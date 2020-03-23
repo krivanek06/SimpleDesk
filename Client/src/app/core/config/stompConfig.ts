@@ -16,7 +16,7 @@ export const stompConfig: InjectableRxStompConfig = {
   heartbeatOutgoing: 20000, // Typical value 20000 - every 20 seconds
 
   // Wait in milliseconds before attempting auto reconnect
-  reconnectDelay: 60000,
+  reconnectDelay: 5000,
 
   // Will log diagnostics on console
   // It can be quite verbose, not recommended in production

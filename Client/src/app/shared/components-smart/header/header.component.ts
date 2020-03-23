@@ -5,6 +5,9 @@ import {AuthenticationService} from "../../../core/services/authentication.servi
 import {Observable} from "rxjs";
 import {User} from "../../../core/model/User";
 import {RequestService} from "../../../features/requirement/services/request.service";
+import {Store} from "@ngrx/store";
+import {AppState, RequestState} from "../../../core/model/appState.model";
+import {resetRequests} from "../../../features/requirement/store/request.action";
 
 @Component({
   selector: 'app-header',
@@ -17,7 +20,8 @@ export class HeaderComponent implements OnInit {
   constructor(private userStoreService: UserStoreService,
               private requestService: RequestService,
               private router: Router,
-              private authService: AuthenticationService) {
+              private authService: AuthenticationService,
+              private store: Store<RequestState>) {
   }
 
   ngOnInit() {
@@ -29,5 +33,6 @@ export class HeaderComponent implements OnInit {
     this.userStoreService.logOut();
     this.requestService.disconnectWebsockets();
     this.authService.logout();
+    this.store.dispatch(resetRequests());
   }
 }

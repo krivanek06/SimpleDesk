@@ -44,9 +44,7 @@ public class RequestConverter {
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
         requestDTO.setDocuments(this.fileService.getFileForRequest(request.getId()));
-       // requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
-       //         request.getRequestComments().stream().map(this::convertRequestCommentToDTO).collect(Collectors.toList()) : new ArrayList<>());
-
+        requestDTO.setRequestCommentDTOS(new ArrayList<>());
     }
 
     public void addImage(HashMap requestDTO){

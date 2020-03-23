@@ -1,10 +1,11 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy} from '@angular/core';
 
 
 @Component({
   selector: 'app-request-comment-sharing',
   templateUrl: './request-comment-sharing.component.html',
-  styleUrls: ['./request-comment-sharing.component.scss']
+  styleUrls: ['./request-comment-sharing.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestCommentSharingComponent implements OnInit {
   @Output() shareEmitter: EventEmitter<any> = new EventEmitter<any>();

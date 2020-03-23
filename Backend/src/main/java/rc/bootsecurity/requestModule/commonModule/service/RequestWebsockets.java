@@ -50,7 +50,9 @@ public class RequestWebsockets {
         requestDTO.setRequestCommentDTOS(this.requestCommentService.getRequestCommentDTOForRequest(request, user.getUsername()));
         // get all previous logs and add new log
         List<String> logs = this.requestLogRepository.findAllByRequestAndUser(request, user).stream().map(RequestLog::getLogMessage).collect(Collectors.toList());
-        logs.add(message);
+        if(message != null) {
+            logs.add(message);
+        }
 
         String[] logsArray = new String[logs.size()];
         logs.toArray(logsArray);
@@ -59,15 +61,13 @@ public class RequestWebsockets {
     }
 
     public void sendRequest(User user, Request request, String message){
-        this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(), this.constructRequestTableWebsocketsDTO(message, request, user));
+        this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(),
+                this.constructRequestTableWebsocketsDTO(message, request, user));
     }
 
     public void sendRequest(User user, Request request){
-        RequestConverter requestConverter = new RequestConverter();
-        RequestDTO requestDTO = requestConverter.convertRequestToRequestDTO(request);
-        requestDTO.setRequestCommentDTOS(this.requestCommentService.getRequestCommentDTOForRequest(request, user.getUsername()));
-
-        this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(), requestDTO);
+        this.messagingTemplate.convertAndSend(DESTINATION_PREFIX + user.getUsername(),
+                this.constructRequestTableWebsocketsDTO(null, request, user));
     }
 
 }

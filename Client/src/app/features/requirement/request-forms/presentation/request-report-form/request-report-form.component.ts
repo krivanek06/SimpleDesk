@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {accessValidator} from 'app/features/requirement/request-forms/validators/reportAccessValidator';
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
@@ -21,6 +21,7 @@ export const DD_MM_YYYY_Format = {
   selector: 'app-request-report-form',
   templateUrl: './request-report-form.component.html',
   styleUrls: ['./request-report-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
   ]

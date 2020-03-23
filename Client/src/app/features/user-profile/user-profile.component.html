@@ -14,7 +14,7 @@
             #userDetials
             (changeImageEmitter) = "changeFrames()"
             (changePasswordEmitter) = 'changePassword($event)'
-            [displayedUser] = "userService.user"
+            [displayedUser] = "user$ | async"
             addImageClick = 'true'
             showPasswordChange = 'true'>
         </app-user-details>

@@ -1,10 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import { UserSimpleDTO} from 'app/core/model/User';
 
 @Component({
   selector: 'app-request-management',
   templateUrl: './request-management.component.html',
-  styleUrls: ['./request-management.component.scss']
+  styleUrls: ['./request-management.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestManagementComponent implements OnInit {
   private priority: string;

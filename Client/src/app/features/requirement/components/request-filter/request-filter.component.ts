@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, EventEmitter, OnDestroy, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
@@ -31,13 +31,12 @@ export const DD_MM_YYYY_Format = {
   selector: 'app-request-filter',
   templateUrl: './request-filter.component.html',
   styleUrls: ['./request-filter.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
   ]
 })
 export class RequestFilterComponent implements OnInit, OnDestroy {
-  dateFrom: string;
-  dateTo: string;
   filterForm: FormGroup;
   selectedType: string; // used to display additional filters
 
@@ -45,6 +44,7 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
 
   @Input() allUsers: UserSimpleDTO[];
   @Input() filterRequests: FilterRequest;
+  @Input() customDate: CustomDate;
   @Output() changedDate: EventEmitter<CustomDate> = new EventEmitter<CustomDate>();
   @Output() changedFormFilter: EventEmitter<FilterRequest> = new EventEmitter<FilterRequest>();
 

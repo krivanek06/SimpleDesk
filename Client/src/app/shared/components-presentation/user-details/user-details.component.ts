@@ -1,4 +1,4 @@
-import {Component, OnInit, Output, Input} from '@angular/core';
+import {Component, OnInit, Output, Input, ChangeDetectionStrategy} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {PasswordContainer, User} from 'app/core/model/User';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';

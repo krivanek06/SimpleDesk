@@ -1,10 +1,11 @@
-import {Component, OnInit, Input, Output, EventEmitter} from '@angular/core';
+import {Component, OnInit, Input, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {RequestComment} from 'app/core/model/Request';
 
 @Component({
   selector: 'app-request-comment-options',
   templateUrl: './request-comment-options.component.html',
-  styleUrls: ['./request-comment-options.component.scss']
+  styleUrls: ['./request-comment-options.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestCommentOptionsComponent implements OnInit {
   @Input() requestComment: RequestComment;

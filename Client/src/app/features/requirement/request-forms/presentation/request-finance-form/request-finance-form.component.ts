@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {FinanceForm, FinanceType} from "../../../../../core/model/Request";
 
 @Component({
   selector: 'app-request-finance-form',
   templateUrl: './request-finance-form.component.html',
-  styleUrls: ['./request-finance-form.component.scss']
+  styleUrls: ['./request-finance-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestFinanceFormComponent implements OnInit {
   financeForm: FormGroup;

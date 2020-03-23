@@ -9,6 +9,7 @@
         <app-request-filter
             [allUsers]="allUsers$ | async"
             [filterRequests]="filterRequests$ | async"
+            [customDate]="customDate$ | async"
             (changedDate) = "changeDate($event)"
             (changedFormFilter) = "filterClosedRequests($event)">
         </app-request-filter>

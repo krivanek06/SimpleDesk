@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {TicketForm, TicketSubtype} from "../../../../../core/model/Request";
 
 @Component({
   selector: 'app-request-ticket-form',
   templateUrl: './request-ticket-form.component.html',
-  styleUrls: ['./request-ticket-form.component.scss']
+  styleUrls: ['./request-ticket-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestTicketFormComponent implements OnInit {
   @Input() softwareTypes: TicketSubtype[] = [];

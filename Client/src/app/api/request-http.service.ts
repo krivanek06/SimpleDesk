@@ -137,8 +137,11 @@ export class RequestHttpService {
     return this.http.post<RequestComment>(environment.apiUrl + `requests/comment`, requestCommentWrapper.requestComment, {params});
   }
 
-  public editComment(requestComment: RequestComment): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/comment`, requestComment);
+  public editComment(requestComment: RequestComment, comment: string): Observable<any> {
+    const params = new HttpParams()
+      .set("requestId", String(requestComment.requestId))
+      .set("commentId", String(requestComment.id));
+    return this.http.put(environment.apiUrl + `requests/comment`, comment, {params});
   }
 
   public deleteComment(requestComment: RequestComment): Observable<any> {

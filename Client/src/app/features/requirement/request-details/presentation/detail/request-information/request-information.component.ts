@@ -1,11 +1,12 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Request} from "../../../../../../core/model/Request";
 import {RequestPriority, RequestType} from "../../../../../../core/enum/request.enum";
 
 @Component({
   selector: 'app-request-information',
   templateUrl: './request-information.component.html',
-  styleUrls: ['./request-information.component.scss']
+  styleUrls: ['./request-information.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RequestInformationComponent implements OnInit {
   @Input() request: Request;

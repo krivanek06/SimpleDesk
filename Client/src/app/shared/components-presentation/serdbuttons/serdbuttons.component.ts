@@ -1,9 +1,10 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {Component, OnInit, Output, EventEmitter, Input, ChangeDetectionStrategy} from '@angular/core';
 
 @Component({
   selector: 'app-serdbuttons',
   templateUrl: './serdbuttons.component.html',
-  styleUrls: ['./serdbuttons.component.scss']
+  styleUrls: ['./serdbuttons.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SERDButtonsComponent implements OnInit {
   @Output() deleteEmitter: EventEmitter<any> = new EventEmitter();

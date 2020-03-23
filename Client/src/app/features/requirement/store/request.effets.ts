@@ -92,7 +92,7 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -107,7 +107,7 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -122,7 +122,7 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments});
+              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -192,7 +192,7 @@ export class RequestEffects {
 
   editComment$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.editComment),
-    switchMap(action => this.requestHttpService.editComment(action.requestComment)
+    switchMap(action => this.requestHttpService.editComment(action.requestComment, action.comment)
       .pipe(
         map(() => {
           this.swallNotification.generateNotification(`Komentár bol zmenený`);

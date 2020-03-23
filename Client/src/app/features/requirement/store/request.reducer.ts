@@ -8,7 +8,6 @@ import {routerSelector} from "../../../shared/utils/router.serializer";
 
 
 export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>();
-export const commentAdapter: EntityAdapter<RequestComment> = createEntityAdapter<RequestComment>();
 
 export const initialState: RequestState = requestAdapter.getInitialState({
   error: undefined,
@@ -47,6 +46,10 @@ const requestReducer = createReducer(initialState,
     RequestAction.addRandomSolver,
     RequestAction.downloadFilesSuccess,
     (state) => ({...state})
+  ),
+  on(
+    RequestAction.resetRequests,
+    (state) => (initialState)
   ),
   on(RequestAction.getClosedRequests,
     (state) => ({...state, loadedClosed: false})

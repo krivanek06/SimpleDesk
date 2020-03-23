@@ -33,14 +33,16 @@ public class RequestCommentController {
     }
 
     @PutMapping
-    public ResponseEntity<?> editComment(@RequestBody RequestCommentDTO requestCommentDTO) {
+    public ResponseEntity<?> editComment(@RequestBody String comment,
+                                         @RequestParam Integer requestId,
+                                         @RequestParam Integer commentId) {
         try {
-            this.requestCommentService.editComment(requestCommentDTO);
+            this.requestCommentService.editComment(requestId, commentId, comment);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method editComment, to add comment: " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri editovaní komentára pre požiadavku s id : " + requestCommentDTO.getRequestId() ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri editovaní komentára pre požiadavku s id : " + requestId ,HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping

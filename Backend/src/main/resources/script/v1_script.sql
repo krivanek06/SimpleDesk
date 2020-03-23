@@ -216,14 +216,6 @@ create table tbl_working_day_types(
   name varchar unique --praca , lekar, dovolenka, meeting atd.
 );
 
-
-DROP TABLE IF EXISTS tbl_request_watched_by_user CASCADE;
-create table tbl_request_watched_by_user(
-  id serial primary key,
-  user_id Integer NOT NULL,
-  request_id Integer NOT NULL
-);
-
 DROP TABLE IF EXISTS tbl_request_type_to_solve CASCADE;
 create table tbl_request_type_to_solve
 (
@@ -281,11 +273,8 @@ create table tbl_request_logs(
     request_id int,
     user_id int,
     log_message varchar,
-    timestamp_creation timestamp,
-    timestamp_closed timestamp
+    timestamp_creation timestamp
 );
-
-
 
 
 alter table tbl_request_logs add foreign key(request_id) references tbl_requests(id);
@@ -320,8 +309,6 @@ ALTER TABLE tbl_requests ADD FOREIGN KEY (closed_uid) REFERENCES tbl_users(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (position_id) REFERENCES tbl_request_positions(id);
 ALTER TABLE tbl_requests ADD FOREIGN KEY (type_id) REFERENCES tbl_module_type(id);
 
-ALTER TABLE tbl_request_watched_by_user ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
-ALTER TABLE tbl_request_watched_by_user ADD FOREIGN KEY (request_id) REFERENCES tbl_requests(id);
 
 ALTER TABLE tbl_working_days ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_working_days ADD FOREIGN KEY (working_day_type_id) REFERENCES tbl_working_day_types(id);
@@ -526,8 +513,9 @@ select distinct username from (
 
       union
       -- select manager of creator or assaigned
-      select user5.username from tbl_users user5
-                                     inner join tbl_groups on tbl_groups.manager_id = user5.id
+      select user5.username
+      from tbl_users user5
+      inner join tbl_groups on tbl_groups.manager_id = user5.id
       where tbl_groups.id in (
           select tg1.group_id from tbl_user_groups tg1
           where tg1.user_id in (
@@ -637,7 +625,7 @@ $$ LANGUAGE sql;
 
 drop function if exists get_request_extended_information(integer, varchar);
 CREATE OR REPLACE FUNCTION get_request_extended_information( searching_request_id integer, request_type varchar)
-    RETURNS varchar AS $$
+    RETURNS json AS $$
 select
     case when request_type = 'Report' then ( select json_build_object(
         'owner', r_owner ,
@@ -654,7 +642,7 @@ select
     ) from tbl_reports
     inner join tbl_report_types on tbl_report_types.id = tbl_reports.r_type_id
     inner join tbl_report_refreshes on tbl_report_refreshes.id = tbl_reports.r_refresh_id
-    where tbl_reports.request_id = searching_request_id )::varchar
+    where tbl_reports.request_id = searching_request_id )
 
     when request_type = 'Ticket' then ( select json_build_object(
         'ticketType', tbl_ticket_types.name,
@@ -662,13 +650,13 @@ select
         'problem' , t_request
     ) from tbl_tickets
     inner join tbl_ticket_types on tbl_ticket_types.id = tbl_tickets.t_type_id
-    where tbl_tickets.request_id = searching_request_id )::varchar
+    where tbl_tickets.request_id = searching_request_id )
 
     when request_type = 'Finance' then ( select json_build_object(
         'financeType' , tbl_finance_types.name
     ) from tbl_finances
     inner join tbl_finance_types on tbl_finance_types.id = tbl_finances.finance_type_id
-    where tbl_finances.request_id = searching_request_id )::varchar
+    where tbl_finances.request_id = searching_request_id )
 
 end as request_extended_information
 $$ LANGUAGE sql;
@@ -734,7 +722,7 @@ select json_agg( json_build_object(
     'requestCommentDTOS', (select * from get_request_comment_dto(id, searching_name)),
     'extendedInformation' , (select * from get_request_extended_information(id, name)),
     'logs', (select json_agg(log_message) from tbl_request_logs
-             where request_id = t.id and user_id = (select id from tbl_users where username = searching_name) and timestamp_closed is null)
+             where request_id = t.id and user_id = (select id from tbl_users where username = searching_name))
 ) ) as my_open_requests
 from (select r.id ,
      trp.name as requestPriority,

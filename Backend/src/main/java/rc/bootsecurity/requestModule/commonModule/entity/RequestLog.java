@@ -32,7 +32,4 @@ public class RequestLog {
     @Column(name = "timestamp_creation")
     private Timestamp timestampCreation;
 
-    @Column(name = "timestamp_closed")
-    private Timestamp timestampClosed;
-
 }

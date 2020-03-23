@@ -262,3 +262,7 @@ export const changeClosedRequestFilter = createAction(
   '[Closed Request Page] Change date range',
   props<{ filterRequests: FilterRequest }>()
 );
+
+
+export const resetRequests = createAction('[Header] Logout, reset request store');
+
