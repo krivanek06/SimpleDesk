@@ -3,6 +3,9 @@ package rc.bootsecurity.requestModule.requestCommentModule.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rc.bootsecurity.requestModule.commonModule.service.RequestLogService;
+import rc.bootsecurity.requestModule.commonModule.service.RequestWebsockets;
+import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
 import rc.bootsecurity.requestModule.requestCommentModule.exception.CommentNotFoundException;
 import rc.bootsecurity.groupModule.dto.GroupContainerDTO;
 import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
@@ -16,6 +19,8 @@ import rc.bootsecurity.requestModule.requestCommentModule.repository.RequestComm
 import rc.bootsecurity.groupModule.service.GroupService;
 import rc.bootsecurity.userModule.service.UserService;
 import rc.bootsecurity.notificationModule.emailModule.EmailService;
+import rc.bootsecurity.util.JsonStringParser;
+import rc.bootsecurity.util.fileModule.FileService;
 
 import java.sql.Timestamp;
 import java.util.*;
@@ -34,30 +39,17 @@ public class RequestCommentService {
     private GroupService groupService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private RequestWebsockets requestWebsockets;
+    @Autowired
+    private RequestLogService requestLogService;
 
-
-    public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
-
-    @Transactional
-    public void deleteComment(RequestCommentDTO requestCommentDTO){
-        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        Integer solutionCommentId = requestComment.getRequest().getSolutionComment();
-        if( solutionCommentId != null && solutionCommentId.equals(requestComment.getId())){
-            requestComment.getRequest().setSolutionComment(null);
-            this.requestService.saveRequest(requestComment.getRequest());
-        }
-        this.requestCommentRepository.delete(requestComment);
-    }
 
     private RequestComment getRequestComment(RequestCommentDTO requestCommentDTO){
         return this.getRequestComment(requestCommentDTO.getId());
     }
 
-    public RequestComment getRequestComment(Integer id){
-        return this.requestCommentRepository.findById(id).orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + id));
-    }
-
-    public RequestComment createRequestComment(RequestCommentDTO requestCommentDTO){
+    private RequestComment createRequestComment(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = new RequestComment();
         requestComment.setComment(requestCommentDTO.getComment());
         requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
@@ -69,6 +61,24 @@ public class RequestCommentService {
         return requestComment;
     }
 
+    private void informCreatorAndAssignedAboutComment(RequestComment requestComment){
+        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
+        String creatorEmail  = requestComment.getRequest().getCreator().getEmail();
+
+        if(requestComment.getRequest().getAssigned() != null){
+            String assignedEmail = requestComment.getRequest().getAssigned().getEmail();
+            this.emailService.sendRequestCommentEmail(requestComment.getRequest(), user, requestComment.getComment(), assignedEmail);
+        }
+        this.emailService.sendRequestCommentEmail(requestComment.getRequest(), user, requestComment.getComment(),creatorEmail);
+
+    }
+
+    public void saveOrUpdateComment(RequestComment requestComment){ this.requestCommentRepository.save(requestComment); }
+
+    public RequestComment getRequestComment(Integer id){
+        return this.requestCommentRepository.findById(id).orElseThrow(() -> new  CommentNotFoundException("Could not find comment with id : " + id));
+    }
+
     @Transactional
     public RequestCommentDTO addRequestComment(RequestCommentDTO requestCommentDTO, boolean sendEmail, boolean solution){
         RequestComment requestComment = this.createRequestComment(requestCommentDTO);
@@ -78,78 +88,70 @@ public class RequestCommentService {
             requestComment.getRequest().setSolutionComment(requestComment.getId());
             this.requestService.saveRequest(requestComment.getRequest());
         }
-        //getting nested exception
+
         if(sendEmail || solution)
             this.informCreatorAndAssignedAboutComment(requestComment);
 
+        if(!requestCommentDTO.getIsPrivate())
+            this.requestLogService.BroadcastRequest(requestComment.getRequest(),  this.requestWebsockets.ADDED_COMMENT);
+
         requestCommentDTO.setId(requestComment.getId());
+
         return requestCommentDTO;
     }
 
-    public void informCreatorAndAssignedAboutComment(RequestComment requestComment){
-        User user = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
-        String assignedEmail  = requestComment.getRequest().getAssigned() != null ? requestComment.getRequest().getAssigned().getEmail() : "";
-        String creatorEmail  = requestComment.getRequest().getCreator().getEmail();
-        this.emailService.sendRequestCommentEmail(requestComment.getRequest(), user, requestComment.getComment(), assignedEmail,creatorEmail);
-
+    @Transactional
+    public void deleteComment(RequestCommentDTO requestCommentDTO){
+        RequestComment requestComment = this.getRequestComment(requestCommentDTO);
+        Integer solutionCommentId = requestComment.getRequest().getSolutionComment();
+        if( solutionCommentId != null && solutionCommentId.equals(requestComment.getId())){
+            requestComment.getRequest().setSolutionComment(null);
+            this.requestService.saveRequest(requestComment.getRequest());
+        }
+        Request request = requestComment.getRequest();
+        this.requestCommentRepository.delete(requestComment);
+        this.requestLogService.BroadcastRequest(request);
     }
 
-    public void modifyComment(RequestCommentDTO requestCommentDTO){
+    public void editComment(Integer requestId, Integer commentId, String comment){
+        RequestComment requestComment = this.getRequestComment(commentId);
+        requestComment.setComment(comment);
+        this.saveOrUpdateComment(requestComment);
+        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestId));
+    }
+
+    public void changePrivacy(RequestCommentDTO requestCommentDTO){
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-        requestComment.setComment(requestCommentDTO.getComment());
-        requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
+        requestComment.setIsPrivate(!requestCommentDTO.getIsPrivate());
         if(!requestCommentDTO.getIsPrivate()){
             requestComment.setGroupsToViewRequestComment(null);
         }
-
         this.saveOrUpdateComment(requestComment);
+        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
     }
 
-    public void shareCommentWith(RequestCommentDTO requestCommentDTO){
-        if(requestCommentDTO.getGroupsToShare().size() == 0)
+    public void shareCommentWith(RequestCommentDTO requestCommentDTO, String groupName){
+        if(requestCommentDTO == null || groupName == null)
             return;
 
         RequestComment requestComment = this.getRequestComment(requestCommentDTO);
-
-        String lastGroupNameInserted = requestCommentDTO.getGroupsToShare().get(requestCommentDTO.getGroupsToShare().size() -1);
-        requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(lastGroupNameInserted));
+        requestComment.getGroupsToViewRequestComment().add(this.groupService.getGroupByGroupName(groupName));
         this.saveOrUpdateComment(requestComment);
+        this.requestLogService.BroadcastRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
     }
 
-    /**
-     * filters out private comment which are not shared with my groups
-     */
-    public List<RequestComment> getRequestCommentsForRequest(Request request, String username){
-        List<RequestComment> requestComments = this.requestCommentRepository.findAllByRequestOrderByTimestampAsc(request).orElseGet(ArrayList::new);
-        if(username.equalsIgnoreCase(USER_TYPE.Admin.name()) || username.equalsIgnoreCase(USER_TYPE.Ghost.name())){
-            return requestComments;
-        }
 
-        List<RequestComment> filtered = new ArrayList<>();
+    public List<RequestCommentDTO> getRequestCommentDTOForRequest(Request request, String username){
+        JsonStringParser jsonStringParser = new JsonStringParser();
+        FileService fileService = new FileService();
 
-        GroupContainerDTO groupContainerDTO = this.groupService.getAllGroupsDTOForLoggedInUser();
-        Set<String> groups  =  Stream.of(groupContainerDTO.getManagerOfGroups(), groupContainerDTO.getUserInGroups(),
-                groupContainerDTO.getWatchedGroupActivity()).flatMap(Collection::stream).collect(Collectors.toSet());
+        String rawJson = (username.equalsIgnoreCase(USER_TYPE.Ghost.name()) || username.equalsIgnoreCase(USER_TYPE.Admin.name())) ?
+                this.requestCommentRepository.getAllRequestCommentDto(request.getId()):
+                this.requestCommentRepository.getRequestCommentDtoForUser(request.getId(), username);
+        List<RequestCommentDTO> comments = jsonStringParser.convertRawJsonToRequestCommentDTO(rawJson);
+        comments.forEach(comment -> comment.getCreator().setUserImageByte(fileService.getUserImage(comment.getCreator().getUserImageString())));
 
-        for(RequestComment requestComment : requestComments){
-            if(requestComment.getIsPrivate()){
-                if(requestComment.getUser().getUsername().equalsIgnoreCase(username) ||
-                        username.equalsIgnoreCase(USER_TYPE.Admin.name()) || username.equalsIgnoreCase(USER_TYPE.Ghost.name())){
-                    filtered.add(requestComment);
-                }else {
-                    List<String> requestCommentGroupNames = requestComment.getGroupsToViewRequestComment().stream()
-                            .map(Group::getGroupName).collect(Collectors.toList());
+        return comments;
 
-                    requestCommentGroupNames.retainAll(groups);
-                    if (requestCommentGroupNames.size() > 0) {
-                        filtered.add(requestComment);
-                    }
-                }
-                continue;
-            }
-            filtered.add(requestComment);
-        }
-        return filtered;
     }
-
 }

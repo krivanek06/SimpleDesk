@@ -1,18 +1,12 @@
 package rc.bootsecurity.groupModule.dto;
 
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
 import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 
 import java.util.List;
 
-@Getter
-@Setter
-@EqualsAndHashCode
-@ToString
+@Data
 public class GroupDTO {
     private Integer id;
 

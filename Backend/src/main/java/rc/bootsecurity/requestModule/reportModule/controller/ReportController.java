@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import rc.bootsecurity.requestModule.reportModule.dto.ReportDTO;
-import rc.bootsecurity.requestModule.reportModule.entity.Report;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
+import rc.bootsecurity.requestModule.reportModule.dto.ReportFormDTO;
 import rc.bootsecurity.requestModule.reportModule.service.ReportService;
 
 @RestController
@@ -19,11 +19,10 @@ public class ReportController {
     private ReportService reportService;
 
     @PostMapping
-    public ResponseEntity<?> submitReport(@RequestBody ReportDTO reportDTO){
+    public ResponseEntity<?> submitReport(@RequestBody ReportFormDTO reportFormDTO){
         try {
-            Report report = this.reportService.createReport(reportDTO);
-            this.reportService.saveOrUpdateRequest(report);
-            return new ResponseEntity<>(report.getId(), HttpStatus.OK);
+            RequestDTO reportDTO = this.reportService.createReport(reportFormDTO);
+            return new ResponseEntity<>(reportDTO, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to save report into database, error : " + e.getMessage());
         }

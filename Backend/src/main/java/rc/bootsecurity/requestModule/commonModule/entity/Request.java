@@ -4,13 +4,10 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import rc.bootsecurity.requestModule.requestCommentModule.entity.RequestComment;
 import rc.bootsecurity.userModule.entity.User;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Set;
 
 
 
@@ -55,14 +52,6 @@ public abstract class Request {
     @JoinColumn(name = "type_id")
     private ModuleType moduleType;
 
-    /*@ManyToMany(fetch = FetchType.LAZY)
-    @EqualsAndHashCode.Exclude
-    @JoinTable(name = "tbl_document_to_requests",
-            joinColumns = { @JoinColumn(name = "request_id")},
-            inverseJoinColumns = { @JoinColumn(name = "document_id")})
-    private List<Document> documents;*/
-
-    // users ------------------------
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "creator_uid")
     private User creator;
@@ -74,31 +63,5 @@ public abstract class Request {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "closed_uid")
     private User closed;
-    // -------------------------
-
-
-
-    /**
-     * comments to request
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "request")
-    @EqualsAndHashCode.Exclude
-    private List<RequestComment> requestComments;
-
-    /**
-     * get users who watch this request
-     */
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "tbl_request_watched_by_user",
-            joinColumns = { @JoinColumn(name = "request_id")},
-            inverseJoinColumns = { @JoinColumn(name = "user_id")})
-    @OrderBy("id ASC")
-    @EqualsAndHashCode.Exclude
-    private Set<User> userWhoWatchThisRequest;
-
-
-
-
-
 
 }

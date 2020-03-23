@@ -7,6 +7,7 @@ import rc.bootsecurity.util.fileModule.FileService;
 import rc.bootsecurity.util.RandomGenerator;
 
 import java.sql.Timestamp;
+import java.util.Optional;
 
 public class UserConverter {
     private FileService fileService = new FileService();
@@ -16,19 +17,13 @@ public class UserConverter {
         userSimpleDTO.setUsername(user.getUsername());
         userSimpleDTO.setFirstName(user.getFirstName());
         userSimpleDTO.setLastName(user.getLastName());
-        userSimpleDTO.setPhotoBytes(this.fileService.getUserImage(user.getPhoto()));
+        userSimpleDTO.setEmail(user.getEmail());
+        userSimpleDTO.setUserShortedName(user.getFirstName().substring(0,1) + ". " + user.getLastName());
+        userSimpleDTO.setUserImageString(user.getPhoto());
+        userSimpleDTO.setUserImageByte(this.fileService.getUserImage(user.getPhoto()));
         return userSimpleDTO;
     }
 
-    public UserSimpleDTO convertUserToSimpleDTOWithoutImage(User user){
-        UserSimpleDTO userSimpleDTO = new UserSimpleDTO();
-        userSimpleDTO.setUsername(user.getUsername());
-        userSimpleDTO.setFirstName(user.getFirstName());
-        userSimpleDTO.setLastName(user.getLastName());
-        userSimpleDTO.setPhotoBytes(null);
-        userSimpleDTO.setFullNameShort(user.getFirstName().substring(0,1) + ". " + user.getLastName());
-        return userSimpleDTO;
-    }
 
     public UserDTO convertUserToUserDTO(User user){
         UserDTO userDTOSimple = new UserDTO();
@@ -44,20 +39,18 @@ public class UserConverter {
         userDTOSimple.setDateCreation(user.getDateCreation());
         userDTOSimple.setDateEnding(user.getDateEnding());
 
-
-
         return  userDTOSimple;
     }
 
-    public User generateFreshUser(UserDTO userDTO){
+    public User generateFreshUser(UserSimpleDTO userSimpleDTO){
         User user = new User();
         RandomGenerator randomGenerator = new RandomGenerator();
 
-        user.setUsername(userDTO.getUsername());
+        user.setUsername(userSimpleDTO.getUsername());
         user.setPhoto("user.png");
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        user.setEmail(userSimpleDTO.getEmail());
+        user.setFirstName(userSimpleDTO.getFirstName());
+        user.setLastName(userSimpleDTO.getLastName());
         user.setActive(true);
         user.setDateCreation(new Timestamp(System.currentTimeMillis()));
         user.setPassword(randomGenerator.generateString(10));

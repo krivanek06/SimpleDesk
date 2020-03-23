@@ -1,0 +1,37 @@
+<ng-sidebar-container>
+
+  <ng-sidebar [opened]="sideBarBoolean" mode="over" keyClose="false" position="right" [dock]='false'
+              [dockedSize]="'50px'"
+              autoCollapseHeight="null" autoCollapseWidth="null" [closeOnClickOutside]='false' [showBackdrop]='true'
+              [ariaLabel]="'My sidebar'" >
+
+    <div id='sliderDiv1' (click)='openSideBar()'>
+      <i class="material-icons sliderButton"> reorder</i>
+    </div>
+    <hr>
+    <!-- display request management -->
+    <app-request-management-container></app-request-management-container>
+  </ng-sidebar>
+
+  <div ng-sidebar-content>
+
+    <app-header></app-header>
+
+    <app-navigation></app-navigation>
+
+    <div id='contentContainer' >
+      <!-- display details -->
+      <div id=requestRightSide>
+        <app-request-information-container  (closeBarEmitter)="openSideBar()"></app-request-information-container>
+      </div>
+
+      <!-- display comments -->
+      <div id=requestLeftSide>
+        <app-request-comment-container [applyZIndex]="!sideBarBoolean"></app-request-comment-container>
+      </div>
+    </div>
+
+    <ngx-spinner><p style="font-size: 20px; color: white">Načítavam požiadavku...</p></ngx-spinner>
+  </div>
+
+</ng-sidebar-container>

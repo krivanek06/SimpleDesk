@@ -2,33 +2,42 @@ package rc.bootsecurity.requestModule.ticketModule.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import rc.bootsecurity.requestModule.ticketModule.dto.TicketDTO;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
+import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
+import rc.bootsecurity.requestModule.commonModule.utils.RequestConverter;
+import rc.bootsecurity.requestModule.ticketModule.dto.TicketFormDTO;
 import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketSubtype;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketSubtypeRepository;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketTypeRepository;
-import rc.bootsecurity.requestModule.commonModule.service.RequestStateService;
 
 import java.util.List;
 
 @Service
-public class TicketService extends RequestStateService {
+public class TicketService extends RequestManagementService {
     @Autowired
     private TicketTypeRepository ticketTypeRepository;
     @Autowired
     private TicketSubtypeRepository ticketSubtypeRepository;
 
 
-    public Ticket createTicket(TicketDTO ticketDTO){
+    public RequestDTO createTicket(TicketFormDTO ticketFormDTO){
         Ticket ticket = new Ticket();
-        this.setAttributesForRequest(ticket, MODULE_TYPE.Ticket.name(),ticketDTO.getName(), ticketDTO.getRequestPriority());
+        RequestConverter requestConverter = new RequestConverter();
 
-        ticket.setTicketSubtypeName(ticketDTO.getTicketSubtypeName());
-        ticket.setTicketType(this.ticketTypeRepository.findByName(ticketDTO.getTicketType()));
-        ticket.setProblem(ticketDTO.getProblem());
+        this.setAttributesForRequest(ticket, MODULE_TYPE.Ticket.name(),ticketFormDTO.getName(), ticketFormDTO.getRequestPriority());
 
-        return ticket;
+        ticket.setTicketSubtypeName(ticketFormDTO.getTicketSubtypeName());
+        ticket.setTicketType(this.ticketTypeRepository.findByName(ticketFormDTO.getTicketType()));
+        ticket.setProblem(ticketFormDTO.getProblem());
+
+        super.saveOrUpdateRequest(ticket);
+
+        this.requestLogService.BroadcastRequest(ticket, super.requestWebsockets.NEW_REQUEST);
+
+        return requestConverter.convertRequestToRequestDTO(ticket);
     }
 
     public List<TicketSubtype> getTicketSubtypesForTicketType(String ticketTypeName){

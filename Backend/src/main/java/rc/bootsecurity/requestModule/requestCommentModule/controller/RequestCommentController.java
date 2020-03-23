@@ -33,14 +33,16 @@ public class RequestCommentController {
     }
 
     @PutMapping
-    public ResponseEntity<?> editComment(@RequestBody RequestCommentDTO requestCommentDTO) {
+    public ResponseEntity<?> editComment(@RequestBody String comment,
+                                         @RequestParam Integer requestId,
+                                         @RequestParam Integer commentId) {
         try {
-            this.requestCommentService.modifyComment(requestCommentDTO);
+            this.requestCommentService.editComment(requestId, commentId, comment);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method editComment, to add comment: " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri editovaní komentára pre požiadavku s id : " + requestCommentDTO.getRequestId() ,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri editovaní komentára pre požiadavku s id : " + requestId ,HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping
@@ -57,18 +59,19 @@ public class RequestCommentController {
     @PutMapping("/privacy")
     public ResponseEntity<?> changeCommentPrivacy(@RequestBody RequestCommentDTO requestCommentDTO) {
         try{
-            this.requestCommentService.modifyComment(requestCommentDTO);
+            this.requestCommentService.changePrivacy(requestCommentDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method changeCommentPrivacy, to add comment: " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse z zmazanie komentára", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri zmene stavu komentára", HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/share")
-    public ResponseEntity<?> shareComment(@RequestBody RequestCommentDTO requestCommentDTO) {
+    public ResponseEntity<?> shareComment(@RequestBody RequestCommentDTO requestCommentDTO,
+                                          @RequestParam("groupName") String groupName) {
         try{
-            this.requestCommentService.shareCommentWith(requestCommentDTO);
+            this.requestCommentService.shareCommentWith(requestCommentDTO, groupName);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed method shareComment : " + e.getMessage());

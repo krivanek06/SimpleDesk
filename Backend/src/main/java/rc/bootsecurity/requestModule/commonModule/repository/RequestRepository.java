@@ -10,8 +10,6 @@ import java.util.Optional;
 
 @Repository
 public interface RequestRepository extends JpaRepository<Request, Integer> {
-    Optional<List<Request>> findAllByNameStartingWithOrderByIdAsc(String subject);
-
 
     @Query(nativeQuery = true, value = "select * from get_requests_on_dashboard_for_user_varchar(?1);")
     String findOpenRequestOnDashboard(String searching_name);

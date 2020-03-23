@@ -1,0 +1,45 @@
+<ng-container *ngIf="requestComment">
+  <img *ngIf='requestComment.isPrivate  &&  !isSolution'
+       src="../../../../../../../assets/images_design/share_icon.png"
+       class='icon'
+       (click)="shareComment()"
+       matTooltip="Zdieľať"
+       matTooltipPosition="right"
+       matTooltipClass="custom-tooltip-icon"
+       matTooltipShowDelay="200"/>
+
+  <img *ngIf=' requestComment.isPrivate  &&  !isSolution'
+       src="../../../../../../../assets/images_design/lock_closed_icon.png"
+       class='icon'
+       (click)="lockComment()"
+       matTooltip="Otvoriť"
+       matTooltipPosition="right"
+       matTooltipClass="custom-tooltip-icon"
+       matTooltipShowDelay="200"/>
+
+  <img *ngIf='!requestComment.isPrivate &&  !isSolution '
+       src="assets/images_design/lock_open_icon.png"
+       class='icon'
+       (click)="lockComment()"
+       matTooltip="Uzamknúť"
+       matTooltipPosition="right"
+       matTooltipClass="custom-tooltip-icon"
+       matTooltipShowDelay="200"/>
+
+
+  <img src="assets/images_design/edit_icon.png"
+       class='icon'
+       (click)="editComment()"
+       matTooltip="Editovať"
+       matTooltipPosition="right"
+       matTooltipClass="custom-tooltip-icon"
+       matTooltipShowDelay="200"/>
+
+  <img src="assets/images_design/delete_bin_icon.png"
+       class='icon'
+       (click)='deleteComment()'
+       matTooltip="Vymazať"
+       matTooltipPosition="right"
+       matTooltipClass="custom-tooltip-icon"
+       matTooltipShowDelay="200"/>
+</ng-container>

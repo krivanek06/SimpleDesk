@@ -47,9 +47,9 @@ public class UserService {
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
 
-    public List<User> getUsersWatchedRequest(Request request){
+   /* public List<User> getUsersWatchedRequest(Request request){
         return this.userRepository.findAllByWatchedRequests(request).orElseGet(ArrayList::new);
-    }
+    }*/
 
     public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.userRepository.findPrivilegesForUser(username));
@@ -130,13 +130,13 @@ public class UserService {
     public List<UserSimpleDTO> getAllActiveUsersWithoutPhoto(){
         return this.userRepository.findAllByActiveTrueOrderById().stream().filter(user ->
                 !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
-                .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList());
     }
 
     public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
         return this.userRepository.findAllByOrderByIdAsc().stream().filter(user ->
                 !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
-                .map(user -> this.userConverter.convertUserToSimpleDTOWithoutImage(user)).collect(Collectors.toList());
+                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList());
     }
 
     public UserDTO getUserDetails(String username){
@@ -161,11 +161,11 @@ public class UserService {
     }
 
 
-    public void registerUser(UserDTO userDTO) throws UserException {
-        if(this.userRepository.findByUsername(userDTO.getUsername()).isPresent()){
+    public void registerUser(UserSimpleDTO userSimpleDTO) throws UserException {
+        if(this.userRepository.findByUsername(userSimpleDTO.getUsername()).isPresent()){
             throw new UserException("User already exists");
         }
-        this.modifyPassword(this.userConverter.generateFreshUser(userDTO));
+        this.modifyPassword(this.userConverter.generateFreshUser(userSimpleDTO));
     }
 
     private void modifyPassword(User user){
@@ -183,6 +183,10 @@ public class UserService {
         User user = this.loadUserByUsername(username);
         user.setActive(!user.getActive());
         this.userRepository.save(user);
+    }
+
+    public List<String> getUsersToSendRequestChange(Integer requestId) {
+        return this.userRepository.getUsersToSendRequestChange(requestId);
     }
 
 

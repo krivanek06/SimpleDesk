@@ -15,7 +15,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode
-public abstract class RequestDTO {
+public class RequestDTO {
     private Integer id;
 
     private Timestamp timestampCreation;
@@ -40,9 +40,11 @@ public abstract class RequestDTO {
 
     private Integer solutionComment;
 
-    private List<UserSimpleDTO> userToWatchRequest;
-
     private List<RequestCommentDTO> requestCommentDTOS;
 
     private List<NameFileDTO> documents;
+
+    private String[] logs;
+
+    protected Object extendedInformation;
 }

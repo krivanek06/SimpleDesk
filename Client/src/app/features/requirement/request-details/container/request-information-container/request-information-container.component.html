@@ -1,0 +1,22 @@
+<ng-container *ngIf="request$ | async as request">
+  <!-- button open request management -->
+  <div id='sliderDiv2' (click)='closeSideBar()' *ngIf="!(isGhost$ | async)">
+    <i class="material-icons sliderButton"> reorder</i>
+  </div>
+
+  <!-- request detail -->
+  <app-request-information [request]='request'
+                           [showAssignedOnMe]='isSolver$ | async'
+                           (assignOnMeEmitter)='assignOnMe(request)'
+                           (downloadFileEmitter)="downloadFile(request, $event)">
+  </app-request-information>
+
+  <!-- uploader -->
+  <div class='uploaderContainer'>
+    <app-file-upload *ngIf='!request.closed && !(isGhost$  | async)'
+                     [uploaderHeight]='45'
+                     (fileInserted)="uploadFile(request, $event)"
+                     hideIt=true>
+    </app-file-upload>
+  </div>
+</ng-container>

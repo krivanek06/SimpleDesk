@@ -1,49 +1,34 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule, PreloadAllModules} from '@angular/router';
 import {AuthGuard} from './core/guards/AuthGuard';
-import {LoginComponent} from "./pages/login/login.component";
-import {LoginGuardGuard} from "./pages/login/guard/login-guard.guard";
+import {LoginComponent} from "./features/login/login.component";
+import {LoginGuardGuard} from "./features/login/guard/login-guard.guard";
 
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
   {path: 'login', component: LoginComponent, canActivate: [LoginGuardGuard]},
   {
-    path: 'dashboard',
-    loadChildren: () => import('./pages/dashboard/dashboard.module').then(mod => mod.DashboardModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'request_new',
-    loadChildren: () => import('./pages/request-forms/request-forms.module').then(mod => mod.RequestFormsModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'request_closed',
-    loadChildren: () => import('./pages/request-closed/request-closed.module').then(mod => mod.RequestClosedModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'request_details/:id',
-    loadChildren: () => import('./pages/request-details/request-details.module').then(mod => mod.RequestDetailsModule),
+    path: 'requests',
+    loadChildren: () => import('./features/requirement/requirement.module').then(mod => mod.RequirementModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'user_profile',
-    loadChildren: () => import('./pages/user-profile/user-profile.module').then(mod => mod.UserProfileModule),
+    loadChildren: () => import('./features/user-profile/user-profile.module').then(mod => mod.UserProfileModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'app_management',
-    loadChildren: () => import('./pages/app-management/app-management.module').then(mod => mod.AppManagementModule),
+    loadChildren: () => import('./features/app-management/app-management.module').then(mod => mod.AppManagementModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'unauthorized',
-    loadChildren: () => import('./pages/unauthorized/unauthorized.module').then(mod => mod.UnauthorizedModule),
+    loadChildren: () => import('./features/unauthorized/unauthorized.module').then(mod => mod.UnauthorizedModule),
     canActivate: [AuthGuard]
   },
-  {path: '**', redirectTo: 'dashboard'}
+  {path: '**', redirectTo: 'requests'}
 ];
 
 @NgModule({

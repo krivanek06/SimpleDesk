@@ -1,31 +1,34 @@
 package rc.bootsecurity.requestModule.commonModule.utils;
 
+import rc.bootsecurity.requestModule.financeModule.dto.FinanceExtendedInformationDTO;
+import rc.bootsecurity.requestModule.reportModule.dto.ReportExtendedInformationDTO;
+import rc.bootsecurity.requestModule.ticketModule.dto.TicketExtendedInformationDTO;
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketPrivilegeDTO;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestTableDTO;
-import rc.bootsecurity.requestModule.financeModule.dto.FinanceDTO;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceTypeDTO;
 import rc.bootsecurity.requestModule.financeModule.entity.Finance;
 import rc.bootsecurity.requestModule.financeModule.entity.FinanceType;
-import rc.bootsecurity.requestModule.reportModule.dto.ReportDTO;
 import rc.bootsecurity.requestModule.reportModule.entity.Report;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
 import rc.bootsecurity.requestModule.requestCommentModule.entity.RequestComment;
-import rc.bootsecurity.requestModule.ticketModule.dto.TicketDTO;
 import rc.bootsecurity.requestModule.ticketModule.entity.Ticket;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketPrivileges;
 import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.enums.TICKET_TYPE;
 import rc.bootsecurity.userModule.util.UserConverter;
+import rc.bootsecurity.util.fileModule.FileService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 
 public class RequestConverter {
     private UserConverter userConverter = new UserConverter();
+    private FileService fileService = new FileService();
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
         requestDTO.setRequestType(request.getModuleType().getName());
@@ -40,76 +43,91 @@ public class RequestConverter {
         requestDTO.setRequestPriority(request.getRequestPriority().getName());
         requestDTO.setTimestampCreation(request.getTimestampCreation());
         requestDTO.setTimestampClosed(request.getTimestampClosed());
-        requestDTO.setUserToWatchRequest(request.getUserWhoWatchThisRequest() != null ?
-                request.getUserWhoWatchThisRequest().stream().map(user -> this.userConverter.convertUserToSimpleDTO(user))
-                        .collect(Collectors.toList()) : null);
-        requestDTO.setRequestCommentDTOS(request.getRequestComments() != null ?
-                request.getRequestComments().stream().map(this::convertRequestCommentToDTO)
-                        .collect(Collectors.toList()) : null);
+        requestDTO.setDocuments(this.fileService.getFileForRequest(request.getId()));
+        requestDTO.setRequestCommentDTOS(new ArrayList<>());
     }
 
-    public RequestTableDTO convertRequestToRequestTableDTO(Request request, Boolean watch){
-        RequestTableDTO requestTableDTO = new RequestTableDTO();
-        requestTableDTO.setId(request.getId());
-        requestTableDTO.setTimestampCreation(request.getTimestampCreation());
-        requestTableDTO.setTimestampClosed(request.getTimestampClosed());
-        requestTableDTO.setName(request.getName());
-        requestTableDTO.setRequestPriority(request.getRequestPriority().getName());
-        requestTableDTO.setRequestPosition(request.getRequestPosition().getName());
-        requestTableDTO.setRequestType(request.getModuleType().getName());
-        requestTableDTO.setCreator(request.getCreator().getFullName());
-        requestTableDTO.setAssigned(request.getAssigned().getFullName());
-        requestTableDTO.setClosed(request.getClosed().getFullName());
-        requestTableDTO.setWatched(watch);
+    public void addImage(HashMap requestDTO){
+        FileService fileService = new FileService();
 
-        return requestTableDTO;
+        HashMap creator = (HashMap) requestDTO.get("creator");
+        creator.put("userImageByte", fileService.getUserImage((String) creator.get("userImageString")));
+
+
+        if(requestDTO.get("assigned") != null){
+            HashMap assigned = (HashMap) requestDTO.get("assigned");
+            assigned.put("userImageByte", fileService.getUserImage((String) assigned.get("userImageString")));
+        }
+
+        if(requestDTO.get("closed") != null){
+            HashMap closed = (HashMap) requestDTO.get("closed");
+            closed.put("userImageByte", fileService.getUserImage((String) closed.get("userImageString")));
+        }
+
+        if(requestDTO.get("requestCommentDTOS") != null){
+            List<HashMap> requestCommentDTOS = (List) requestDTO.get("requestCommentDTOS");
+            for(HashMap comment: requestCommentDTOS){
+                HashMap commentCreator = (HashMap) comment.get("creator");
+                commentCreator.put("userImageByte", fileService.getUserImage((String) commentCreator.get("userImageString")));
+            }
+        }
+
     }
 
-    private TicketDTO convertTicketToTicketDTO(Ticket ticket){
-        TicketDTO ticketDTO = new TicketDTO();
+
+
+    private RequestDTO convertTicketToTicketDTO(Ticket ticket){
+        RequestDTO ticketDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(ticketDTO, ticket);
 
-        ticketDTO.setTicketSubtypeName(ticket.getTicketSubtypeName());
-        ticketDTO.setProblem(ticket.getProblem());
-        ticketDTO.setTicketType(ticket.getTicketType().getName());
+        TicketExtendedInformationDTO ticketExtendedInformationDTO = new TicketExtendedInformationDTO();
+        ticketExtendedInformationDTO.setTicketSubtypeName(ticket.getTicketSubtypeName());
+        ticketExtendedInformationDTO.setTicketType(ticket.getTicketType().getName());
+        ticketExtendedInformationDTO.setProblem(ticket.getProblem());
 
-        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.User.name())){
-            ticketDTO.setTicketType("Uživateľ");
+        if(ticketExtendedInformationDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.User.name())){
+            ticketExtendedInformationDTO.setTicketType("Uživateľ");
         }
 
-        if(ticketDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.Other.name())){
-            ticketDTO.setTicketType("Iné");
+        if(ticketExtendedInformationDTO.getTicketType().equalsIgnoreCase(TICKET_TYPE.Other.name())){
+            ticketExtendedInformationDTO.setTicketType("Iné");
         }
 
+        ticketDTO.setExtendedInformation(ticketExtendedInformationDTO);
 
         return ticketDTO;
     }
 
-    private ReportDTO convertReportToReportDTO(Report report){
-        ReportDTO reportDTO = new ReportDTO();
+    private RequestDTO convertReportToReportDTO(Report report){
+        RequestDTO reportDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(reportDTO,report);
 
-        reportDTO.setAccessMethods(report.getAccessMethods());
-        reportDTO.setAccessByPeople(report.getAccessByPeople());
-        reportDTO.setCriteria(report.getCriteria());
-        reportDTO.setDeadline(report.getDeadline());
-        reportDTO.setOtherInformation(report.getOtherInformation());
-        reportDTO.setOwner(report.getOwner());
-        reportDTO.setPurpose(report.getPurpose());
-        reportDTO.setReportRefresh(report.getReportRefresh().getName());
-        reportDTO.setVisibleData(report.getVisibleData());
-        reportDTO.setEvaluation(report.getEvaluation());
-        reportDTO.setReportType(report.getReportType().getName());
+        ReportExtendedInformationDTO reportExtendedInformationDTO = new ReportExtendedInformationDTO();
+        reportExtendedInformationDTO.setAccessMethods(report.getAccessMethods());
+        reportExtendedInformationDTO.setAccessByPeople(report.getAccessByPeople());
+        reportExtendedInformationDTO.setCriteria(report.getCriteria());
+        reportExtendedInformationDTO.setDeadline(report.getDeadline());
+        reportExtendedInformationDTO.setOtherInformation(report.getOtherInformation());
+        reportExtendedInformationDTO.setOwner(report.getOwner());
+        reportExtendedInformationDTO.setPurpose(report.getPurpose());
+        reportExtendedInformationDTO.setReportRefresh(report.getReportRefresh().getName());
+        reportExtendedInformationDTO.setVisibleData(report.getVisibleData());
+        reportExtendedInformationDTO.setEvaluation(report.getEvaluation());
+        reportExtendedInformationDTO.setReportType(report.getReportType().getName());
+
+        reportDTO.setExtendedInformation(reportExtendedInformationDTO);
 
         return reportDTO;
     }
 
-    private FinanceDTO convertFinanceToFinanceDTO(Finance finance){
-        FinanceDTO financeDTO = new FinanceDTO();
+    private RequestDTO convertFinanceToFinanceDTO(Finance finance){
+        RequestDTO financeDTO = new RequestDTO();
         this.setRequestDTOValuesFromRequest(financeDTO, finance);
 
-        financeDTO.setFinanceType(finance.getFinanceType().getName());
+        FinanceExtendedInformationDTO financeExtendedInformationDTO = new FinanceExtendedInformationDTO();
+        financeExtendedInformationDTO.setFinanceType(finance.getFinanceType().getName());
 
+        financeDTO.setExtendedInformation(financeExtendedInformationDTO);
         return financeDTO;
     }
 

@@ -1,10 +1,19 @@
 import {Injectable} from '@angular/core';
-import {HttpClient,  HttpParams} from '@angular/common/http';
-import {Observable} from 'rxjs';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable, of} from 'rxjs';
 import {environment} from 'environments/environment';
-import {RequestDashboard, RequestTable} from 'app/resources/request/model/interface/RequestTable';
-import { Request} from 'app/resources/request/model/interface/Request';
-import {UserSimple} from "../resources/user/model/User";
+import {
+  CustomDocument,
+  FinanceForm,
+  FinanceType,
+  ReportForm,
+  Request, RequestComment,
+  RequestCommentWrapper,
+  TicketForm,
+  TicketSubtype,
+} from 'app/core/model/Request';
+import {UserSimpleDTO} from "../core/model/User";
+import {map} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -14,17 +23,13 @@ export class RequestHttpService {
   constructor(private http: HttpClient) {
   }
 
-  public getRequestOnDashboard(): Observable<RequestDashboard> {
-    return this.http.get<RequestDashboard>(`${environment.apiUrl}requests/dashboard`);
+  public getRequestOnDashboard(): Observable<Request[]> {
+    return this.http.get<Request[]>(`${environment.apiUrl}requests/dashboard`);
   }
 
-  public getRequestDetails(id: any): Observable<Request> {
-    return this.http.get<Request>(`${environment.apiUrl}requests/requestDetails/${id}`);
-  }
-
-  public getClosedRequests(dateFrom: string, dateTo: string): Observable<RequestTable[]> {
+  public getClosedRequests(dateFrom: string, dateTo: string): Observable<Request[]> {
     const params = new HttpParams().set('dateFrom', dateFrom).set('dateTo', dateTo);
-    return this.http.get<RequestTable[]>(environment.apiUrl + "requests/closed", {params});
+    return this.http.get<Request[]>(environment.apiUrl + "requests/closed", {params});
   }
 
 
@@ -38,21 +43,118 @@ export class RequestHttpService {
     return this.http.put(environment.apiUrl + `requests/modification/${requestid}/priority`, null, {params});
   }
 
-  public changeState(requestid: number, close: boolean): Observable<any> {
+  public changeState(requestId: number, close: boolean): Observable<any> {
     const params = new HttpParams().set('close', String(close));
-    return this.http.put(environment.apiUrl + `requests/modification/${requestid}/state`, null, {params});
+    return this.http.put(environment.apiUrl + `requests/modification/${requestId}/state`, null, {params});
   }
 
-  public changeCommenting(requestid: number): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/modification/${requestid}/commenting`, null);
+  public changeCommenting(requestId: number): Observable<any> {
+    return this.http.put(environment.apiUrl + `requests/modification/${requestId}/commenting`, null);
   }
 
-  public assignSolver(requestid: number, userSimple: UserSimple): Observable<UserSimple> {
-    return this.http.put<UserSimple>(environment.apiUrl + `requests/modification/secure/${requestid}/addSolver`, userSimple);
+  public removeLogs(requestId: number): Observable<any> {
+    return this.http.request('delete', environment.apiUrl + `requests/modification/${requestId}/logs`);
   }
 
-  public removeSolver(requestid: number): Observable<any> {
-    return this.http.put(environment.apiUrl + `requests/modification/secure/${requestid}/removeSolver`, null);
+  public assignSolver(requestiId: number, userSimpleDTO: UserSimpleDTO): Observable<UserSimpleDTO> {
+    return this.http.put<UserSimpleDTO>(environment.apiUrl + `requests/modification/secure/${requestiId}/addSolver`, userSimpleDTO);
+  }
+
+  public uploadFileForRequest(id: number, customDocuments: CustomDocument[]): Observable<any> {
+    if (!customDocuments || customDocuments.length === 0) {
+      return of(false);
+    }
+
+    const formData: FormData = new FormData();
+    customDocuments.forEach(item => formData.append("filesToUpload", item.file));
+
+    return this.http.post(environment.apiUrl + `requests/requestDetails/${id}/files`, formData);
+  }
+
+
+  public downloadFileForRequest(id: number, fileName: string): Observable<any> {
+    const params = new HttpParams().set('fileName', fileName);
+    return this.http.get(environment.apiUrl + `requests/requestDetails/${id}/download`, {
+      params,
+      responseType: 'blob'
+    });
+  }
+
+
+  /* ------------------------------------------------------------*/
+
+  // Finance
+  public getFinanceTypes(): Observable<FinanceType[]> {
+    return this.http.get<FinanceType[]>(environment.apiUrl + "requests/finance/types");
+  }
+
+  public getFinanceTypesAll(): Observable<FinanceType[]> {
+    return this.http.get<FinanceType[]>(environment.apiUrl + "requests/finance/secure/types");
+  }
+
+  public submitFinance(financeForm: FinanceForm): Observable<Request> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<Request>(environment.apiUrl + 'requests/finance', financeForm, {headers});
+  }
+
+
+  /* ------------------------------------------------------------*/
+
+  // Ticket
+  public getTicketSubtype(ticketType: string): Observable<TicketSubtype[]> {
+    const params = new HttpParams().set('ticketTypeName', ticketType);
+    return this.http.get<TicketSubtype[]>(environment.apiUrl + "requests/ticket/ticketSubtype", {params});
+  }
+
+  public submitTicket(ticketForm: TicketForm): Observable<Request> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<Request>(environment.apiUrl + 'requests/ticket', ticketForm, {headers});
+  }
+
+
+  /* ------------------------------------------------------------*/
+
+  // Report
+  public submitReport(reportForm: ReportForm): Observable<Request> {
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    return this.http.post<Request>(environment.apiUrl + "requests/report", reportForm, {headers});
+  }
+
+  public addReportEvaluation(requestid: number, days: number): Observable<any> {
+    const params = new HttpParams().set('days', String(days));
+    return this.http.put(environment.apiUrl + `requests/report/${requestid}/evaluation`, null, {params});
+  }
+
+
+  /* ------------------------------------------------------------*/
+
+  // Request comments
+
+  public addComment(requestCommentWrapper: RequestCommentWrapper): Observable<RequestComment> {
+    const params = new HttpParams()
+      .set("sendEmail", String(requestCommentWrapper.sendEmail))
+      .set("solution", String(requestCommentWrapper.solution));
+    return this.http.post<RequestComment>(environment.apiUrl + `requests/comment`, requestCommentWrapper.requestComment, {params});
+  }
+
+  public editComment(requestComment: RequestComment, comment: string): Observable<any> {
+    const params = new HttpParams()
+      .set("requestId", String(requestComment.requestId))
+      .set("commentId", String(requestComment.id));
+    return this.http.put(environment.apiUrl + `requests/comment`, comment, {params});
+  }
+
+  public deleteComment(requestComment: RequestComment): Observable<any> {
+    return this.http.request('delete', environment.apiUrl + `requests/comment`, {body: requestComment});
+  }
+
+  public changePrivacy(requestComment: RequestComment): Observable<any> {
+    return this.http.put(environment.apiUrl + `requests/comment/privacy`, requestComment);
+  }
+
+  public shareComment(requestComment: RequestComment, groupName: string): Observable<any> {
+    const params = new HttpParams().set("groupName", groupName);
+    return this.http.put(environment.apiUrl + `requests/comment/share`, requestComment, {params});
   }
 
 }

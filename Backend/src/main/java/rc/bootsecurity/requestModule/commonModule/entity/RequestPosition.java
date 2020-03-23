@@ -17,6 +17,6 @@ public class RequestPosition {
     @Column(name = "name")
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestPosition")
-    private List<Request> requests;
+   // @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestPosition")
+   // private List<Request> requests;
 }
