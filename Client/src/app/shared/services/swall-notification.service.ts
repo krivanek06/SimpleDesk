@@ -12,9 +12,9 @@ export class SwallNotificationService {
   public generateNotification(text: string): void {
     Swal.fire({
       position: 'top-end',
-      text: text,
+      text,
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     });
   }
 

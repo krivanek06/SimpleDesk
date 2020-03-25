@@ -6,6 +6,7 @@ import {routerReducer, RouterReducerState} from "@ngrx/router-store";
 export interface AppState {
   requirement: RequestState;
   router: RouterReducerState<RouterStateUrl>;
+  loader: Loading;
 }
 
 export interface RequestState extends EntityState<Request> {
@@ -25,6 +26,10 @@ export interface RouterStateUrl {
 export interface CustomDate {
   dateFrom: string;
   dateTo: string;
+}
+
+export interface Loading {
+  loading: boolean;
 }
 
 /*

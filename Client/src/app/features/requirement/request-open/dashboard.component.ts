@@ -1,6 +1,5 @@
-import {Component, OnInit, OnDestroy, ChangeDetectionStrategy} from '@angular/core';
-import {NgxSpinnerService} from "ngx-spinner";
-import {Observable, Subject} from 'rxjs';
+import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {Observable} from 'rxjs';
 import {UserStoreService} from 'app/core/services/user-store.service';
 import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
 import {RequestHttpService} from 'app/api/request-http.service';
@@ -11,9 +10,8 @@ import {Request} from "../../../core/model/Request";
 import {
   getMeAssignedRequests,
   getMyCreatedRequests,
-  getOtherRequests, isDashboardLoaded,
+  getOtherRequests,
 } from "../store/request.reducer";
-import {filter, takeUntil} from "rxjs/operators";
 import {RequestState} from "../../../core/model/appState.model";
 
 @Component({
@@ -22,20 +20,16 @@ import {RequestState} from "../../../core/model/appState.model";
   styleUrls: ['./dashboard.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit {
   viewTable = ['id', 'additionalInformation', 'creator', 'name', 'priority', 'assigned', 'timeCreated', 'details'];
   modifyTable = ['id', 'additionalInformation', 'creator', 'name', 'priority', 'assigned', 'userAction', 'timeCreated', 'details'];
 
-
   isSolver$: Observable<boolean>;
-  destroy$: Subject<boolean> = new Subject<boolean>();
-
   otherOpenRequests$: Observable<Request[]>;
   meAssignedRequests$: Observable<Request[]>;
   myCreatedRequests$: Observable<Request[]>;
 
-  constructor(private spinner: NgxSpinnerService,
-              private userStoreService: UserStoreService,
+  constructor(private userStoreService: UserStoreService,
               private requestHttp: RequestHttpService,
               private router: Router,
               private swallNotification: SwallNotificationService,
@@ -48,20 +42,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.meAssignedRequests$ = this.store.pipe(select(getMeAssignedRequests(this.userStoreService.user.username)));
     this.otherOpenRequests$ = this.store.pipe(select(getOtherRequests(this.userStoreService.user.username)));
 
-    this.spinner.show();
-
-    this.store.pipe(select(isDashboardLoaded)).pipe(
-      takeUntil(this.destroy$),
-      filter(res => res)
-    ).subscribe(() => this.spinner.hide());
-
     this.store.dispatch(RequestAction.getOpenRequests());
-
-  }
-
-  ngOnDestroy(): void {
-    this.destroy$.next(true);
-    this.destroy$.unsubscribe();
   }
 
 

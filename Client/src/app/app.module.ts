@@ -27,6 +27,9 @@ import {EffectsModule} from "@ngrx/effects";
 import {routerReducer, RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
 import {RouterCustomSerializer} from "./shared/utils/router.serializer";
 
+import * as LoadingReducer from './core/store/loading/loading.reducer';
+import {NgxSpinnerModule} from "ngx-spinner";
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,6 +52,7 @@ import {RouterCustomSerializer} from "./shared/utils/router.serializer";
 
     StoreModule.forRoot({
       router: routerReducer,
+      loader: LoadingReducer.reducer
     }),
     EffectsModule.forRoot([]),
     StoreDevtoolsModule.instrument({
@@ -56,6 +60,7 @@ import {RouterCustomSerializer} from "./shared/utils/router.serializer";
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
+    NgxSpinnerModule,
   ],
   providers: [
     DatePipe,

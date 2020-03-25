@@ -36,8 +36,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
               private userService: UserStoreService,
               private groupService: GroupHttpService,
               private userHttp: UserHttpService,
-              private swallNotification: SwallNotificationService,
-              private spinner: NgxSpinnerService) {
+              private swallNotification: SwallNotificationService) {
   }
 
   ngOnInit() {
@@ -96,9 +95,7 @@ export class UserProfileComponent implements OnInit, AfterViewInit {
     this.displayAvatars = !this.displayAvatars;
     // load images first time
     if (!this.userAvatars.avatars) {
-      this.spinner.show();
       this.userHttp.getAvailableAvatars().subscribe(avatars => {
-        this.spinner.hide();
         this.userAvatars.avatars = avatars;
       });
     }

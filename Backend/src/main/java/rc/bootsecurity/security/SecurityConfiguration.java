@@ -30,27 +30,26 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
 
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 // remove csrf and state in session because in jwt we do not need them
-                    .csrf().disable()
-                    .addFilterBefore(new CORSFilter(), CsrfFilter.class)
-                    .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .csrf().disable()
+                .addFilterBefore(new CORSFilter(), CsrfFilter.class)
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
                 .and()
-                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
-              /*  .and() // allow https
-                    .requiresChannel()
-                    .anyRequest()
-                    .requiresSecure()*/
+                /*  .and() // allow https
+                      .requiresChannel()
+                      .anyRequest()
+                      .requiresSecure()*/
                 .and()
-                    // add jwt filters (1. authentication, 2. authorization)
-                    .addFilter(new JwtAuthenticationFilter(authenticationManager()))
-                    .addFilter(new JwtAuthorizationFilter(authenticationManager()));
+                // add jwt filters (1. authentication, 2. authorization)
+                .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+                .addFilter(new JwtAuthorizationFilter(authenticationManager()));
 
-                    // configure access rules
+                // configure access rules
                 /*   .authorizeRequests()
                     .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                     .antMatchers( "/login").permitAll()
@@ -59,7 +58,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    DaoAuthenticationProvider authenticationProvider(){
+    DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         daoAuthenticationProvider.setUserDetailsService(this.userPrincipalDetailsService);

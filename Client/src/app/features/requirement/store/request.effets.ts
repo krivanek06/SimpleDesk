@@ -3,22 +3,25 @@ import {Injectable} from "@angular/core";
 import {act, Actions, createEffect, ofType} from "@ngrx/effects";
 import {Observable, of} from "rxjs";
 import {RequestHttpService} from "../../../api/request-http.service";
-import * as RequestAction from "./request.action";
-import {catchError, filter, map, mergeMap, switchMap, withLatestFrom} from "rxjs/operators";
+import {catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from "rxjs/operators";
 import {isDashboardLoaded} from "./request.reducer";
 import {Action, Store} from "@ngrx/store";
-import {RequestState} from "../../../core/model/appState.model";
-import {CustomDocument, TicketForm} from "../../../core/model/Request";
+import {Loading, RequestState} from "../../../core/model/appState.model";
 import {SwallNotificationService} from "../../../shared/services/swall-notification.service";
 import {RequestPosition} from "../../../core/enum/request.enum";
 import {saveAs} from 'file-saver';
+
+import * as RequestAction from "./request.action";
+import * as LoadingAction from "./../../../core/store/loading/loading.action";
+import {Request} from "../../../core/model/Request";
 
 @Injectable()
 export class RequestEffects {
   constructor(private actions$: Actions,
               private swallNotification: SwallNotificationService,
               private requestHttpService: RequestHttpService,
-              private store: Store<RequestState>) {
+              private store: Store<RequestState>,
+              private storeLoading: Store<Loading>) {
   }
 
 
@@ -26,18 +29,23 @@ export class RequestEffects {
     ofType(RequestAction.getOpenRequests),
     withLatestFrom(this.store.select(isDashboardLoaded)),
     filter(([_, loaded]) => !loaded),
-    mergeMap(
-      () => this.requestHttpService.getRequestOnDashboard()
-        .pipe(
-          map(requests => RequestAction.getOpenRequestsSuccess({requests})),
-          catchError(error => of(RequestAction.getOpenRequestsError({error})))
-        )
-    )));
+    tap(() => this.storeLoading.dispatch(LoadingAction.loadingStart())),
+    switchMap(() => this.requestHttpService.getRequestOnDashboard()
+      .pipe(
+        tap(() => this.storeLoading.dispatch(LoadingAction.loadingFinished())),
+        map(requests => RequestAction.getOpenRequestsSuccess({requests})),
+        catchError(error => of(RequestAction.getOpenRequestsError({error})))
+      )
+    ),
+  ));
+
 
   getClosedRequest$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.getClosedRequests),
+    tap(() => this.storeLoading.dispatch(LoadingAction.loadingStart())),
     switchMap(action => this.requestHttpService.getClosedRequests(action.customDate.dateFrom, action.customDate.dateTo)
       .pipe(
+        tap(() => this.storeLoading.dispatch(LoadingAction.loadingFinished())),
         map((requests) => RequestAction.getClosedRequestsSuccess({
           requests,
           customDate: action.customDate
@@ -92,7 +100,10 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
+              return requestAction.createRequestSuccess({
+                request,
+                customDocuments: action.customDocuments ? action.customDocuments : []
+              });
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -107,7 +118,10 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
+              return requestAction.createRequestSuccess({
+                request,
+                customDocuments: action.customDocuments ? action.customDocuments : []
+              });
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -122,7 +136,10 @@ export class RequestEffects {
           .pipe(
             map(() => {
               this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
-              return requestAction.createRequestSuccess({request, customDocuments: action.customDocuments ? action.customDocuments : []});
+              return requestAction.createRequestSuccess({
+                request,
+                customDocuments: action.customDocuments ? action.customDocuments : []
+              });
             }),
             catchError(error => of(requestAction.createRequestFailure({error})))
           )
@@ -170,7 +187,7 @@ export class RequestEffects {
         map(() => {
           const allowCommenting = !action.request.allowCommenting;
           this.swallNotification.generateNotification(
-            allowCommenting ? 'Komentovanie požiadavky sa zakázalo' : 'Komentovanie požiadavky sa povolilo');
+            allowCommenting ?  'Komentovanie požiadavky sa povolilo' : 'Komentovanie požiadavky sa zakázalo');
           return requestAction.toggleCommentingSuccess({requestId: action.request.id, allowCommenting});
         }),
         catchError(error => of(requestAction.toggleCommentingFailure({error})))

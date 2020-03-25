@@ -259,7 +259,7 @@ export const getClosedRequestsError = createAction(
 );
 
 export const changeClosedRequestFilter = createAction(
-  '[Closed Request Page] Change date range',
+  '[Closed Request Page] Change closed request filter',
   props<{ filterRequests: FilterRequest }>()
 );
 

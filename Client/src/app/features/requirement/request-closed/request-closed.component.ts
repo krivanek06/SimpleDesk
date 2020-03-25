@@ -1,11 +1,10 @@
 import {ChangeDetectionStrategy, Component, OnDestroy, OnInit} from '@angular/core';
-import {NgxSpinnerService} from 'ngx-spinner';
 import {Router} from "@angular/router";
 import {Observable, Subject} from "rxjs";
 import {UserHttpService} from "../../../api/user-http.service";
 import {UserSimpleDTO} from "../../../core/model/User";
 import {FilterRequest, Request} from "../../../core/model/Request";
-import {CustomDate, RequestState} from "../../../core/model/appState.model";
+import {CustomDate, Loading, RequestState} from "../../../core/model/appState.model";
 import {select, Store} from "@ngrx/store";
 import {
   getClosedRequestDateRange,
@@ -16,6 +15,7 @@ import {
 import {filter, takeUntil} from "rxjs/operators";
 import {DatePipe} from "@angular/common";
 import * as RequestAction from '../store/request.action';
+import * as LoadingAction from "../../../core/store/loading/loading.action";
 
 
 @Component({
@@ -35,9 +35,9 @@ export class RequestClosedComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<boolean> = new Subject();
 
-  constructor(private spinner: NgxSpinnerService,
-              private router: Router,
+  constructor(private router: Router,
               private store: Store<RequestState>,
+              private storeLoading: Store<Loading>,
               private userHttp: UserHttpService,
               private datepipe: DatePipe) {
   }
@@ -47,18 +47,6 @@ export class RequestClosedComponent implements OnInit, OnDestroy {
     this.closedRequests$ = this.store.pipe(select(getClosedRequests));
     this.customDate$ = this.store.pipe(select(getClosedRequestDateRange));
     this.filterRequests$ = this.store.pipe(select(getClosedRequestFilterState));
-
-    this.spinner.show();
-    this.store.pipe(
-      select(isClosedLoaded),
-      takeUntil(this.destroy$)
-    ).subscribe((loaded) => {
-      if (loaded) {
-        this.spinner.hide();
-      } else {
-        this.spinner.show();
-      }
-    });
 
     // initial loading when date is not set
     this.customDate$.pipe(
