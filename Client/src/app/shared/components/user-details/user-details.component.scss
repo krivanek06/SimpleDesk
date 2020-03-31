@@ -1,0 +1,34 @@
+@import "../../style/SideTablePrintScss";
+@import "../../style/iconScss";
+
+.passwordChange{
+    cursor: pointer;
+    color: #4d72f9;
+}
+
+.passwordChange:hover{
+    font-weight: bold;
+}
+
+.avatar{
+    width: 120px;
+    margin-left: -25px;
+    margin-top: -10px;
+}
+
+.avatarReactive{
+    cursor: pointer;
+    -webkit-transition:  0.4s ease-out;
+    -moz-transition:  0.4s ease-out;
+    -o-transition:  0.4s ease-out;
+    transition:  0.4s ease-out;
+
+    &:hover {
+        transform: scale(1.15);
+        -webkit-transition:  0.4s ease-out;
+        -moz-transition:  0.4s ease-out;
+        -o-transition:  0.4s ease-out;
+        transition:  0.4s ease-out;
+    }
+
+}

@@ -11,8 +11,8 @@ import {
   ViewChild
 } from '@angular/core';
 import {MatPaginator, MatTableDataSource} from '@angular/material';
-import {Request} from "../../../../core/model/Request";
-import {RequestType} from "../../../../core/enum/request.enum";
+import {Request} from "../../model/Request";
+import {RequestType} from "../../model/request.enum";
 
 @Component({
   selector: 'app-request-table',

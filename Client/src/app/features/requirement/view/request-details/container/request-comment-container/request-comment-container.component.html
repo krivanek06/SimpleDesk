@@ -1,0 +1,57 @@
+<ng-container *ngIf="request$  | async as request">
+
+  <!-- request content -->
+  <app-request-content [request]="request"></app-request-content>
+
+  <div *ngFor="let requestComment of request.requestCommentDTOS"
+       [ngClass]="{'floatRight' : requestComment.creator.username === (user$ | async).username,
+                    'floatLeft' : requestComment.creator.username !== (user$ | async).username,
+                    'zIndex' : applyZIndex}"
+       class="commentBox ">
+
+    <!-- form options -> edit / delele / share / lock -->
+    <app-request-comment-options
+      class="commentIcons"
+      *ngIf='requestComment.creator.username === (user$ | async).username && !request.closed'
+      [requestComment]='requestComment'
+      [isSolution]='requestComment.id === request.solutionComment'
+      (shareEmitter)='changeFrames($event)'
+      (lockEmitter)='changeCommentPrivacy($event)'
+      (editEmitter)='editComment($event)'
+      (deleteEmitter)='deleteComment($event)'>
+    </app-request-comment-options>
+
+    <!-- comment content -->
+    <app-request-comment-body
+      [solutionId]='request.solutionComment'
+      [requestComment]='requestComment'>
+    </app-request-comment-body>
+  </div>
+
+  <!-- share comment with groups -->
+  <div id="myModal" class="modal" *ngIf="showWindowCommentSharing && !request.closed">
+    <div class="modal-content">
+      <span class="close" (click)="changeFrames(undefined)">&times;</span>
+
+      <app-request-comment-sharing
+        class='displayCommentSharing'
+        [involvedInGroups]='(groupContainer$ | async).userInGroups'
+        [groupName]="(selectedGroup$ | async)?.name"
+        (groupDetailsEmitter)='getGroupDetails($event)'
+        (shareEmitter)="shareWith($event)">
+      </app-request-comment-sharing>
+
+      <app-group-details
+        class='groupDetails'
+        [groupCopy]="selectedGroup$ | async">
+      </app-group-details>
+    </div>
+  </div>
+
+  <!-- form to write commment -->
+  <app-request-comment-form
+    *ngIf='!request.closed && !(isGhost$ | async) && ( request.allowCommenting || (isSolver$ | async) )'
+    (addedCommentEmitter)="addComment($event, request)">
+  </app-request-comment-form>
+</ng-container>
+

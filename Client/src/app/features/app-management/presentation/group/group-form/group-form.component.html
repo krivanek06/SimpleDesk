@@ -30,7 +30,7 @@
       <hr>
     </div>
 
-    <!-- user selection -->
+    <!-- user-section selection -->
     <div class='formInformationContainerSubcontent'>
             <span>
                 <img src='assets/images_design/groups_icon_2.png' class='icon'/>
@@ -43,9 +43,8 @@
           <mat-option *ngFor="let user of allAvailableUsers" [value]="user">
             {{ user.firstName }}  {{ user.lastName }}
           </mat-option>
-
-          <mat-error *ngIf="groupManager.invalid"> Prosím vyberte menežéra skupiny</mat-error>
         </mat-select>
+        <mat-error *ngIf="groupManager.invalid"> Prosím vyberte menežéra skupiny</mat-error>
       </mat-form-field>
 
       <mat-form-field class='inlineParameters'>
@@ -63,9 +62,8 @@
           <mat-option *ngFor="let user of allAvailableUsers" [value]="user">
             {{ user.firstName }}  {{ user.lastName }}
           </mat-option>
-
-          <mat-error *ngIf="usersInGroup.invalid"> Prosím vyberte členov do skupiny</mat-error>
         </mat-select>
+        <mat-error *ngIf="usersInGroup.invalid"> Prosím vyberte členov do skupiny</mat-error>
       </mat-form-field>
       <hr>
     </div>

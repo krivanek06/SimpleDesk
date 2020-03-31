@@ -1,0 +1,21 @@
+<h2 class='formTitle'>Požiadavka na Účtáreň</h2>
+
+<div class='InlineParameters'>
+  <app-request-finance-form
+    #financeFormComponent
+    [financeTypeArray]="financeType$ | async"
+    (formEmitter)="submitFinance($event)">
+
+  </app-request-finance-form>
+
+  <!-- uploader -->
+  <app-file-upload
+    #fileUploadComponent
+    id='fileUploader'
+    [uploaderHeight]='45'
+    (fileInserted) = 'fileInserted($event)'>
+  </app-file-upload>
+  <!--<mat-error *ngIf="fileInput && fileInput.isEmpty()" class='movedError'> Prosím vyberte súbor</mat-error>-->
+</div>
+
+<img id='FormImage' src="../../../../assets/images_design/finance_form.png"/>

@@ -1,20 +1,23 @@
-import {Component, OnInit, ViewChild, EventEmitter, Output} from '@angular/core';
-import {Validators, FormGroup, FormBuilder} from '@angular/forms';
-import {UserSimpleDTO} from 'app/core/model/User';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {User, UserSimple} from "../../../../../core/model/User";
+import {UserConstructorService} from "../../../../../core/services/user-constructor.service";
 
 @Component({
   selector: 'app-user-form',
   templateUrl: './user-form.component.html',
-  styleUrls: ['./user-form.component.scss']
+  styleUrls: ['./user-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserFormComponent implements OnInit {
 
   userRegistrationForm: FormGroup;
 
-  @Output() userRegistrationEmitter: EventEmitter<UserSimpleDTO> = new EventEmitter();
-  @ViewChild('userFormViewChild', {static: true}) userFormViewChild;
+  @Output() userSimpleRegistrationEmitter: EventEmitter<UserSimple> = new EventEmitter();
+  @ViewChild('userFormViewChild') userFormViewChild;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private converterService: UserConstructorService) {
   }
 
   ngOnInit() {
@@ -41,16 +44,13 @@ export class UserFormComponent implements OnInit {
     }
 
     const formValues = this.userRegistrationForm.value;
-    const userRegistraion: UserSimpleDTO = {
-      username: formValues.username.trim().toLowerCase(),
-      firstName: formValues.firstname.trim(),
-      lastName: formValues.lastname.trim(),
-      email: formValues.email.trim(),
-    };
-
-    this.userRegistrationEmitter.emit(userRegistraion);
-
-
+    const userRegistraion = this.converterService.constructUserRegistrationDTO(
+      formValues.username.trim().toLowerCase(),
+      formValues.firstname.trim(),
+      formValues.lastname.trim(),
+      formValues.email.trim()
+    );
+    this.userSimpleRegistrationEmitter.emit(userRegistraion);
   }
 
   public resetForm() {

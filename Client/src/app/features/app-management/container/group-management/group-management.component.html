@@ -3,33 +3,44 @@
   <mat-form-field>
     <mat-label>Vyberte skupinu</mat-label>
     <mat-select (selectionChange)="selectGroup($event.value)">
-      <mat-option *ngFor='let name of groups$ | async ' [value]='name'> {{ name }}</mat-option>
+      <mat-option *ngFor='let name of groupNames$ | async ' [value]='name'>
+        {{ name }}
+      </mat-option>
     </mat-select>
   </mat-form-field>
 </div>
 
-<!-- modifycation buttons -->
-<app-serdbuttons
-  #serdbuttonsGroup
-  id='serdbuttonsGroup'
-  [editActivated] = 'editGroupActivated'
-  *ngIf="groupDetails.group  && !(isGhost$ | async)"
-  (editEmitter)="editGroup()"
-  (resetEmitter)="resetGroup()"
-  (saveEmitter)="saveGroup()"
-  (deleteEmitter)="deleteGroup()">
-</app-serdbuttons>
+<ng-container *ngIf="groupDetails$ | async as group">
+  <app-serdbuttons
+    *ngIf="!(isGhost$ | async)"
+    id='serdbuttonsGroup'
+    [editActivated]='editGroupActivated'
+    (editEmitter)="editGroup()"
+    (resetEmitter)="editGroup()"
+    (saveEmitter)="saveGroup()"
+    (deleteEmitter)="deleteGroup()">
+  </app-serdbuttons>
 
-<app-group-details
-  #groupDetails
-  [editGroupActivated] = "editGroupActivated"
-  [allUsers]='users$ | async'>
+  <app-group-details
+    #appGroupDetails
+    [groupCopy]="group"
+    [groupOrig]="group"
+    [editGroupActivated]="editGroupActivated"
+    [allUsers]='activeUsers$ | async'>
 
-</app-group-details>
-<app-privileges
-  #groupPrivileges
-  [applyGreenColor]='true'>
-</app-privileges>
+  </app-group-details>
+  <app-privileges
+    #appGroupPrivileges
+    name="Skupiny"
+    [enabledPrivilegesCopy]="group.applicationPrivilegeDTO"
+    [enabledPrivilegesOrig]="group.applicationPrivilegeDTO"
+    [disabledPrivilegesCopy]="group.unsetApplicationPrivilegeDTO"
+    [disabledPrivilegesOrig]="group.unsetApplicationPrivilegeDTO"
+    [applyGreenColor]='true'
+    [hideUnassignedPriv]="!editGroupActivated"
+    [activateUnableClick]="editGroupActivated">
+  </app-privileges>
 
+</ng-container>
 
 

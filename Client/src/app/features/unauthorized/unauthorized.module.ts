@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import {UnauthorizedComponent} from "./unauthorized.component";
 import {RouterModule, Routes} from "@angular/router";
-import {AuthGuard} from "../../core/guards/AuthGuard";
+import {AuthGuard} from "../../core/guards/Auth.guard";
 import {SharedModule} from "../../shared/shared.module";
 import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";

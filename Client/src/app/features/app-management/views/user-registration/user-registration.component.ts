@@ -1,32 +1,34 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {UserSimpleDTO} from 'app/core/model/User';
-import {UserHttpService} from 'app/api/user-http.service';
-import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
+import {User, UserSimple} from 'app/core/model/User';
+import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {UserFormComponent} from 'app/features/app-management/presentation/user/user-form/user-form.component';
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../../core/model/appState.model";
+
+import * as appManagementAction from '../../store/app-management.action';
+
 
 @Component({
   selector: 'app-user-registration',
   templateUrl: './user-registration.component.html',
-  styleUrls: ['./user-registration.component.scss']
+  styleUrls: ['./user-registration.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserRegistrationComponent implements OnInit {
   @ViewChild('userForm') userForm: UserFormComponent;
 
-  constructor(private userHttp: UserHttpService, private swallNotification: SwallNotificationService) {
+  constructor(private swallNotification: SwallNotificationService,
+              private store: Store<AppState>) {
   }
 
   ngOnInit() {
   }
 
-  userRegistration(userSimpleDTO: UserSimpleDTO): void {
+  userRegistration(userSimple: UserSimple): void {
     this.swallNotification.generateQuestion(`Naozaj chcetete vytvoriť uživateľa ?`).then((res) => {
       if (res.value) {
-        this.swallNotification.generateNotification(`Žiadosť o vytvorenie uživateľa bolo zaslané`);
-
-        this.userHttp.registerUser(userSimpleDTO).subscribe(() => {
-          this.swallNotification.generateNotification(`Uživateľ bol zaregistrovaný, emailom sa bude notifikovať`);
-          this.userForm.resetForm();
-        });
+        this.store.dispatch(appManagementAction.registerUser({userSimple}));
+        this.userForm.resetForm();
       }
     });
   }

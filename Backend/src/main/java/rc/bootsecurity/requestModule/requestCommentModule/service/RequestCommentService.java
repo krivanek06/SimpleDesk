@@ -19,6 +19,7 @@ import rc.bootsecurity.requestModule.requestCommentModule.repository.RequestComm
 import rc.bootsecurity.groupModule.service.GroupService;
 import rc.bootsecurity.userModule.service.UserService;
 import rc.bootsecurity.notificationModule.emailModule.EmailService;
+import rc.bootsecurity.userModule.util.UserConverter;
 import rc.bootsecurity.util.JsonStringParser;
 import rc.bootsecurity.util.fileModule.FileService;
 
@@ -54,7 +55,7 @@ public class RequestCommentService {
         requestComment.setComment(requestCommentDTO.getComment());
         requestComment.setIsPrivate(requestCommentDTO.getIsPrivate());
 
-        requestComment.setUser(this.userService.loadUserByUsername(requestCommentDTO.getCreator().getUsername()));
+        requestComment.setUser(this.userService.loadUserByUsername(this.userService.getPrincipalUsername()));
         requestComment.setRequest(this.requestService.loadRequestById(requestCommentDTO.getRequestId()));
 
         requestComment.setTimestamp(new Timestamp(new Date().getTime()));
@@ -95,7 +96,9 @@ public class RequestCommentService {
         if(!requestCommentDTO.getIsPrivate())
             this.requestLogService.BroadcastRequest(requestComment.getRequest(),  this.requestWebsockets.ADDED_COMMENT);
 
+        UserConverter userConverter = new UserConverter();
         requestCommentDTO.setId(requestComment.getId());
+        requestCommentDTO.setCreator(userConverter.convertUserToUserDTO(requestComment.getUser()));
 
         return requestCommentDTO;
     }

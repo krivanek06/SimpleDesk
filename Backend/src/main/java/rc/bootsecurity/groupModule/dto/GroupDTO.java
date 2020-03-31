@@ -2,7 +2,7 @@ package rc.bootsecurity.groupModule.dto;
 
 import lombok.*;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
+import rc.bootsecurity.userModule.dto.UserDTO;
 
 import java.util.List;
 
@@ -16,11 +16,11 @@ public class GroupDTO {
 
     private String description;
 
-    private UserSimpleDTO groupManager;
+    private UserDTO groupManager;
 
-    private List<UserSimpleDTO> usersInGroup;
+    private List<UserDTO> usersInGroup;
 
-    private List<UserSimpleDTO> usersWatchGroup;
+    private List<UserDTO> usersWatchGroup;
 
     private ApplicationPrivilegeDTO applicationPrivilegeDTO;
 

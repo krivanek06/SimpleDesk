@@ -1,14 +1,13 @@
 
-import {UserSimpleDTO} from "./User";
-import {ApplicationPrivilege} from "./Request";
+import {ApplicationPrivilege, User} from "./User";
 
 export interface Group {
   name: string;
   email: string;
   description: string;
-  groupManager: UserSimpleDTO;
-  usersInGroup: UserSimpleDTO[];
-  usersWatchGroup: UserSimpleDTO[];
+  groupManager: User;
+  usersInGroup: User[];
+  usersWatchGroup: User[];
   applicationPrivilegeDTO: ApplicationPrivilege;
   unsetApplicationPrivilegeDTO: ApplicationPrivilege;
 }

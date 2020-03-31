@@ -1,0 +1,24 @@
+<h2 class='formTitle'>Požiadavka na IT & Projekty</h2>
+
+<div class='ticketInlineParameters'>
+  <!-- ticket form -->
+  <app-request-ticket-form
+    #ticketFormComponent
+    [softwareTypes]='softwareTypes$ | async'
+    [hardwareTypes]='hardwareTypes$ | async'
+    [serverTypes]='serverTypes$ | async'
+    (formEmitter)='submitTicket($event)'>
+
+  </app-request-ticket-form>
+
+
+  <!-- uploader -->
+  <app-file-upload
+    #fileUploadComponent
+    id='uploader'
+    [uploaderHeight]='45'
+    (fileInserted)='fileInserted($event)'>
+  </app-file-upload>
+</div>
+
+<img id='ticketFormImage' src="../../../../assets/images_design/ticket_form.png"/>

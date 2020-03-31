@@ -1,6 +1,10 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
-import {UserStoreService} from "../../../core/services/user-store.service";
+import {AppState} from "../../../core/model/appState.model";
+import {Store} from "@ngrx/store";
+
+import * as fromAuth from '../../../core/store/auth/auth.reducer';
+import * as fromUser from '../../../core/store/user/user.reducer';
 
 @Component({
   selector: 'app-navigation',
@@ -15,16 +19,16 @@ export class NavigationComponent implements OnInit {
   hasTicketModuleAccess$: Observable<boolean>;
   hasReportModuleAccess$: Observable<boolean>;
 
-  constructor(private userStoreService: UserStoreService) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.hasPrivilegeAccess$ = this.userStoreService.hasPrivilegeAccess();
-    this.isAdmin$ = this.userStoreService.isAdmin();
-    this.isGhost$ = this.userStoreService.isGhost();
-    this.hasFinanceModuleAccess$ = this.userStoreService.hasFinanceModuleAccess();
-    this.hasTicketModuleAccess$ = this.userStoreService.hasTicketModuleAccess();
-    this.hasReportModuleAccess$ = this.userStoreService.hasReportModuleAccess();
+    this.isAdmin$ = this.store.select(fromAuth.isAdmin);
+    this.isGhost$ = this.store.select(fromAuth.isGhost);
+    this.hasPrivilegeAccess$ = this.store.select(fromUser.hasPrivilegeAccess);
+    this.hasFinanceModuleAccess$ = this.store.select(fromUser.hasFinanceModuleAccess);
+    this.hasTicketModuleAccess$ = this.store.select(fromUser.hasTicketModuleAccess);
+    this.hasReportModuleAccess$ = this.store.select(fromUser.hasReportModuleAccess);
   }
 
 }

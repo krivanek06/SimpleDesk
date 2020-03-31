@@ -1,9 +1,10 @@
-import {Component, OnInit, Output, EventEmitter, Input} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 
 @Component({
   selector: 'app-user-management-buttons',
   templateUrl: './user-management-buttons.component.html',
-  styleUrls: ['./user-management-buttons.component.scss']
+  styleUrls: ['./user-management-buttons.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserManagementButtonsComponent implements OnInit {
   @Input() isActive: boolean;
@@ -16,7 +17,7 @@ export class UserManagementButtonsComponent implements OnInit {
   ngOnInit() {
   }
 
-  reserPassword(): void {
+  resetPassword(): void {
     return this.resetPasswordEmitter.emit();
   }
 

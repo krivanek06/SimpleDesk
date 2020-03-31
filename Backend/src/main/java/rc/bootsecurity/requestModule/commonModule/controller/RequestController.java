@@ -8,10 +8,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import rc.bootsecurity.requestModule.commonModule.dto.RequestDTO;
 import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.commonModule.service.RequestService;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
+import rc.bootsecurity.userModule.dto.UserDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -151,9 +150,9 @@ public class RequestController {
      * add chosen solver
      */
     @PutMapping("/modification/secure/{id}/addSolver")
-    public ResponseEntity<?> addSolver(@PathVariable("id") Integer id, @RequestBody UserSimpleDTO userSimpleDTO){
+    public ResponseEntity<?> addSolver(@PathVariable("id") Integer id, @RequestBody UserDTO userDTO){
         try {
-            UserSimpleDTO assignedUser =  this.requestManagementService.setAssignUserAndSave(id, userSimpleDTO);
+            UserDTO assignedUser =  this.requestManagementService.setAssignUserAndSave(id, userDTO);
             return new ResponseEntity<>(assignedUser, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to addSolver, error : " + e.getMessage());
@@ -161,20 +160,5 @@ public class RequestController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri zmene riešiteľa, pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
 
     }
-
-    /*
-     * remove solver
-    @PutMapping("/modification/secure/{id}/removeSolver")
-    public ResponseEntity<?> removeSolver(@PathVariable("id") Integer id){
-        try {
-            this.requestManagementService.removeAssignUserAndSave(id);
-            return new ResponseEntity<>(id, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed to removeSolver, error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri modifikovaní riešiteľa pre požiadavku s id : " + id ,HttpStatus.INTERNAL_SERVER_ERROR);
-    }*/
-
-
 
 }

@@ -1,0 +1,181 @@
+<ng-container *ngIf='name'>
+  <div class=' smallerContent'>
+        <span class='formTitleSmall'>
+            <img src="assets/images_design/privilege_icon.png" class="icon"/>
+               <span class='formTitleSmallText'> Oprávnenia {{ name }} </span>
+        </span>
+
+
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.moduleTypesToUse.length > 0 || disabledPrivilegesCopy.moduleTypesToUse.length > 0'>
+      <div class='informationTitle'>Používanie modulov</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.moduleTypesToUse'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changeModuleTypeToUse(type)'> {{ type }} </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.moduleTypesToUse'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            (click)='changeModuleTypeToUse(type)'
+            [ngClass]='{ "ableClick" :  activateUnableClick }'> {{ type }} </li>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.submitFinanceRequests.length > 0 || disabledPrivilegesCopy.submitFinanceRequests.length > 0'
+        [ngClass]='{"unableClick" : activateUnableClick &&  !enabledPrivilegesCopy.moduleTypesToUse.includes("Finance") }'>
+      <div class='informationTitle'>Zasielanie financií</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.submitFinanceRequests'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changesubmitFinanceRequests(type)'> {{ type }} </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.submitFinanceRequests'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            (click)='changesubmitFinanceRequests(type)'
+            [ngClass]='{ "ableClick" :  activateUnableClick  && enabledPrivilegesCopy.moduleTypesToUse.includes("Finance")}'> {{ type }} </li>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.requestTypesToSolve.length > 0 || disabledPrivilegesCopy.requestTypesToSolve.length > 0'>
+      <div class='informationTitle'>Riešenie požiadávok</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.requestTypesToSolve'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changeRequestTypeToSolve(type)'>
+          {{ type }}
+        </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.requestTypesToSolve'
+            (click)='changeRequestTypeToSolve(type)'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            [ngClass]='{ "ableClick" :  activateUnableClick }'> {{ type }} </li>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") ||
+                     disabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")'
+        [ngClass]='{"unableClick" : activateUnableClick &&
+                        (!enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")) }'>
+      <div class='informationTitle'>Riešenie tiketov</div>
+      <ul class='informationsHolder'>
+        <li
+          *ngIf=' enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") && enabledPrivilegesCopy.solveTickets.Software !== null'
+          (click)="changeSolveTicketsSoftwareAll()"
+          [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Softvér
+        </li>
+
+        <li
+          *ngIf=' enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") && enabledPrivilegesCopy.solveTickets.Hardware !== null'
+          (click)="changeSolveTicketsHardwareAll()"
+          [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Hardvér
+        </li>
+
+        <li
+          *ngIf=' enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") &&  enabledPrivilegesCopy.solveTickets.Server !== null'
+          (click)="changeSolveTicketsServerAll()"
+          [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Server
+        </li>
+
+        <li
+          *ngIf=' enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") &&  enabledPrivilegesCopy.solveTickets.User.length > 0'
+          (click)='changeSolveTicketsUserAll()'
+          [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Uživateľ
+        </li>
+
+        <li
+          *ngIf=' enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") &&  enabledPrivilegesCopy.solveTickets.Other.length > 0'
+          (click)='changeSolveTicketsOtherAll()'
+          [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'>Iné
+        </li>
+
+
+        <div>
+          <li *ngIf=' activateUnableClick && enabledPrivilegesCopy.solveTickets.Software === null'
+              (click)="changeSolveTicketsSoftwareAll()"
+              [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")}'>
+            Softvér
+          </li>
+
+          <li *ngIf=' activateUnableClick && enabledPrivilegesCopy.solveTickets.Hardware === null '
+              (click)="changeSolveTicketsHardwareAll()"
+              [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")  }'>
+            Hardvér
+          </li>
+
+          <li *ngIf=' activateUnableClick && enabledPrivilegesCopy.solveTickets.Server === null'
+              (click)="changeSolveTicketsServerAll()"
+              [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")}'>
+            Server
+          </li>
+
+          <li *ngIf=' activateUnableClick && enabledPrivilegesCopy.solveTickets.User.length === 0'
+              (click)='changeSolveTicketsUserAll()'
+              [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")}'>
+            Uživateľ
+          </li>
+
+          <li *ngIf='activateUnableClick && enabledPrivilegesCopy.solveTickets.Other.length === 0'
+              (click)='changeSolveTicketsOtherAll()'
+              [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")}'>
+            Iné
+          </li>
+        </div>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.solveTickets.Software?.length > 0 || disabledPrivilegesCopy.solveTickets.Software.length > 0'
+        [ngClass]='{"unableClick" : activateUnableClick && (!enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")
+                        || enabledPrivilegesCopy.solveTickets.Software === null)}'>
+      <div class='informationTitle'>Riešenie Softvéru</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.solveTickets.Software'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changeSolveTicketsSoftware(type)'> {{ type }} </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.solveTickets.Software'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            (click)='changeSolveTicketsSoftware(type)'
+            [ngClass]='{ "ableClick" :  activateUnableClick &&
+                        enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") &&
+                        enabledPrivilegesCopy.solveTickets.Software !== null}'>
+          {{ type }}
+        </li>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.solveTickets.Hardware?.length > 0 || disabledPrivilegesCopy.solveTickets.Hardware.length > 0'
+        [ngClass]='{"unableClick" : activateUnableClick &&
+                    (!enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") || enabledPrivilegesCopy.solveTickets.Hardware === null ) }'>
+      <div class='informationTitle'>Riešenie Hardvéru</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.solveTickets.Hardware'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changeSolveTicketsHardware(type)'> {{ type }} </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.solveTickets.Hardware'
+            (click)='changeSolveTicketsHardware(type)'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            [ngClass]='{ "ableClick" : activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")
+                                && enabledPrivilegesCopy.solveTickets.Hardware !== null }'> {{ type }} </li>
+      </ul>
+    </li>
+    <li class='informationsContainer topspace'
+        *ngIf='enabledPrivilegesCopy.solveTickets.Server?.length > 0 || disabledPrivilegesCopy.solveTickets.Server.length > 0'
+        [ngClass]='{"unableClick" : activateUnableClick &&
+                    (!enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket") || enabledPrivilegesCopy.solveTickets.Server === null) }'>
+      <div class='informationTitle'>Riešenie Serverov</div>
+      <ul class='informationsHolder'>
+        <li *ngFor='let type of enabledPrivilegesCopy.solveTickets.Server'
+            [ngClass]='{ "enabledPriv" :  activateUnableClick, "coloredLi" : applyGreenColor }'
+            (click)='changeSolveTicketsServer(type)'> {{ type }} </li>
+
+        <li *ngFor='let type of disabledPrivilegesCopy.solveTickets.Server'
+            (click)='changeSolveTicketsServer(type)'
+            [hidden]="!activateUnableClick && hideUnassignedPriv"
+            [ngClass]='{ "ableClick" :  activateUnableClick && enabledPrivilegesCopy.requestTypesToSolve.includes("Ticket")
+                                && enabledPrivilegesCopy.solveTickets.Server !== null}'> {{ type }} </li>
+      </ul>
+    </li>
+
+  </div>
+</ng-container>

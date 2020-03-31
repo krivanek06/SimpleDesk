@@ -1,53 +1,54 @@
-import {Component, Input, OnInit, ViewChild} from '@angular/core';
-import {UserSimpleDTO} from 'app/core/model/User';
-import {GroupFormComponent} from 'app/features/app-management/presentation/group/group-form/group-form.component';
-import {GroupHttpService} from 'app/api/group-http.service';
-import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserHttpService} from "../../../../api/user-http.service";
+import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
+import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {Group} from "../../../../core/model/Group";
-import {FinanceType, TicketType} from "../../../../core/model/Request";
-import {RequestHttpService} from "../../../../api/request-http.service";
+import {FinanceType, TicketSubtype} from "../../../requirement/model/Request";
+import {UserSimple} from "../../../../core/model/User";
+import {Observable} from "rxjs";
+import {Store} from "@ngrx/store";
+import {AppState} from "../../../../core/model/appState.model";
+import {GroupFormComponent} from "../../presentation/group/group-form/group-form.component";
+
+import * as appManagementAction from '../../store/app-management.action';
+import * as fromAppManagement from '../../store/app-management.reducer';
+import * as fromRequest from '../../../../features/requirement/store/request.reducer';
+import * as requestAction from '../../../../features/requirement/store/request.action';
+
 
 @Component({
   selector: 'app-group-registration',
   templateUrl: './group-registration.component.html',
-  styleUrls: ['./group-registration.component.scss']
+  styleUrls: ['./group-registration.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupRegistrationComponent implements OnInit {
-
-  allAvailableUsers: UserSimpleDTO[] = [];
-  financeTypes: FinanceType[] = [];
-  softwares: TicketType[];
-  hardwares: TicketType[];
-  servers: TicketType[];
-
   @ViewChild('groupForm') groupForm: GroupFormComponent;
 
-  constructor(
-    private groupHttp: GroupHttpService,
-    private swallNotification: SwallNotificationService,
-    private requestHttpService: RequestHttpService,
-    private userHttp: UserHttpService) {
+  activeUsers$: Observable<UserSimple[]>;
+  financeType$: Observable<FinanceType[]>;
+  software$: Observable<TicketSubtype[]>;
+  hardware$: Observable<TicketSubtype[]>;
+  server$: Observable<TicketSubtype[]>;
+
+  constructor(private swallNotification: SwallNotificationService,
+              private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.userHttp.getAllActiveUsers().subscribe(users => this.allAvailableUsers = users);
-    this.requestHttpService.getFinanceTypesAll().subscribe(types => this.financeTypes = types);
-    this.requestHttpService.getTicketSubtype("Software").subscribe(x => this.softwares = x);
-    this.requestHttpService.getTicketSubtype("Hardware").subscribe(x => this.hardwares = x);
-    this.requestHttpService.getTicketSubtype("Server").subscribe(x => this.servers = x);
+    this.activeUsers$ = this.store.select(fromAppManagement.getAllActiveUsers);
+    this.financeType$ = this.store.select(fromRequest.getFinanceTypes);
+    this.software$ = this.store.select(fromRequest.getSoftwareTypes);
+    this.hardware$ = this.store.select(fromRequest.getHardwareTypes);
+    this.server$ = this.store.select(fromRequest.getServerTypes);
 
-
+    this.store.dispatch(requestAction.getFinanceTypes());
+    this.store.dispatch(requestAction.getTicketSubtypes());
   }
 
   registerGroup(group: Group): void {
     this.swallNotification.generateQuestion(`Naozaj chcetete vytvoriť skupinu ?`).then((res) => {
       if (res.value) {
-        this.swallNotification.generateNotification(`Žiadosť o vytvorenie skupiny bolo zaslané`);
-        this.groupHttp.registerGroup(group).subscribe(() => {
-          this.groupForm.resetForm();
-          this.swallNotification.generateNotification(`Skupina ${group.name} bola vytvorená`);
-        });
+        this.store.dispatch(appManagementAction.registerGroup({group}));
+        this.groupForm.resetForm();
       }
     });
 

@@ -1,103 +1,85 @@
-import {Component, OnInit, ViewChild, AfterViewInit} from '@angular/core';
-import {PrivilegesComponent} from 'app/shared/components-presentation/privileges/privileges.component';
-import {GroupDetailsComponent} from 'app/shared/components-presentation/group-details/group-details.component';
-import {GroupHttpService} from 'app/api/group-http.service';
-import {Observable,} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {UserStoreService} from 'app/core/services/user-store.service';
-import {SERDButtonsComponent} from 'app/shared/components-presentation/serdbuttons/serdbuttons.component';
-import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {UserSimpleDTO} from "../../../../core/model/User";
-import {UserHttpService} from "../../../../api/user-http.service";
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
+import {PrivilegesComponent} from 'app/shared/components/privileges/privileges.component';
+import {GroupDetailsComponent} from 'app/shared/components/group-details/group-details.component';
+import {Observable} from 'rxjs';
+import {SwallNotificationService} from 'app/core/services/swall-notification.service';
+import {UserSimple} from "../../../../core/model/User";
+import {Store} from "@ngrx/store";
+import {Group} from "../../../../core/model/Group";
+import {GroupConstructorService} from "../../../../core/services/group-constructor.service";
+
+import * as fromAuth from '../../../../core/store/auth/auth.reducer';
+import * as fromAppManagement from '../../store/app-management.reducer';
+import * as appManagementAction from '../../store/app-management.action';
+
 
 @Component({
   selector: 'app-group-management',
   templateUrl: './group-management.component.html',
-  styleUrls: ['./group-management.component.scss']
+  styleUrls: ['./group-management.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class GroupManagementComponent implements OnInit, AfterViewInit {
-  groups$: Observable<string[]>;
-  users$: Observable<UserSimpleDTO[]>;
+export class GroupManagementComponent implements OnInit {
+  groupNames$: Observable<string[]>;
+  activeUsers$: Observable<UserSimple[]>;
+  groupDetails$: Observable<Group>;
   isGhost$: Observable<boolean>;
 
-  @ViewChild('groupPrivileges') groupPrivileges: PrivilegesComponent;
-  @ViewChild('groupDetails') groupDetails: GroupDetailsComponent;
-  @ViewChild('serdbuttonsGroup') serdbuttonsGroup: SERDButtonsComponent;
+  @ViewChild('appGroupPrivileges') groupPrivileges: PrivilegesComponent;
+  @ViewChild('appGroupDetails') groupDetails: GroupDetailsComponent;
 
   editGroupActivated = false;
 
-  constructor(private groupService: GroupHttpService,
-              private userService: UserStoreService,
-              private userHttp: UserHttpService,
+  constructor(private store: Store<Store>,
               private swallNotification: SwallNotificationService,
-  ) {
+              private groupConstructorService: GroupConstructorService) {
   }
 
   ngOnInit() {
-    this.groups$ = this.groupService.getAllGroups();
-    this.users$ =  this.userHttp.getAllActiveUsers();
-    this.isGhost$ = this.userService.isGhost();
+    this.groupNames$ = this.store.select(fromAppManagement.getAllGroupNames);
+    this.activeUsers$ = this.store.select(fromAppManagement.getAllActiveUsers);
+    this.groupDetails$ = this.store.select(fromAppManagement.getGroupDetails);
+    this.isGhost$ = this.store.select(fromAuth.isGhost);
+
   }
 
-  ngAfterViewInit(): void {
-    this.groupPrivileges.hideUnassignedPriv = true;
-  }
 
-  public selectGroup(groupName: string) {
-    this.groupService.getGroupDetailsWithUnsetPrivileges(groupName)
-      .subscribe(group => {
-        this.groupPrivileges.enabledPrivileges = group.applicationPrivilegeDTO;
-        this.groupPrivileges.disabledPrivileges = group.unsetApplicationPrivilegeDTO;
-        this.groupPrivileges.name = 'Skupiny';
-        this.groupDetails.group = group;
-      });
+  selectGroup(groupName: string) {
+    this.store.dispatch(appManagementAction.getGroupDetailsWithUnsetPrivileges({groupName}));
   }
 
   editGroup() {
-    this.groupDetails.editGroup();
-    this.groupPrivileges.editGroup();
-    this.editGroupActivated = true;
+    this.editGroupActivated = !this.editGroupActivated;
+    this.groupDetails.edit();
+    this.groupPrivileges.edit();
   }
-
-  resetGroup() {
-    this.groupDetails.resetGroup();
-    this.groupPrivileges.resetGroup();
-    this.editGroupActivated = false;
-  }
-
 
   saveGroup() {
     this.swallNotification.generateQuestion(`Naozaj chcetete editovať skupinu ?`).then((result) => {
       if (result.value) {
-        this.swallNotification.generateNotification(`Požiadavka editovanie skupiny zaslaná`);
-        this.groupService.modifyGroup(this.groupDetails.group).subscribe(() => {
-          this.swallNotification.generateNotification(`Skupina bola editovaná`);
-          this.editGroupActivated = false;
-          this.groupPrivileges.activateUnableClick = false;
-          this.groupPrivileges.hideUnassignedPriv = true;
-          this.editGroupActivated = false;
-          // this.serdbuttonsGroup.editActivated = false;
-        });
+
+        const groupCopy = this.groupConstructorService.createGroupCopy(
+          this.groupDetails.groupCopy,
+          this.groupPrivileges.enabledPrivilegesCopy,
+          this.groupPrivileges.disabledPrivilegesCopy
+        );
+
+        this.store.dispatch(appManagementAction.editGroup({group: groupCopy}));
+        this.editGroupActivated = false;
       }
     });
   }
 
-  deleteGroup(): void {
+  deleteGroup() {
     this.swallNotification.generateQuestion(`Naozaj chcetete vymazať skupinu ?`).then((result) => {
       if (result.value) {
-        this.swallNotification.generateNotification(`Požiadavka zmazania skupiny zaslaná`);
-        this.groupService.deleteGroup(this.groupDetails.group.name).subscribe(() => {
-
-          const groupName = this.groupDetails.group.name;
-          this.groups$ = this.groups$.pipe(map(group => group.filter(name => name !== groupName)));
-          this.groupPrivileges.enabledPrivileges = undefined;
-          this.groupPrivileges.disabledPrivileges = undefined;
-          this.groupPrivileges.name = undefined;
-          this.groupDetails.group = undefined;
-          this.editGroupActivated = false;
-          // this.serdbuttonsGroup.editActivated = false;
-          this.swallNotification.generateNotification(`Skupina bola zmazaná`);
-        });
+        this.store.dispatch(appManagementAction.removeGroup());
+        this.editGroupActivated = false;
       }
     });
   }

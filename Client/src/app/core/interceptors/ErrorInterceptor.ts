@@ -3,7 +3,7 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/com
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
+import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -15,7 +15,7 @@ export class ErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(catchError(err => {
       console.log(err);
       if (err.status === 401) {
-        this.authenticationFailed();
+        this.authenticationFailed(err.error.error);
       } else if (err.status === 403) {
         this.swallNotification.generateErrorNotification(err.error).then(() => this.router.navigate(['/unauthorized']));
       } else if (err.status === 404) {
@@ -32,7 +32,12 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
 
-  private authenticationFailed(): void {
+  private authenticationFailed(error: string): void {
+    console.log(error);
+    if (error === 'Not found anonymousUser') {
+      console.log('missing token : Not found anonymousUser');
+      return;
+    }
     this.swallNotification.generateErrorNotification(`Zadali ste nesprávne prihlasovacie údaje.`);
   }
 }

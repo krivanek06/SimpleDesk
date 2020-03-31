@@ -32,9 +32,9 @@ public class RequestConverter {
 
     private void setRequestDTOValuesFromRequest(RequestDTO requestDTO, Request request){
         requestDTO.setRequestType(request.getModuleType().getName());
-        requestDTO.setCreator( this.userConverter.convertUserToSimpleDTO(request.getCreator()));
-        requestDTO.setAssigned(request.getAssigned() != null ?  this.userConverter.convertUserToSimpleDTO(request.getAssigned()) : null);
-        requestDTO.setClosed(request.getClosed() != null ? this.userConverter.convertUserToSimpleDTO(request.getClosed()) : null);
+        requestDTO.setCreator( this.userConverter.convertUserToUserDTO(request.getCreator()));
+        requestDTO.setAssigned(request.getAssigned() != null ?  this.userConverter.convertUserToUserDTO(request.getAssigned()) : null);
+        requestDTO.setClosed(request.getClosed() != null ? this.userConverter.convertUserToUserDTO(request.getClosed()) : null);
         requestDTO.setSolutionComment(request.getSolutionComment());
         requestDTO.setAllowCommenting(request.getAllowCommenting());
         requestDTO.setId(request.getId());
@@ -147,7 +147,7 @@ public class RequestConverter {
     public RequestCommentDTO convertRequestCommentToDTO(RequestComment requestComment){
         RequestCommentDTO requestCommentDTO = new RequestCommentDTO();
         requestCommentDTO.setIsPrivate(requestComment.getIsPrivate());
-        requestCommentDTO.setCreator(this.userConverter.convertUserToSimpleDTO(requestComment.getUser()));
+        requestCommentDTO.setCreator(this.userConverter.convertUserToUserDTO(requestComment.getUser()));
         requestCommentDTO.setRequestId(requestComment.getRequest().getId());
         requestCommentDTO.setComment(requestComment.getComment());
         requestCommentDTO.setId(requestComment.getId());

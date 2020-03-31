@@ -4,36 +4,38 @@ import {
   HttpRequest,
   HttpHandler,
   HttpEvent,
-  HttpResponse,
-  HttpErrorResponse
 } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {AuthenticationService} from '../services/authentication.service';
-import {UserStoreService} from "../services/user-store.service";
 import {Router} from "@angular/router";
+import {Auth} from "../model/appState.model";
+import {select, Store} from "@ngrx/store";
 
+import * as fromAuth from './../store/auth/auth.reducer';
+import * as authAction from './../store/auth/auth.action';
+import {filter, first, flatMap, mergeMap, retry, shareReplay, switchMap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthenticationService,
-              private userStoreService: UserStoreService,
-              private router: Router) {
+  constructor(private router: Router, private store: Store<Auth>) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!this.authService.isTokenValid()) {
-      this.router.navigateByUrl("/login");
-      this.userStoreService.logOut();
-      this.authService.logout();
+    if (!this.store.select(fromAuth.isTokenValid)) {
+      console.log('logging out');
+      this.store.dispatch(authAction.logout());
     }
 
-    const jwtToken = this.authService.getAccessToken();
-    if (jwtToken) {
-      req = req.clone({headers: req.headers.set("Authorization", "Bearer " + jwtToken)});
-    }
-
-    return next.handle(req);
+    return this.store.pipe(
+      select(fromAuth.getAccessToken),
+      first(),
+      mergeMap(token => {
+        const authReq = !!token ? req.clone({setHeaders: {Authorization: 'Bearer ' + token}}) : req;
+        return next.handle(authReq);
+      }),
+      retry(1),
+      shareReplay()
+    );
   }
 }

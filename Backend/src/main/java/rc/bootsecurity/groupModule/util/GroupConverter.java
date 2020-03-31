@@ -18,11 +18,11 @@ public class GroupConverter {
         groupDTO.setName(group.getGroupName());
         groupDTO.setDescription(group.getDescription());
         groupDTO.setEmail(group.getEmail());
-        groupDTO.setGroupManager(this.userConverter.convertUserToSimpleDTO(group.getGroupManager()));
+        groupDTO.setGroupManager(this.userConverter.convertUserToUserDTO(group.getGroupManager()));
         groupDTO.setUsersInGroup(group.getUsersInGroup() != null ? group.getUsersInGroup().stream()
-                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
+                .map(user -> this.userConverter.convertUserToUserDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
         groupDTO.setUsersWatchGroup(group.getUsersWatchingGroupActivity() != null ? group.getUsersWatchingGroupActivity().stream()
-                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
+                .map(user -> this.userConverter.convertUserToUserDTO(user)).collect(Collectors.toList()) : new ArrayList<>());
         return groupDTO;
     }
 

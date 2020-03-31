@@ -5,17 +5,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.messaging.simp.SimpMessageSendingOperations;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.exception.PasswordException;
 import rc.bootsecurity.util.fileModule.ImageDTO;
-import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.dto.UserPasswordContainer;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 import rc.bootsecurity.userModule.exception.UserException;
 import rc.bootsecurity.userModule.service.UserService;
 import rc.bootsecurity.util.fileModule.FileService;
@@ -85,7 +81,7 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public ResponseEntity<?> registerUser(@RequestBody UserSimpleDTO userSimpleDTO){
+    public ResponseEntity<?> registerUser(@RequestBody UserDTO userSimpleDTO){
         try {
             this.userService.registerUser(userSimpleDTO);
             return new ResponseEntity<>(HttpStatus.OK);
@@ -97,14 +93,15 @@ public class UserController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie uživateľa",HttpStatus.BAD_REQUEST);
     }
 
-    @GetMapping("/secure/allActive")
-    public List<UserSimpleDTO> getAllActiveUsers(){
-        return this.userService.getAllActiveUsersWithoutPhoto();
-    }
 
     @GetMapping("/secure/all")
-    public List<UserSimpleDTO> getAllUsers(){
-        return this.userService.getAllUsersWithoutPhoto();
+    public ResponseEntity<?> getAllUsers(){
+        try {
+            return new ResponseEntity<>(this.userService.getAllUsers(), HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to get user all users, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri získavaní uživateľov",HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping("/secure/{username}")

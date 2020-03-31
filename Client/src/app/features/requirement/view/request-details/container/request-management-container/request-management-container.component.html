@@ -1,0 +1,20 @@
+<ng-container *ngIf="request$ | async as request">
+  <app-request-management
+    class='content'
+    [isOpen]='!request.closed'
+    [allowCommenting]="request.allowCommenting"
+    [availableUsers]='activeUsers$ | async'
+    [enableChangeState]='(this.isAdmin$ | async) || request.assigned?.username === (user$ | async).username || request.creator.username === (user$ | async).username'
+    [enableChangeCommenting]="(this.isAdmin$ | async) || request.assigned?.username === (user$ | async).username "
+    [enableRemoveSolver]='(this.isAdmin$ | async) || request.assigned?.username === (user$ | async).username '
+    [enableChangeSolver]='(this.isAdmin$ | async) || ((isSolver$ | async) && ((isManager$ | async) || (isSolverRightHand$ | async)))'
+    [enableChangePriority]='(isAdmin$ | async) || ((isSolver$ | async) && request.assigned?.username === (user$ | async).username) '
+    [enableEvaluation]='request.requestType === requestType.Report &&  (( isAdmin$ | async ) || request.assigned?.username === (user$ | async).username )'
+    (changeStateEmitter)='changeState(request)'
+    (commentingEmitter)='changeCommenting(request)'
+    (removeMeOnRequestEmitter)='removeMeOnRequest(request)'
+    (changeSolverEmitter)='changeSolver(request, $event)'
+    (changePriorityEmitter)='changePriority(request, $event)'
+    (evaluationEmitter)='addReportEvaluation(request, $event)'>
+  </app-request-management>
+</ng-container>

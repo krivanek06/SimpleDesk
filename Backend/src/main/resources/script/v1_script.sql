@@ -610,7 +610,7 @@ from tbl_request_comments as r_comments where request_id = searching_request_id 
         tbl_request_comments_shared.group_id in (
         select group_id from tbl_user_groups where tbl_user_groups.user_id = (select id from tbl_users where username = searching_user_name)
     )
-) )
+) or r_comments.user_id = (select id from tbl_users where username = searching_user_name) )
 $$ LANGUAGE sql;
 
 drop function if exists get_request_comment_dto_varchar(integer, varchar);

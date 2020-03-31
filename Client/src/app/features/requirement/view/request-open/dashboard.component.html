@@ -1,0 +1,33 @@
+<app-header></app-header>
+
+<app-navigation></app-navigation>
+
+<div id='contentContainer'>
+
+   <app-request-table
+       headerColor="#358BF0"
+       [data] = 'myCreatedRequests$ | async'
+       [displayedColumns]= "viewTable"
+       tableTitle="Moje požiadávky"
+       (seenLogsEmitter) = 'removeLogs($event)'>
+   </app-request-table>
+
+   <app-request-table
+       headerColor="#56A3FF"
+       [displayedColumns]= "modifyTable"
+       [data] = 'meAssignedRequests$ | async'
+       tableTitle="Požiadavky pridelené na mňa"
+       (seenLogsEmitter) = 'removeLogs($event)'
+       (removeFromMeEmitter) = "modifyMeAsSolver($event, false)">
+   </app-request-table>
+
+   <app-request-table
+       headerColor="#E8F3FF"
+       [displayedColumns]= "viewTable"
+       [data] = 'otherOpenRequests$ | async'
+       [displayAssignToMe] ='(isSolver$ | async)'
+       tableTitle="Ostatné otvorené požiadavky"
+       (seenLogsEmitter) = 'removeLogs($event)'
+       (assignOnMeEmitter) = "modifyMeAsSolver($event, true)">
+   </app-request-table>
+</div>

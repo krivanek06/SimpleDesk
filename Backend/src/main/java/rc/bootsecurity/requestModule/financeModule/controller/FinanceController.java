@@ -22,23 +22,14 @@ public class FinanceController {
     @Autowired
     private FinanceService financeService;
 
-    @GetMapping("/types")
-    public List<FinanceTypeDTO> getFinanceTypesToSubmitForLoggedInUser(){
-        try {
-            return this.financeService.getFinanceTypesToSubmitForLoggedInUser();
-        } catch (Exception e) {
-            LOGGER.error("Method getFinanceTypesToSubmitForLoggedInUser failed, error : " + e.getMessage());
-        }
-        return new ArrayList<>();
-    }
 
     @PostMapping("")
-    public ResponseEntity<?> submitTicket(@RequestBody FinanceFormDTO financeFormDTO){
+    public ResponseEntity<?> submitFinance(@RequestBody FinanceFormDTO financeFormDTO){
         try {
             RequestDTO financeDTO = this.financeService.createFinance(financeFormDTO);
             return new ResponseEntity<>(financeDTO, HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to save ticket into database, error : " + e.getMessage());
+            LOGGER.error("Failed to save finance into database, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri zaznamenávaní finančnej požidavky, kontaktujte administrátora.",HttpStatus.BAD_REQUEST);
     }

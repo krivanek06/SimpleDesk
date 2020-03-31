@@ -37,11 +37,11 @@ public class TicketController {
     }
 
     @GetMapping("/ticketSubtype")
-    public List<TicketSubtype> getTicketSubtype(@RequestParam("ticketTypeName") String ticketTypeName){
+    public List<TicketSubtype> getTicketSubtype(){
         try {
-            return this.ticketService.getTicketSubtypesForTicketType(ticketTypeName);
+            return this.ticketService.getAllTicketSubtypes();
         } catch (Exception e) {
-            LOGGER.error("Failed to getTicketSubtype for ticket " + ticketTypeName + ", error : " + e.getMessage());
+            LOGGER.error("Failed to getAllTicketSubtypes, error : " + e.getMessage());
         }
         return new ArrayList<>();
     }
