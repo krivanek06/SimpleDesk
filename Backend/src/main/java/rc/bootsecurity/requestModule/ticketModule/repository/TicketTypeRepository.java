@@ -10,6 +10,4 @@ import java.util.Set;
 @Repository
 public interface TicketTypeRepository extends CrudRepository<TicketType, Integer> {
     TicketType findByName(String name);
-    List<TicketType> findAllByNameIn(List<String> names);
-    List<TicketType> findAllByNameIn(Set<String> names);
 }

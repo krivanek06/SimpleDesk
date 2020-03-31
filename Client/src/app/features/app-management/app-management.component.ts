@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { UserStoreService } from 'app/core/services/user-store.service';
+import {Store} from "@ngrx/store";
+import {AppState, Auth} from "../../core/model/appState.model";
 
+import * as fromAuth from '../../core/store/auth/auth.reducer';
+import * as fromUser from '../../core/store/user/user.reducer';
 @Component({
   selector: 'app-app-management',
   templateUrl: './app-management.component.html',
@@ -11,9 +14,9 @@ export class AppManagementComponent implements OnInit {
   isAdmin$: Observable<boolean>;
   hasPrivilegeAccess$: Observable<boolean>;
 
-  constructor(private userStoreService: UserStoreService) {
-    this.isAdmin$ = this.userStoreService.isAdmin();
-    this.hasPrivilegeAccess$ = this.userStoreService.hasPrivilegeAccess();
+  constructor(private store: Store<AppState>) {
+    this.isAdmin$ = this.store.select(fromAuth.isAdmin);
+    this.hasPrivilegeAccess$ = this.store.select(fromUser.hasPrivilegeAccess);
    }
 
   ngOnInit() {

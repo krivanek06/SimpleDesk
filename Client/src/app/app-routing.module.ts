@@ -1,13 +1,12 @@
 import {NgModule} from '@angular/core';
 import {Routes, RouterModule, PreloadAllModules} from '@angular/router';
-import {AuthGuard} from './core/guards/AuthGuard';
-import {LoginComponent} from "./features/login/login.component";
-import {LoginGuardGuard} from "./features/login/guard/login-guard.guard";
+import {AuthGuard} from './core/guards/Auth.guard';
+import {LoginComponent} from "./core/components/login/login.component";
 
 
 const routes: Routes = [
   {path: '', redirectTo: 'login', pathMatch: 'full'},
-  {path: 'login', component: LoginComponent, canActivate: [LoginGuardGuard]},
+  {path: 'login', component: LoginComponent},
   {
     path: 'requests',
     loadChildren: () => import('./features/requirement/requirement.module').then(mod => mod.RequirementModule),
@@ -15,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'user_profile',
-    loadChildren: () => import('./features/user-profile/user-profile.module').then(mod => mod.UserProfileModule),
+    loadChildren: () => import('./features/user-section/user-section.module').then(mod => mod.UserSectionModule),
     canActivate: [AuthGuard]
   },
   {

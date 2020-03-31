@@ -1,39 +1,19 @@
 package rc.bootsecurity.userModule.dto;
 
 import lombok.Data;
+import rc.bootsecurity.groupModule.dto.GroupContainerDTO;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
 
-import java.sql.Timestamp;
 
 @Data
-public class UserDTO {
-    private Integer id;
+public class UserDTO extends UserDTOSimple{
+    private String userShortedName;
 
-    private String username;
+    private String userImageString;
 
-    private String firstName;
+    private byte[] userImageByte;
 
-    private String lastName;
-
-    private String fullName;
-
-    private String photo;
-
-    private String email;
-
-    private Boolean active;
-
-    private Timestamp dateCreation;
-
-    private Timestamp dateEnding;
-
-    private byte[] photoBytes;
-
-    private String[]  groupsToManage;
-
-    private String[]  groupsActivityWatched;
-
-    private String[]  groupsInvolved;
+    private GroupContainerDTO groupContainerDTO;
 
     private ApplicationPrivilegeDTO applicationPrivilegeDTO;
 

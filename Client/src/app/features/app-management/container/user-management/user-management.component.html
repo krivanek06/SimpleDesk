@@ -1,29 +1,39 @@
+<div class='contanierTitle'>
+  <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>
+  <mat-form-field>
+    <mat-label>Vyberte uživateľa</mat-label>
+    <mat-select (selectionChange)="selectUser($event.value)">
+      <mat-option *ngFor='let value of allUsers$ | async ' [value]='value.username'>
+        {{ value.firstName }} {{ value.lastName }}
+      </mat-option>
+    </mat-select>
 
-<div class = 'contanierTitle'>
-    <span class='formTitleSmall selectTitleSpace'>Zvoľte uživateľa</span>
-    <mat-form-field >
-        <mat-label>Vyberte uživateľa</mat-label>
-        <mat-select (selectionChange)= "selectUser($event.value)">
-            <mat-option *ngFor = 'let value of users | async ' [value] = 'value.username'>
-                {{ value.firstName }} {{ value.lastName }}
-            </mat-option>
-        </mat-select>
-
-    </mat-form-field>
+  </mat-form-field>
 
 
-    <!-- modifycation buttons -->
-    <div id = 'userModificationButtons' *ngIf='userDetails.displayedUser && !(isGhost$ | async)'>
-        <app-user-management-buttons
-            [isActive] = 'userDetails.displayedUser.active'
-            (modifyStateEmitter) = 'modifyUserState()'
-            (resetPasswordEmitter)="resetUserPassword()">
-        </app-user-management-buttons>
-    </div>
+  <!-- modifycation buttons -->
+  <div id='userModificationButtons' *ngIf='userDetails$ | async as userDetails '>
+    <app-user-management-buttons
+      *ngIf="!(isGhost$ | async)"
+      [isActive]='userDetails.active'
+      (modifyStateEmitter)='modifyUserState(userDetails)'
+      (resetPasswordEmitter)="resetUserPassword(userDetails.username)">
+    </app-user-management-buttons>
+  </div>
 
 </div>
 
+<ng-container *ngIf="userDetails$ | async as userDetails">
+  <app-user-details
+    [displayedUser]="userDetails">
+  </app-user-details>
 
-<app-user-details #userDetails ></app-user-details>
-<app-privileges #userPrivileges ></app-privileges>
-<app-user-groups #userGroups ></app-user-groups>
+  <app-privileges
+    name='Uživateľa'
+    [enabledPrivilegesCopy]=userDetails.applicationPrivilegeDTO>
+  </app-privileges>
+
+  <app-user-groups
+    [groupContainer]="userDetails.groupContainerDTO">
+  </app-user-groups>
+</ng-container>

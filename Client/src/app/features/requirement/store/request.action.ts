@@ -1,16 +1,17 @@
 import {Action, createAction, props} from "@ngrx/store";
 import {
   CustomDocument, FilterRequest,
-  FinanceForm,
+  FinanceForm, FinanceType,
   ReportForm,
   Request,
   RequestComment,
   RequestCommentWrapper,
-  TicketForm
-} from "../../../core/model/Request";
-import {UserSimpleDTO} from "../../../core/model/User";
-import {RequestPosition, RequestType} from "../../../core/enum/request.enum";
+  TicketForm, TicketSubtype
+} from "../model/Request";
+import {RequestPosition, RequestType} from "../model/request.enum";
 import {CustomDate} from "../../../core/model/appState.model";
+import {User} from "../../../core/model/User";
+import {Group} from "../../../core/model/Group";
 
 
 export const uploadFile = createAction(
@@ -135,15 +136,15 @@ export const addReportEvaluationFailure = createAction(
 
 export const closeRequest = createAction(
   '[Request Detail] Close request',
-  props<{ requestId: number, date: Date, userSimpleDTO: UserSimpleDTO }>()
+  props<{ requestId: number, date: Date, close: boolean }>()
 );
 export const reopenRequest = createAction(
   '[Request Details] Reopen request',
-  props<{ requestId: number, date: Date, userSimpleDTO: UserSimpleDTO }>()
+  props<{ requestId: number, date: Date, close: boolean }>()
 );
 export const modifiedStateRequestSuccess = createAction(
   '[Request] Modified state on request success',
-  props<{ requestId: number, userSimpleDTO: UserSimpleDTO, date: Date, requestPosition: RequestPosition }>()
+  props<{ requestId: number, userDTO: User, date: Date, requestPosition: RequestPosition }>()
 );
 export const modifiedStateRequestFailure = createAction(
   '[Request] Modified state on request failure',
@@ -186,6 +187,15 @@ export const createRequestFailure = createAction(
   props<{ error: Error }>()
 );
 
+export const initializeWebsocketConnectionForRequests = createAction(
+  '[Core] init websocket connection for requests'
+);
+
+export const initializeWebsocketConnectionForRequestsFailure = createAction(
+  '[Core] init websocket connection for requests failure',
+  props<{ error: Error }>()
+);
+
 
 export const updateRequestFromAPI = createAction(
   '[API] Update request',
@@ -198,7 +208,7 @@ export const deleteRequestFromAPI = createAction(
 
 export const addRandomSolver = createAction(
   '[Request Details] Assign request to somebody',
-  props<{ requestId: number, userSimpleDTO: UserSimpleDTO }>()
+  props<{ requestId: number, userSimpleDTO: User }>()
 );
 
 export const removeLogs = createAction(
@@ -217,15 +227,15 @@ export const removeLogsFailure = createAction(
 
 export const assignMeOnRequest = createAction(
   '[Dashboard Page] Assign me on request',
-  props<{ request: Partial<Request>, userSimpleDTO: UserSimpleDTO }>()
+  props<{ request: Partial<Request>, assign: boolean }>()
 );
 export const removeMeOnRequest = createAction(
   '[Dashboard Page] Remove me on request',
-  props<{ request: Partial<Request>, userSimpleDTO: UserSimpleDTO }>()
+  props<{ request: Partial<Request>, assign: boolean }>()
 );
 export const modifiedSolverOnRequestSuccess = createAction(
   '[Request] Modified solver on request success',
-  props<{ requestId: number, userSimpleDTO: UserSimpleDTO, requestPosition: RequestPosition }>()
+  props<{ requestId: number, userSimpleDTO: User, requestPosition: RequestPosition }>()
 );
 export const modifiedSolverOnRequestFailure = createAction(
   '[Request] Modified solver on request failure',
@@ -264,5 +274,48 @@ export const changeClosedRequestFilter = createAction(
 );
 
 
-export const resetRequests = createAction('[Header] Logout, reset request store');
+export const getTicketSubtypes = createAction(
+  '[Request] get ticket subtypes',
+);
+
+export const getTicketSubtypesSuccess = createAction(
+  '[Request] get ticket subtypes success',
+  props<{ ticketSubtype: TicketSubtype[] }>()
+);
+
+export const getTicketSubtypesError = createAction(
+  '[Request] get ticket subtypes error',
+  props<{ error: Error }>()
+);
+
+
+export const getFinanceTypes = createAction(
+  '[Request] get finance types',
+);
+
+export const getFinanceTypesSuccess = createAction(
+  '[Request] get finance types success',
+  props<{ financeType: FinanceType[] }>()
+);
+
+export const getFinanceTypesError = createAction(
+  '[Request] get finance types error',
+  props<{ error: Error }>()
+);
+
+export const getGroupToShare = createAction(
+  '[Request] get group to share',
+  props<{ groupName: string }>()
+);
+
+export const getGroupToShareSuccess = createAction(
+  '[Request] get group to share success',
+  props<{ group: Group }>()
+);
+
+export const getGroupToShareError = createAction(
+  '[Request] get group to share failure',
+  props<{ error: Error }>()
+);
+
 

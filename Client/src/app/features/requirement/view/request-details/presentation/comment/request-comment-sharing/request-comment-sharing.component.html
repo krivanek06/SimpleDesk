@@ -1,0 +1,22 @@
+<ul>
+  <li class='information groupTitle'>Vyberte skupinu pre zdieľanie komentáru</li>
+  <li class='information elevation'
+      *ngFor="let name of involvedInGroups"
+      (click)="getGroupDetails(name)">
+    {{ name }}
+  </li>
+</ul>
+
+<button mat-raised-button color="primary"
+        id="sendingButton"
+        type="submit"
+        [disabled]="!groupName"
+        (click)="shareWith()">
+  Zdieľať
+</button>
+
+
+
+
+
+

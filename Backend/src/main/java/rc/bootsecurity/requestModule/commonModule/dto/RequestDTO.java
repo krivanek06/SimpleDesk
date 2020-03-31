@@ -4,9 +4,9 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.util.fileModule.NameFileDTO;
 import rc.bootsecurity.requestModule.requestCommentModule.dto.RequestCommentDTO;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -32,11 +32,11 @@ public class RequestDTO {
 
     private String requestType;
 
-    private UserSimpleDTO creator;
+    private UserDTO creator;
 
-    private UserSimpleDTO assigned;
+    private UserDTO assigned;
 
-    private UserSimpleDTO closed;
+    private UserDTO closed;
 
     private Integer solutionComment;
 

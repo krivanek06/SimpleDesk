@@ -2,37 +2,59 @@ import * as requestAction from './request.action';
 import {Injectable} from "@angular/core";
 import {act, Actions, createEffect, ofType} from "@ngrx/effects";
 import {Observable, of} from "rxjs";
-import {RequestHttpService} from "../../../api/request-http.service";
+import {RequestHttpService} from "../../../core/api/request-http.service";
 import {catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from "rxjs/operators";
-import {isDashboardLoaded} from "./request.reducer";
 import {Action, Store} from "@ngrx/store";
-import {Loading, RequestState} from "../../../core/model/appState.model";
-import {SwallNotificationService} from "../../../shared/services/swall-notification.service";
-import {RequestPosition} from "../../../core/enum/request.enum";
+import {AppState} from "../../../core/model/appState.model";
+import {SwallNotificationService} from "../../../core/services/swall-notification.service";
+import {RequestPosition} from "../model/request.enum";
 import {saveAs} from 'file-saver';
+import {Request} from "../model/Request";
 
 import * as RequestAction from "./request.action";
-import * as LoadingAction from "./../../../core/store/loading/loading.action";
-import {Request} from "../../../core/model/Request";
+import * as LoadingAction from "../../../core/store/loading/loader.action";
+import * as fromUser from '../../../core/store/user/user.reducer';
+import * as fromRequest from "./request.reducer";
+import {GroupHttpService} from "../../../core/api/group-http.service";
 
 @Injectable()
 export class RequestEffects {
   constructor(private actions$: Actions,
               private swallNotification: SwallNotificationService,
               private requestHttpService: RequestHttpService,
-              private store: Store<RequestState>,
-              private storeLoading: Store<Loading>) {
+              private groupHttpService: GroupHttpService,
+              private store: Store<AppState>) {
   }
 
+  initializeWebsocketConnectionForRequests$: Observable<Action> = createEffect(() => this.actions$.pipe(
+    ofType(RequestAction.initializeWebsocketConnectionForRequests),
+    withLatestFrom(this.store.select(fromRequest.isWebsocketConnected)),
+    filter(([_, loaded]) => !loaded),
+    switchMap(() => this.store.select(fromUser.getUser)
+      .pipe(
+        switchMap(user => this.requestHttpService.initializeWebsocketConnection(user.username)
+          .pipe(
+            map((response) => {
+              const request: Request = JSON.parse(response.body);
+              if (!request.logs || request.logs[request.logs.length - 1] !== 'DELETE') {
+                return RequestAction.updateRequestFromAPI({request});
+              }
+              return RequestAction.deleteRequestFromAPI({request});
+            }),
+            catchError((error) => of(RequestAction.initializeWebsocketConnectionForRequestsFailure({error})))
+          ))
+      )
+    )
+  ));
 
   getOpenRequests$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.getOpenRequests),
-    withLatestFrom(this.store.select(isDashboardLoaded)),
+    withLatestFrom(this.store.select(fromRequest.isDashboardLoaded)),
     filter(([_, loaded]) => !loaded),
-    tap(() => this.storeLoading.dispatch(LoadingAction.loadingStart())),
+    tap(() => this.store.dispatch(LoadingAction.loadingStart())),
     switchMap(() => this.requestHttpService.getRequestOnDashboard()
       .pipe(
-        tap(() => this.storeLoading.dispatch(LoadingAction.loadingFinished())),
+        tap(() => this.store.dispatch(LoadingAction.loadingFinished())),
         map(requests => RequestAction.getOpenRequestsSuccess({requests})),
         catchError(error => of(RequestAction.getOpenRequestsError({error})))
       )
@@ -42,10 +64,10 @@ export class RequestEffects {
 
   getClosedRequest$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.getClosedRequests),
-    tap(() => this.storeLoading.dispatch(LoadingAction.loadingStart())),
+    tap(() => this.store.dispatch(LoadingAction.loadingStart())),
     switchMap(action => this.requestHttpService.getClosedRequests(action.customDate.dateFrom, action.customDate.dateTo)
       .pipe(
-        tap(() => this.storeLoading.dispatch(LoadingAction.loadingFinished())),
+        tap(() => this.store.dispatch(LoadingAction.loadingFinished())),
         map((requests) => RequestAction.getClosedRequestsSuccess({
           requests,
           customDate: action.customDate
@@ -60,18 +82,21 @@ export class RequestEffects {
       RequestAction.assignMeOnRequest,
       RequestAction.removeMeOnRequest
     ),
-    switchMap((action) => this.requestHttpService.assignOrRemoveRequestOnMe(action.request.id, !!action.userSimpleDTO)
+    switchMap((action) => this.requestHttpService.assignOrRemoveRequestOnMe(action.request.id, action.assign)
       .pipe(
-        map(() => {
-          const text = !!action.userSimpleDTO ? `Pridelené` : `Vzdané`;
-          this.swallNotification.generateNotification(text);
-          return RequestAction.modifiedSolverOnRequestSuccess({
-            requestId: action.request.id,
-            userSimpleDTO: action.userSimpleDTO,
-            requestPosition: !!action.userSimpleDTO ? RequestPosition.Assigned : RequestPosition.UnAssigned,
-          });
-        }),
-        catchError(error => of(RequestAction.modifiedSolverOnRequestFailure({error})))
+        switchMap(() => this.store.select(fromUser.getUser)
+          .pipe(
+            map((user) => {
+              const text = action.assign ? `Pridelené` : `Vzdané`;
+              this.swallNotification.generateNotification(text);
+              return RequestAction.modifiedSolverOnRequestSuccess({
+                requestId: action.request.id,
+                userSimpleDTO: action.assign ? user : undefined,
+                requestPosition: action.assign ? RequestPosition.Assigned : RequestPosition.UnAssigned,
+              });
+            }),
+            catchError(error => of(RequestAction.modifiedSolverOnRequestFailure({error})))
+          ))
       )
     )));
 
@@ -187,7 +212,7 @@ export class RequestEffects {
         map(() => {
           const allowCommenting = !action.request.allowCommenting;
           this.swallNotification.generateNotification(
-            allowCommenting ?  'Komentovanie požiadavky sa povolilo' : 'Komentovanie požiadavky sa zakázalo');
+            allowCommenting ? 'Komentovanie požiadavky sa povolilo' : 'Komentovanie požiadavky sa zakázalo');
           return requestAction.toggleCommentingSuccess({requestId: action.request.id, allowCommenting});
         }),
         catchError(error => of(requestAction.toggleCommentingFailure({error})))
@@ -278,20 +303,23 @@ export class RequestEffects {
 
   modifiedStateRequest$: Observable<Action> = createEffect(() => this.actions$.pipe(
     ofType(RequestAction.closeRequest, RequestAction.reopenRequest),
-    switchMap(action => this.requestHttpService.changeState(action.requestId, !!action.userSimpleDTO)
+    switchMap(action => this.requestHttpService.changeState(action.requestId, action.close)
       .pipe(
-        map(() => {
-          const state = !!action.date ? 'uzavretá' : 'otvorená';
-          this.swallNotification.generateNotification(`Požiadavka ${action.requestId}. bola ${state}`);
-          return RequestAction.modifiedStateRequestSuccess({
-            requestId: action.requestId,
-            userSimpleDTO: action.userSimpleDTO,
-            date: action.date,
-            requestPosition: !!action.date ? RequestPosition.Closed : RequestPosition.Assigned,
-          });
-        }),
-        catchError((error) => of(RequestAction.modifiedStateRequestFailure({error})))
-      )
+        switchMap(() => this.store.select(fromUser.getUser)
+          .pipe(
+            map((userDTO) => {
+              const state = action.close ? 'uzavretá' : 'otvorená';
+              this.swallNotification.generateNotification(`Požiadavka ${action.requestId}. bola ${state}`);
+              return RequestAction.modifiedStateRequestSuccess({
+                requestId: action.requestId,
+                userDTO: action.close ? userDTO : undefined,
+                date: action.date,
+                requestPosition: action.close ? RequestPosition.Closed : RequestPosition.Assigned,
+              });
+            }),
+            catchError((error) => of(RequestAction.modifiedStateRequestFailure({error})))
+          )
+        ))
     )));
 
   changePriority$: Observable<Action> = createEffect(() => this.actions$.pipe(
@@ -305,4 +333,37 @@ export class RequestEffects {
         catchError((error) => of(RequestAction.changePriorityFailure({error})))
       )
     )));
+
+  getTicketSubtypes$: Observable<Action> = createEffect(() => this.actions$.pipe(
+    ofType(RequestAction.getTicketSubtypes),
+    withLatestFrom(this.store.select(fromRequest.isTicketTypesLoaded)),
+    filter(([_, loaded]) => !loaded),
+    switchMap(() => this.requestHttpService.getTicketSubtype()
+      .pipe(
+        map((ticketSubtype) => RequestAction.getTicketSubtypesSuccess({ticketSubtype})),
+        catchError((error) => of(RequestAction.getTicketSubtypesError({error})))
+      ))
+  ));
+
+  getFinanceTypes$: Observable<Action> = createEffect(() => this.actions$.pipe(
+    ofType(RequestAction.getFinanceTypes),
+    withLatestFrom(this.store.select(fromRequest.isFinanceTypesLoaded)),
+    filter(([_, loaded]) => !loaded),
+    switchMap(() => this.requestHttpService.getFinanceTypesAll()
+      .pipe(
+        map((financeType) => RequestAction.getFinanceTypesSuccess({financeType})),
+        catchError((error) => of(RequestAction.getFinanceTypesError({error})))
+      ))
+  ));
+
+  getGroupToShare$: Observable<Action> = createEffect(() => this.actions$.pipe(
+    ofType(RequestAction.getGroupToShare),
+    switchMap((action) => this.groupHttpService.getGroupDetails(action.groupName)
+      .pipe(
+        map((group) => RequestAction.getGroupToShareSuccess({group})),
+        catchError((error) => of(RequestAction.getGroupToShareError({error})))
+      ))
+  ));
+
+
 }

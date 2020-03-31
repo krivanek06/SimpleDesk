@@ -9,16 +9,14 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import rc.bootsecurity.groupModule.dto.GroupContainerDTO;
 import rc.bootsecurity.groupModule.service.GroupService;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
-import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.userModule.dto.UserDTO;
+import rc.bootsecurity.userModule.dto.UserDTOSimple;
 import rc.bootsecurity.userModule.exception.PasswordException;
 import rc.bootsecurity.userModule.repository.UserRepository;
-import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.dto.UserPasswordContainer;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 import rc.bootsecurity.userModule.entity.User;
 import rc.bootsecurity.userModule.enums.USER_TYPE;
 import rc.bootsecurity.userModule.exception.UserException;
@@ -28,6 +26,7 @@ import rc.bootsecurity.util.JsonStringParser;
 import rc.bootsecurity.userModule.util.UserConverter;
 import rc.bootsecurity.util.RandomGenerator;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -47,9 +46,6 @@ public class UserService {
 
     private static final Logger LOGGER =  LoggerFactory.getLogger(UserService.class);
 
-   /* public List<User> getUsersWatchedRequest(Request request){
-        return this.userRepository.findAllByWatchedRequests(request).orElseGet(ArrayList::new);
-    }*/
 
     public ApplicationPrivilegeDTO getPrivilegesForUser(String username){
         return this.jsonStringParser.parseFromRawJsonToUserPrivilegeDTO(this.userRepository.findPrivilegesForUser(username));
@@ -87,19 +83,11 @@ public class UserService {
     }
 
     public UserDTO getLoggedInUserDetails(){
-        String username = this.getPrincipalUsername();
-        UserDTO userDTO = this.userConverter.convertUserToUserDTO(this.loadUserByUsername(username));
-        userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
-
-        return userDTO;
+        return this.getUserDetails(this.getPrincipalUsername());
     }
 
     public void changePassword(UserPasswordContainer userPasswordContainer) throws PasswordException {
         String username = this.getPrincipalUsername();
-
-        /*if(!userPasswordContainer.getNewPassword1().contentEquals(userPasswordContainer.getNewPassword2())){
-            throw new Exception("Password does not match for user : " + username);
-        }*/
 
         User user = this.loadUserByUsername(username);
         BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
@@ -110,7 +98,6 @@ public class UserService {
 
         user.setPassword(bCryptPasswordEncoder.encode(userPasswordContainer.getNewPassword1()));
         this.userRepository.save(user);
-
     }
 
     public void changeImageInDB(String imageToUpdate){
@@ -126,30 +113,18 @@ public class UserService {
         this.fileService.uploadImageForUser(uploadingFiles);
     }
 
-
-    public List<UserSimpleDTO> getAllActiveUsersWithoutPhoto(){
-        return this.userRepository.findAllByActiveTrueOrderById().stream().filter(user ->
-                !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
-                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList());
-    }
-
-    public List<UserSimpleDTO> getAllUsersWithoutPhoto(){
+    public List<UserDTOSimple> getAllUsers(){
         return this.userRepository.findAllByOrderByIdAsc().stream().filter(user ->
                 !user.getUsername().equalsIgnoreCase("admin") && !user.getUsername().equalsIgnoreCase("ghost"))
-                .map(user -> this.userConverter.convertUserToSimpleDTO(user)).collect(Collectors.toList());
+                .map(user -> this.userConverter.convertUserToUserDTOSimple(user)).collect(Collectors.toList());
     }
 
     public UserDTO getUserDetails(String username){
         User user = this.loadUserByUsername(username);
 
         UserDTO userDTO = this.userConverter.convertUserToUserDTO(user);
-        userDTO.setPhotoBytes(fileService.getUserImage(userDTO.getPhoto()));
         userDTO.setApplicationPrivilegeDTO(this.getPrivilegesForUser(username));
-
-        GroupContainerDTO groupContainerDTO = this.groupService.getAllGroupsDTOForUsername(username);
-        userDTO.setGroupsInvolved(groupContainerDTO.getUserInGroups().toArray(String[]::new));
-        userDTO.setGroupsActivityWatched(groupContainerDTO.getWatchedGroupActivity().toArray(String[]::new));
-        userDTO.setGroupsToManage(groupContainerDTO.getManagerOfGroups().toArray(String[]::new));
+        userDTO.setGroupContainerDTO(this.groupService.getAllGroupsDTOForUsername(username));
 
         return userDTO;
     }
@@ -161,11 +136,11 @@ public class UserService {
     }
 
 
-    public void registerUser(UserSimpleDTO userSimpleDTO) throws UserException {
-        if(this.userRepository.findByUsername(userSimpleDTO.getUsername()).isPresent()){
+    public void registerUser(UserDTO userDTO) throws UserException {
+        if(this.userRepository.findByUsername(userDTO.getUsername()).isPresent()){
             throw new UserException("User already exists");
         }
-        this.modifyPassword(this.userConverter.generateFreshUser(userSimpleDTO));
+        this.modifyPassword(this.userConverter.generateFreshUser(userDTO));
     }
 
     private void modifyPassword(User user){
@@ -182,6 +157,11 @@ public class UserService {
     public void modifyUserState(String username){
         User user = this.loadUserByUsername(username);
         user.setActive(!user.getActive());
+        if(!user.getActive()) {
+            user.setDateEnding(new Timestamp(System.currentTimeMillis()));
+        }else{
+            user.setDateEnding(null);
+        }
         this.userRepository.save(user);
     }
 

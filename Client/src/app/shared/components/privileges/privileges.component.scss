@@ -1,0 +1,32 @@
+@import "../../style/SideTablePrintScss";
+@import "../../style/iconScss";
+
+.coloredLi{
+    color: #21cd2c;
+}
+
+.enabledPriv{
+    cursor: pointer;
+}
+
+.enabledPriv:hover {
+    font-weight: bold;
+}
+
+.unableClick{
+    opacity: 0.5;
+    cursor: no-drop;
+}
+
+.ableClick{
+    opacity: 1;
+    cursor: pointer  !important;
+}
+
+.ableClick:hover{
+    font-weight: bold;
+}
+
+.rightButton{
+    margin-right: -10px;
+}

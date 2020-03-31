@@ -9,8 +9,8 @@ import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.groupModule.repository.GroupRepository;
 import rc.bootsecurity.groupModule.util.GroupConverter;
 import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
+import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.service.UserService;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
 import rc.bootsecurity.userModule.entity.User;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketPrivileges;
 import rc.bootsecurity.requestModule.ticketModule.entity.TicketType;
@@ -25,7 +25,6 @@ import rc.bootsecurity.util.JsonStringParser;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class GroupService {
@@ -107,12 +106,12 @@ public class GroupService {
             group.setGroupManager(this.userService.loadUserByUsername(groupDTO.getGroupManager().getUsername()));
 
         // check if any new user was added to the group, if yes, reaload all members
-        List<String> userNamesInGroup = groupDTO.getUsersInGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList());
+        List<String> userNamesInGroup = groupDTO.getUsersInGroup().stream().map(UserDTO::getUsername).collect(Collectors.toList());
         if(!group.getUsersInGroup().stream().map(User::getUsername).collect(Collectors.toList()).equals(userNamesInGroup))
             group.setUsersInGroup(new HashSet<>(this.userService.loadUsersByUsername(userNamesInGroup)));
 
         // check if any new user was added to watch group, if yes, reaload all members
-        List<String> userNamesWatchedGroup = groupDTO.getUsersWatchGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList());
+        List<String> userNamesWatchedGroup = groupDTO.getUsersWatchGroup().stream().map(UserDTO::getUsername).collect(Collectors.toList());
         if(!group.getUsersWatchingGroupActivity().stream().map(User::getUsername).collect(Collectors.toList()).equals(userNamesWatchedGroup))
             group.setUsersWatchingGroupActivity(new HashSet<>(this.userService.loadUsersByUsername(userNamesWatchedGroup)));
 
@@ -164,18 +163,6 @@ public class GroupService {
         return groupContainerDTO;
     }
 
-    public List<String> getAllGroupsNamesForLoggedInUser(){
-        if(this.userService.isAdminOrGhost())
-            return this.getAllGroups();
-
-        GroupContainerDTO groupContainerDTO = this.getAllGroupsDTOForLoggedInUser();
-        return Stream.of(groupContainerDTO.getManagerOfGroups(), groupContainerDTO.getUserInGroups(),
-                groupContainerDTO.getWatchedGroupActivity()).flatMap(Collection::stream).distinct().collect(Collectors.toList());
-    }
-
-    public GroupContainerDTO getAllGroupsDTOForLoggedInUser(){
-        return this.getAllGroupsDTOForUsername(this.userService.getPrincipalUsername());
-    }
 
     public List<String> getAllGroups(){
         List<String> groups = new ArrayList<>();
@@ -185,20 +172,15 @@ public class GroupService {
 
     @Transactional
     public void registerGroup(GroupDTO groupDTO){
-        // add manager as member of group
-        /*if(!groupDTO.getUsersInGroup().contains(groupDTO.getGroupManager())){
-            groupDTO.getUsersInGroup().add(groupDTO.getGroupManager());
-        }*/
-
         Group group = new Group();
         group.setEmail(groupDTO.getEmail());
         group.setGroupName(groupDTO.getName());
         group.setDescription(groupDTO.getDescription());
         group.setGroupManager(this.userService.loadUserByUsername(groupDTO.getGroupManager().getUsername()));
-        group.setUsersInGroup(new HashSet<>(this.userService.loadUsersByUsername(groupDTO.getUsersInGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList()))));
+        group.setUsersInGroup(new HashSet<>(this.userService.loadUsersByUsername(groupDTO.getUsersInGroup().stream().map(UserDTO::getUsername).collect(Collectors.toList()))));
 
         if(!groupDTO.getUsersWatchGroup().isEmpty()) {
-            group.setUsersWatchingGroupActivity(new HashSet<>(this.userService.loadUsersByUsername(groupDTO.getUsersWatchGroup().stream().map(UserSimpleDTO::getUsername).collect(Collectors.toList()))));
+            group.setUsersWatchingGroupActivity(new HashSet<>(this.userService.loadUsersByUsername(groupDTO.getUsersWatchGroup().stream().map(UserDTO::getUsername).collect(Collectors.toList()))));
         }
 
         List<TicketPrivileges> ticketPrivilegesList = this.convertTicketPrivilegesForGroupToDTO(group, groupDTO.getApplicationPrivilegeDTO());
@@ -221,6 +203,10 @@ public class GroupService {
     }
 
     private List<TicketPrivileges> convertTicketPrivilegesForGroupToDTO(Group group, ApplicationPrivilegeDTO applicationPrivilegeDTO){
+        if(applicationPrivilegeDTO.getSolveTickets() == null){
+            return new ArrayList<>();
+        }
+
         List<TicketPrivileges> ticketPrivilegesList = new ArrayList<>();
         for(String ticketTypeName: applicationPrivilegeDTO.getSolveTickets().keySet()){
             if(applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName) == null || applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName).size() == 0 ) {
@@ -237,8 +223,6 @@ public class GroupService {
                 ticketPrivilegesList.add(ticketPrivileges);
                 continue;
             }
-
-
 
             for(String ticketSubtypeName: applicationPrivilegeDTO.getSolveTickets().get(ticketTypeName)){
                 TicketPrivileges ticketPrivileges = new TicketPrivileges();

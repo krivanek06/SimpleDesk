@@ -79,6 +79,11 @@ public class JsonStringParser {
 
                 for(HashMap request: result){
                     request.computeIfAbsent("requestCommentDTOS", k -> new ArrayList<>());
+
+                    List<HashMap> comments = (List<HashMap>) request.get("requestCommentDTOS");
+                    for(HashMap comment: comments){
+                        comment.computeIfAbsent("groupsToShare", k -> new ArrayList<>());
+                    }
                 }
             }catch (IOException e){
                 LOGGER.error("error in method parseFromRawJsonToRequestTableDTO : " + e.getMessage());

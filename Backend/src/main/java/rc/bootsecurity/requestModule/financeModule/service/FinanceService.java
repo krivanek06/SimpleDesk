@@ -34,12 +34,6 @@ public class FinanceService extends RequestManagementService {
         return requestConverter.convertRequestToRequestDTO(finance);
     }
 
-    public List<FinanceTypeDTO> getFinanceTypesToSubmitForLoggedInUser(){
-        return this.financeTypeRepository.getFinanceTypesToSubmitForUser(this.userService.getPrincipalUsername())
-                    .map(types -> types.stream().map(requestConverter::convertFinanceTypeToFinanceTypeDTOWithoutGroups)
-                            .collect(Collectors.toList())).orElseGet(ArrayList::new);
-    }
-
     public List<FinanceTypeDTO> getFinanceTypesDTO(){
         List<FinanceTypeDTO> financeTypes =  new ArrayList<>();
         this.financeTypeRepository.findAll().forEach(financeType -> {

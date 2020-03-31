@@ -13,7 +13,11 @@ import rc.bootsecurity.requestModule.commonModule.enums.MODULE_TYPE;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketSubtypeRepository;
 import rc.bootsecurity.requestModule.ticketModule.repository.TicketTypeRepository;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class TicketService extends RequestManagementService {
@@ -40,8 +44,12 @@ public class TicketService extends RequestManagementService {
         return requestConverter.convertRequestToRequestDTO(ticket);
     }
 
-    public List<TicketSubtype> getTicketSubtypesForTicketType(String ticketTypeName){
-        return this.ticketSubtypeRepository.findAllByTicketType(this.ticketTypeRepository.findByName(ticketTypeName));
+    public List<TicketSubtype> getAllTicketSubtypes(){
+        List<TicketSubtype> software = this.ticketSubtypeRepository.findAllByTicketType(this.ticketTypeRepository.findByName("Software"));
+        List<TicketSubtype> hardware = this.ticketSubtypeRepository.findAllByTicketType(this.ticketTypeRepository.findByName("Hardware"));
+        List<TicketSubtype> server = this.ticketSubtypeRepository.findAllByTicketType(this.ticketTypeRepository.findByName("Server"));
+
+        return Stream.of(software, hardware, server).flatMap(Collection::stream).collect(Collectors.toList());
     }
 
 

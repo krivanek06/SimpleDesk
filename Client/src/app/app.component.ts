@@ -1,8 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {RequestService} from "./features/requirement/services/request.service";
 import {select, Store} from "@ngrx/store";
 import {Loading} from "./core/model/appState.model";
-import {isLoading} from "./core/store/loading/loading.reducer";
+import {isLoading} from "./core/store/loading/loader.reducer";
 import {takeUntil} from "rxjs/operators";
 import {Subject} from "rxjs";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -17,15 +16,11 @@ export class AppComponent implements OnInit, OnDestroy {
 
   destroy$: Subject<boolean> = new Subject<boolean>();
 
-  constructor(private requestService: RequestService,
-              private spinner: NgxSpinnerService,
+  constructor(private spinner: NgxSpinnerService,
               private store: Store<Loading>) {
   }
 
   ngOnInit() {
-    this.requestService.activateConnection();
-   // this.store.subscribe(x => console.log(x));
-
     this.store.pipe(select(isLoading)).pipe(
       takeUntil(this.destroy$),
     ).subscribe((loading) => {

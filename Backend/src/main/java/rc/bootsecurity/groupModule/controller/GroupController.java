@@ -34,32 +34,17 @@ public class GroupController {
                 groupName + ", kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @GetMapping
-    public GroupContainerDTO getAllInvolvedGroupsName(){
-        return this.groupService.getAllGroupsDTOForLoggedInUser();
-    }
-
-    @GetMapping("/available")
-    public ResponseEntity<?> getAllAvailableGroupsForUSer(){
-        try {
-            List<String> groups =  this.groupService.getAllGroupsNamesForLoggedInUser();
-            return new ResponseEntity<>(groups, HttpStatus.OK);
-        } catch (Exception e) {
-            LOGGER.error("Failed method getAllAvailableGroupsForUSer,  error : " + e.getMessage());
-        }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní mien skupín, kontaktujte administrátora." , HttpStatus.INTERNAL_SERVER_ERROR);
-    }
 
     /* Available only for authorized solvers -> authorization type privilege management */
     @PutMapping("secure/manage/{name}/modifyGroup")
-    public ResponseEntity<?> modifyDescription(@PathVariable String name , @RequestBody GroupDTO groupDTO){
+    public ResponseEntity<?> modifyGroup(@PathVariable String name , @RequestBody GroupDTO groupDTO){
         try {
             this.groupService.modifyGroup(name, groupDTO);
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
-            LOGGER.error("Failed to modify group description, error : " + e.getMessage());
+            LOGGER.error("Failed to modify group, error : " + e.getMessage());
         }
-        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani opisu skupny",HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o modifikovani skupny",HttpStatus.BAD_REQUEST);
     }
 
     /* Available only for authorized solvers -> authorization type privilege management */

@@ -1,18 +1,25 @@
-import * as RequestAction from './request.action';
-import {FilterRequest, Request, RequestComment} from "../../../core/model/Request";
+import {FilterRequest, Request, RequestComment} from "../model/Request";
 import {Action, createFeatureSelector, createReducer, createSelector, on, State} from '@ngrx/store';
 import {RequestState} from "../../../core/model/appState.model";
 import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
 import {routerSelector} from "../../../shared/utils/router.serializer";
+import {User} from "../../../core/model/User";
 
 
+import * as authAction from "../../../core/store/auth/auth.action";
+import * as RequestAction from './request.action';
+import * as fromUser from '../../../core/store/user/user.reducer';
+import {TicketSubtype} from "../model/request.enum";
 
 export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>();
 
 export const initialState: RequestState = requestAdapter.getInitialState({
-  error: undefined,
   loadedDashboard: false,
-  loadedClosed: false,
+  websocketConnected: false,
+  requestType: {
+    ticketSubtype: [],
+    financeType: [],
+  },
   customDate: undefined,
   closedFilterRequests: {
     type: '',
@@ -21,6 +28,7 @@ export const initialState: RequestState = requestAdapter.getInitialState({
     name: '',
     priority: '',
   },
+  shareGroup: undefined,
 });
 
 
@@ -45,14 +53,31 @@ const requestReducer = createReducer(initialState,
     RequestAction.addReportEvaluation,
     RequestAction.addRandomSolver,
     RequestAction.downloadFilesSuccess,
+    RequestAction.getClosedRequests,
+    RequestAction.getTicketSubtypes,
+    RequestAction.getFinanceTypes,
+    RequestAction.getGroupToShare,
+
+    RequestAction.getOpenRequestsError,
+    RequestAction.getClosedRequestsError,
+    RequestAction.modifiedSolverOnRequestFailure,
+    RequestAction.modifiedStateRequestFailure,
+    RequestAction.removeLogsFailure,
+    RequestAction.changeCommentPrivacyFailure,
+    RequestAction.editCommentFailure,
+    RequestAction.shareCommentFailure,
+    RequestAction.deleteCommentFailure,
+    RequestAction.addCommentFailure,
+    RequestAction.changePriorityFailure,
+    RequestAction.addReportEvaluationFailure,
+    RequestAction.toggleCommentingFailure,
+    RequestAction.downloadFilesFailure,
+    RequestAction.uploadFileFailure,
+    RequestAction.createRequestFailure,
+    RequestAction.getTicketSubtypesError,
+    RequestAction.getFinanceTypesError,
+    RequestAction.getGroupToShareError,
     (state) => ({...state})
-  ),
-  on(
-    RequestAction.resetRequests,
-    (state) => (initialState)
-  ),
-  on(RequestAction.getClosedRequests,
-    (state) => ({...state, loadedClosed: false})
   ),
   on(RequestAction.getOpenRequestsSuccess,
     (state, {requests}) => (
@@ -66,11 +91,7 @@ const requestReducer = createReducer(initialState,
   ),
   on(RequestAction.getClosedRequestsSuccess,
     (state, {requests, customDate}) => (
-      requestAdapter.upsertMany(requests, {
-        ...state,
-        loadedClosed: true,
-        customDate
-      })
+      requestAdapter.upsertMany(requests, {...state, customDate})
     )
   ),
   on(
@@ -121,13 +142,13 @@ const requestReducer = createReducer(initialState,
   ),
   on(
     RequestAction.modifiedStateRequestSuccess,
-    (state, {requestId, userSimpleDTO, date, requestPosition}) => (
+    (state, {requestId, userDTO, date, requestPosition}) => (
       requestAdapter.updateOne({
         id: requestId,
         changes: {
           ...state.entities[requestId],
           timestampClosed: date,
-          closed: userSimpleDTO,
+          closed: userDTO,
           requestPosition,
         }
       }, state)
@@ -191,7 +212,7 @@ const requestReducer = createReducer(initialState,
                   ...state.entities[requestComment.requestId].requestCommentDTOS.find(
                     item => item.id === requestComment.id).groupsToShare,
                   groupName
-                ].filter(name => !!name)
+                ].filter(name => !!name) // delete undefined
             }
           ].sort((a: RequestComment, b: RequestComment) => a.id - b.id)
         }
@@ -260,26 +281,23 @@ const requestReducer = createReducer(initialState,
       }, state)
     )
   ),
-  on(RequestAction.getOpenRequestsError,
-    RequestAction.getClosedRequestsError,
-    RequestAction.modifiedSolverOnRequestFailure,
-    RequestAction.modifiedStateRequestFailure,
-    RequestAction.removeLogsFailure,
-    RequestAction.changeCommentPrivacyFailure,
-    RequestAction.editCommentFailure,
-    RequestAction.shareCommentFailure,
-    RequestAction.deleteCommentFailure,
-    RequestAction.addCommentFailure,
-    RequestAction.changePriorityFailure,
-    RequestAction.addReportEvaluationFailure,
-    RequestAction.toggleCommentingFailure,
-    RequestAction.downloadFilesFailure,
-    RequestAction.uploadFileFailure,
-    RequestAction.createRequestFailure,
-    (state, {error}) => ({...state, error})
-  )
-  )
-;
+  on(
+    RequestAction.getGroupToShareSuccess,
+    (state, {group}) => ({...state, shareGroup: group})
+  ),
+  on(
+    RequestAction.getTicketSubtypesSuccess,
+    (state, {ticketSubtype}) => ({...state, requestType: {...state.requestType, ticketSubtype}})
+  ),
+  on(
+    RequestAction.getFinanceTypesSuccess,
+    (state, {financeType}) => ({...state,  requestType: {...state.requestType, financeType}})
+  ),
+  on(
+    authAction.logout,
+    (state) => (initialState)
+  ),
+);
 
 
 export function reducer(state: RequestState | undefined, action: Action) {
@@ -287,39 +305,39 @@ export function reducer(state: RequestState | undefined, action: Action) {
 }
 
 
+// Selectors
 export const getRequestState = createFeatureSelector<RequestState>('requirement');
-
+export const isWebsocketConnected = createSelector(getRequestState, (state: RequestState) => state.websocketConnected);
 export const isDashboardLoaded = createSelector(getRequestState, (state: RequestState) => state.loadedDashboard);
-export const isClosedLoaded = createSelector(getRequestState, (state: RequestState) => state.loadedClosed);
 export const getClosedRequestDateRange = createSelector(getRequestState, (state: RequestState) => state.customDate);
 export const getClosedRequestFilterState = createSelector(getRequestState, (state: RequestState) => state.closedFilterRequests);
 
 
-const getAllEntities = createSelector(
-  getRequestState,
-  (item => item.entities)
-);
+const getAllEntities = createSelector(getRequestState, (item => item.entities));
 
 export const getAllRequests = createSelector(
   getRequestState,
   request => Object.keys(request.entities).map(key => request.entities[key])
 );
 
-export const getMyCreatedRequests = (username: string) => createSelector(
+export const getMyCreatedRequests = createSelector(
   getAllRequests,
-  (state: Request[]) => state.filter(item => item.creator.username === username && !item.closed)
+  fromUser.getUser,
+  (state: Request[], user: User) => state.filter(item => item.creator.username === user.username && !item.closed)
 );
 
-export const getMeAssignedRequests = (username: string) => createSelector(
+export const getMeAssignedRequests = createSelector(
   getAllRequests,
-  (state: Request[]) => state.filter(item => item.assigned && item.assigned.username === username && !item.closed)
+  fromUser.getUser,
+  (state: Request[], user: User) => state.filter(item => item.assigned && item.assigned.username === user.username && !item.closed)
 );
 
 
-export const getOtherRequests = (username: string) => createSelector(
+export const getOtherRequests = createSelector(
   getAllRequests,
-  (state: Request[]) => state.filter(
-    item => !(item.assigned && item.assigned.username === username) && item.creator.username !== username && !item.closed
+  fromUser.getUser,
+  (state: Request[], user: User) => state.filter(
+    item => !(item.assigned && item.assigned.username === user.username) && item.creator.username !== user.username && !item.closed
   )
 );
 
@@ -347,9 +365,33 @@ export const getClosedRequests = createSelector(
   })
 );
 
-
 export const getRequestById = createSelector(
   getAllEntities,
   routerSelector,
   (entities, router) => router.state && entities[router.state.queryParams.request_id]
 );
+
+// Group
+export const getGroupToShare = createSelector(getRequestState, (state) => (state.shareGroup));
+
+// Request Type selectors
+export const getSoftwareTypes = createSelector(
+  getRequestState,
+  (state) => (state.requestType.ticketSubtype.filter(ticketSubtype => ticketSubtype.ticketType.name === TicketSubtype.Software))
+);
+
+export const getHardwareTypes = createSelector(
+  getRequestState,
+  (state) => (state.requestType.ticketSubtype.filter(ticketSubtype => ticketSubtype.ticketType.name === TicketSubtype.Hardware))
+);
+
+export const getServerTypes = createSelector(
+  getRequestState,
+  (state) => (state.requestType.ticketSubtype.filter(ticketSubtype => ticketSubtype.ticketType.name === TicketSubtype.Server))
+);
+
+export const getFinanceTypes = createSelector(getRequestState, (state) => (state.requestType.financeType));
+
+export const isFinanceTypesLoaded = createSelector(getRequestState, (state) => (state.requestType.financeType.length !== 0));
+export const isTicketTypesLoaded = createSelector(getRequestState, (state) => (state.requestType.ticketSubtype.length !== 0));
+

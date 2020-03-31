@@ -1,0 +1,33 @@
+<!--Login form -->
+<div class="login-box" *ngIf='! (authenticating$ | async)'>
+  <h1>Helpdesk</h1>
+  <form [formGroup]="form">
+    <fieldset>
+
+      <div class="textbox">
+        <i class="fas fa-user"></i>
+        <input name="username" formControlName="username" type="text" placeholder="prihlasovacie meno" required>
+      </div>
+
+      <div class="textbox">
+        <i class="fas fa-lock"></i>
+        <input name="password" formControlName="password" type="password" placeholder="heslo" required>
+      </div>
+
+    </fieldset>
+      <input type="button" class="btn" (click)="login()" value="Prihlásiť sa">
+  </form>
+</div>
+
+<span class="version">
+  verzia {{version}}
+</span>
+
+
+<!-- spinner -->
+<app-dot-loader *ngIf='authenticating$ | async' class='spinner'></app-dot-loader>
+
+
+<!-- particles.js container -->
+<particles [style]="style" [params]="params"></particles>
+

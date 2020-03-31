@@ -1,20 +1,23 @@
-import {Component, OnInit, ViewChild, Output, EventEmitter, Input} from '@angular/core';
-import {FormGroup, FormBuilder, Validators} from '@angular/forms';
-import {UserSimpleDTO} from 'app/core/model/User';
+import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Group} from "../../../../../core/model/Group";
-import {ApplicationPrivilege, FinanceType, TicketType} from "../../../../../core/model/Request";
+import {FinanceType, TicketPrivilege, TicketType} from "../../../../requirement/model/Request";
+import {ApplicationPrivilege, User} from "../../../../../core/model/User";
+import {UserConstructorService} from "../../../../../core/services/user-constructor.service";
+import {GroupConstructorService} from "../../../../../core/services/group-constructor.service";
 
 @Component({
   selector: 'app-group-form',
   templateUrl: './group-form.component.html',
-  styleUrls: ['./group-form.component.scss']
+  styleUrls: ['./group-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class GroupFormComponent implements OnInit {
 
   groupRegistrationForm: FormGroup;
 
 
-  @Input() allAvailableUsers: UserSimpleDTO[] = [];
+  @Input() allAvailableUsers: User[] = [];
   @Input() financeTypes: FinanceType[] = [];
   @Input() softwares: TicketType[];
   @Input() hardwares: TicketType[];
@@ -22,9 +25,11 @@ export class GroupFormComponent implements OnInit {
 
   @Output() groupRegistrationEmitter: EventEmitter<Group> = new EventEmitter();
 
-  @ViewChild('groupFormViewChild', {static: true}) groupFormViewChild;
+  @ViewChild('groupFormViewChild') groupFormViewChild;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private formBuilder: FormBuilder,
+              private userConverterService: UserConstructorService,
+              private groupConstructorService: GroupConstructorService) {
   }
 
   ngOnInit() {
@@ -64,8 +69,6 @@ export class GroupFormComponent implements OnInit {
 
     const group = this.consructGroup();
     this.groupRegistrationEmitter.emit(group);
-
-
   }
 
   public resetForm(): void {
@@ -73,35 +76,31 @@ export class GroupFormComponent implements OnInit {
   }
 
   private consructGroup(): Group {
-    let ticketpriv: any = {};
+    let ticketpriv: TicketPrivilege;
+
     if (this.solveTickets.value !== null) {
-      ticketpriv = {
-        Software: this.solveSoftware.value === null ? [] : this.solveSoftware.value,
-        Hardware: this.solveHardware.value === null ? [] : this.solveHardware.value,
-        Server: this.solveServer.value === null ? [] : this.solveServer.value,
-        User: this.solveTickets.value.includes('User') ? ["True"] : [],
-        Other: this.solveTickets.value.includes('Other') ? ["True"] : []
-      };
+      ticketpriv = this.userConverterService.constructTicketPrivilege(
+        this.solveSoftware.value,
+        this.solveHardware.value,
+        this.solveServer.value,
+        this.solveTickets.value
+      );
     }
+    const privilege: ApplicationPrivilege = this.userConverterService.constructApplicationPrivilege(
+      this.moduleTypesToUse.value,
+      this.requestTypesToSolve.value,
+      ticketpriv,
+      this.submitFinanceRequests.value);
 
-    const privilege: ApplicationPrivilege = {
-      moduleTypesToUse: this.moduleTypesToUse.value === null ? [] : this.moduleTypesToUse.value,
-      requestTypesToSolve: this.requestTypesToSolve.value === null ? [] : this.requestTypesToSolve.value,
-      solveTickets: ticketpriv,
-      submitFinanceRequests: this.submitFinanceRequests.value === null ? [] : this.submitFinanceRequests.value
-    };
-
-    const group: Group = {
-      name: this.groupName.value.charAt(0).toUpperCase() + this.groupName.value.slice(1),
-      description: this.groupDescription.value,
-      email: this.groupEmail.value,
-      groupManager: this.groupManager.value,
-      usersInGroup: this.usersInGroup.value === null ? [] : this.usersInGroup.value,
-      usersWatchGroup: this.usersWatchGroup.value === null ? [] : this.usersWatchGroup.value,
-      applicationPrivilegeDTO: privilege,
-      unsetApplicationPrivilegeDTO: null
-    };
-    return group;
+    return this.groupConstructorService.constructGroup(
+      this.groupName.value.charAt(0).toUpperCase() + this.groupName.value.slice(1),
+      this.groupDescription.value,
+      this.groupEmail.value,
+      this.groupManager.value,
+      this.usersInGroup.value,
+      this.usersWatchGroup.value,
+      privilege
+    );
   }
 
   changeModuleTypesToUse() {

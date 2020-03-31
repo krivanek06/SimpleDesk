@@ -1,65 +1,43 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {UserHttpService} from 'app/api/user-http.service';
-import {UserSimpleDTO} from 'app/core/model/User';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {UserGroupsComponent} from 'app/shared/components-presentation/user-groups/user-groups.component';
-import {PrivilegesComponent} from 'app/shared/components-presentation/privileges/privileges.component';
-import {UserDetailsComponent} from 'app/shared/components-presentation/user-details/user-details.component';
-import {UserStoreService} from 'app/core/services/user-store.service';
-import {SwallNotificationService} from 'app/shared/services/swall-notification.service';
-import {GroupContainer} from "../../../../core/model/Group";
+import {User, UserSimple} from "../../../../core/model/User";
+import {AppState} from "../../../../core/model/appState.model";
+import {Store} from "@ngrx/store";
+
+import * as fromAuth from '../../../../core/store/auth/auth.reducer';
+import * as fromAppManagement from '../../store/app-management.reducer';
+import * as appManagementAction from '../../store/app-management.action';
 
 @Component({
   selector: 'app-user-management',
   templateUrl: './user-management.component.html',
-  styleUrls: ['./user-management.component.scss']
+  styleUrls: ['./user-management.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class UserManagementComponent implements OnInit {
   isGhost$: Observable<boolean>;
-  users: Observable<UserSimpleDTO[]>;
-  @ViewChild('userDetails') userDetails: UserDetailsComponent;
-  @ViewChild('userPrivileges') userPrivileges: PrivilegesComponent;
-  @ViewChild('userGroups') userGroups: UserGroupsComponent;
+  allUsers$: Observable<UserSimple[]>;
+  userDetails$: Observable<User>;
 
-
-  constructor(private userHttp: UserHttpService,
-              private userService: UserStoreService,
-              private swallNotification: SwallNotificationService) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.isGhost$ = this.userService.isGhost();
-    this.users = this.userHttp.getAllUsers();
+    this.isGhost$ = this.store.select(fromAuth.isGhost);
+    this.allUsers$ = this.store.select(fromAppManagement.getAllUsers);
+    this.userDetails$ = this.store.select(fromAppManagement.getUserDetails);
   }
 
   selectUser(username: string) {
-    this.userHttp.getUserDetials(username)
-      .subscribe(user => {
-        this.userDetails.displayedUser = user;
-        this.userPrivileges.enabledPrivileges = user.applicationPrivilegeDTO;
-        this.userPrivileges.name = 'Uživateľa';
-
-        const groupContainer: GroupContainer = {
-          managerOfGroups: user.groupsToManage,
-          watchedGroupActivity: user.groupsActivityWatched,
-          userInGroups: user.groupsInvolved
-        };
-
-        this.userGroups.groupContainer = groupContainer;
-      });
+    this.store.dispatch(appManagementAction.getUserDetails({username}));
   }
 
-  resetUserPassword() {
-    this.userHttp.resetUserPassword(this.userDetails.displayedUser.username).subscribe(() => {
-      this.swallNotification.generateNotification(`Heslo uživateľa bolo resetované`);
-    });
+  resetUserPassword(username: string) {
+    this.store.dispatch(appManagementAction.resetUserPassword({username}));
   }
 
-  modifyUserState() {
-    this.userHttp.modifyUserState(this.userDetails.displayedUser.username).subscribe(() => {
-      this.userDetails.displayedUser.active = !this.userDetails.displayedUser.active;
-      this.swallNotification.generateNotification(`Stav uživateľa bol zmeneý`);
-    });
+  modifyUserState(user: User) {
+    this.store.dispatch(appManagementAction.modifyUserState({user}));
   }
 
 }

@@ -1,18 +1,17 @@
-
 <div id='headerBackground' *ngIf="user$ | async as user">
 
-    <div  id='headerContainer'>
-        <div id="headerTitle">
-           Vitaj, {{ user.fullName}}
-        </div>
-
-        <div id="headerLogout">
-            <div class="button_cont example_f" (click)= "logout()">
-                <span>
-                <img [src]="'data:image/jpeg;base64,'+ user.photoBytes" class='userIcon'/>
-                 Odhlásiť sa
-                </span>
-            </div>
-        </div>
+  <div id='headerContainer'>
+    <div id="headerTitle">
+      Vitaj, {{ user.fullName}}
     </div>
+
+    <div id="headerLogout">
+      <div class="button_cont example_f" (click)="logout()">
+        <span>
+          <img [src]="'data:image/jpeg;base64,'+ user.userImageByte" class='userIcon'/>
+           Odhlásiť sa
+        </span>
+      </div>
+    </div>
+  </div>
 </div>

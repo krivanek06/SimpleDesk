@@ -4,11 +4,11 @@
 <app-group-form
     #groupForm
     id='groupForm'
-    [allAvailableUsers] = 'allAvailableUsers'
-    [financeTypes] = 'financeTypes'
-    [softwares] = 'softwares'
-    [hardwares] = 'hardwares'
-    [servers] = 'servers'
+    [allAvailableUsers] = 'activeUsers$ | async'
+    [financeTypes] = 'financeType$ | async'
+    [softwares] = 'software$ | async'
+    [hardwares] = 'hardware$ | async'
+    [servers] = 'server$ | async'
     (groupRegistrationEmitter) = 'registerGroup($event)'>
 </app-group-form>
 

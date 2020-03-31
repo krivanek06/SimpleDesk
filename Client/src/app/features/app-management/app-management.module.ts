@@ -16,14 +16,17 @@ import {AlertModule} from "ngx-bootstrap";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {SatDatepickerModule, SatNativeDateModule} from "saturn-datepicker";
 import {SharedModule} from "../../shared/shared.module";
-import {AuthGuard} from "../../core/guards/AuthGuard";
+import {AuthGuard} from "../../core/guards/Auth.guard";
 import {GroupRegistrationComponent} from "./views/group-registration/group-registration.component";
 import {PrivilegeManagerGuard} from "./guard/privilege-manager.guard";
 import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
-
+import {EffectsModule} from "@ngrx/effects";
+import {AppManagementEffects} from "./store/app-management.effects";
+import * as fromAppManagement from './store/app-management.reducer';
+import {Store, StoreModule} from "@ngrx/store";
 
 export const routes: Routes = [
   {
@@ -61,6 +64,8 @@ export const routes: Routes = [
     SatNativeDateModule,
     SatDatepickerModule,
     SharedModule,
+    EffectsModule.forFeature([AppManagementEffects]),
+    StoreModule.forFeature('app-management', fromAppManagement.reducer),
   ],
   exports: [
     RouterModule,

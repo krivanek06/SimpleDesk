@@ -60,17 +60,17 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // Create JWT Token
         String token = JWT.create()
                 .withSubject(principal.getUsername())
-                .withClaim("IS_ADMIN" , principal.isAdmin())
-                .withClaim("IS_GHOST" , principal.isGhost())
+                /*.withClaim("IS_ADMIN" , principal.isAdmin())
+                .withClaim("IS_GHOST" , principal.isGhost())*/
                 .withArrayClaim("AUTHORITIES", authorities)
-                .withArrayClaim("MODULE_TYPES_TO_USE" , principal.getModuleTypesToUse())
+               /* .withArrayClaim("MODULE_TYPES_TO_USE" , principal.getModuleTypesToUse())
                 .withArrayClaim("REQUEST_TYPE_TO_SOLVE" , principal.getRequestTypesToSolve())
                 .withArrayClaim("FINANCE_TYPE_TO_SUBMIT" , principal.getFinanceTypeToSubmit())
                 .withArrayClaim("TICKET_SOFTWARE_PRIVILEGES" , principal.getSolveTicketsTypeSoftware())
                 .withArrayClaim("TICKET_HARDWARE_PRIVILEGES" , principal.getSolveTicketsTypeHardware())
                 .withArrayClaim("TICKET_SERVER_PRIVILEGES" , principal.getSolveTicketsTypeServer())
                 .withArrayClaim("TICKET_USER_PRIVILEGES" , principal.getSolveTicketsTypeUser() )
-                .withArrayClaim("TICKET_OTHER_PRIVILEGES" , principal.getSolveTicketsTypeOther() )
+                .withArrayClaim("TICKET_OTHER_PRIVILEGES" , principal.getSolveTicketsTypeOther() )*/
                 .withExpiresAt(new Date(System.currentTimeMillis() + JwtProperties.EXPIRATION_TIME))
                 .sign(HMAC512(JwtProperties.SECRET.getBytes()));
 

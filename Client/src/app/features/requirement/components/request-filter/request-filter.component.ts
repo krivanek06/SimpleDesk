@@ -2,11 +2,11 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnIn
 import {DatePipe} from '@angular/common';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Subject} from 'rxjs';
-import {UserSimpleDTO} from 'app/core/model/User';
 import {takeUntil} from 'rxjs/operators';
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
-import {FilterRequest} from "../../../../core/model/Request";
+import {FilterRequest} from "../../model/Request";
 import {CustomDate} from "../../../../core/model/appState.model";
+import {User, UserSimple} from "../../../../core/model/User";
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -42,7 +42,7 @@ export class RequestFilterComponent implements OnInit, OnDestroy {
 
   private destroy$: Subject<boolean> = new Subject<boolean>();
 
-  @Input() allUsers: UserSimpleDTO[];
+  @Input() allUsers: UserSimple[];
   @Input() filterRequests: FilterRequest;
   @Input() customDate: CustomDate;
   @Output() changedDate: EventEmitter<CustomDate> = new EventEmitter<CustomDate>();

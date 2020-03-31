@@ -4,13 +4,14 @@ Client/node_modules/
 Backend/target/*
 Backend/src/main/resources/
 Backend/uploadedFiles/*
+Backend/uploadedFiles/requests
+Backend/uploadedFiles/requests/*
 Backend/src/main/resources/images/*
 Backend/src/main/webapp/*
-Client/src/environments/*
 Backend/src/main/resources/static/*
 BachelorSiteOverview
-Database
-old_code
+Database/*
+old_code/*
 foto
 # Compiled source #
 ###################

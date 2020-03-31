@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import rc.bootsecurity.requestModule.commonModule.entity.RequestPriority;
 import rc.bootsecurity.requestModule.commonModule.exception.RequestNotFoundException;
 import rc.bootsecurity.requestModule.commonModule.repository.*;
-import rc.bootsecurity.userModule.dto.UserSimpleDTO;
+import rc.bootsecurity.userModule.dto.UserDTO;
 import rc.bootsecurity.userModule.entity.User;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 import rc.bootsecurity.requestModule.commonModule.enums.REQUEST_POSITION;
@@ -91,15 +91,15 @@ public class RequestManagementService{
         this.setUserAndInform(request, user, this.requestWebsockets.ADDED_SOLVER, REQUEST_POSITION.Priradené.name());
     }
 
-    public UserSimpleDTO setAssignUserAndSave(Integer requestId, UserSimpleDTO userSimpleDTO){
-        User user = this.userService.loadUserByUsername(userSimpleDTO.getUsername());
+    public UserDTO setAssignUserAndSave(Integer requestId, UserDTO userDTO){
+        User user = this.userService.loadUserByUsername(userDTO.getUsername());
         User principal = this.userService.loadUserByUsername(this.userService.getPrincipalUsername());
         Request request = this.findRequest(requestId);
 
         this.setUserAndInform(request, user, this.requestWebsockets.ADDED_SOLVER, REQUEST_POSITION.Priradené.name());
         this.emailService.sendAssignRequestEmail(request, principal,user.getEmail() );
 
-        return this.userConverter.convertUserToSimpleDTO(user);
+        return this.userConverter.convertUserToUserDTO(user);
     }
 
 

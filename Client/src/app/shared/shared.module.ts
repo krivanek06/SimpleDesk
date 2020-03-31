@@ -1,18 +1,18 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
-import {ChartComponent} from "./components-presentation/chart/chart.component";
-import {FileUploadComponent} from "./components-presentation/file-upload/file-upload.component";
-import {SERDButtonsComponent} from "./components-presentation/serdbuttons/serdbuttons.component";
+import {ChartComponent} from "./components/chart/chart.component";
+import {FileUploadComponent} from "./components/file-upload/file-upload.component";
+import {SERDButtonsComponent} from "./components/serdbuttons/serdbuttons.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {MaterialModule} from "../material.module";
 import {RouterModule} from "@angular/router";
-import {GroupDetailsComponent} from "./components-presentation/group-details/group-details.component";
-import {PrivilegesComponent} from "./components-presentation/privileges/privileges.component";
-import {UserDetailsComponent} from "./components-presentation/user-details/user-details.component";
-import {UserGroupsComponent} from "./components-presentation/user-groups/user-groups.component";
+import {GroupDetailsComponent} from "./components/group-details/group-details.component";
+import {PrivilegesComponent} from "./components/privileges/privileges.component";
+import {UserDetailsComponent} from "./components/user-details/user-details.component";
+import {UserGroupsComponent} from "./components/user-groups/user-groups.component";
 import {NavigationComponent} from "./components-smart/navigation/navigation.component";
 import {HeaderComponent} from "./components-smart/header/header.component";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
@@ -35,8 +35,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     PrivilegesComponent,
     UserDetailsComponent,
     UserGroupsComponent,
-    NavigationComponent,
     HeaderComponent,
+    NavigationComponent
   ],
   imports: [
     IconSpriteModule,
@@ -72,8 +72,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     PrivilegesComponent,
     UserDetailsComponent,
     UserGroupsComponent,
-    NavigationComponent,
     HeaderComponent,
+    NavigationComponent
   ],
   providers: [
     DatePipe,
