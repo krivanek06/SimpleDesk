@@ -1,6 +1,7 @@
 import {createAction, props} from "@ngrx/store";
 import {Group} from "../../../core/model/Group";
 import {User, UserSimple} from "../../../core/model/User";
+import {RequestStatistics} from "../../requirement/model/Request";
 
 export const getAllGroupNames = createAction(
   '[App-management] get all group names'
@@ -145,6 +146,22 @@ export const editGroupSuccess = createAction(
 export const editGroupFailure = createAction(
   '[App-management] edit group failure',
   props<{ error: Error }>()
+);
+
+
+export const getRequestMonthlyStatisticsForUser = createAction(
+  '[App-management] get request monthly statistics',
+  props<{username: string}>()
+);
+
+export const getRequestMonthlyStatisticsSuccessForUser = createAction(
+  '[App-management] get request monthly statistics success',
+  props<{ userRequestStatistics: RequestStatistics }>()
+);
+
+export const getRequestMonthlyStatisticsErrorForUser = createAction(
+  '[App-management] get request monthly statistics error',
+  props<{error: Error}>()
 );
 
 

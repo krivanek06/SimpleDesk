@@ -1,7 +1,7 @@
 import {
   FilterRequest,
   FinanceType,
-  Request,
+  Request, RequestStatistics,
   TicketSubtype,
 } from "../../features/requirement/model/Request";
 import {EntityState} from "@ngrx/entity";
@@ -9,6 +9,8 @@ import {Params} from "@angular/router";
 import {routerReducer, RouterReducerState} from "@ngrx/router-store";
 import {ImageDTO, JWToken, User, UserSimple} from "./User";
 import {Group} from "./Group";
+import {UserStat} from "../../features/user-section/store/user/user-stat.reducer";
+import {Reminder, ReminderContainer} from "../../features/user-section/model/Reminder.model";
 
 export interface AppState {
   requirement: RequestState;
@@ -23,7 +25,7 @@ export interface AppState {
 export interface RequestState extends EntityState<Request> {
   loadedDashboard: boolean;
   websocketConnected: boolean;
-  customDate: CustomDate;
+  closedFilterDate: CustomDate;
   closedFilterRequests: FilterRequest;
   requestType: RequestType;
   shareGroup: Group;
@@ -56,13 +58,20 @@ export interface Auth {
 }
 
 export interface UserSection {
-  group: Group;
-  userImages: ImageDTO[];
+  userStat: UserStat;
+  reminderState: ReminderState;
 }
+
+export interface ReminderState extends EntityState<ReminderContainer> {
+
+}
+
+
 
 export interface AppManagement {
   allUsers: UserSimple[];
   allGroups: string[];
   userDetails: User;
+  userRequestStatistics: RequestStatistics;
   groupDetails: Group;
 }

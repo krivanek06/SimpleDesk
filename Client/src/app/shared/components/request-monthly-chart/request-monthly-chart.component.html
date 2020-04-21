@@ -1,0 +1,13 @@
+<div [style.height.px] = 'height' *ngIf="requestStatistics">
+  <canvas
+    baseChart
+    [chartType]="'line'"
+    [labels] = 'requestStatistics.dateText'
+    [datasets] = '[
+      {data: requestStatistics.sentRequests, label: "Vytvorené žiadosti", backgroundColor: "#43DC38", borderColor: "#35A62D", pointBackgroundColor: "#2D8B26" },
+      {data: requestStatistics.solvedRequests, label: "Uzatvorené žiadosti" }
+    ]'
+    [options]="chartOptions"
+    [legend]="true">
+  </canvas>
+</div>

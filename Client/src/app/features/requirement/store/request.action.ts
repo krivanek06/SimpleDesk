@@ -5,7 +5,7 @@ import {
   ReportForm,
   Request,
   RequestComment,
-  RequestCommentWrapper,
+  RequestCommentWrapper, RequestStatistics,
   TicketForm, TicketSubtype
 } from "../model/Request";
 import {RequestPosition, RequestType} from "../model/request.enum";
@@ -317,5 +317,6 @@ export const getGroupToShareError = createAction(
   '[Request] get group to share failure',
   props<{ error: Error }>()
 );
+
 
 

@@ -1,0 +1,15 @@
+#contentContainer {
+  height: 100%;
+  width: calc(100% - 85px);
+  padding: 10px 25px;
+  float: right;
+  font-size: 14px;
+  position: relative;
+}
+
+
+.side_bar_navigation{
+  position: absolute;
+  top: 5px;
+  right: 15px;
+}

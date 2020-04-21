@@ -1,6 +1,8 @@
 import {NgModule} from '@angular/core';
 
 
+
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import {
   MatCheckboxModule,
   MatPseudoCheckboxModule,
@@ -36,6 +38,7 @@ import {
   MatNativeDateModule,
   MatRippleModule,
 } from '@angular/material';
+
 
 @NgModule({
   imports: [
@@ -73,6 +76,7 @@ import {
     MatNativeDateModule,
     MatFormFieldModule,
     MatRippleModule,
+    MatMomentDateModule,
   ],
   exports: [
     MatPseudoCheckboxModule,
@@ -108,8 +112,12 @@ import {
     MatPaginatorModule,
     MatFormFieldModule,
     MatRippleModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatMomentDateModule
   ]
 })
 export class MaterialModule {
 }
+
+
+

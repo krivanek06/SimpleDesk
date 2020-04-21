@@ -8,7 +8,8 @@ export const initialState: AppManagement = {
   allGroups: [],
   allUsers: [],
   groupDetails: undefined,
-  userDetails: undefined
+  userDetails: undefined,
+  userRequestStatistics: undefined
 };
 
 
@@ -36,7 +37,13 @@ export const appManagementReducer = createReducer(
     appManagementAction.removeGroupFailure,
     appManagementAction.editGroup,
     appManagementAction.editGroupFailure,
+    appManagementAction.getRequestMonthlyStatisticsForUser,
+    appManagementAction.getRequestMonthlyStatisticsErrorForUser,
     (state) => ({...state})
+  ),
+  on(
+    appManagementAction.getRequestMonthlyStatisticsSuccessForUser,
+    (state, {userRequestStatistics}) => ({...state, userRequestStatistics})
   ),
   on(
     appManagementAction.getAllGroupNamesSuccess,
@@ -103,6 +110,7 @@ export const getAllActiveUsers = createSelector(getAllUsers, (state) => state.fi
 export const getAllGroupNames = createSelector(appManagementState, (state) => state.allGroups);
 export const getUserDetails = createSelector(appManagementState, (state) => state.userDetails);
 export const getGroupDetails = createSelector(appManagementState, (state) => state.groupDetails);
+export const getRequestMonthlyStatisticsForUser = createSelector(appManagementState, (state) => state.userRequestStatistics);
 
 export const areUserLoaded = createSelector(getAllUsers, (state) => state.length !== 0);
 export const areGroupsLoaded = createSelector(getAllGroupNames, (state) => state.length !== 0);

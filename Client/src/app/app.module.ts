@@ -31,6 +31,7 @@ import * as UserReducer from './core/store/user/user.reducer';
 
 import {AuthEffects} from "./core/store/auth/auth.effects";
 import {UserEffects} from "./core/store/user/user.effets";
+import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
   declarations: [
@@ -51,7 +52,7 @@ import {UserEffects} from "./core/store/user/user.effets";
     HttpClientModule,
     SweetAlert2Module,
     RouterModule,
-
+    NgbModule,
     StoreModule.forRoot({
       router: routerReducer,
       loader: LoadingReducer.reducer,
@@ -62,7 +63,7 @@ import {UserEffects} from "./core/store/user/user.effets";
       AuthEffects, UserEffects
     ]),
     StoreDevtoolsModule.instrument({
-      maxAge: 25, // Retains last 25 states
+      maxAge: 2, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
     }),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),

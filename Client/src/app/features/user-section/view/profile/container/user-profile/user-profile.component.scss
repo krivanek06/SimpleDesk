@@ -1,0 +1,27 @@
+
+#chartContainer{
+  width: 80%;
+  margin-left: 10%;
+  padding: 15px 35px;
+  float: left;
+}
+
+
+.windowLeft {
+  width: 45%;
+  float: left;
+}
+
+
+#userInforContainer {
+  margin-left: 3%;
+  margin-right: 1%
+}
+
+
+@media(min-width: 1919px) {
+  .windowLeft {
+    width: 40%;
+  }
+
+}

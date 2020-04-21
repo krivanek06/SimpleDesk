@@ -7,6 +7,7 @@ import {Store} from "@ngrx/store";
 import * as fromAuth from '../../../../core/store/auth/auth.reducer';
 import * as fromAppManagement from '../../store/app-management.reducer';
 import * as appManagementAction from '../../store/app-management.action';
+import {RequestStatistics} from "../../../requirement/model/Request";
 
 @Component({
   selector: 'app-user-management',
@@ -18,6 +19,7 @@ export class UserManagementComponent implements OnInit {
   isGhost$: Observable<boolean>;
   allUsers$: Observable<UserSimple[]>;
   userDetails$: Observable<User>;
+  userRequestStatistics$: Observable<RequestStatistics>;
 
   constructor(private store: Store<AppState>) {
   }
@@ -26,9 +28,11 @@ export class UserManagementComponent implements OnInit {
     this.isGhost$ = this.store.select(fromAuth.isGhost);
     this.allUsers$ = this.store.select(fromAppManagement.getAllUsers);
     this.userDetails$ = this.store.select(fromAppManagement.getUserDetails);
+    this.userRequestStatistics$ = this.store.select(fromAppManagement.getRequestMonthlyStatisticsForUser);
   }
 
   selectUser(username: string) {
+    this.store.dispatch(appManagementAction.getRequestMonthlyStatisticsForUser({username}));
     this.store.dispatch(appManagementAction.getUserDetails({username}));
   }
 

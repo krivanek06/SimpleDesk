@@ -1,0 +1,28 @@
+@import "../../../../../../shared/style/ModalScss";
+
+  .icon{
+    width: 55px;
+    height: 55px;
+    cursor: pointer;
+
+  }
+
+  .imageContent{
+    padding: 5px;
+    margin: 5px;
+    display: inline-block;
+    transition: 0.8s;
+
+    -webkit-transition:  0.8s ease-out;
+    -moz-transition:  0.8s ease-out;
+    -o-transition:  0.8s ease-out;
+    transition:  0.8s ease-out;
+
+    &:hover {
+        transform: scale(1.35);
+        -webkit-transition:  0.8s ease-out;
+        -moz-transition:  0.8s ease-out;
+        -o-transition:  0.8s ease-out;
+        transition:  0.8s ease-out;
+    }
+  }

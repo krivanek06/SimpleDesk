@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {CommonModule, DatePipe} from '@angular/common';
-import {ChartComponent} from "./components/chart/chart.component";
 import {FileUploadComponent} from "./components/file-upload/file-upload.component";
 import {SERDButtonsComponent} from "./components/serdbuttons/serdbuttons.component";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -18,17 +17,48 @@ import {HeaderComponent} from "./components-smart/header/header.component";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
 import {AlertModule} from "ngx-bootstrap";
 import {
+  NGX_MAT_DATE_FORMATS,
+  NgxMatDatetimePickerModule, NgxMatNativeDateModule,
+  NgxMatTimepickerModule
+} from '@angular-material-components/datetime-picker';
+import {
   DateAdapter,
   MAT_DATE_FORMATS,
   MAT_DATE_LOCALE,
   SatDatepickerModule,
   SatNativeDateModule
 } from "saturn-datepicker";
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-moment-adapter";
+import {MomentDateAdapter} from "@angular/material-moment-adapter";
+import {LazyLoadImageModule} from "ng-lazyload-image";
+import {RequestMonthlyChartComponent} from './components/request-monthly-chart/request-monthly-chart.component';
+import {ChartsModule} from 'ng2-charts';
+import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+
+
+
+export interface SatDatepickerRangeValue<D> {
+  begin: D | null;
+  end: D | null;
+}
+export const DD_MM_YYYY_Format = {
+  parse: {
+    dateInput: 'LL',
+  },
+  display: {
+    dateInput: 'DD.MM.YYYY',
+    monthYearLabel: 'MMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY',
+  },
+};
+
+
+
 
 @NgModule({
   declarations: [
-    ChartComponent,
+    UnauthorizedComponent,
     FileUploadComponent,
     SERDButtonsComponent,
     GroupDetailsComponent,
@@ -36,7 +66,8 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,
-    NavigationComponent
+    NavigationComponent,
+    RequestMonthlyChartComponent
   ],
   imports: [
     IconSpriteModule,
@@ -45,11 +76,18 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     SatDatepickerModule,
     ReactiveFormsModule,
     RouterModule,
-
+    LazyLoadImageModule,
+    ChartsModule,
     CommonModule,
     FormsModule,
     MaterialModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
     SweetAlert2Module.forRoot(),
+
   ],
   exports: [
     CommonModule,
@@ -64,8 +102,15 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     SatDatepickerModule,
     IconSpriteModule,
     AlertModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
+    OwlDateTimeModule,
+    OwlNativeDateTimeModule,
 
-    ChartComponent,
+    LazyLoadImageModule,
+    ChartsModule,
+    UnauthorizedComponent,
     FileUploadComponent,
     SERDButtonsComponent,
     GroupDetailsComponent,
@@ -73,12 +118,14 @@ import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from "@angular/material-mome
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,
-    NavigationComponent
+    NavigationComponent,
+    RequestMonthlyChartComponent
   ],
   providers: [
     DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
+    { provide: NGX_MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format }
   ]
 })
 export class SharedModule {

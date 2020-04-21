@@ -4,8 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import rc.bootsecurity.groupModule.entity.Group;
 import rc.bootsecurity.documentModule.DocumentsToUsers;
-import rc.bootsecurity.notificationModule.reminderModule.Reminder;
-import rc.bootsecurity.requestModule.commonModule.entity.Request;
+import rc.bootsecurity.notificationModule.calendarModule.entity.Reminder;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -42,7 +41,7 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @Column(name = "timestamp_creation") //  columnDefinition = "current_timestamp"
+    @Column(name = "timestamp_creation")
     private Timestamp dateCreation;
 
     @Column(name = "timestamp_ending")
@@ -69,34 +68,7 @@ public class User {
     @EqualsAndHashCode.Exclude
     private List<Group> groupsActivityWatched;
 
-    /**
-     * get requests which I am watching
-     */
-   /* @ManyToMany(fetch = FetchType.LAZY ,mappedBy = "userWhoWatchThisRequest")
-    @OrderBy(value = "id ASC")
-    @EqualsAndHashCode.Exclude
-    private Set<Request> watchedRequests;*/
 
-    /**
-     * Documents which are shared with me
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @EqualsAndHashCode.Exclude
-    private List<DocumentsToUsers> documents;
 
-    /**
-     * Reminders which user created
-     */
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    @EqualsAndHashCode.Exclude
-    private List<Reminder> myReminders;
-
-    /**
-     * reminders which are shared with me
-     */
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "usersToViewReminder")
-    @OrderBy(value = "id ASC")
-    @EqualsAndHashCode.Exclude
-    private Set<Reminder> remindersSharedWithMe;
 
 }

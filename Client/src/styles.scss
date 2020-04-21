@@ -1,24 +1,41 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import '~@angular/material/theming';
-@import '~saturn-datepicker/bundle.css'; // import datepicker range
+@import '~saturn-datepicker/bundle.css';
+// import datepicker range
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 // @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import "../node_modules/angular-calendar/css/angular-calendar.css";
+
+@import "~ng-pick-datetime/assets/style/picker.min.css"; // css for OwlDateTimeModule
 
 body {
-font-family: Segoe UI,Frutiger,Frutiger Linotype,Dejavu Sans,Helvetica Neue,Arial,sans-serif !important;
-/*color: #606060;
-font-weight: lighter;*/
+  font-family: Segoe UI, Frutiger, Frutiger Linotype, Dejavu Sans, Helvetica Neue, Arial, sans-serif !important;
+  /*color: #606060;
+  font-weight: lighter;*/
 
 }
 
 
-mat-icon{
-font-family: 'Material Icons' !important;
+mat-icon {
+  font-family: 'Material Icons' !important;
 }
 
-.editButton{
-    color: #f4a216;
+.editButton {
+  color: #f4a216;
+}
+
+img.ng-lazyloaded {
+  animation: fadein .5s;
+}
+
+@keyframes fadein {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 /*

@@ -7,16 +7,17 @@ import {Action, Store} from "@ngrx/store";
 import {catchError, filter, map, switchMap, tap, withLatestFrom} from "rxjs/operators";
 import {AppState} from "../../../core/model/appState.model";
 import {SwallNotificationService} from "../../../core/services/swall-notification.service";
-
+import {RequestHttpService} from "../../../core/api/request-http.service";
 import * as appManagementAction from './app-management.action';
 import * as fromAppManagement from './app-management.reducer';
-import {UserConstructorService} from "../../../core/services/user-constructor.service";
+
 
 @Injectable()
 export class AppManagementEffects {
   constructor(private actions$: Actions,
               private swallNotification: SwallNotificationService,
               private store: Store<AppState>,
+              private requestHttpService: RequestHttpService,
               private groupHttpService: GroupHttpService,
               private userHttpService: UserHttpService) {
   }
@@ -126,6 +127,17 @@ export class AppManagementEffects {
         map(() => appManagementAction.editGroupSuccess({group: action.group})),
         tap(() => this.swallNotification.generateNotification(`Skupina bola editovaná`)),
         catchError((error) => of(appManagementAction.editGroupFailure({error})))
+      ))
+  ));
+
+  getRequestMonthlyStatistics$: Observable<Action> = createEffect(() => this.actions$.pipe(
+    ofType(appManagementAction.getRequestMonthlyStatisticsForUser),
+    switchMap((action) => this.requestHttpService.getRequestMonthlyStatisticsForUser(action.username)
+      .pipe(
+        map((requestStatistics) =>
+          appManagementAction.getRequestMonthlyStatisticsSuccessForUser({userRequestStatistics: requestStatistics})
+        ),
+        catchError((error) => of(appManagementAction.getRequestMonthlyStatisticsErrorForUser({error})))
       ))
   ));
 

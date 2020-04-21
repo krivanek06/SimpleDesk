@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
-import {UserImagesComponent} from "./components/user-images/user-images.component";
-import {UserProfileComponent} from "./view/user-profile/user-profile.component";
+import {ImagePresentationComponent} from "./view/profile/presentation/image-presentation/image-presentation.component";
+import {UserProfileComponent} from "./view/profile/container/user-profile/user-profile.component";
 import {RouterModule, Routes} from "@angular/router";
 import {MaterialModule} from "../../material.module";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
@@ -12,24 +12,49 @@ import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
-import {StoreModule} from "@ngrx/store";
+import {ActionReducerMap, StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
-import {UserSectionEffets} from "./store/user-section.effets";
+import {UserStatEffets} from "./store/user/user-stat.effets.";
+import {FlatpickrModule} from 'angularx-flatpickr';
+import {UserCalendarComponent} from './view/profile/container/user-calendar/user-calendar.component';
+import {CalendarModule, DateAdapter} from "angular-calendar";
+import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
+import {ProfileComponent} from './view/profile/profile.component';
+import {CalendarComponent} from './view/profile/presentation/calendar/calendar.component';
+import { CalendarFormComponent } from './view/profile/presentation/calendar-form/calendar-form.component';
+import { CalendarEventDetailsComponent } from './view/profile/presentation/calendar-event-details/calendar-event-details.component';
 
-import * as userSectionReducer from "./store/user-section.reducer";
+import * as userStatReducer from "./store/user/user-stat.reducer";
+import * as fromReminder from "./store/reminder/reminder.reducer";
+import {ReminderEffects} from "./store/reminder/reminder.effects";
 
 export const routes: Routes = [
   {
-    path: '', component: UserProfileComponent, canActivate: [AuthGuard],
+    path: '', component: ProfileComponent, canActivate: [AuthGuard],
+    children: [
+      {path: '', component: UserProfileComponent, pathMatch: 'full'},
+      {path: 'profile' , component: UserProfileComponent},
+      {path: 'calendar', component: UserCalendarComponent},
+      {path: '**', redirectTo: 'profile'}
+    ]
   }
 ];
 
+export const reducers = {
+  userStat: userStatReducer.reducer,
+  reminderState: fromReminder.reducer,
+};
 
 
 @NgModule({
   declarations: [
-    UserImagesComponent,
-    UserProfileComponent
+    ImagePresentationComponent,
+    UserProfileComponent,
+    UserCalendarComponent,
+    ProfileComponent,
+    CalendarComponent,
+    CalendarFormComponent,
+    CalendarEventDetailsComponent
   ],
   imports: [
     RouterModule.forChild(routes),
@@ -38,8 +63,13 @@ export const routes: Routes = [
     AlertModule.forRoot(),
     SweetAlert2Module.forRoot(),
     SharedModule,
-    StoreModule.forFeature('userSection', userSectionReducer.reducer),
-    EffectsModule.forFeature([UserSectionEffets]),
+    StoreModule.forFeature('userSection', reducers),
+    EffectsModule.forFeature([UserStatEffets, ReminderEffects]),
+    CalendarModule.forRoot({
+      provide: DateAdapter,
+      useFactory: adapterFactory,
+    }),
+    FlatpickrModule.forRoot(),
   ],
   exports: [
     RouterModule,
