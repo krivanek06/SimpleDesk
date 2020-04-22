@@ -33,8 +33,6 @@ import {LazyLoadImageModule} from "ng-lazyload-image";
 import {RequestMonthlyChartComponent} from './components/request-monthly-chart/request-monthly-chart.component';
 import {ChartsModule} from 'ng2-charts';
 import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -84,8 +82,6 @@ export const DD_MM_YYYY_Format = {
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
     SweetAlert2Module.forRoot(),
 
   ],
@@ -105,8 +101,6 @@ export const DD_MM_YYYY_Format = {
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
 
     LazyLoadImageModule,
     ChartsModule,
