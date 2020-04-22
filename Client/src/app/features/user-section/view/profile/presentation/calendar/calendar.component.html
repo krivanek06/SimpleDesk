@@ -1,0 +1,48 @@
+<div class="row text-center">
+  <div class="col-md-4">
+    <div class="btn-group">
+      <div
+        class="btn btn-primary"
+        mwlCalendarPreviousView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Predošlý
+      </div>
+      <div
+        class="btn btn-outline-secondary"
+        mwlCalendarToday
+        [(viewDate)]="viewDate"
+      >
+        Dnes
+      </div>
+      <div
+        class="btn btn-primary"
+        mwlCalendarNextView
+        [view]="view"
+        [(viewDate)]="viewDate"
+        (viewDateChange)="closeOpenMonthViewDay()"
+      >
+        Ďaľší
+      </div>
+    </div>
+  </div>
+</div>
+<br/>
+
+
+<mwl-calendar-month-view
+  [viewDate]="viewDate"
+  [events]="events"
+  [refresh]="refresh"
+  [activeDayIsOpen]="activeDayIsOpen"
+  (dayClicked)="dayClicked($event.day)"
+  (eventClicked)="handleEvent($event.event)"
+  (eventTimesChanged)="eventTimesChanged($event)"
+>
+</mwl-calendar-month-view>
+
+
+
+

@@ -3,6 +3,7 @@ package rc.bootsecurity.requestModule.commonModule.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestStatistics;
 import rc.bootsecurity.requestModule.commonModule.entity.Request;
 
 import java.util.List;
@@ -25,5 +26,8 @@ public interface RequestRepository extends JpaRepository<Request, Integer> {
 
     @Query(nativeQuery = true, value = "select * from get_access_for_request(?1, ?2, ?3)")
     Boolean hasAccessForRequest(Integer requestId, String requestType, String username);
+
+    @Query(nativeQuery = true, value = "select * from get_request_month_statistics(?1)")
+    List<Object[]> getRequestMonthStatistics(String searching_name);
 
 }

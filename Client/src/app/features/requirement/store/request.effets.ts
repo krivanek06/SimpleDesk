@@ -9,7 +9,7 @@ import {AppState} from "../../../core/model/appState.model";
 import {SwallNotificationService} from "../../../core/services/swall-notification.service";
 import {RequestPosition} from "../model/request.enum";
 import {saveAs} from 'file-saver';
-import {Request} from "../model/Request";
+import {Request, RequestStatistics} from "../model/Request";
 
 import * as RequestAction from "./request.action";
 import * as LoadingAction from "../../../core/store/loading/loader.action";
@@ -364,6 +364,7 @@ export class RequestEffects {
         catchError((error) => of(RequestAction.getGroupToShareError({error})))
       ))
   ));
+
 
 
 }

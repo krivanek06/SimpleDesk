@@ -1,0 +1,11 @@
+@import "src/app/shared/style/ButtonOrange";
+
+#contentContainer {
+  height: 100%;
+  width: calc(100% - 85px);
+  padding: 10px 25px;
+  float: right;
+  font-size: 14px;
+  position: relative;
+}
+

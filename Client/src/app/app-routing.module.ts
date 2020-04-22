@@ -13,18 +13,13 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'user_profile',
+    path: 'user',
     loadChildren: () => import('./features/user-section/user-section.module').then(mod => mod.UserSectionModule),
     canActivate: [AuthGuard]
   },
   {
     path: 'app_management',
     loadChildren: () => import('./features/app-management/app-management.module').then(mod => mod.AppManagementModule),
-    canActivate: [AuthGuard]
-  },
-  {
-    path: 'unauthorized',
-    loadChildren: () => import('./features/unauthorized/unauthorized.module').then(mod => mod.UnauthorizedModule),
     canActivate: [AuthGuard]
   },
   {path: '**', redirectTo: 'requests'}

@@ -36,4 +36,13 @@
   <app-user-groups
     [groupContainer]="userDetails.groupContainerDTO">
   </app-user-groups>
+
+  <!-- chart statistics -->
+  <div id="chartContainer">
+    <app-request-monthly-chart
+      [height] = '300'
+      [requestStatistics] = 'userRequestStatistics$ | async'>
+    </app-request-monthly-chart>
+  </div>
+
 </ng-container>

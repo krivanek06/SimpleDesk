@@ -1,3 +1,4 @@
+@import "src/app/shared/style/ButtonOrange";
 
 #contentContainer{
     height: 100%;
@@ -9,25 +10,16 @@
 }
 
 
-.requestFormButtonContainer{
-    position: absolute;
-    display: inline-grid;
-    right: 35px;
-}
 
-.requestFormButton{
-    margin-bottom: 10px;
-    background-color: #ffec98;
-}
 
 .requestForm{
     padding: 20px 40px;
-} 
+}
 
 @media(min-width:1919px) {
     .requestForm{
         padding: 40px 100px;
-    } 
+    }
 
 }
 

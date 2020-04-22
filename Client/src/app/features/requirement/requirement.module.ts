@@ -35,8 +35,8 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import {RequestEffects} from "./store/request.effets";
-import {RequestFilterComponent} from "./components/request-filter/request-filter.component";
-import {RequestTableComponent} from "./components/request-table/request-table.component";
+import {RequestFilterComponent} from "./view/request-closed/presentation/request-filter/request-filter.component";
+import {RequestTableComponent} from "./components-shared/request-table/request-table.component";
 import {SidebarModule} from "ng-sidebar";
 import {MatTableExporterModule} from "mat-table-exporter";
 

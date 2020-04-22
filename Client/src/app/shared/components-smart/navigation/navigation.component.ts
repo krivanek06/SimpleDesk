@@ -1,4 +1,4 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {Observable} from "rxjs";
 import {AppState} from "../../../core/model/appState.model";
 import {Store} from "@ngrx/store";
@@ -9,7 +9,8 @@ import * as fromUser from '../../../core/store/user/user.reducer';
 @Component({
   selector: 'app-navigation',
   templateUrl: './navigation.component.html',
-  styleUrls: ['./navigation.component.scss']
+  styleUrls: ['./navigation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavigationComponent implements OnInit {
   hasPrivilegeAccess$: Observable<boolean>;
@@ -18,6 +19,7 @@ export class NavigationComponent implements OnInit {
   hasFinanceModuleAccess$: Observable<boolean>;
   hasTicketModuleAccess$: Observable<boolean>;
   hasReportModuleAccess$: Observable<boolean>;
+
 
   constructor(private store: Store<AppState>) {
   }

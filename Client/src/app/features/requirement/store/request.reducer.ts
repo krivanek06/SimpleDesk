@@ -1,4 +1,4 @@
-import {FilterRequest, Request, RequestComment} from "../model/Request";
+import {FilterRequest, Request, RequestComment, RequestStatistics} from "../model/Request";
 import {Action, createFeatureSelector, createReducer, createSelector, on, State} from '@ngrx/store';
 import {RequestState} from "../../../core/model/appState.model";
 import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
@@ -20,7 +20,7 @@ export const initialState: RequestState = requestAdapter.getInitialState({
     ticketSubtype: [],
     financeType: [],
   },
-  customDate: undefined,
+  closedFilterDate: undefined,
   closedFilterRequests: {
     type: '',
     creator: '',
@@ -58,6 +58,7 @@ const requestReducer = createReducer(initialState,
     RequestAction.getFinanceTypes,
     RequestAction.getGroupToShare,
 
+
     RequestAction.getOpenRequestsError,
     RequestAction.getClosedRequestsError,
     RequestAction.modifiedSolverOnRequestFailure,
@@ -91,7 +92,7 @@ const requestReducer = createReducer(initialState,
   ),
   on(RequestAction.getClosedRequestsSuccess,
     (state, {requests, customDate}) => (
-      requestAdapter.upsertMany(requests, {...state, customDate})
+      requestAdapter.upsertMany(requests, {...state, closedFilterDate: customDate})
     )
   ),
   on(
@@ -291,7 +292,7 @@ const requestReducer = createReducer(initialState,
   ),
   on(
     RequestAction.getFinanceTypesSuccess,
-    (state, {financeType}) => ({...state,  requestType: {...state.requestType, financeType}})
+    (state, {financeType}) => ({...state, requestType: {...state.requestType, financeType}})
   ),
   on(
     authAction.logout,
@@ -309,7 +310,7 @@ export function reducer(state: RequestState | undefined, action: Action) {
 export const getRequestState = createFeatureSelector<RequestState>('requirement');
 export const isWebsocketConnected = createSelector(getRequestState, (state: RequestState) => state.websocketConnected);
 export const isDashboardLoaded = createSelector(getRequestState, (state: RequestState) => state.loadedDashboard);
-export const getClosedRequestDateRange = createSelector(getRequestState, (state: RequestState) => state.customDate);
+export const getClosedRequestDateRange = createSelector(getRequestState, (state: RequestState) => state.closedFilterDate);
 export const getClosedRequestFilterState = createSelector(getRequestState, (state: RequestState) => state.closedFilterRequests);
 
 

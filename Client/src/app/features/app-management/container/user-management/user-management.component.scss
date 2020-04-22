@@ -1,26 +1,33 @@
 
-.contanierTitle{
-    position: relative;
+.contanierTitle {
+  position: relative;
 }
 
-.formTitleSmall{
-    font-size: 17px;
-    font-weight: bold;
-    color: #818181;
+.formTitleSmall {
+  font-size: 17px;
+  font-weight: bold;
+  color: #818181;
 }
 
-#userModificationButtons{
-    right:  15%;
-    position: absolute;
+#userModificationButtons {
+  right: 15%;
+  position: absolute;
 }
 
-.selectTitleSpace{
-    margin-right: 15px;
+.selectTitleSpace {
+  margin-right: 15px;
 }
+
+#chartContainer {
+  margin-top: 25px;
+  margin-bottom: 15px;
+  margin-left: -20px;
+}
+
 
 @media(max-width: 1250px) {
-  #userModificationButtons{
-    right:  0;
+  #userModificationButtons {
+    right: 0;
     position: relative;
   }
 }

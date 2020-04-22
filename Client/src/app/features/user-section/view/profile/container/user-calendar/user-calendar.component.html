@@ -1,0 +1,48 @@
+<!-- display calendar -->
+<div id="calendar">
+  <app-calendar
+    [events]="reminders$ | async"
+    (openDetailsEmitter)="openDetails($event)">
+
+  </app-calendar>
+  <br>
+  <app-calendar-event-date-range
+    [reminders]="reminders$ | async"
+    (dateChangeEmitter)='dateChange($event)'>
+
+  </app-calendar-event-date-range>
+</div>
+
+<!-- form to create reminder -->
+<div id="calendar_form">
+  <div id="calendar_form_space">
+    <app-calendar-event-form
+      #calendarForm
+      (formEmitter)="addReminder($event)">
+
+    </app-calendar-event-form>
+  </div>
+</div>
+
+
+<!-- show details of reminder in modal && edit buttons-->
+<ng-template #modalContent>
+  <ng-container *ngIf="selectedReminder">
+    <div id="serdbuttons">
+      <app-serdbuttons
+        [editActivated]='editReminder'
+        (deleteEmitter)="deleteReminder(selectedReminder)"
+        (editEmitter)="toggleEdit()"
+        (resetEmitter)="toggleEdit()"
+        (saveEmitter)="updateEditedReminder()">
+
+      </app-serdbuttons>
+    </div>
+
+    <app-calendar-event-details
+      [reminder]="selectedReminderCopy"
+      [editReminder]="editReminder">
+    </app-calendar-event-details>
+  </ng-container>
+</ng-template>
+

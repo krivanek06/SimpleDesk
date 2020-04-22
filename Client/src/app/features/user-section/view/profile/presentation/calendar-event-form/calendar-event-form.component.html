@@ -1,0 +1,33 @@
+<form [formGroup]="reminderForm" (ngSubmit)="submit()" #reminderFormViewChild="ngForm">
+  <mat-form-field>
+    <input matInput [ngxMatDatetimePicker]="picker1" placeholder="Čas začiatoku" formControlName="startMoment">
+    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker1>
+    </ngx-mat-datetime-picker>
+
+    <mat-error *ngIf="startMoment.invalid"> Prosím zadefinujte začiatok pripomienky</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput [ngxMatDatetimePicker]="picker2" placeholder="Čas ukončenia" formControlName="endMoment">
+    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+    <ngx-mat-datetime-picker #picker2>
+    </ngx-mat-datetime-picker>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <input matInput placeholder="Názov pripomienky" formControlName="title">
+    <mat-error *ngIf="title.invalid"> Prosím zadefinujte názov pripomienky</mat-error>
+  </mat-form-field>
+
+  <mat-form-field>
+    <textarea matInput placeholder="Popis pripomienky" formControlName="description"></textarea>
+    <mat-error *ngIf="description.invalid"> Prosím zadefinujte popis pripomienky</mat-error>
+  </mat-form-field>
+
+
+  <button mat-raised-button class="btn btn-primary right" type="submit"> Odoslať</button>
+
+</form>
+

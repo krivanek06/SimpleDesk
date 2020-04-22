@@ -8,12 +8,11 @@ import {
   FinanceType,
   ReportForm,
   Request, RequestComment,
-  RequestCommentWrapper,
+  RequestCommentWrapper, RequestStatistics,
   TicketForm,
   TicketSubtype,
 } from 'app/features/requirement/model/Request';
 import {User} from "../model/User";
-import {map} from "rxjs/operators";
 import {RxStompService} from "@stomp/ng2-stompjs";
 
 @Injectable({
@@ -83,6 +82,14 @@ export class RequestHttpService {
 
   public initializeWebsocketConnection(username: string): Observable<any> {
     return this.rxStompService.watch('/request/' + username);
+  }
+
+  public getRequestMonthlyStatistics(): Observable<RequestStatistics> {
+    return this.http.get<RequestStatistics>(`${environment.apiUrl}requests/statistics`);
+  }
+
+  public getRequestMonthlyStatisticsForUser(username: string): Observable<RequestStatistics> {
+    return this.http.get<RequestStatistics>(`${environment.apiUrl}requests/statistics/secure/${username}`);
   }
 
 

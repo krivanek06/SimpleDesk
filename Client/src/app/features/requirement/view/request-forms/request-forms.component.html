@@ -3,14 +3,14 @@
 <app-navigation></app-navigation>
 
 <div id='contentContainer'>
-  <div class="requestFormButtonContainer">
-    <a mat-raised-button class="requestFormButton" routerLink="/requests/request_new/ticket"
+  <div class="orangeRaisedButtonContainer">
+    <a mat-raised-button class="orangeRaisedButton" routerLink="/requests/request_new/ticket"
        *ngIf='hasTicketModuleAccess$ | async'>IT a Projekty</a>
 
-    <a mat-raised-button class="requestFormButton" routerLink="/requests/request_new/report"
+    <a mat-raised-button class="orangeRaisedButton" routerLink="/requests/request_new/report"
        *ngIf='hasReportModuleAccess$ | async'>Report</a>
 
-    <a mat-raised-button class="requestFormButton" routerLink="/requests/request_new/finance"
+    <a mat-raised-button class="orangeRaisedButton" routerLink="/requests/request_new/finance"
        *ngIf="hasFinanceModuleAccess$ | async">Účtáreň</a>
   </div>
   <div class='requestForm'>

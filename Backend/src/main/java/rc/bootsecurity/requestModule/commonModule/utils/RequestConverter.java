@@ -1,5 +1,6 @@
 package rc.bootsecurity.requestModule.commonModule.utils;
 
+import rc.bootsecurity.requestModule.commonModule.dto.RequestStatistics;
 import rc.bootsecurity.requestModule.financeModule.dto.FinanceExtendedInformationDTO;
 import rc.bootsecurity.requestModule.reportModule.dto.ReportExtendedInformationDTO;
 import rc.bootsecurity.requestModule.ticketModule.dto.TicketExtendedInformationDTO;
@@ -72,6 +73,16 @@ public class RequestConverter {
             }
         }
 
+    }
+
+    public RequestStatistics convertObjectIntoRequestStatistics(List<Object[]> getRequestMonthStatistics){
+        RequestStatistics requestStatistics = new RequestStatistics();
+        getRequestMonthStatistics.forEach(  stat -> {
+            requestStatistics.getDateText().add((String) stat[0]);
+            requestStatistics.getSentRequests().add((Integer) stat[1]);
+            requestStatistics.getSolvedRequests().add((Integer) stat[2]);
+        });
+        return requestStatistics;
     }
 
 

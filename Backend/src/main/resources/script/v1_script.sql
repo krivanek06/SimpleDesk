@@ -1,27 +1,3 @@
-DROP TABLE IF EXISTS tbl_reminders CASCADE;
-create table tbl_reminders(
-  id serial primary key,
-  timestamp_creation TIMESTAMP NOT NULL,
-  timestamp_reminder TIMESTAMP NOT NULL,
-  user_id Integer NOT NULL,
-  subject varchar(255) NOT NULL,
-  description varchar,
-  allow_commenting boolean default True
-);
-DROP TABLE IF EXISTS tbl_reminder_comments CASCADE;
-create table tbl_reminder_comments(
-   id serial primary key,
-   user_id integer NOT NULL,
-   reminder_id integer NOT NULL,
-   comment varchar NOT NULL,
-   timestamp TIMESTAMP NOT NULL
-);
-DROP TABLE IF EXISTS tbl_shared_reminders CASCADE;
-create table tbl_shared_reminders(
-   id serial primary key NOT NULL,
-   reminder_id Integer,
-   user_id Integer
-);
 
 
 DROP TABLE IF EXISTS tbl_documents CASCADE;
@@ -276,20 +252,24 @@ create table tbl_request_logs(
     timestamp_creation timestamp
 );
 
+DROP TABLE IF EXISTS tbl_calendar CASCADE;
+create table tbl_calendar(
+    id serial primary key ,
+    timestamp_creation timestamp not null,
+    timestamp_start timestamp,
+    timestamp_end timestamp,
+    user_id integer not null,
+    title varchar not null,
+    description varchar
+);
+
+alter table tbl_calendar  ADD FOREIGN KEY  (user_id) references tbl_users(id);
 
 alter table tbl_request_logs add foreign key(request_id) references tbl_requests(id);
 alter table tbl_request_logs add foreign key(user_id) references tbl_users(id);
 
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 ALTER TABLE tbl_group_activity_watched_by_user ADD FOREIGN KEY (group_id) REFERENCES tbl_groups(id);
-
-ALTER TABLE tbl_reminders  ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
-
-ALTER TABLE tbl_reminder_comments ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
-ALTER TABLE tbl_reminder_comments ADD FOREIGN KEY (reminder_id) REFERENCES tbl_reminders(id);
-
-ALTER TABLE tbl_shared_reminders ADD FOREIGN KEY (reminder_id) REFERENCES tbl_reminders(id);
-ALTER TABLE tbl_shared_reminders ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
 
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (document_id) REFERENCES tbl_documents(id);
 ALTER TABLE tbl_document_to_users ADD FOREIGN KEY (user_id) REFERENCES tbl_users(id);
@@ -914,3 +894,35 @@ from (select
     and r.timestamp_closed <= (date_closed2::timestamp + INTERVAL '1day')
   order by timestamp_closed desc) as t))::varchar
 $$ LANGUAGE sql;
+
+
+
+drop function if exists get_request_month_statistics(searching_name varchar);
+create or replace function get_request_month_statistics(searching_name varchar)
+    RETURNS table(dateText text, sentRequests integer, solvedRequests integer) AS $$
+BEGIN
+RETURN QUERY
+    SELECT to_char(date_trunc('month', t.date_text):: date,'Mon YYYY') as  dateText ,
+           case when sent_requests_table.sent_requests is null then 0 else sent_requests_table.sent_requests end as sentRequests,
+           case when solved_requests_table.solved_requests is null then 0 else solved_requests_table.solved_requests end as solvedRequests
+    FROM generate_series(  (now() - INTERVAL '1 year' )::date  , now()::date , '1 month'::interval) as t(date_text)
+             left join (
+        select to_char(timestamp_creation::date,'Mon YYYY') as date_text,
+               count(id)::integer as sent_requests
+        from tbl_requests
+        where
+                creator_uid = (select id from tbl_users where username = searching_name) and
+                timestamp_creation > (now() - INTERVAL '1 year' )
+        group by 1
+    ) as sent_requests_table on sent_requests_table.date_text = to_char(date_trunc('month', t.date_text):: date,'Mon YYYY')
+             left join (
+        select to_char(timestamp_creation::date,'Mon YYYY') as date_text,
+               count(id)::integer as solved_requests
+        from tbl_requests
+        where
+                closed_uid = (select id from tbl_users where username = searching_name) and
+                timestamp_creation > (now() - INTERVAL '1 year' )
+        group by 1
+    ) as solved_requests_table on solved_requests_table.date_text =  to_char(date_trunc('month', t.date_text):: date,'Mon YYYY');
+END;
+$$ LANGUAGE plpgsql;

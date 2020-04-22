@@ -1,0 +1,26 @@
+<div class="modal-header" *ngIf="reminder">
+  <h5 class="modal-title">Pripomienky v kalendáry</h5>
+</div>
+<div class="modal-body">
+
+  <div>
+    <pre *ngIf="!editReminder">{{ reminder.title }}</pre>
+    <mat-form-field *ngIf="editReminder">
+      <input matInput [(ngModel)]="reminder.title" placeholder="Názov pripomienky">
+    </mat-form-field>
+  </div>
+
+  <div>
+    <pre *ngIf="!editReminder">{{ reminder.description }}</pre>
+    <mat-form-field *ngIf="editReminder">
+      <textarea matInput [(ngModel)]="reminder.description" placeholder="Popis pripomienky"> </textarea>
+    </mat-form-field>
+  </div>
+
+</div>
+<!--
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-secondary" (click)="close()">
+    OK
+  </button>
+</div>-->

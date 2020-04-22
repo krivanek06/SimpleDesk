@@ -1,5 +1,11 @@
 import {User} from "../../../core/model/User";
 
+export interface RequestStatistics {
+  dateText: string[];
+  sentRequests: number[];
+  solvedRequests: number[];
+}
+
 export interface Request {
   id: number;
   timestampCreation: Date;
@@ -146,9 +152,4 @@ export interface FilterRequest {
   name: string;
   priority: string;
 }
-
-
-
-// ----------------------------
-// Privileges
 

@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import rc.bootsecurity.requestModule.commonModule.dto.RequestStatistics;
 import rc.bootsecurity.requestModule.commonModule.service.RequestManagementService;
 import rc.bootsecurity.requestModule.commonModule.service.RequestService;
 import rc.bootsecurity.userModule.dto.UserDTO;
@@ -30,7 +31,7 @@ public class RequestController {
     @GetMapping("/dashboard")
     public ResponseEntity<?>  getRequestOnDashboard(){
         try {
-            List<HashMap> requestDTOS = this.requestService.getRequestOnDashboard();
+            List<HashMap> requestDTOS = this.requestService.getRequestsOnDashboard();
             return new ResponseEntity<>(requestDTOS, HttpStatus.OK);
         } catch (Exception e) {
             LOGGER.error("Failed to getRequestOnDashboard, error : " + e.getMessage());
@@ -47,6 +48,28 @@ public class RequestController {
             LOGGER.error("Failed to getClosedRequests, error : " + e.getMessage());
         }
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní zatvorených požiadavok ",HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/statistics")
+    public ResponseEntity<?> getRequestMonthlyStatistics(){
+        try {
+            RequestStatistics requestStatistics = this.requestService.getRequestMonthlyStatistics();
+            return new ResponseEntity<>(requestStatistics, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to getRequestMonthlyStatistics, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní štatistík požiadavok ",HttpStatus.BAD_REQUEST);
+    }
+
+    @GetMapping("/statistics/secure/{username}")
+    public ResponseEntity<?> getRequestMonthlyStatisticsForUser(@PathVariable("username") String username){
+        try {
+            RequestStatistics requestStatistics = this.requestService.getRequestMonthlyStatistics(username);
+            return new ResponseEntity<>(requestStatistics, HttpStatus.OK);
+        } catch (Exception e) {
+            LOGGER.error("Failed to getRequestMonthlyStatisticsForUser, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Došlo ku chybe na strane servera pri načítavaní štatistík požiadavok uživateľovi",HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/requestDetails/{id}/download", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

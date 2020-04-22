@@ -20,7 +20,7 @@ export class SwallNotificationService {
 
   public generateQuestion(text: string): Promise<SweetAlertResult> {
     return Swal.fire({
-      text: text,
+      text,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -31,20 +31,20 @@ export class SwallNotificationService {
   }
 
   public generateErrorNotification(text: string): Promise<SweetAlertResult> {
-    return Swal.fire({text: text, icon: 'error'});
+    return Swal.fire({text, icon: 'error'});
   }
 
   public generateDeleteQuestion(title: string, text: string): Promise<SweetAlertResult> {
     return Swal.fire({
       title: `Naozaj chcete zmazať ${title} ?`,
-      text: text,
+      text,
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: 'rgb(40, 171, 22)',
       cancelButtonText: "Zatvoriť",
       confirmButtonText: 'Zmazať',
-    })
+    });
   }
 
   public editComment(comment: string): Promise<SweetAlertResult> {
@@ -57,7 +57,7 @@ export class SwallNotificationService {
       focusConfirm: false,
       width: 750,
       preConfirm: () => {
-        return [(<HTMLInputElement> document.getElementById('commentText')).value]
+        return [(document.getElementById('commentText') as HTMLInputElement).value];
       }
     });
   }
@@ -83,13 +83,14 @@ export class SwallNotificationService {
       focusConfirm: false,
       preConfirm: () => {
         return [
-          (<HTMLInputElement>document.getElementById('old_pwd')).value,
-          (<HTMLInputElement>document.getElementById('new_pwd1')).value,
-          (<HTMLInputElement>document.getElementById('new_pwd2')).value
-        ]
+          (document.getElementById('old_pwd') as HTMLInputElement).value,
+          (document.getElementById('new_pwd1') as HTMLInputElement).value,
+          (document.getElementById('new_pwd2') as HTMLInputElement).value
+        ];
       }
     });
   }
+
 
 
 }
