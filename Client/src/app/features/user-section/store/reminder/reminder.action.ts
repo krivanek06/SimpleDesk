@@ -10,7 +10,7 @@ export const getReminders = createAction(
 
 export const getRemindersSuccess = createAction(
   '[Reminder] get reminders for user success',
-  props<{ reminderContainers: ReminderContainer[] }>()
+  props<{ reminders: Reminder[] }>()
 );
 
 export const getRemindersError = createAction(
@@ -25,7 +25,7 @@ export const createReminder = createAction(
 
 export const createReminderSuccess = createAction(
   '[Reminder] create success',
-  props<{ reminderContainer: ReminderContainer  }>()
+  props<{ reminder: Reminder   }>()
 );
 
 export const createReminderError = createAction(
@@ -35,12 +35,12 @@ export const createReminderError = createAction(
 
 export const editReminder = createAction(
   '[Reminder] edit',
-  props<{ reminderContainer: ReminderContainer }>()
+  props<{ reminder: Reminder  }>()
 );
 
 export const editReminderSuccess = createAction(
   '[Reminder] edit success',
-  props<{ reminderContainer: ReminderContainer }>()
+  props<{ reminder: Reminder  }>()
 );
 
 export const editReminderError = createAction(
@@ -50,12 +50,12 @@ export const editReminderError = createAction(
 
 export const deleteReminder = createAction(
   '[Reminder] delete',
-  props<{ reminderContainer: ReminderContainer }>()
+  props<{ reminder: Reminder  }>()
 );
 
 export const deleteReminderSuccess = createAction(
   '[Reminder] delete success',
-  props<{ reminderContainer: ReminderContainer }>()
+  props<{ reminder: Reminder  }>()
 );
 
 export const deleteReminderError = createAction(

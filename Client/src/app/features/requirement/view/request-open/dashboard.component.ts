@@ -50,6 +50,7 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+
   }
 
   removeLogs(request: Request) {

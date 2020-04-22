@@ -1,18 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Reminder, ReminderContainer} from "../../../../model/Reminder.model";
+import {ChangeDetectionStrategy, Component, Input, OnInit} from '@angular/core';
+import {Reminder} from "../../../../model/Reminder.model";
 
 @Component({
   selector: 'app-calendar-event-details',
   templateUrl: './calendar-event-details.component.html',
-  styleUrls: ['./calendar-event-details.component.scss']
+  styleUrls: ['./calendar-event-details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CalendarEventDetailsComponent implements OnInit {
-  @Input() readonly reminderContainer: ReminderContainer;
+  @Input() reminder: Reminder;
   @Input() editReminder: boolean;
-
-  @Output() closeEmitter: EventEmitter<any> = new EventEmitter<any>();
-
-  copyReminderContainer: ReminderContainer;
 
 
   constructor() {
@@ -21,13 +18,5 @@ export class CalendarEventDetailsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  close() {
-    this.closeEmitter.emit();
-  }
-
-  edit() {
-    this.copyReminderContainer = JSON.parse(JSON.stringify(this.reminderContainer));
-    console.log(this.copyReminderContainer);
-  }
 
 }

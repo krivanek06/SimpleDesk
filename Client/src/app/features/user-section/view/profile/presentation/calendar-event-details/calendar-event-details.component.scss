@@ -7,3 +7,15 @@ pre {
   padding: 15px;
   white-space: pre-wrap;
 }
+
+mat-form-field {
+  display: block;
+  position: relative;
+  text-align: left;
+  width: 80%;
+  margin-left: 10%;
+}
+
+textarea{
+  height: 300px;
+}

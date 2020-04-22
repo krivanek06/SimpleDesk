@@ -2,9 +2,8 @@ import {Action, createFeatureSelector, createReducer, createSelector, on} from "
 
 import * as reminderAction from './reminder.action';
 import * as authAction from "../../../../core/store/auth/auth.action";
-import {ReminderState, RequestState, UserSection} from "../../../../core/model/appState.model";
-import {createEntityAdapter, EntityAdapter, EntityState} from "@ngrx/entity";
-import {CalendarEvent} from "angular-calendar";
+import {ReminderState,  UserSection} from "../../../../core/model/appState.model";
+import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
 import {Reminder} from "../../model/Reminder.model";
 
 
@@ -12,7 +11,9 @@ export const reminderAdapter: EntityAdapter<Reminder> = createEntityAdapter<Remi
   // selectId: (reminderContainer: ReminderContainer) => reminderContainer.reminder.id,
 });
 
-const initialState = reminderAdapter.getInitialState();
+const initialState: ReminderState = reminderAdapter.getInitialState({
+  areRemindersLoaded: false
+});
 
 export const reminderReducer = createReducer(
   initialState,
@@ -29,19 +30,19 @@ export const reminderReducer = createReducer(
   ),
   on(
     reminderAction.createReminderSuccess,
-    (state, {reminderContainer}) => reminderAdapter.addOne(reminderContainer, {...state})
+    (state, {reminder}) => reminderAdapter.addOne(reminder, {...state})
   ),
   on(
     reminderAction.getRemindersSuccess,
-    (state, {reminderContainers}) => reminderAdapter.addMany(reminderContainers, ({...state}))
+    (state, {reminders}) => reminderAdapter.addMany(reminders, ({...state, areRemindersLoaded: true}))
   ),
   on(
     reminderAction.editReminderSuccess,
-    (state, {reminderContainer}) => reminderAdapter.upsertOne(reminderContainer, ({...state}))
+    (state, {reminder}) => reminderAdapter.upsertOne(reminder, ({...state}))
   ),
   on(
     reminderAction.deleteReminderSuccess,
-    (state, {reminderContainer}) => reminderAdapter.removeOne(reminderContainer.reminder.id, ({...state}))
+    (state, {reminder}) => reminderAdapter.removeOne(reminder.id, ({...state}))
   ),
   on(authAction.logout, (state) => (initialState)),
 );
@@ -54,15 +55,11 @@ export function reducer(state: ReminderState | undefined, action: Action) {
 
 export const userSectionModuleState = createFeatureSelector<UserSection>('userSection');
 export const reminderState = createSelector(userSectionModuleState, (state) => state.reminderState);
-const getAllEntities = createSelector(reminderState, (item => item.entities));
+export const areRemindersLoaded = createSelector(reminderState, (state => state.areRemindersLoaded));
 
 export const getAllReminderContainers =
   createSelector(reminderState, reminder => Object.keys(reminder.entities).map(key => reminder.entities[key]));
 
-export const getReminderContainerById =
-  createSelector(getAllEntities, (entities, id: number) => entities[id]);
 
-export const getReminderContainerByCalendarEvent =
-  createSelector(getAllReminderContainers,
-    (reminderContainer, props) =>
-      reminderContainer.find(container => container.calendarEvent === props.event));
+
+

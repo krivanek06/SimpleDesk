@@ -8,8 +8,9 @@ export interface Reminder extends CalendarEvent {
   description: string;
 }
 
-/*
-export interface ReminderContainer {
-  calendarEvent: ;
+export interface ReminderDateContainer {
   reminder: Reminder;
-}*/
+  start: Date;
+  end: Date;
+}
+

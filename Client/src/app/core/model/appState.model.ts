@@ -10,7 +10,7 @@ import {routerReducer, RouterReducerState} from "@ngrx/router-store";
 import {ImageDTO, JWToken, User, UserSimple} from "./User";
 import {Group} from "./Group";
 import {UserStat} from "../../features/user-section/store/user/user-stat.reducer";
-import {Reminder, ReminderContainer} from "../../features/user-section/model/Reminder.model";
+import {Reminder} from "../../features/user-section/model/Reminder.model";
 
 export interface AppState {
   requirement: RequestState;
@@ -62,8 +62,8 @@ export interface UserSection {
   reminderState: ReminderState;
 }
 
-export interface ReminderState extends EntityState<ReminderContainer> {
-
+export interface ReminderState extends EntityState<Reminder> {
+  areRemindersLoaded: boolean;
 }
 
 

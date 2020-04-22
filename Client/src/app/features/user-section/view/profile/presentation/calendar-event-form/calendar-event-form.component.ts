@@ -1,14 +1,15 @@
-import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Reminder} from "../../../../model/Reminder.model";
 
 
 @Component({
-  selector: 'app-calendar-form',
-  templateUrl: './calendar-form.component.html',
-  styleUrls: ['./calendar-form.component.scss']
+  selector: 'app-calendar-event-form',
+  templateUrl: './calendar-event-form.component.html',
+  styleUrls: ['./calendar-event-form.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class CalendarFormComponent implements OnInit {
+export class CalendarEventFormComponent implements OnInit {
   @Output() changeWindowEmitter: EventEmitter<any> = new EventEmitter<any>();
   @Output() formEmitter: EventEmitter<Reminder> = new EventEmitter<Reminder>();
   @ViewChild('reminderFormViewChild') reminderFormViewChild;
@@ -40,8 +41,9 @@ export class CalendarFormComponent implements OnInit {
     }
     const reminder: Reminder = {
       id: undefined,
-      timestampStart: this.reminderForm.get("startMoment").value,
-      timestampEnd: this.reminderForm.get("endMoment").value,
+      start: this.reminderForm.get("startMoment").value,
+      end: !this.reminderForm.get("endMoment").value ?
+        this.reminderForm.get("startMoment").value : this.reminderForm.get("endMoment").value,
       title: this.reminderForm.get("title").value,
       description: this.reminderForm.get("description").value
     };

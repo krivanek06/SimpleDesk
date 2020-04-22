@@ -21,12 +21,13 @@ import {CalendarModule, DateAdapter} from "angular-calendar";
 import {adapterFactory} from "angular-calendar/date-adapters/date-fns";
 import {ProfileComponent} from './view/profile/profile.component';
 import {CalendarComponent} from './view/profile/presentation/calendar/calendar.component';
-import { CalendarFormComponent } from './view/profile/presentation/calendar-form/calendar-form.component';
+import { CalendarEventFormComponent } from './view/profile/presentation/calendar-event-form/calendar-event-form.component';
 import { CalendarEventDetailsComponent } from './view/profile/presentation/calendar-event-details/calendar-event-details.component';
 
 import * as userStatReducer from "./store/user/user-stat.reducer";
 import * as fromReminder from "./store/reminder/reminder.reducer";
 import {ReminderEffects} from "./store/reminder/reminder.effects";
+import { CalendarEventDateRangeComponent } from './view/profile/presentation/calendar-event-date-range/calendar-event-date-range.component';
 
 export const routes: Routes = [
   {
@@ -53,8 +54,9 @@ export const reducers = {
     UserCalendarComponent,
     ProfileComponent,
     CalendarComponent,
-    CalendarFormComponent,
-    CalendarEventDetailsComponent
+    CalendarEventFormComponent,
+    CalendarEventDetailsComponent,
+    CalendarEventDateRangeComponent
   ],
   imports: [
     RouterModule.forChild(routes),

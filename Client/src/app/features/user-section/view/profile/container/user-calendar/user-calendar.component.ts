@@ -1,18 +1,14 @@
-import {Component, ChangeDetectionStrategy, OnInit, ViewChild, TemplateRef, OnDestroy} from '@angular/core';
-import {Reminder, ReminderContainer} from "../../../../model/Reminder.model";
+import {Component, ChangeDetectionStrategy, OnInit, ViewChild, TemplateRef} from '@angular/core';
+import {Reminder, ReminderDateContainer} from "../../../../model/Reminder.model";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
-import {CalendarEvent, CalendarEventAction} from "angular-calendar";
-import {CalendarFormComponent} from "../../presentation/calendar-form/calendar-form.component";
-import {ReminderConverterService} from "../../../../services/reminder-converter.service";
+import {CalendarEventFormComponent} from "../../presentation/calendar-event-form/calendar-event-form.component";
 import {AppState} from "../../../../../../core/model/appState.model";
-import {select, Store} from "@ngrx/store";
+import { Store} from "@ngrx/store";
 import {Observable} from "rxjs";
-import {SwallNotificationService} from "../../../../../../core/services/swall-notification.service";
 
 import * as fromReminder from '../../../../store/reminder/reminder.reducer';
 import * as reminderAction from '../../../../store/reminder/reminder.action';
-import {userSectionModuleState} from "../../../../store/user/user-stat.reducer";
-import {CalendarEventDetailsComponent} from "../../presentation/calendar-event-details/calendar-event-details.component";
+import {NgbModalRef} from "@ng-bootstrap/ng-bootstrap/modal/modal-ref";
 
 
 @Component({
@@ -23,30 +19,23 @@ import {CalendarEventDetailsComponent} from "../../presentation/calendar-event-d
 })
 export class UserCalendarComponent implements OnInit {
   @ViewChild('modalContent', {static: true}) modalContent: TemplateRef<any>;
-  @ViewChild('calendarForm') calendarForm: CalendarFormComponent;
-  @ViewChild('calendarEventDetails') calendarEventDetails: CalendarEventDetailsComponent;
+  @ViewChild('calendarForm') calendarForm: CalendarEventFormComponent;
 
-  reminderContainers$: Observable<ReminderContainer[]>;
-  selectedContainer$: Observable<ReminderContainer>;
+  reminders$: Observable<Reminder[]>;
 
-  events: CalendarEvent[] = [];
+  selectedReminder: Reminder;
+  selectedReminderCopy: Reminder;
+
   editReminder = false;
 
-  constructor(private modal: NgbModal,
-              private swallNotification: SwallNotificationService,
-              private reminderConverterService: ReminderConverterService,
+  private modal: NgbModalRef;
+
+  constructor(private modalService: NgbModal,
               private store: Store<AppState>) {
   }
 
   ngOnInit(): void {
-    this.reminderContainers$ = this.store.select(fromReminder.getAllReminderContainers);
-    // async pipe unsubscribe
-    this.reminderContainers$.subscribe(containers =>
-      containers.forEach(container => this.events = [...this.events, container.calendarEvent]));
-
-    this.store.subscribe(x => console.log(x));
-    this.store.select(userSectionModuleState).subscribe(x => console.log(x));
-
+    this.reminders$ = this.store.select(fromReminder.getAllReminderContainers);
     this.store.dispatch(reminderAction.getReminders());
   }
 
@@ -57,27 +46,48 @@ export class UserCalendarComponent implements OnInit {
   }
 
 
-  openDetails(event: CalendarEvent) {
-    this.selectedContainer$ = this.store.pipe(select(fromReminder.getReminderContainerByCalendarEvent, {event}));
-    this.selectedContainer$.subscribe(x => console.log(x));
-    this.modal.open(this.modalContent, {size: 'lg'});
+  openDetails(selectedReminder: Reminder) {
+    this.selectedReminder = selectedReminder;
+    this.selectedReminderCopy = JSON.parse(JSON.stringify(selectedReminder));
+    this.modal = this.modalService.open(this.modalContent, {size: 'lg'});
+    // onClose change back to edit
+    this.modal.result.then(
+      () => this.editReminder = false,
+      () => this.editReminder = false);
   }
 
-  deleteReminder(reminderContainer: ReminderContainer) {
-    this.store.dispatch(reminderAction.deleteReminder({reminderContainer}));
+  deleteReminder(reminder: Reminder) {
+    this.store.dispatch(reminderAction.deleteReminder({reminder}));
+    this.modal.close();
   }
 
   toggleEdit() {
-    console.log('aaaa');
     this.editReminder = !this.editReminder;
-    console.log(this.editReminder);
-    if (this.editReminder) {
-      this.calendarEventDetails.edit();
-    }
+    this.selectedReminderCopy = JSON.parse(JSON.stringify(this.selectedReminder));
   }
 
   updateEditedReminder() {
-    console.log(this.calendarEventDetails.copyReminderContainer);
-    this.store.dispatch(reminderAction.editReminder({reminderContainer: this.calendarEventDetails.copyReminderContainer}));
+    const reminder: Reminder = {
+      ...this.selectedReminderCopy,
+      end: new Date(this.selectedReminderCopy.end),
+      start: new Date(this.selectedReminderCopy.start)
+    };
+
+    this.store.dispatch(reminderAction.editReminder({reminder}));
+    // changed displayed old to new
+    this.editReminder = false;
+    this.selectedReminder = reminder;
+    this.selectedReminderCopy = JSON.parse(JSON.stringify(reminder));
   }
+
+  dateChange(event: ReminderDateContainer) {
+    this.store.dispatch(reminderAction.editReminder({
+      reminder: {
+        ...event.reminder,
+        start: !event.start ? event.reminder.start : event.start,
+        end: !event.end ? event.reminder.end : event.end
+      }
+    }));
+  }
+
 }

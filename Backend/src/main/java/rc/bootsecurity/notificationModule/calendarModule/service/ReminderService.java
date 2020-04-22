@@ -13,6 +13,7 @@ import rc.bootsecurity.userModule.service.UserService;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -36,16 +37,16 @@ public class ReminderService {
         reminderDTO.setId(reminder.getId());
         reminderDTO.setTitle(reminder.getTitle());
         reminderDTO.setDescription(reminder.getDescription());
-        reminderDTO.setTimestampStart(reminder.getTimestampStart());
-        reminderDTO.setTimestampEnd(reminder.getTimestampEnd());
+        reminderDTO.setStart(new Date(reminder.getTimestampStart().getTime()));
+        reminderDTO.setEnd(new Date(reminder.getTimestampEnd().getTime()));
         return reminderDTO;
     }
 
     public ReminderDTO createReminder(ReminderDTO reminderDTO){
         Reminder reminder = new Reminder();
         reminder.setTimestampCreation(new Timestamp(System.currentTimeMillis()));
-        reminder.setTimestampStart(reminderDTO.getTimestampStart());
-        reminder.setTimestampEnd(reminderDTO.getTimestampEnd());
+        reminder.setTimestampStart( new Timestamp(reminderDTO.getStart().getTime()));
+        reminder.setTimestampEnd( new Timestamp(reminderDTO.getEnd().getTime()));
         reminder.setTitle(reminderDTO.getTitle());
         reminder.setDescription(reminderDTO.getDescription());
         reminder.setUser(this.userService.loadUserByUsername(this.userService.getPrincipalUsername()));
@@ -73,8 +74,8 @@ public class ReminderService {
 
     public void editReminder(ReminderDTO reminderDTO){
         Reminder reminder = this.loadReminderForPrincipal(reminderDTO.getId());
-        reminder.setTimestampStart(reminderDTO.getTimestampStart());
-        reminder.setTimestampEnd(reminderDTO.getTimestampEnd());
+        reminder.setTimestampStart( new Timestamp(reminderDTO.getStart().getTime()));
+        reminder.setTimestampEnd( new Timestamp(reminderDTO.getEnd().getTime()));
         reminder.setTitle(reminderDTO.getTitle());
         reminder.setDescription(reminderDTO.getDescription());
         this.reminderRepository.save(reminder);
