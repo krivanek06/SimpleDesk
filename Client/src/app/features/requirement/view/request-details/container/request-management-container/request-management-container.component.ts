@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {Request} from 'app/features/requirement/model/Request';
 import {Observable} from 'rxjs';
 import {RequestType} from 'app/features/requirement/model/request.enum';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../../core/model/appState.model";
 import {getRequestById} from "../../../../store/request.reducer";
@@ -13,6 +12,7 @@ import * as fromAuth from '../../../../../../core/store/auth/auth.reducer';
 import * as fromAppManagement from '../../../../../app-management/store/app-management.reducer';
 import * as appManagementAction from '../../../../../app-management/store/app-management.action';
 import * as fromUser from '../../../../../../core/store/user/user.reducer';
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 
 @Component({
   selector: 'app-request-management-container',
@@ -31,8 +31,7 @@ export class RequestManagementContainerComponent implements OnInit {
   activeUsers$: Observable<UserSimple[]>;
 
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -67,18 +66,22 @@ export class RequestManagementContainerComponent implements OnInit {
     this.store.dispatch(RequestAction.removeMeOnRequest({request, assign: false}));
   }
 
+
   changeState(request: Request) {
-    const state = request.closed ? 'otvoriť' : 'uzatvoriť';
-    this.swallNotification.generateQuestion(`Naozaj chcetete ${state} požiadavku ?`).then((result) => {
-      if (result.value) {
-        if (request.closed) {
-          // reopen Request
-          this.store.dispatch(RequestAction.reopenRequest({requestId: request.id, date: undefined, close: false}));
-        } else {
-          // close Request
-          this.store.dispatch(RequestAction.closeRequest({requestId: request.id, date: new Date(), close: true}));
-        }
-      }
-    });
+    if (request.closed) {
+      this.reopenRequest(request);
+    } else {
+      this.closeRequest(request);
+    }
+  }
+
+  @Confirmable(`Naozaj chcetete uzatvoriť požiadavku ?`)
+  private closeRequest(request: Request) {
+    this.store.dispatch(RequestAction.closeRequest({requestId: request.id, date: new Date(), close: true}));
+  }
+
+  @Confirmable(`Naozaj chcetete otvoriť požiadavku ?`)
+  private reopenRequest(request: Request) {
+    this.store.dispatch(RequestAction.reopenRequest({requestId: request.id, date: undefined, close: false}));
   }
 }

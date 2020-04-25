@@ -1,5 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {SwallNotificationService} from "../../../../../../core/services/swall-notification.service";
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 import {RequestReportFormComponent} from "../../presentation/request-report-form/request-report-form.component";
 import {FileUploadComponent} from "../../../../../../shared/components/file-upload/file-upload.component";
 import {CustomDocument, ReportForm} from "../../../../model/Request";
@@ -20,8 +20,7 @@ export class ReportFormPageComponent implements OnInit {
 
   private customDocuments: CustomDocument[];
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<RequestState>) {
+  constructor(private store: Store<RequestState>) {
   }
 
   ngOnInit() {
@@ -31,14 +30,11 @@ export class ReportFormPageComponent implements OnInit {
     this.customDocuments = customDocuments;
   }
 
+  @Confirmable(`Naozaj chcetete odoslať report ?`)
   submitReport(reportForm: ReportForm) {
-    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať report ?`).then((result) => {
-      if (result.value) {
-        this.store.dispatch(RequestAction.createReport({reportForm, customDocuments: this.customDocuments}));
-        this.reportFormComponent.resetForm();
-        this.fileUploadComponent.removeFiles();
-      }
-    });
+    this.store.dispatch(RequestAction.createReport({reportForm, customDocuments: this.customDocuments}));
+    this.reportFormComponent.resetForm();
+    this.fileUploadComponent.removeFiles();
   }
 
 }

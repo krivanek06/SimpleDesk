@@ -18,7 +18,7 @@
        [data] = 'meAssignedRequests$ | async'
        tableTitle="Požiadavky pridelené na mňa"
        (seenLogsEmitter) = 'removeLogs($event)'
-       (removeFromMeEmitter) = "modifyMeAsSolver($event, false)">
+       (removeFromMeEmitter) = "removeMeAsSolver($event)">
    </app-request-table>
 
    <app-request-table
@@ -28,6 +28,6 @@
        [displayAssignToMe] ='(isSolver$ | async)'
        tableTitle="Ostatné otvorené požiadavky"
        (seenLogsEmitter) = 'removeLogs($event)'
-       (assignOnMeEmitter) = "modifyMeAsSolver($event, true)">
+       (assignOnMeEmitter) = "addMeAsSolver($event)">
    </app-request-table>
 </div>

@@ -1,6 +1,5 @@
 import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
 import {Observable} from 'rxjs';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {select, Store} from "@ngrx/store";
 import {Request} from "../../model/Request";
 import {Auth, RequestState} from "../../../../core/model/appState.model";
@@ -8,6 +7,7 @@ import {Auth, RequestState} from "../../../../core/model/appState.model";
 import * as RequestAction from '../../store/request.action';
 import * as fromRequest from '../../store/request.reducer';
 import * as fromAuth from '../../../../core/store/auth/auth.reducer';
+import {Confirmable} from "../../../../shared/utils/swall-notification";
 
 @Component({
   selector: 'app-dashboard',
@@ -24,8 +24,7 @@ export class DashboardComponent implements OnInit {
   meAssignedRequests$: Observable<Request[]>;
   myCreatedRequests$: Observable<Request[]>;
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<RequestState>,
+  constructor(private store: Store<RequestState>,
               private storeAuth: Store<Auth>) {
   }
 
@@ -39,18 +38,14 @@ export class DashboardComponent implements OnInit {
     this.store.dispatch(RequestAction.initializeWebsocketConnectionForRequests());
   }
 
-  modifyMeAsSolver(request: Request, assign: boolean) {
-    const text = assign ? "prideliť na" : "odstrániť zo";
-    this.swallNotification.generateQuestion(`Naozaj chcetete ${text} seba požiadavku s id: ${request.id}. ?`).then((result) => {
-      if (result.value) {
-        if (assign) {
-          this.store.dispatch(RequestAction.assignMeOnRequest({request, assign: true}));
-        } else {
-          this.store.dispatch(RequestAction.removeMeOnRequest({request, assign: false}));
-        }
-      }
-    });
+  @Confirmable(`Naozaj chcetete prideliť na seba požiadavku ?`)
+  addMeAsSolver(request: Request) {
+    this.store.dispatch(RequestAction.assignMeOnRequest({request, assign: true}));
+  }
 
+  @Confirmable(`Naozaj chcetete odstrániť zo seba požiadavku ?`)
+  removeMeAsSolver(request: Request) {
+    this.store.dispatch(RequestAction.removeMeOnRequest({request, assign: false}));
   }
 
   removeLogs(request: Request) {

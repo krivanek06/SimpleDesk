@@ -1,15 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {Observable} from 'rxjs';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {ImageDTO, PasswordContainer, User} from "../../../../../../core/model/User";
 import {Store} from "@ngrx/store";
 import {Group} from "../../../../../../core/model/Group";
 import {AppState} from "../../../../../../core/model/appState.model";
 import {RequestStatistics} from "../../../../../requirement/model/Request";
-
+import {swallErrorNotification, swallSelectImage} from "../../../../../../shared/utils/swall-notification";
 import * as fromUserSection from '../../../../store/user/user-stat.reducer';
 import * as fromUser from '../../../../../../core/store/user/user.reducer';
 import * as userSectionAction from '../../../../store/user/user-stat.action';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -26,8 +26,7 @@ export class UserProfileComponent implements OnInit {
   requestMonthlyStatistics$: Observable<RequestStatistics>;
 
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -46,9 +45,9 @@ export class UserProfileComponent implements OnInit {
 
   changePassword(password: PasswordContainer): void {
     if (password.newPassword1 !== password.newPassword2) {
-      this.swallNotification.generateErrorNotification(`Zadané heslá sa nezhodujú, požiadavka o zmenu hesla nebola odoslaná`);
+      swallErrorNotification(`Zadané heslá sa nezhodujú, požiadavka o zmenu hesla nebola odoslaná`);
     } else if (password.newPassword1.length < 6 || password.newPassword2.length < 6) {
-      this.swallNotification.generateErrorNotification(`Minimálna dĺžka hesla je 6 znakov, požiadavka o zmenu hesla nebola odoslaná.`);
+      swallErrorNotification(`Minimálna dĺžka hesla je 6 znakov, požiadavka o zmenu hesla nebola odoslaná.`);
     } else {
       this.store.dispatch(userSectionAction.changePassword({password}));
     }
@@ -60,7 +59,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   selectImage(image: ImageDTO) {
-    this.swallNotification.selectImage(image.imageBytes).then(result => {
+    swallSelectImage(image.imageBytes).then(result => {
       if (result.value === true) {
         this.store.dispatch(userSectionAction.changeImage({image}));
       }

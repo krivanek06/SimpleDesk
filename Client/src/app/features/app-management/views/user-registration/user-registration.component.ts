@@ -1,11 +1,11 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {User, UserSimple} from 'app/core/model/User';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
+import {UserSimple} from 'app/core/model/User';
 import {UserFormComponent} from 'app/features/app-management/presentation/user/user-form/user-form.component';
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../core/model/appState.model";
 
 import * as appManagementAction from '../../store/app-management.action';
+import {Confirmable} from "../../../../shared/utils/swall-notification";
 
 
 @Component({
@@ -17,19 +17,15 @@ import * as appManagementAction from '../../store/app-management.action';
 export class UserRegistrationComponent implements OnInit {
   @ViewChild('userForm') userForm: UserFormComponent;
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
   }
 
+  @Confirmable(`Naozaj chcetete vytvoriť uživateľa ?`)
   userRegistration(userSimple: UserSimple): void {
-    this.swallNotification.generateQuestion(`Naozaj chcetete vytvoriť uživateľa ?`).then((res) => {
-      if (res.value) {
-        this.store.dispatch(appManagementAction.registerUser({userSimple}));
-        this.userForm.resetForm();
-      }
-    });
+    this.store.dispatch(appManagementAction.registerUser({userSimple}));
+    this.userForm.resetForm();
   }
 }

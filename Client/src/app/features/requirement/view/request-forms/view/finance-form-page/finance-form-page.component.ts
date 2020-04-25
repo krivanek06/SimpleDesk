@@ -1,9 +1,8 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
-import {SwallNotificationService} from "../../../../../../core/services/swall-notification.service";
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 import {RequestFinanceFormComponent} from "../../presentation/request-finance-form/request-finance-form.component";
 import {FileUploadComponent} from "../../../../../../shared/components/file-upload/file-upload.component";
-import {CustomDocument, FinanceForm, FinanceType} from "../../../../model/Request";
-import {RequestHttpService} from "../../../../../../core/api/request-http.service";
+import {CustomDocument, FinanceForm} from "../../../../model/Request";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../../core/model/appState.model";
 
@@ -26,9 +25,7 @@ export class FinanceFormPageComponent implements OnInit {
 
   financeType$: Observable<string[]>;
 
-  constructor(private requestHttpService: RequestHttpService,
-              private store: Store<AppState>,
-              private swallNotification: SwallNotificationService) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -39,14 +36,11 @@ export class FinanceFormPageComponent implements OnInit {
     this.customDocuments = customDocuments;
   }
 
+  @Confirmable(`Naozaj chcetete odoslať požiadavku na účtáreň ?`)
   submitFinance(financeForm: FinanceForm) {
-    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať na účtáreň ?`).then((result) => {
-      if (result.value) {
-        this.store.dispatch(RequestAction.createFinance({financeForm, customDocuments: this.customDocuments}));
-        this.financeFormComponent.resetForm();
-        this.fileUploadComponent.removeFiles();
-      }
-    });
+    this.store.dispatch(RequestAction.createFinance({financeForm, customDocuments: this.customDocuments}));
+    this.financeFormComponent.resetForm();
+    this.fileUploadComponent.removeFiles();
   }
 
 }

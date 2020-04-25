@@ -3,12 +3,11 @@ import {HttpRequest, HttpHandler, HttpEvent, HttpInterceptor} from '@angular/com
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 import {Router} from '@angular/router';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
+import {swallErrorNotification} from "../../shared/utils/swall-notification";
 
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
-  constructor(private router: Router,
-              private swallNotification: SwallNotificationService) {
+  constructor(private router: Router) {
   }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -17,7 +16,7 @@ export class ErrorInterceptor implements HttpInterceptor {
       if (err.status === 401) {
         this.authenticationFailed(err.error.error);
       } else if (err.status === 403) {
-        this.swallNotification.generateErrorNotification(err.error).then(() => this.router.navigate(['/unauthorized']));
+        swallErrorNotification(err.error).then(() => this.router.navigate(['/unauthorized']));
       } else if (err.status === 404) {
         console.log("404 error, shoud be created an error page");
       } else {
@@ -28,7 +27,7 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   private generalError(error: string) {
-    this.swallNotification.generateErrorNotification(`Požiadavka zlyhala, chyba hlášky : ${error}`);
+    swallErrorNotification(`Požiadavka zlyhala, chyba hlášky : ${error}`);
   }
 
 
@@ -38,6 +37,6 @@ export class ErrorInterceptor implements HttpInterceptor {
       console.log('missing token : Not found anonymousUser');
       return;
     }
-    this.swallNotification.generateErrorNotification(`Zadali ste nesprávne prihlasovacie údaje.`);
+    swallErrorNotification(`Zadali ste nesprávne prihlasovacie údaje.`);
   }
 }

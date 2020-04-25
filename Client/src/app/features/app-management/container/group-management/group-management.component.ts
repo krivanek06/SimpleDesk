@@ -7,7 +7,6 @@ import {
 import {PrivilegesComponent} from 'app/shared/components/privileges/privileges.component';
 import {GroupDetailsComponent} from 'app/shared/components/group-details/group-details.component';
 import {Observable} from 'rxjs';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {UserSimple} from "../../../../core/model/User";
 import {Store} from "@ngrx/store";
 import {Group} from "../../../../core/model/Group";
@@ -16,6 +15,7 @@ import {GroupConstructorService} from "../../../../core/services/group-construct
 import * as fromAuth from '../../../../core/store/auth/auth.reducer';
 import * as fromAppManagement from '../../store/app-management.reducer';
 import * as appManagementAction from '../../store/app-management.action';
+import {Confirmable} from "../../../../shared/utils/swall-notification";
 
 
 @Component({
@@ -36,7 +36,6 @@ export class GroupManagementComponent implements OnInit {
   editGroupActivated = false;
 
   constructor(private store: Store<Store>,
-              private swallNotification: SwallNotificationService,
               private groupConstructorService: GroupConstructorService) {
   }
 
@@ -59,29 +58,22 @@ export class GroupManagementComponent implements OnInit {
     this.groupPrivileges.edit();
   }
 
+  @Confirmable(`Naozaj chcetete editovať skupinu ?`)
   saveGroup() {
-    this.swallNotification.generateQuestion(`Naozaj chcetete editovať skupinu ?`).then((result) => {
-      if (result.value) {
+    const groupCopy = this.groupConstructorService.createGroupCopy(
+      this.groupDetails.groupCopy,
+      this.groupPrivileges.enabledPrivilegesCopy,
+      this.groupPrivileges.disabledPrivilegesCopy
+    );
 
-        const groupCopy = this.groupConstructorService.createGroupCopy(
-          this.groupDetails.groupCopy,
-          this.groupPrivileges.enabledPrivilegesCopy,
-          this.groupPrivileges.disabledPrivilegesCopy
-        );
-
-        this.store.dispatch(appManagementAction.editGroup({group: groupCopy}));
-        this.editGroupActivated = false;
-      }
-    });
+    this.store.dispatch(appManagementAction.editGroup({group: groupCopy}));
+    this.editGroupActivated = false;
   }
 
+  @Confirmable(`Naozaj chcetete vymazať skupinu ?`)
   deleteGroup() {
-    this.swallNotification.generateQuestion(`Naozaj chcetete vymazať skupinu ?`).then((result) => {
-      if (result.value) {
-        this.store.dispatch(appManagementAction.removeGroup());
-        this.editGroupActivated = false;
-      }
-    });
+    this.store.dispatch(appManagementAction.removeGroup());
+    this.editGroupActivated = false;
   }
 
 }

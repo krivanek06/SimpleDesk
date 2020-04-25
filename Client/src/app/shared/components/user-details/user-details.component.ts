@@ -1,7 +1,7 @@
-import {Component, OnInit, Output, Input, ChangeDetectionStrategy} from '@angular/core';
+import {Component, OnInit, Output, Input} from '@angular/core';
 import {EventEmitter} from '@angular/core';
 import {PasswordContainer, User} from 'app/core/model/User';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
+import {swallChangePassword} from 'app/shared/utils/swall-notification';
 
 @Component({
   selector: 'app-user-details',
@@ -16,7 +16,7 @@ export class UserDetailsComponent implements OnInit {
   @Output() changePasswordEmitter: EventEmitter<PasswordContainer> = new EventEmitter<PasswordContainer>();
   @Output() changeImageEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private swallNotification: SwallNotificationService) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -27,7 +27,7 @@ export class UserDetailsComponent implements OnInit {
   }
 
   async changePassword() {
-    const {value: formValues} = await this.swallNotification.changePassword();
+    const {value: formValues} = await swallChangePassword();
     if (formValues) {
       const passwordContainer: PasswordContainer = {
         oldPassword: formValues[0],

@@ -1,7 +1,7 @@
-import {Component, OnInit, Input, Output, ChangeDetectionStrategy} from '@angular/core';
+import {Component, Input, Output} from '@angular/core';
 import {EventEmitter} from '@angular/core';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {CustomDocument} from "../../../features/requirement/model/Request";
+import {swallErrorNotification} from "../../utils/swall-notification";
 
 @Component({
   selector: 'app-file-upload',
@@ -10,7 +10,7 @@ import {CustomDocument} from "../../../features/requirement/model/Request";
 })
 export class FileUploadComponent {
 
-  constructor(private swallNotification: SwallNotificationService) {
+  constructor() {
   }
 
   @Output() fileInserted: EventEmitter<CustomDocument[]> = new EventEmitter<CustomDocument[]>();
@@ -32,7 +32,7 @@ export class FileUploadComponent {
     // if more than 20MB
     const sizeMB = Math.round(this.files.reduce((acc, item) => acc + item.size, 0) / 1000000);
     if (sizeMB > 20) {
-      this.swallNotification.generateErrorNotification(`Veľkosť vášho súboru je ${sizeMB}MB, maximálna povolená veľkosť je 20MB. `);
+      swallErrorNotification(`Veľkosť vášho súboru je ${sizeMB}MB, maximálna povolená veľkosť je 20MB. `);
       this.removeFiles();
       return;
     }

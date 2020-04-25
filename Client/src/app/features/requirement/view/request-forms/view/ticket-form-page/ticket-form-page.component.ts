@@ -1,6 +1,5 @@
 import {ChangeDetectionStrategy, Component, OnInit, ViewChild} from '@angular/core';
 import {FileUploadComponent} from "../../../../../../shared/components/file-upload/file-upload.component";
-import {SwallNotificationService} from "../../../../../../core/services/swall-notification.service";
 import {RequestTicketFormComponent} from "../../presentation/request-ticket-form/request-ticket-form.component";
 import {CustomDocument, TicketForm, TicketSubtype} from "../../../../model/Request";
 import {Store} from "@ngrx/store";
@@ -9,6 +8,7 @@ import {Observable} from "rxjs";
 
 import * as RequestAction from '../../../../store/request.action';
 import * as fromRequest from '../../../../store/request.reducer';
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 
 @Component({
   selector: 'app-ticket-form-page',
@@ -26,8 +26,7 @@ export class TicketFormPageComponent implements OnInit {
   hardwareTypes$: Observable<TicketSubtype[]>;
   serverTypes$: Observable<TicketSubtype[]>;
 
-  constructor(private store: Store<AppState>,
-              private swallNotification: SwallNotificationService) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -42,13 +41,10 @@ export class TicketFormPageComponent implements OnInit {
     this.customDocuments = customDocuments;
   }
 
+  @Confirmable(`Naozaj chcetete odoslať ticket ?`)
   submitTicket(ticketForm: TicketForm) {
-    this.swallNotification.generateQuestion(`Naozaj chcetete odoslať ticket ?`).then((result) => {
-      if (result.value) {
-        this.store.dispatch(RequestAction.createTicket({ticketForm, customDocuments: this.customDocuments}));
-        this.ticketFormComponent.resetForm();
-        this.fileUploadComponent.removeFiles();
-      }
-    });
+    this.store.dispatch(RequestAction.createTicket({ticketForm, customDocuments: this.customDocuments}));
+    this.ticketFormComponent.resetForm();
+    this.fileUploadComponent.removeFiles();
   }
 }

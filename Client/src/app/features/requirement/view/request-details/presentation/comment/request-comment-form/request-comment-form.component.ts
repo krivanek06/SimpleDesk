@@ -1,8 +1,8 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {RequestComment, RequestCommentWrapper} from 'app/features/requirement/model/Request';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
+import {RequestCommentWrapper} from 'app/features/requirement/model/Request';
 import {RequestCommentType} from "../../../../../model/request.enum";
 import {RequestConstructorService} from "../../../../../services/request-constructor.service";
+import {Confirmable} from "../../../../../../../shared/utils/swall-notification";
 
 
 @Component({
@@ -19,8 +19,7 @@ export class RequestCommentFormComponent implements OnInit {
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 
-  constructor(private swallNotification: SwallNotificationService,
-              private requestConstructorService: RequestConstructorService) {
+  constructor(private requestConstructorService: RequestConstructorService) {
   }
 
   ngOnInit() {
@@ -31,7 +30,7 @@ export class RequestCommentFormComponent implements OnInit {
     this.isCheckedName = event.source.name;
   }
 
-
+  @Confirmable(`Odoslať komentár ?`)
   submit(): void {
     if (this.commentInput === '') {
       return;
@@ -47,12 +46,8 @@ export class RequestCommentFormComponent implements OnInit {
       this.isCheckedName === RequestCommentType.Solution
     );
 
-    this.swallNotification.generateQuestion(`Odoslať komentár ?`).then((result) => {
-      if (result.value) {
-        this.addedCommentEmitter.emit(requestCommentWrapper);
-        this.commentInput = '';
-      }
-    });
+    this.addedCommentEmitter.emit(requestCommentWrapper);
+    this.commentInput = '';
   }
 
 }

@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  loginUrl: 'http://localhost:8082/', // 10.134.216.210:8081
-  apiUrl: 'http://localhost:8082/api/',
-  websockets: 'ws://localhost:8082', // /websocket
+  loginUrl: 'http://localhost:8081/', // 10.134.216.210:8081
+  apiUrl: 'http://localhost:8081/api/',
+  websockets: 'ws://localhost:8081', // /websocket
   version: 1.4,
 };
 
