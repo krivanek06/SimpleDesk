@@ -8,7 +8,6 @@ import {Observable} from "rxjs";
 
 import * as RequestAction from '../../../../store/request.action';
 import * as fromRequest from '../../../../store/request.reducer';
-import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 
 @Component({
   selector: 'app-ticket-form-page',
@@ -17,7 +16,6 @@ import {Confirmable} from "../../../../../../shared/utils/swall-notification";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TicketFormPageComponent implements OnInit {
-  @ViewChild('ticketFormComponent') ticketFormComponent: RequestTicketFormComponent;
   @ViewChild('fileUploadComponent') fileUploadComponent: FileUploadComponent;
 
   private customDocuments: CustomDocument[];
@@ -41,10 +39,9 @@ export class TicketFormPageComponent implements OnInit {
     this.customDocuments = customDocuments;
   }
 
-  @Confirmable(`Naozaj chcetete odoslať ticket ?`)
+
   submitTicket(ticketForm: TicketForm) {
     this.store.dispatch(RequestAction.createTicket({ticketForm, customDocuments: this.customDocuments}));
-    this.ticketFormComponent.resetForm();
     this.fileUploadComponent.removeFiles();
   }
 }

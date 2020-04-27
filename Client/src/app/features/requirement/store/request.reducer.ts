@@ -11,7 +11,9 @@ import * as RequestAction from './request.action';
 import * as fromUser from '../../../core/store/user/user.reducer';
 import {TicketSubtype} from "../model/request.enum";
 
-export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>();
+export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>({
+  sortComparer: (a, b) => 0 - (a.id > b.id ? 1 : -1)
+});
 
 export const initialState: RequestState = requestAdapter.getInitialState({
   loadedDashboard: false,
@@ -94,6 +96,14 @@ const requestReducer = createReducer(initialState,
     (state, {requests, customDate}) => (
       requestAdapter.upsertMany(requests, {...state, closedFilterDate: customDate})
     )
+  ),
+  on(
+    RequestAction.initializeWebsocketConnectionForRequestsSuccess,
+    (state) => ({...state, websocketConnected: true})
+  ),
+  on(
+    RequestAction.initializeWebsocketConnectionForRequestsFailure,
+    (state) => ({...state, websocketConnected: false})
   ),
   on(
     RequestAction.updateRequestFromAPI,

@@ -93,6 +93,16 @@ public class UserController {
         return new ResponseEntity<>("Došlo ku chybe na strane servera pri pokuse o registrovanie uživateľa",HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/registration")
+    public ResponseEntity<?> checkIfUsernameExists(@RequestParam("username") String username){
+        try {
+            return new ResponseEntity<>(this.userService.checkIfUsernameExists(username), HttpStatus.OK);
+        } catch (Exception e){
+            LOGGER.error("Failed checkIfUsernameExists, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Požiadavka o existencii uživateĺa zlyhala",HttpStatus.BAD_REQUEST);
+    }
+
 
     @GetMapping("/secure/all")
     public ResponseEntity<?> getAllUsers(){

@@ -1,13 +1,17 @@
-import {Component, OnInit, ChangeDetectionStrategy} from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {Observable} from 'rxjs';
 import {select, Store} from "@ngrx/store";
 import {Request} from "../../model/Request";
 import {Auth, RequestState} from "../../../../core/model/appState.model";
-
+import {Confirmable} from "../../../../shared/utils/swall-notification";
 import * as RequestAction from '../../store/request.action';
 import * as fromRequest from '../../store/request.reducer';
 import * as fromAuth from '../../../../core/store/auth/auth.reducer';
-import {Confirmable} from "../../../../shared/utils/swall-notification";
+import * as reminderAction from "../../../user-section/store/reminder/reminder.action";
 
 @Component({
   selector: 'app-dashboard',
@@ -24,6 +28,7 @@ export class DashboardComponent implements OnInit {
   meAssignedRequests$: Observable<Request[]>;
   myCreatedRequests$: Observable<Request[]>;
 
+
   constructor(private store: Store<RequestState>,
               private storeAuth: Store<Auth>) {
   }
@@ -36,6 +41,7 @@ export class DashboardComponent implements OnInit {
 
     this.store.dispatch(RequestAction.getOpenRequests());
     this.store.dispatch(RequestAction.initializeWebsocketConnectionForRequests());
+    this.store.dispatch(reminderAction.getReminders());
   }
 
   @Confirmable(`Naozaj chcetete prideliť na seba požiadavku ?`)

@@ -1,57 +1,77 @@
+@import "../../style/NotificationDot";
 
-#headerBackground{
-    height: 40px;
-    position: relative;
-    background-color: #F3F3F4;
-    opacity: 0.7;
-    margin-bottom: 20px;
+#headerBackground {
+  height: 40px;
+  position: relative;
+  background-color: #F3F3F4;
+  opacity: 0.7;
+  margin-bottom: 20px;
 }
 
-#headerContainer{
-    float: right;
-    width: calc(100% - 85px);
-    height: 40px;
-    position: relative;
+#headerContainer {
+  float: right;
+  width: calc(100% - 85px);
+  height: 40px;
+  position: relative;
 }
 
-#headerTitle{
-    float: left;
-    margin-left: 10px;
-    margin-top:6px;
-    font-size: 20px;
-}
-#headerLogout{
-    float: right;
-    margin-right: 25px;
-    margin-top:6px;
+#headerTitle {
+  float: left;
+  margin-left: 10px;
+  margin-top: 6px;
+  font-size: 20px;
 }
 
-.userIcon{
-    width: 30px;
-    height: 30px;
-    margin-right: 5px;
-    margin-top: -5px;
+#headerLogout {
+  float: right;
+  margin-right: 25px;
+  margin-top: 6px;
+}
+
+.userIcon {
+  width: 30px;
+  height: 30px;
+  margin-right: 5px;
+  margin-top: -5px;
+}
+
+.feature-icon{
+  cursor: pointer;
+  transition: All 0.40s ease-out;
+  &:hover {
+    transform: scale(1.25);
   }
+}
 
 
-  .example_f span {
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    transition: 0.4s;
-  }
-  .example_f span:after {
-    content: '\00bb';
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    right: -20px;
-    transition: 0.5s;
-  }
-  .example_f:hover span {
-    padding-right: 25px;
-  }
-  .example_f:hover span:after {
-    opacity: 1;
-    right: 0;
-  }
+.image-features-container{
+  float: left;
+  margin-left: 50px;
+  margin-top: 8px;
+  position: relative;
+}
+
+.example_f span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.4s;
+}
+
+.example_f span:after {
+  content: '\00bb';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+
+.example_f:hover span {
+  padding-right: 25px;
+}
+
+.example_f:hover span:after {
+  opacity: 1;
+  right: 0;
+}

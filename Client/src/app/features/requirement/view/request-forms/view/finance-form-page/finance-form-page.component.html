@@ -2,7 +2,6 @@
 
 <div class='InlineParameters'>
   <app-request-finance-form
-    #financeFormComponent
     [financeTypeArray]="financeType$ | async"
     (formEmitter)="submitFinance($event)">
 

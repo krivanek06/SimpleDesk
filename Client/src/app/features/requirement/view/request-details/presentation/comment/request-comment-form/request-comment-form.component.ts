@@ -1,7 +1,6 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {RequestCommentWrapper} from 'app/features/requirement/model/Request';
+import {RequestComment, RequestCommentWrapper} from 'app/features/requirement/model/Request';
 import {RequestCommentType} from "../../../../../model/request.enum";
-import {RequestConstructorService} from "../../../../../services/request-constructor.service";
 import {Confirmable} from "../../../../../../../shared/utils/swall-notification";
 
 
@@ -19,7 +18,7 @@ export class RequestCommentFormComponent implements OnInit {
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 
-  constructor(private requestConstructorService: RequestConstructorService) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -36,15 +35,22 @@ export class RequestCommentFormComponent implements OnInit {
       return;
     }
 
-    const requestComment = this.requestConstructorService.constructRequestComment(
-      this.commentInput,
-      this.isChecked && this.isCheckedName === RequestCommentType.Private
-    );
-    const requestCommentWrapper = this.requestConstructorService.constructRequestCommentWrapper(
+    const requestComment: RequestComment = {
+      id: null,
+      requestId: null,
+      creator: undefined,
+      comment: this.commentInput,
+      isPrivate: this.isChecked && this.isCheckedName === RequestCommentType.Private,
+      groupsToShare: [],
+      timestamp: new Date()
+    };
+
+    const requestCommentWrapper: RequestCommentWrapper = {
       requestComment,
-      this.isChecked && (this.isCheckedName === RequestCommentType.Solution || this.isCheckedName === RequestCommentType.Notification),
-      this.isCheckedName === RequestCommentType.Solution
-    );
+      sendEmail: this.isChecked &&
+        (this.isCheckedName === RequestCommentType.Solution || this.isCheckedName === RequestCommentType.Notification),
+      solution: this.isCheckedName === RequestCommentType.Solution
+    };
 
     this.addedCommentEmitter.emit(requestCommentWrapper);
     this.commentInput = '';

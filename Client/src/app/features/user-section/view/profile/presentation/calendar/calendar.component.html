@@ -38,8 +38,7 @@
   [refresh]="refresh"
   [activeDayIsOpen]="activeDayIsOpen"
   (dayClicked)="dayClicked($event.day)"
-  (eventClicked)="handleEvent($event.event)"
-  (eventTimesChanged)="eventTimesChanged($event)"
+  (eventClicked)="openDetails($event.event)"
 >
 </mwl-calendar-month-view>
 

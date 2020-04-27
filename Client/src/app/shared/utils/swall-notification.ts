@@ -31,9 +31,11 @@ function generateDeleteQuestion(text: string): Promise<SweetAlertResult> {
 export function swallNotification(text: string): void {
   Swal.fire({
     position: 'top-end',
-    text,
+    title: `<span style="color:#f0f0f0">${text}<span>`,
     showConfirmButton: false,
-    timer: 1500,
+    timer: 3000,
+    background: '#b20066',
+    toast: true,
   });
 }
 

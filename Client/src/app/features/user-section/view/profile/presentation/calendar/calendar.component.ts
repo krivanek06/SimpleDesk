@@ -43,22 +43,7 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  eventTimesChanged({event, newStart, newEnd}: CalendarEventTimesChangedEvent): void {
-    console.log('eventTimesChanged', event);
-    this.events = this.events.map((iEvent) => {
-      if (iEvent === event) {
-        return {
-          ...event,
-          start: newStart,
-          end: newEnd,
-        };
-      }
-      return iEvent;
-    });
-    this.handleEvent(event);
-  }
-
-  handleEvent(event: CalendarEvent): void {
+  openDetails(event: CalendarEvent): void {
     this.openDetailsEmitter.emit(event);
   }
 

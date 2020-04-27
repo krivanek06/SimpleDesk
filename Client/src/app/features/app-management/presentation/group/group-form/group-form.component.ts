@@ -28,7 +28,6 @@ export class GroupFormComponent implements OnInit {
   @ViewChild('groupFormViewChild') groupFormViewChild;
 
   constructor(private formBuilder: FormBuilder,
-              private userConverterService: UserConstructorService,
               private groupConstructorService: GroupConstructorService) {
   }
 
@@ -79,14 +78,14 @@ export class GroupFormComponent implements OnInit {
     let ticketpriv: TicketPrivilege;
 
     if (this.solveTickets.value !== null) {
-      ticketpriv = this.userConverterService.constructTicketPrivilege(
+      ticketpriv = UserConstructorService.constructTicketPrivilege(
         this.solveSoftware.value,
         this.solveHardware.value,
         this.solveServer.value,
         this.solveTickets.value
       );
     }
-    const privilege: ApplicationPrivilege = this.userConverterService.constructApplicationPrivilege(
+    const privilege: ApplicationPrivilege = UserConstructorService.constructApplicationPrivilege(
       this.moduleTypesToUse.value,
       this.requestTypesToSolve.value,
       ticketpriv,

@@ -31,6 +31,7 @@ export class RequestEffects {
     filter(([_, loaded]) => !loaded),
     switchMap(() => this.store.select(fromUser.getUser)
       .pipe(
+        tap(() => this.store.dispatch(RequestAction.initializeWebsocketConnectionForRequestsSuccess())),
         switchMap(user => this.requestHttpService.initializeWebsocketConnection(user.username)
           .pipe(
             map((response) => {

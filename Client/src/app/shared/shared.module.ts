@@ -39,6 +39,7 @@ export interface SatDatepickerRangeValue<D> {
   begin: D | null;
   end: D | null;
 }
+
 export const DD_MM_YYYY_Format = {
   parse: {
     dateInput: 'LL',
@@ -50,8 +51,6 @@ export const DD_MM_YYYY_Format = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
-
 
 
 @NgModule({
@@ -119,7 +118,7 @@ export const DD_MM_YYYY_Format = {
     DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
-    { provide: NGX_MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format }
+    {provide: NGX_MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format}
   ]
 })
 export class SharedModule {

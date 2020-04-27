@@ -13,6 +13,7 @@ import {
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Request} from "../../model/Request";
 import {RequestType} from "../../model/request.enum";
+import {MatSort, Sort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-request-table',
@@ -33,6 +34,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   @Output() seenLogsEmitter: EventEmitter<Request> = new EventEmitter<Request>();
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   dataSource: MatTableDataSource<Request> = new MatTableDataSource<Request>();
 
@@ -46,12 +48,12 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     this.dataSource.data = [...this.data];
-    this.dataSource.data.sort((a, b) => (b.id - a.id));
-    this.dataSource._updateChangeSubscription();
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.sort;
+
   }
 
   removeLogs(request: Request) {
@@ -65,5 +67,13 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   removeFromMe(request: Request) {
     this.removeFromMeEmitter.emit(request);
+  }
+
+  trackBy(index: number, item: Request) {
+    return item.id;
+  }
+
+  sortData($event: Sort) {
+
   }
 }
