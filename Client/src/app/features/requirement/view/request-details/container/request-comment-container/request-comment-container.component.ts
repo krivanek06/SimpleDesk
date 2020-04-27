@@ -1,17 +1,18 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {RequestComment, Request, RequestCommentWrapper} from 'app/features/requirement/model/Request';
 import {Observable} from 'rxjs';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {Group, GroupContainer} from "../../../../../../core/model/Group";
 import {Store} from "@ngrx/store";
 import {AppState} from "../../../../../../core/model/appState.model";
 import {getRequestById} from "../../../../store/request.reducer";
 import {User} from "../../../../../../core/model/User";
+import {ConfirmableDelete, swallEditComment} from "../../../../../../shared/utils/swall-notification";
 
 import * as RequestAction from '../../../../store/request.action';
 import * as fromRequest from '../../../../store/request.reducer';
 import * as fromAuth from '../../../../../../core/store/auth/auth.reducer';
 import * as fromUser from '../../../../../../core/store/user/user.reducer';
+
 
 @Component({
   selector: 'app-request-comment-container',
@@ -34,8 +35,7 @@ export class RequestCommentContainerComponent implements OnInit {
   groupContainer$: Observable<GroupContainer>;
 
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<AppState>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
@@ -48,18 +48,15 @@ export class RequestCommentContainerComponent implements OnInit {
   }
 
   async editComment(requestComment: RequestComment) {
-    const {value: formValues} = await this.swallNotification.editComment(requestComment.comment);
+    const {value: formValues} = await swallEditComment(requestComment.comment);
     if (formValues) {
       this.store.dispatch(RequestAction.editComment({requestComment, comment: formValues[0]}));
     }
   }
 
+  @ConfirmableDelete(`Naozaj chcete zmazať komentár ?`)
   deleteComment(requestComment: RequestComment) {
-    this.swallNotification.generateDeleteQuestion('komentár', requestComment.comment).then((result) => {
-      if (result.value) {
-        this.store.dispatch(RequestAction.deleteComment({requestComment}));
-      }
-    });
+    this.store.dispatch(RequestAction.deleteComment({requestComment}));
   }
 
   changeCommentPrivacy(requestComment: RequestComment) {
@@ -72,11 +69,7 @@ export class RequestCommentContainerComponent implements OnInit {
   }
 
   shareWith(groupName: string) {
-    this.swallNotification.generateQuestion(`Naozaj chcete vyzdieľať komentár so skupinou: ${groupName} ?`).then((result) => {
-      if (result.value) {
-        this.store.dispatch(RequestAction.shareComment({requestComment: this.sharingComment, groupName}));
-      }
-    });
+    this.store.dispatch(RequestAction.shareComment({requestComment: this.sharingComment, groupName}));
   }
 
   getGroupDetails(groupName: string) {

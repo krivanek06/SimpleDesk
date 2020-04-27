@@ -7,7 +7,7 @@ export const environment = {
   loginUrl: 'http://localhost:8082/', // 10.134.216.210:8081
   apiUrl: 'http://localhost:8082/api/',
   websockets: 'ws://localhost:8082', // /websocket
-  version: 1.4,
+  version: '1.4.1',
 };
 
 

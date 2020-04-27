@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {UserHttpService} from "../../../../core/api/user-http.service";
 import {ReminderHttpService} from "../../../../core/api/reminder-http.service";
-import {SwallNotificationService} from "../../../../core/services/swall-notification.service";
 import {Action, Store} from "@ngrx/store";
 import {Observable, of} from "rxjs";
 import {catchError, filter, map, switchMap, tap, withLatestFrom} from "rxjs/operators";
@@ -13,6 +12,7 @@ import * as reminderAction from './reminder.action';
 import * as fromReminder from './reminder.reducer';
 import * as fromRequest from "../../../requirement/store/request.reducer";
 import {AppState} from "../../../../core/model/appState.model";
+import {swallNotification} from "../../../../shared/utils/swall-notification";
 
 
 @Injectable()
@@ -20,8 +20,7 @@ export class ReminderEffects {
   constructor(private actions$: Actions,
               private store: Store<AppState>,
               private userHttpService: UserHttpService,
-              private reminderHttpService: ReminderHttpService,
-              private swallNotification: SwallNotificationService) {
+              private reminderHttpService: ReminderHttpService) {
   }
 
 
@@ -42,7 +41,7 @@ export class ReminderEffects {
     switchMap((action) => this.reminderHttpService.createReminder(action.reminder)
       .pipe(
         map((reminder) => reminderAction.createReminderSuccess({reminder})),
-        tap(() => this.swallNotification.generateNotification("Pripomienka vytvorená")),
+        tap(() => swallNotification("Pripomienka vytvorená")),
         catchError((error) => of(reminderAction.createReminderError({error})))
       ))
   ));
@@ -62,7 +61,7 @@ export class ReminderEffects {
     switchMap((action) => this.reminderHttpService.deleteReminder(action.reminder)
       .pipe(
         map(() => reminderAction.deleteReminderSuccess({reminder: action.reminder})),
-        tap(() => this.swallNotification.generateNotification("Pripomienka vymazaná")),
+        tap(() => swallNotification("Pripomienka vymazaná")),
         catchError((error) => of(reminderAction.deleteReminderError({error})))
       ))
   ));

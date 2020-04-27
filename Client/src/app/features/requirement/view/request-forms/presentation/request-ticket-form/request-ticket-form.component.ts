@@ -1,6 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
 import {FormGroup, FormBuilder, Validators, FormControl} from '@angular/forms';
 import {TicketForm, TicketSubtype} from "../../../../model/Request";
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 
 @Component({
   selector: 'app-request-ticket-form',
@@ -38,7 +39,6 @@ export class RequestTicketFormComponent implements OnInit {
     if (this.ticketForm.invalid) {
       return;
     }
-
     const ticketForm: TicketForm = {
       name: this.ticketForm.get("name").value,
       ticketType: this.ticketForm.get("ticketType").value,
@@ -47,12 +47,18 @@ export class RequestTicketFormComponent implements OnInit {
       requestPriority: this.ticketForm.get("requestPriority").value,
     };
 
-    this.formEmitter.emit(ticketForm);
+    this.emitForm(ticketForm);
+
   }
 
-  public resetForm(): void {
+  @Confirmable(`Naozaj chcetete odoslať ticket ?`)
+  private emitForm(ticketForm: TicketForm) {
+    this.formEmitter.emit(ticketForm);
+
+    // reset form
     this.ticketFormViewChild.resetForm();
   }
+
 
   changeTicketType(): void {
     this.ticketForm.patchValue({ticketSubtypeName: ''});

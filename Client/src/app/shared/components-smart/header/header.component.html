@@ -1,10 +1,30 @@
 <div id='headerBackground' *ngIf="user$ | async as user">
 
   <div id='headerContainer'>
+    <!-- display name -->
     <div id="headerTitle">
       Vitaj, {{ user.fullName}}
     </div>
 
+    <!-- features -->
+    <div class="image-features-container">
+
+      <ng-container *ngIf="(reminders$ | async)?.length as number">
+        <a routerLink="/user/calendar"
+           class="notification-container"
+           matTooltip="Máte {{number}} {{ number === 1 ? 'pripomienku' : number > 1 && number < 5 ? 'pripomienky' : 'pripomienok' }} v kalendáry"
+           matTooltipPosition="below"
+           matTooltipClass="custom-tooltip"
+           matTooltipShowDelay="150">
+          <div class="red-dot-right-notification">
+            {{ number }}
+          </div>
+          <img src="../../../../assets/images_design/calendar2.png" class='userIcon feature-icon'/>
+        </a>
+      </ng-container>
+    </div>
+
+    <!-- log out -->
     <div id="headerLogout">
       <div class="button_cont example_f" (click)="logout()">
         <span>
@@ -13,5 +33,7 @@
         </span>
       </div>
     </div>
+
+
   </div>
 </div>

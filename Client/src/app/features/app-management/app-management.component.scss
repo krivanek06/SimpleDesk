@@ -1,51 +1,28 @@
+@import "src/app/shared/style/ButtonOrange";
 
-#contentContainer{
-    height: 100%;
-    width: calc(100% - 85px);
-    padding: 5px;
-    float: right;
+#contentContainer {
+  height: 100%;
+  width: calc(100% - 100px);
+  padding: 5px;
+  float: right;
 }
 
 
-.windowButtonChangers{
-    position: relative;
-    float: right;
-    width: 100%; /*calc(100% - 85px);*/
-    /*border-bottom: 1px solid #d7d7d7;*/
-    /*padding: 0 10px 0 10px;*/
-    margin-bottom: 20px;
+.formTitleSmall {
+  font-size: 26px;
+  font-weight: bold;
+  color: #2c8d61;
 }
 
-
-.orangeRaisedButton{
-    float: right;
-    margin-right: 10px;
-    background-color: #ffec98;
-    z-index: 1;
-}
-
-
-.formTitleSmall{
-    font-size: 26px;
-    font-weight: bold;
-    color:#2c8d61;
-    position: absolute;
-    left: 30px;
-}
-
-.content{
+.content {
   position: relative;
-  margin-left: 25px;
+  margin-top: 20px;
 
 }
 
-@media(min-width:1919px) {
-    .windowButtonChangers{
-        margin-bottom: 35px;
-    }
-
-    .formTitleSmall{
-        font-size: 30px;
-    }
+@media(min-width: 1919px) {
+  .formTitleSmall {
+    font-size: 30px;
+  }
 
 }

@@ -15,7 +15,6 @@ import {UserGroupsComponent} from "./components/user-groups/user-groups.componen
 import {NavigationComponent} from "./components-smart/navigation/navigation.component";
 import {HeaderComponent} from "./components-smart/header/header.component";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
-import {AlertModule} from "ngx-bootstrap";
 import {
   NGX_MAT_DATE_FORMATS,
   NgxMatDatetimePickerModule, NgxMatNativeDateModule,
@@ -39,6 +38,7 @@ export interface SatDatepickerRangeValue<D> {
   begin: D | null;
   end: D | null;
 }
+
 export const DD_MM_YYYY_Format = {
   parse: {
     dateInput: 'LL',
@@ -50,8 +50,6 @@ export const DD_MM_YYYY_Format = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
-
-
 
 
 @NgModule({
@@ -69,7 +67,6 @@ export const DD_MM_YYYY_Format = {
   ],
   imports: [
     IconSpriteModule,
-    AlertModule.forRoot(),
     SatNativeDateModule,
     SatDatepickerModule,
     ReactiveFormsModule,
@@ -97,7 +94,6 @@ export const DD_MM_YYYY_Format = {
     SatNativeDateModule,
     SatDatepickerModule,
     IconSpriteModule,
-    AlertModule,
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
@@ -119,7 +115,7 @@ export const DD_MM_YYYY_Format = {
     DatePipe,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format},
-    { provide: NGX_MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format }
+    {provide: NGX_MAT_DATE_FORMATS, useValue: DD_MM_YYYY_Format}
   ]
 })
 export class SharedModule {

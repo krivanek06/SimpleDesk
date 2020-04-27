@@ -6,7 +6,7 @@ import {TicketPrivilege} from "../../features/requirement/model/Request";
   providedIn: 'root',
 })
 export class UserConstructorService {
-  public constructUserRegistrationDTO(username: string, firstName: string, lastName: string, email: string): UserSimple {
+  public static constructUserRegistrationDTO(username: string, firstName: string, lastName: string, email: string): UserSimple {
     const userRegistration: UserSimple = {
       username,
       firstName,
@@ -23,12 +23,10 @@ export class UserConstructorService {
   }
 
 
-
-
-  public constructTicketPrivilege(solveSoftware: string[],
-                                  solveHardware: string[],
-                                  solveServer: string[],
-                                  solveTickets: string[],
+  public static constructTicketPrivilege(solveSoftware: string[],
+                                         solveHardware: string[],
+                                         solveServer: string[],
+                                         solveTickets: string[],
   ): TicketPrivilege {
     const ticketPrivilege: TicketPrivilege = {
       Software: solveSoftware ? solveSoftware : [],
@@ -40,10 +38,10 @@ export class UserConstructorService {
     return ticketPrivilege;
   }
 
-  public constructApplicationPrivilege(moduleTypesToUse: string[],
-                                       requestTypesToSolve: string[],
-                                       ticketPrivilege: TicketPrivilege,
-                                       submitFinanceRequests: string[]
+  public static constructApplicationPrivilege(moduleTypesToUse: string[],
+                                              requestTypesToSolve: string[],
+                                              ticketPrivilege: TicketPrivilege,
+                                              submitFinanceRequests: string[]
   ): ApplicationPrivilege {
     const privilege: ApplicationPrivilege = {
       moduleTypesToUse: moduleTypesToUse === null ? [] : moduleTypesToUse,
@@ -53,8 +51,6 @@ export class UserConstructorService {
     };
     return privilege;
   }
-
-
 
 
 }

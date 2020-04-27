@@ -191,6 +191,10 @@ export const initializeWebsocketConnectionForRequests = createAction(
   '[Core] init websocket connection for requests'
 );
 
+export const initializeWebsocketConnectionForRequestsSuccess = createAction(
+  '[Core] init websocket connection for requests success'
+);
+
 export const initializeWebsocketConnectionForRequestsFailure = createAction(
   '[Core] init websocket connection for requests failure',
   props<{ error: Error }>()

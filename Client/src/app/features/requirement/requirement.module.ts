@@ -5,7 +5,6 @@ import {RequirementRoutingModule} from './requirement-routing.module';
 import {RouterModule} from "@angular/router";
 import {MaterialModule} from "../../material.module";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
-import {AlertModule} from "ngx-bootstrap";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {SharedModule} from "../../shared/shared.module";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
@@ -71,7 +70,6 @@ import * as RequestReducer from './store/request.reducer';
     MaterialModule,
     MatTableExporterModule,
     IconSpriteModule,
-    AlertModule.forRoot(),
     SweetAlert2Module.forRoot(),
     SharedModule,
     RequirementRoutingModule,

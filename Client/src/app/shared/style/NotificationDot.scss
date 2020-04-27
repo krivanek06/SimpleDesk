@@ -1,0 +1,43 @@
+
+.notification-container{
+  position: relative;
+}
+
+.circle {
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 35px;
+  text-align: center;
+  background: #003552;
+  position: absolute;
+  top: -20px;
+  left: -15px;
+}
+
+.notification{
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  color: #fff;
+  line-height: 25px;
+  text-align: center;
+  background: #FF3232 ;
+  margin-left: 10px;
+}
+
+.red-dot-right-notification{
+  width: 25px;
+  height: 25px;
+  top: -8px;
+  right: -8px;
+  position: absolute;
+  border-radius: 50%;
+  color: #fff;
+  font-weight: bold;
+  line-height: 24px;
+  text-align: center;
+  background: #ff0000;
+  z-index: 100;
+}

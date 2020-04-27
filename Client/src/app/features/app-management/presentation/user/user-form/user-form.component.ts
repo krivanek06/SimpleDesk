@@ -2,6 +2,8 @@ import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewCh
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {User, UserSimple} from "../../../../../core/model/User";
 import {UserConstructorService} from "../../../../../core/services/user-constructor.service";
+import {CustomAsyncValidators} from "../../../../../shared/utils/CustomAsyncValidators";
+import {UserHttpService} from "../../../../../core/api/user-http.service";
 
 @Component({
   selector: 'app-user-form',
@@ -17,7 +19,7 @@ export class UserFormComponent implements OnInit {
   @ViewChild('userFormViewChild') userFormViewChild;
 
   constructor(private formBuilder: FormBuilder,
-              private converterService: UserConstructorService) {
+              private userHttpService: UserHttpService) {
   }
 
   ngOnInit() {
@@ -28,9 +30,10 @@ export class UserFormComponent implements OnInit {
       lastname: ['', [
         Validators.required,
       ]],
-      username: ['', [
-        Validators.required,
-      ]],
+      username: ['',
+        [Validators.required, Validators.minLength(6)],
+        [CustomAsyncValidators.asyncUniqueUsernameValidator(this.userHttpService)]
+      ],
       email: ['', [
         Validators.required,
         Validators.email
@@ -44,7 +47,7 @@ export class UserFormComponent implements OnInit {
     }
 
     const formValues = this.userRegistrationForm.value;
-    const userRegistraion = this.converterService.constructUserRegistrationDTO(
+    const userRegistraion = UserConstructorService.constructUserRegistrationDTO(
       formValues.username.trim().toLowerCase(),
       formValues.firstname.trim(),
       formValues.lastname.trim(),

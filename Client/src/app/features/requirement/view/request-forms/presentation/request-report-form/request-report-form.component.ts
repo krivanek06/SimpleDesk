@@ -3,6 +3,7 @@ import {FormGroup, FormBuilder, Validators} from '@angular/forms';
 import {accessValidator} from 'app/features/requirement/view/request-forms/validators/reportAccessValidator';
 import {MAT_DATE_FORMATS} from "saturn-datepicker";
 import {ReportForm} from "../../../../model/Request";
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
 
 export const DD_MM_YYYY_Format = {
   parse: {
@@ -75,11 +76,11 @@ export class RequestReportFormComponent implements OnInit {
     });
   }
 
-
   submit(): void {
     if (this.reportForm.invalid) {
       return;
     }
+
     this.reportForm.patchValue({accessByPeople: this.accessByPeopleArray.join(",")});
     this.reportForm.patchValue({accessMethods: this.accessByMethodArray.join(",")});
 
@@ -97,15 +98,21 @@ export class RequestReportFormComponent implements OnInit {
       deadline: this.reportForm.get("deadline").value,
       accessMethods: this.reportForm.get("accessMethods").value,
     };
+    this.emitForm(reportForm);
 
-    this.formEmitter.emit(reportForm);
   }
 
-  public resetForm(): void {
+  @Confirmable(`Naozaj chcetete odoslať report ?`)
+  private emitForm(reportForm: ReportForm) {
+    this.formEmitter.emit(reportForm);
+
+    // reset
     this.reportFormViewChild.resetForm();
     this.accessByPeopleArray = [];
     this.accessByMethodArray = [];
+
   }
+
 
   addPeopleToAccess() {
     const value = this.reportForm.get("accessByPeople").value;

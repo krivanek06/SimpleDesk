@@ -6,21 +6,20 @@ import {RequestHttpService} from "../../../core/api/request-http.service";
 import {catchError, filter, map, mergeMap, switchMap, tap, withLatestFrom} from "rxjs/operators";
 import {Action, Store} from "@ngrx/store";
 import {AppState} from "../../../core/model/appState.model";
-import {SwallNotificationService} from "../../../core/services/swall-notification.service";
 import {RequestPosition} from "../model/request.enum";
 import {saveAs} from 'file-saver';
-import {Request, RequestStatistics} from "../model/Request";
+import {Request} from "../model/Request";
 
 import * as RequestAction from "./request.action";
 import * as LoadingAction from "../../../core/store/loading/loader.action";
 import * as fromUser from '../../../core/store/user/user.reducer';
 import * as fromRequest from "./request.reducer";
 import {GroupHttpService} from "../../../core/api/group-http.service";
+import {swallNotification} from "../../../shared/utils/swall-notification";
 
 @Injectable()
 export class RequestEffects {
   constructor(private actions$: Actions,
-              private swallNotification: SwallNotificationService,
               private requestHttpService: RequestHttpService,
               private groupHttpService: GroupHttpService,
               private store: Store<AppState>) {
@@ -32,6 +31,7 @@ export class RequestEffects {
     filter(([_, loaded]) => !loaded),
     switchMap(() => this.store.select(fromUser.getUser)
       .pipe(
+        tap(() => this.store.dispatch(RequestAction.initializeWebsocketConnectionForRequestsSuccess())),
         switchMap(user => this.requestHttpService.initializeWebsocketConnection(user.username)
           .pipe(
             map((response) => {
@@ -88,7 +88,7 @@ export class RequestEffects {
           .pipe(
             map((user) => {
               const text = action.assign ? `Pridelené` : `Vzdané`;
-              this.swallNotification.generateNotification(text);
+              swallNotification(text);
               return RequestAction.modifiedSolverOnRequestSuccess({
                 requestId: action.request.id,
                 userSimpleDTO: action.assign ? user : undefined,
@@ -105,7 +105,7 @@ export class RequestEffects {
     switchMap((action) => this.requestHttpService.assignSolver(action.requestId, action.userSimpleDTO)
       .pipe(
         map((solver) => {
-          this.swallNotification.generateNotification(`Požiadavka pridelená na užívateľa ${solver.userShortedName}`);
+          swallNotification(`Požiadavka pridelená na užívateľa ${solver.userShortedName}`);
           return RequestAction.modifiedSolverOnRequestSuccess({
             requestId: action.requestId,
             userSimpleDTO: solver,
@@ -124,7 +124,7 @@ export class RequestEffects {
         switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
-              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
+              swallNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
               return requestAction.createRequestSuccess({
                 request,
                 customDocuments: action.customDocuments ? action.customDocuments : []
@@ -142,7 +142,7 @@ export class RequestEffects {
         switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
-              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
+              swallNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
               return requestAction.createRequestSuccess({
                 request,
                 customDocuments: action.customDocuments ? action.customDocuments : []
@@ -160,7 +160,7 @@ export class RequestEffects {
         switchMap((request) => this.requestHttpService.uploadFileForRequest(request.id, action.customDocuments)
           .pipe(
             map(() => {
-              this.swallNotification.generateNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
+              swallNotification(`Vaša požiadavka s id : ${request.id}. bola zaznamenaná. `);
               return requestAction.createRequestSuccess({
                 request,
                 customDocuments: action.customDocuments ? action.customDocuments : []
@@ -211,8 +211,7 @@ export class RequestEffects {
       .pipe(
         map(() => {
           const allowCommenting = !action.request.allowCommenting;
-          this.swallNotification.generateNotification(
-            allowCommenting ? 'Komentovanie požiadavky sa povolilo' : 'Komentovanie požiadavky sa zakázalo');
+          swallNotification(allowCommenting ? 'Komentovanie požiadavky sa povolilo' : 'Komentovanie požiadavky sa zakázalo');
           return requestAction.toggleCommentingSuccess({requestId: action.request.id, allowCommenting});
         }),
         catchError(error => of(requestAction.toggleCommentingFailure({error})))
@@ -224,7 +223,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.addComment(action.requestCommentWrapper)
       .pipe(
         map((requestComment) => {
-          this.swallNotification.generateNotification(`Komentár bol odoslaný`);
+          swallNotification(`Komentár bol odoslaný`);
           const solutionComment = action.requestCommentWrapper.solution ? requestComment.id : action.request.solutionComment;
           return RequestAction.addCommentSuccess({requestComment, solutionComment});
         }),
@@ -237,7 +236,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.editComment(action.requestComment, action.comment)
       .pipe(
         map(() => {
-          this.swallNotification.generateNotification(`Komentár bol zmenený`);
+          swallNotification(`Komentár bol zmenený`);
           return RequestAction.editCommentSuccess({
             requestComment: action.requestComment,
             comment: action.comment
@@ -252,7 +251,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.deleteComment(action.requestComment)
       .pipe(
         map(() => {
-          this.swallNotification.generateNotification(`Komentár bol zmazaný`);
+          swallNotification(`Komentár bol zmazaný`);
           return RequestAction.deleteCommentSuccess({requestComment: action.requestComment});
         }),
         catchError((error) => of(RequestAction.deleteCommentFailure({error})))
@@ -264,7 +263,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.shareComment(action.requestComment, action.groupName)
       .pipe(
         map(() => {
-          this.swallNotification.generateNotification(`Komentár bol vyzdieľaný`);
+          swallNotification(`Komentár bol vyzdieľaný`);
           return RequestAction.shareCommentSuccess({
             requestComment: action.requestComment,
             groupName: action.groupName
@@ -279,7 +278,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.changePrivacy(action.requestComment)
       .pipe(
         map(() => {
-          this.swallNotification.generateNotification(`Viditeľnosť komentára bolo zmenené`);
+          swallNotification(`Viditeľnosť komentára bolo zmenené`);
           return RequestAction.changeCommentPrivacySuccess({
             requestComment: action.requestComment,
             privacy: !action.requestComment.isPrivate
@@ -294,7 +293,7 @@ export class RequestEffects {
     switchMap(action => this.requestHttpService.addReportEvaluation(action.requestId, action.days)
       .pipe(
         map(() => {
-          this.swallNotification.generateNotification(`Nadhodnocenie reportu bolo zaznamenané`);
+          swallNotification(`Nadhodnocenie reportu bolo zaznamenané`);
           return RequestAction.addReportEvaluationSuccess({requestId: action.requestId, days: action.days});
         }),
         catchError((error) => of(RequestAction.addReportEvaluationFailure({error})))
@@ -309,7 +308,7 @@ export class RequestEffects {
           .pipe(
             map((userDTO) => {
               const state = action.close ? 'uzavretá' : 'otvorená';
-              this.swallNotification.generateNotification(`Požiadavka ${action.requestId}. bola ${state}`);
+              swallNotification(`Požiadavka ${action.requestId}. bola ${state}`);
               return RequestAction.modifiedStateRequestSuccess({
                 requestId: action.requestId,
                 userDTO: action.close ? userDTO : undefined,
@@ -326,10 +325,8 @@ export class RequestEffects {
     ofType(RequestAction.changePriority),
     switchMap(action => this.requestHttpService.changePriority(action.requestId, action.priority)
       .pipe(
-        map(() => {
-          this.swallNotification.generateNotification(`Priorita bola zmenená`);
-          return RequestAction.changePrioritySuccess({requestId: action.requestId, priority: action.priority});
-        }),
+        tap(() => swallNotification(`Priorita bola zmenená`)),
+        map(() => RequestAction.changePrioritySuccess({requestId: action.requestId, priority: action.priority})),
         catchError((error) => of(RequestAction.changePriorityFailure({error})))
       )
     )));

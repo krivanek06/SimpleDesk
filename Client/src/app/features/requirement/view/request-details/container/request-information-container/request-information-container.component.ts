@@ -1,13 +1,14 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Observable} from "rxjs";
 import {CustomDocument, Request} from "../../../../model/Request";
-import {SwallNotificationService} from "../../../../../../core/services/swall-notification.service";
 import {Store} from "@ngrx/store";
 import {Auth, RequestState} from "../../../../../../core/model/appState.model";
 import {getRequestById} from "../../../../store/request.reducer";
 
 import * as RequestAction from '../../../../store/request.action';
 import * as fromAuth from '../../../../../../core/store/auth/auth.reducer';
+import {Confirmable} from "../../../../../../shared/utils/swall-notification";
+
 @Component({
   selector: 'app-request-information-container',
   templateUrl: './request-information-container.component.html',
@@ -22,8 +23,7 @@ export class RequestInformationContainerComponent implements OnInit {
   @Output() closeBarEmitter: EventEmitter<any> = new EventEmitter<any>();
 
 
-  constructor(private swallNotification: SwallNotificationService,
-              private store: Store<RequestState>) {
+  constructor(private store: Store<RequestState>) {
   }
 
   ngOnInit() {
@@ -44,13 +44,9 @@ export class RequestInformationContainerComponent implements OnInit {
     this.store.dispatch(RequestAction.downloadFiles({id: request.id, fileName}));
   }
 
+  @Confirmable(`Naozaj chcetete na seba prideliť požiadavku  ?`)
   assignOnMe(request: Request) {
-    this.swallNotification.generateQuestion(`Naozaj chcetete prideliť na seba požiadavku s id : ${request.id} ?`)
-      .then((result) => {
-        if (result.value) {
-          this.store.dispatch(RequestAction.assignMeOnRequest({request, assign: true}));
-        }
-      });
+    this.store.dispatch(RequestAction.assignMeOnRequest({request, assign: true}));
   }
 
 }

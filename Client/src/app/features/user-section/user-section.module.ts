@@ -4,7 +4,6 @@ import {UserProfileComponent} from "./view/profile/container/user-profile/user-p
 import {RouterModule, Routes} from "@angular/router";
 import {MaterialModule} from "../../material.module";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
-import {AlertModule} from "ngx-bootstrap";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {SharedModule} from "../../shared/shared.module";
 import {AuthGuard} from "../../core/guards/Auth.guard";
@@ -62,7 +61,6 @@ export const reducers = {
     RouterModule.forChild(routes),
     MaterialModule,
     IconSpriteModule,
-    AlertModule.forRoot(),
     SweetAlert2Module.forRoot(),
     SharedModule,
     StoreModule.forFeature('userSection', reducers),

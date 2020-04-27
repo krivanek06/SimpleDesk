@@ -15,7 +15,7 @@ import {Observable} from "rxjs";
 })
 export class LoginComponent implements OnInit {
   form: FormGroup;
-  version: number;
+  version: string;
   style: object = {};
   params: object = {};
 

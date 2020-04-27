@@ -1,8 +1,7 @@
 import {ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {RequestComment, RequestCommentWrapper} from 'app/features/requirement/model/Request';
-import {SwallNotificationService} from 'app/core/services/swall-notification.service';
 import {RequestCommentType} from "../../../../../model/request.enum";
-import {RequestConstructorService} from "../../../../../services/request-constructor.service";
+import {Confirmable} from "../../../../../../../shared/utils/swall-notification";
 
 
 @Component({
@@ -19,8 +18,7 @@ export class RequestCommentFormComponent implements OnInit {
 
   @Output() addedCommentEmitter: EventEmitter<RequestCommentWrapper> = new EventEmitter();
 
-  constructor(private swallNotification: SwallNotificationService,
-              private requestConstructorService: RequestConstructorService) {
+  constructor() {
   }
 
   ngOnInit() {
@@ -31,28 +29,31 @@ export class RequestCommentFormComponent implements OnInit {
     this.isCheckedName = event.source.name;
   }
 
-
+  @Confirmable(`Odoslať komentár ?`)
   submit(): void {
     if (this.commentInput === '') {
       return;
     }
 
-    const requestComment = this.requestConstructorService.constructRequestComment(
-      this.commentInput,
-      this.isChecked && this.isCheckedName === RequestCommentType.Private
-    );
-    const requestCommentWrapper = this.requestConstructorService.constructRequestCommentWrapper(
-      requestComment,
-      this.isChecked && (this.isCheckedName === RequestCommentType.Solution || this.isCheckedName === RequestCommentType.Notification),
-      this.isCheckedName === RequestCommentType.Solution
-    );
+    const requestComment: RequestComment = {
+      id: null,
+      requestId: null,
+      creator: undefined,
+      comment: this.commentInput,
+      isPrivate: this.isChecked && this.isCheckedName === RequestCommentType.Private,
+      groupsToShare: [],
+      timestamp: new Date()
+    };
 
-    this.swallNotification.generateQuestion(`Odoslať komentár ?`).then((result) => {
-      if (result.value) {
-        this.addedCommentEmitter.emit(requestCommentWrapper);
-        this.commentInput = '';
-      }
-    });
+    const requestCommentWrapper: RequestCommentWrapper = {
+      requestComment,
+      sendEmail: this.isChecked &&
+        (this.isCheckedName === RequestCommentType.Solution || this.isCheckedName === RequestCommentType.Notification),
+      solution: this.isCheckedName === RequestCommentType.Solution
+    };
+
+    this.addedCommentEmitter.emit(requestCommentWrapper);
+    this.commentInput = '';
   }
 
 }

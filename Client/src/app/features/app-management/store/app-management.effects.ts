@@ -6,16 +6,16 @@ import {Actions, createEffect, ofType} from "@ngrx/effects";
 import {Action, Store} from "@ngrx/store";
 import {catchError, filter, map, switchMap, tap, withLatestFrom} from "rxjs/operators";
 import {AppState} from "../../../core/model/appState.model";
-import {SwallNotificationService} from "../../../core/services/swall-notification.service";
 import {RequestHttpService} from "../../../core/api/request-http.service";
+
 import * as appManagementAction from './app-management.action';
 import * as fromAppManagement from './app-management.reducer';
+import {swallNotification} from "../../../shared/utils/swall-notification";
 
 
 @Injectable()
 export class AppManagementEffects {
   constructor(private actions$: Actions,
-              private swallNotification: SwallNotificationService,
               private store: Store<AppState>,
               private requestHttpService: RequestHttpService,
               private groupHttpService: GroupHttpService,
@@ -67,7 +67,7 @@ export class AppManagementEffects {
     switchMap((action) => this.userHttpService.resetUserPassword(action.username)
       .pipe(
         map(() => appManagementAction.resetUserPasswordSuccess),
-        tap(() => this.swallNotification.generateNotification(`Heslo uživateľa bolo resetované`)),
+        tap(() => swallNotification(`Heslo uživateľa bolo resetované`)),
         catchError((error) => of(appManagementAction.resetUserPasswordFailure({error})))
       ))
   ));
@@ -77,7 +77,7 @@ export class AppManagementEffects {
     switchMap((action) => this.userHttpService.modifyUserState(action.user.username)
       .pipe(
         map(() => appManagementAction.modifyUserStateSuccess()),
-        tap(() => this.swallNotification.generateNotification(`Stav uživateľa bol zmeneý`)),
+        tap(() => swallNotification(`Stav uživateľa bol zmeneý`)),
         catchError((error) => of(appManagementAction.modifyUserStateFailure({error})))
       ))
   ));
@@ -86,9 +86,9 @@ export class AppManagementEffects {
     ofType(appManagementAction.registerUser),
     switchMap((action) => this.userHttpService.registerUser(action.userSimple)
       .pipe(
-        tap(() => this.swallNotification.generateNotification(`Žiadosť o vytvorenie uživateľa bolo zaslané`)),
+        tap(() => swallNotification(`Žiadosť o vytvorenie uživateľa bolo zaslané`)),
         map(() => appManagementAction.registerUserSuccess({userSimple: action.userSimple})),
-        tap(() => this.swallNotification.generateNotification(`Uživateľ bol zaregistrovaný, emailom sa bude notifikovať`)),
+        tap(() => swallNotification(`Uživateľ bol zaregistrovaný, emailom sa bude notifikovať`)),
         catchError((error) => of(appManagementAction.registerUserFailure({error})))
       ))
   ));
@@ -97,9 +97,9 @@ export class AppManagementEffects {
     ofType(appManagementAction.registerGroup),
     switchMap((action) => this.groupHttpService.registerGroup(action.group)
       .pipe(
-        tap(() => this.swallNotification.generateNotification(`Žiadosť o vytvorenie skupiny bolo zaslané`)),
+        tap(() => swallNotification(`Žiadosť o vytvorenie skupiny bolo zaslané`)),
         map(() => appManagementAction.registerGroupSuccess({groupName: action.group.name})),
-        tap(() => this.swallNotification.generateNotification(`Skupina ${action.group.name} bola vytvorená`)),
+        tap(() => swallNotification(`Skupina ${action.group.name} bola vytvorená`)),
         catchError((error) => of(appManagementAction.registerGroupFailure({error})))
       ))
   ));
@@ -111,9 +111,9 @@ export class AppManagementEffects {
         filter(group => !!group),
         switchMap((group) => this.groupHttpService.deleteGroup(group.name)
           .pipe(
-            tap(() => this.swallNotification.generateNotification(`Požiadavka zmazania skupiny zaslaná`)),
+            tap(() => swallNotification(`Požiadavka zmazania skupiny zaslaná`)),
             map(() => appManagementAction.removeGroupSuccess({groupName: group.name})),
-            tap(() => this.swallNotification.generateNotification(`Skupina bola zmazaná`)),
+            tap(() => swallNotification(`Skupina bola zmazaná`)),
             catchError((error) => of(appManagementAction.removeGroupFailure({error})))
           ))
       ))
@@ -123,9 +123,9 @@ export class AppManagementEffects {
     ofType(appManagementAction.editGroup),
     switchMap((action) => this.groupHttpService.editGroup(action.group)
       .pipe(
-        tap(() => this.swallNotification.generateNotification(`Požiadavka editovanie skupiny zaslaná`)),
+        tap(() => swallNotification(`Požiadavka editovanie skupiny zaslaná`)),
         map(() => appManagementAction.editGroupSuccess({group: action.group})),
-        tap(() => this.swallNotification.generateNotification(`Skupina bola editovaná`)),
+        tap(() => swallNotification(`Skupina bola editovaná`)),
         catchError((error) => of(appManagementAction.editGroupFailure({error})))
       ))
   ));

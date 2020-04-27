@@ -143,6 +143,10 @@ public class UserService {
         this.modifyPassword(this.userConverter.generateFreshUser(userDTO));
     }
 
+    public boolean checkIfUsernameExists(String username){
+        return this.userRepository.findByUsername(username).isPresent();
+    }
+
     private void modifyPassword(User user){
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         // send information email

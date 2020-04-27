@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common
 import {User, ImageDTO, PasswordContainer, UserSimple} from 'app/core/model/User';
 import {Observable} from 'rxjs';
 import {environment} from 'environments/environment';
-import {retry} from "rxjs/operators";
+import {debounceTime, distinctUntilChanged, retry} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +16,11 @@ export class UserHttpService {
   public registerUser(user: UserSimple): Observable<any> {
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
     return this.http.post(environment.apiUrl + "user/registration", user, {headers});
+  }
+
+  public checkIfUsernameExists(username: string): Observable<boolean> {
+    const params = new HttpParams().set('username', username);
+    return this.http.get<boolean>(`${environment.apiUrl}user/registration`, {params});
   }
 
   public getAllUsers(): Observable<UserSimple[]> {

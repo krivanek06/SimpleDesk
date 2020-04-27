@@ -12,7 +12,7 @@ import {select, Store} from "@ngrx/store";
 
 import * as fromAuth from './../store/auth/auth.reducer';
 import * as authAction from './../store/auth/auth.action';
-import {filter, first, flatMap, mergeMap, retry, shareReplay, switchMap} from "rxjs/operators";
+import {first, mergeMap, retry, shareReplay} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
