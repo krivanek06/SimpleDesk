@@ -3,7 +3,6 @@ import {NgModule} from '@angular/core';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
-import {AlertModule} from 'ngx-bootstrap';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {IconSpriteModule} from 'ng-svg-icon-sprite';
 import {CommonModule, DatePipe} from '@angular/common';
@@ -46,7 +45,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     ParticlesModule,
     IconSpriteModule,
     MaterialModule,
-    AlertModule.forRoot(),
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,

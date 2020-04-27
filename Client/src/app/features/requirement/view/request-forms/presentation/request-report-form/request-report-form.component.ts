@@ -76,7 +76,6 @@ export class RequestReportFormComponent implements OnInit {
     });
   }
 
-  @Confirmable(`Naozaj chcetete odoslať report ?`)
   submit(): void {
     if (this.reportForm.invalid) {
       return;

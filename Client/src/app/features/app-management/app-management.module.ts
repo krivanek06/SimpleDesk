@@ -12,7 +12,6 @@ import {RouterModule, Routes} from "@angular/router";
 import {MaterialModule} from "../../material.module";
 import {FormsModule} from "@angular/forms";
 import {IconSpriteModule} from "ng-svg-icon-sprite";
-import {AlertModule} from "ngx-bootstrap";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
 import {SatDatepickerModule, SatNativeDateModule} from "saturn-datepicker";
 import {SharedModule} from "../../shared/shared.module";
@@ -59,7 +58,6 @@ export const routes: Routes = [
     MaterialModule,
     FormsModule,
     IconSpriteModule,
-    AlertModule.forRoot(),
     SweetAlert2Module.forRoot(),
     SatNativeDateModule,
     SatDatepickerModule,
