@@ -5,7 +5,6 @@ import {SERDButtonsComponent} from "./components/serdbuttons/serdbuttons.compone
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import {NgxSpinnerModule} from "ngx-spinner";
 import {MaterialModule} from "../material.module";
 import {RouterModule} from "@angular/router";
 import {GroupDetailsComponent} from "./components/group-details/group-details.component";
@@ -89,7 +88,6 @@ export const DD_MM_YYYY_Format = {
     ReactiveFormsModule,
     HttpClientModule,
     SweetAlert2Module,
-    NgxSpinnerModule,
     MaterialModule,
     FormsModule,
     RouterModule,

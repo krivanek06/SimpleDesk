@@ -18,11 +18,9 @@ import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
 import {stompConfig} from "./core/config/stompConfig";
 import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from "@stomp/ng2-stompjs";
 import {State, StoreModule} from "@ngrx/store";
-import {environment} from "../environments/environment";
 import {EffectsModule} from "@ngrx/effects";
 import {routerReducer, RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
 import {RouterCustomSerializer} from "./shared/utils/router.serializer";
-import {NgxSpinnerModule} from "ngx-spinner";
 import * as LoadingReducer from './core/store/loading/loader.reducer';
 import * as AuthReducer from './core/store/auth/auth.reducer';
 import * as UserReducer from './core/store/user/user.reducer';
@@ -30,6 +28,7 @@ import * as UserReducer from './core/store/user/user.reducer';
 import {AuthEffects} from "./core/store/auth/auth.effects";
 import {UserEffects} from "./core/store/user/user.effets";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {environment} from "../environments/environment.prod";
 
 @NgModule({
   declarations: [
@@ -60,7 +59,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     ]),
     StoreDevtoolsModule.instrument({
       maxAge: 2, // Retains last 25 states
-      logOnly: false, // Restrict extension to log-only mode
+      logOnly: environment.production, // Restrict extension to log-only mode
       features: {
         pause: false,
         lock: true,
@@ -68,7 +67,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
       }
     }),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-    NgxSpinnerModule,
   ],
   providers: [
     DatePipe,
