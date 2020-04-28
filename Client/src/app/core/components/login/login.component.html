@@ -15,7 +15,7 @@
       </div>
 
     </fieldset>
-      <input type="button" class="btn" (click)="login()" value="Prihlásiť sa">
+    <input type="button" class="btn" (click)="login()" value="Prihlásiť sa">
   </form>
 </div>
 
@@ -25,7 +25,23 @@
 
 
 <!-- spinner -->
-<app-dot-loader *ngIf='authenticating$ | async' class='spinner'></app-dot-loader>
+<div *ngIf='authenticating$ | async' class="spinner">
+  <div class='dot-content'>
+    <div class="multi-spinner-container">
+      <div class="multi-spinner">
+        <div class="multi-spinner">
+          <div class="multi-spinner">
+            <div class="multi-spinner">
+              <div class="multi-spinner">
+                <div class="multi-spinner"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 <!-- particles.js container -->

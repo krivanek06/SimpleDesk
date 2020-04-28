@@ -131,7 +131,8 @@
         <div class='informationTitle'>Vytvoril</div>
         <ul>
           <li class='information'>
-            <img [src]="'data:image/jpeg;base64,'+request.creator.userImageByte" class='avatar'
+            <img [src]="'../../../../../../../../assets/images_avatars/' + request.creator.userImageString"
+                 class='avatar'
                  alt="creator user photo"/>
             {{ request.creator.firstName }} {{ request.creator.lastName }}
           </li>
@@ -142,7 +143,8 @@
         <div class='informationTitle'>Pridelené</div>
         <ul *ngIf='request.assigned'>
           <li class='information'>
-            <img [src]="'data:image/jpeg;base64,'+request.assigned.userImageByte" class='avatar'
+            <img [src]="'../../../../../../../../assets/images_avatars/' + request.assigned.userImageString"
+                 class='avatar'
                  alt="assigned user photo"/>
             {{ request.assigned.firstName }} {{ request.assigned.lastName }}
           </li>
@@ -157,7 +159,8 @@
         <div class='informationTitle'>Uzavrel</div>
         <ul *ngIf='request.closed'>
           <li class='information'>
-            <img [src]="'data:image/jpeg;base64,'+request.closed.userImageByte" class='avatar'
+            <img [src]="'../../../../../../../../assets/images_avatars/' + request.closed.userImageString"
+                 class='avatar'
                  alt="closed user photo"/>
             {{ request.closed.firstName }} {{ request.closed.lastName }}
           </li>

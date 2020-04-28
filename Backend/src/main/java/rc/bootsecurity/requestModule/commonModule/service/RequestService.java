@@ -48,7 +48,6 @@ public class RequestService {
         List<HashMap> requestDashboardDTO = this.jsonStringParser.convertRawJsonToRequestTableDTO(rawJson, "open_requests");
         requestDashboardDTO.forEach(requestTableDTO -> {
             requestTableDTO.put("documents", this.fileService.getFileForRequest((Integer) requestTableDTO.get("id")));
-            this.requestConverter.addImage(requestTableDTO);
         });
 
         return requestDashboardDTO;
@@ -64,7 +63,6 @@ public class RequestService {
         List<HashMap> requestTableDTOS = this.jsonStringParser.convertRawJsonToRequestTableDTO(rawJson,"closed_requests" );
         requestTableDTOS.forEach(requestTableDTO -> {
             requestTableDTO.put("documents", this.fileService.getFileForRequest((Integer) requestTableDTO.get("id")));
-            this.requestConverter.addImage(requestTableDTO);
         });
 
         return requestTableDTOS;

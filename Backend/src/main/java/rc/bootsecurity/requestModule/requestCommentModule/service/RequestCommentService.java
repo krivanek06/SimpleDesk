@@ -146,13 +146,11 @@ public class RequestCommentService {
 
     public List<RequestCommentDTO> getRequestCommentDTOForRequest(Request request, String username){
         JsonStringParser jsonStringParser = new JsonStringParser();
-        FileService fileService = new FileService();
 
         String rawJson = (username.equalsIgnoreCase(USER_TYPE.Ghost.name()) || username.equalsIgnoreCase(USER_TYPE.Admin.name())) ?
                 this.requestCommentRepository.getAllRequestCommentDto(request.getId()):
                 this.requestCommentRepository.getRequestCommentDtoForUser(request.getId(), username);
         List<RequestCommentDTO> comments = jsonStringParser.convertRawJsonToRequestCommentDTO(rawJson);
-        comments.forEach(comment -> comment.getCreator().setUserImageByte(fileService.getUserImage(comment.getCreator().getUserImageString())));
 
         return comments;
 

@@ -12,18 +12,15 @@ import {ParticlesModule} from "angular-particle";
 import {LoginComponent} from "./core/components/login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import {DotLoaderComponent} from "./shared/components/dot-loader/dot-loader.component";
 import {MaterialModule} from "./material.module";
 import {AuthInterceptor} from "./core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
 import {stompConfig} from "./core/config/stompConfig";
 import {InjectableRxStompConfig, RxStompService, rxStompServiceFactory} from "@stomp/ng2-stompjs";
 import {State, StoreModule} from "@ngrx/store";
-import {environment} from "../environments/environment";
 import {EffectsModule} from "@ngrx/effects";
 import {routerReducer, RouterStateSerializer, StoreRouterConnectingModule} from '@ngrx/router-store';
 import {RouterCustomSerializer} from "./shared/utils/router.serializer";
-import {NgxSpinnerModule} from "ngx-spinner";
 import * as LoadingReducer from './core/store/loading/loader.reducer';
 import * as AuthReducer from './core/store/auth/auth.reducer';
 import * as UserReducer from './core/store/user/user.reducer';
@@ -31,12 +28,12 @@ import * as UserReducer from './core/store/user/user.reducer';
 import {AuthEffects} from "./core/store/auth/auth.effects";
 import {UserEffects} from "./core/store/user/user.effets";
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
+import {environment} from "../environments/environment.prod";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    DotLoaderComponent,
   ],
   imports: [
     CommonModule,
@@ -63,9 +60,13 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     StoreDevtoolsModule.instrument({
       maxAge: 2, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
+      features: {
+        pause: false,
+        lock: true,
+        persist: true
+      }
     }),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
-    NgxSpinnerModule,
   ],
   providers: [
     DatePipe,

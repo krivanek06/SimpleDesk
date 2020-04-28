@@ -6,7 +6,7 @@ import {
 import {Observable} from 'rxjs';
 import {select, Store} from "@ngrx/store";
 import {Request} from "../../model/Request";
-import {Auth, RequestState} from "../../../../core/model/appState.model";
+import {AppState} from "../../../../core/model/appState.model";
 import {Confirmable} from "../../../../shared/utils/swall-notification";
 import * as RequestAction from '../../store/request.action';
 import * as fromRequest from '../../store/request.reducer';
@@ -28,13 +28,11 @@ export class DashboardComponent implements OnInit {
   meAssignedRequests$: Observable<Request[]>;
   myCreatedRequests$: Observable<Request[]>;
 
-
-  constructor(private store: Store<RequestState>,
-              private storeAuth: Store<Auth>) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
-    this.isSolver$ = this.storeAuth.select(fromAuth.isSolver);
+    this.isSolver$ = this.store.select(fromAuth.isSolver);
     this.myCreatedRequests$ = this.store.pipe(select(fromRequest.getMyCreatedRequests));
     this.meAssignedRequests$ = this.store.pipe(select(fromRequest.getMeAssignedRequests));
     this.otherOpenRequests$ = this.store.pipe(select(fromRequest.getOtherRequests));
@@ -57,5 +55,7 @@ export class DashboardComponent implements OnInit {
   removeLogs(request: Request) {
     this.store.dispatch(RequestAction.removeLogs({requestId: request.id}));
   }
+
+
 }
 

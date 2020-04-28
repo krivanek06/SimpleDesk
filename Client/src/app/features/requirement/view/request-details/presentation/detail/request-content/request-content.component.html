@@ -3,7 +3,7 @@
   <div *ngIf=" request.requestType === requestType.Ticket" class='customRow mainInformationContainer'>
     <div class="raisedbox customCol" [style.width.%]=75>
       <p class="raisedboxName">
-        <img [src]="'data:image/jpeg;base64,'+ request.creator.userImageByte" class='icon'/>
+        <img [src]="'../../../../../../../../assets/images_avatars/' + request.creator.userImageString" class='icon'/>
         {{ request.creator.firstName }} {{ request.creator.lastName }}<br>
         {{ request.timestampCreation | date:'MMM d, y, h:mm:ss a'}}
       </p>

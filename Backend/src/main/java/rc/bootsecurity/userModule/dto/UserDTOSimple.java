@@ -16,6 +16,8 @@ public class UserDTOSimple {
 
     private String fullName;
 
+    private String userImageString;
+
     private String userShortedName;
 
     private String email;

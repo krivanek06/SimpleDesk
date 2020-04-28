@@ -48,7 +48,7 @@ public class RequestConverter {
         requestDTO.setRequestCommentDTOS(new ArrayList<>());
     }
 
-    public void addImage(HashMap requestDTO){
+   /* public void addImage(HashMap requestDTO){
         FileService fileService = new FileService();
 
         HashMap creator = (HashMap) requestDTO.get("creator");
@@ -73,7 +73,7 @@ public class RequestConverter {
             }
         }
 
-    }
+    }*/
 
     public RequestStatistics convertObjectIntoRequestStatistics(List<Object[]> getRequestMonthStatistics){
         RequestStatistics requestStatistics = new RequestStatistics();

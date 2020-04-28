@@ -5,7 +5,6 @@ import {SERDButtonsComponent} from "./components/serdbuttons/serdbuttons.compone
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {HttpClientModule} from "@angular/common/http";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import {NgxSpinnerModule} from "ngx-spinner";
 import {MaterialModule} from "../material.module";
 import {RouterModule} from "@angular/router";
 import {GroupDetailsComponent} from "./components/group-details/group-details.component";
@@ -32,6 +31,7 @@ import {LazyLoadImageModule} from "ng-lazyload-image";
 import {RequestMonthlyChartComponent} from './components/request-monthly-chart/request-monthly-chart.component';
 import {ChartsModule} from 'ng2-charts';
 import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
+import {DotLoaderComponent} from "./components/dot-loader/dot-loader.component";
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -62,6 +62,7 @@ export const DD_MM_YYYY_Format = {
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,
+    DotLoaderComponent,
     NavigationComponent,
     RequestMonthlyChartComponent
   ],
@@ -87,7 +88,6 @@ export const DD_MM_YYYY_Format = {
     ReactiveFormsModule,
     HttpClientModule,
     SweetAlert2Module,
-    NgxSpinnerModule,
     MaterialModule,
     FormsModule,
     RouterModule,
@@ -105,6 +105,7 @@ export const DD_MM_YYYY_Format = {
     SERDButtonsComponent,
     GroupDetailsComponent,
     PrivilegesComponent,
+    DotLoaderComponent,
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,

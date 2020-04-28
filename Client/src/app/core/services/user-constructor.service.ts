@@ -13,6 +13,7 @@ export class UserConstructorService {
       lastName,
       email,
       fullName: firstName + ' ' + lastName,
+      userImageString: undefined,
       active: true,
       dateCreation: new Date().getTime().toString(),
       dateEnding: undefined,
