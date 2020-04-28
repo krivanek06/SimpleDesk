@@ -7,11 +7,7 @@ import rc.bootsecurity.requestModule.commonModule.dto.ApplicationPrivilegeDTO;
 
 @Data
 public class UserDTO extends UserDTOSimple{
-    private String userShortedName;
-
-    private String userImageString;
-
-    private byte[] userImageByte;
+    // private byte[] userImageByte;
 
     private GroupContainerDTO groupContainerDTO;
 

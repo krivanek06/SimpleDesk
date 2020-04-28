@@ -4,7 +4,7 @@
   <div class="modal-content">
     <span class="close" (click)="closeWindow()">&times;</span>
     <div class='imageContent' *ngFor="let avatar of avatars">
-      <img class='icon' [src]="'data:image/jpeg;base64,'+avatar.imageBytes" (click)="selectImage(avatar)"/>
+      <img class='icon'  [src]="'../../../../../../../assets/images_avatars/' + avatar.name " (click)="selectImage(avatar)"/>
     </div>
   </div>
 

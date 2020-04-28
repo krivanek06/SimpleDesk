@@ -7,15 +7,15 @@ export interface UserSimple {
   lastName: string;
   fullName: string;
   userShortedName: string;
-  email: string;
-  active: boolean;
-  dateCreation: string;
-  dateEnding: string;
+  userImageString: string;
+  email?: string;
+  active?: boolean;
+  dateCreation?: string;
+  dateEnding?: string;
 }
 
 export interface User extends UserSimple {
-  userImageString: string;
-  userImageByte: string;
+  // userImageByte: string;
   groupContainerDTO?: GroupContainer;
   applicationPrivilegeDTO?: ApplicationPrivilege;
 }

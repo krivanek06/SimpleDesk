@@ -75,10 +75,29 @@ public class UserController {
     }
 
     @GetMapping("/getImages")
-    public List<ImageDTO> getAllAvailableImages(){
-        FileService fileService = new FileService();
-        return fileService.getAllAvailableImages();
+    public ResponseEntity<?> getAllAvailableImages(){
+
+        try {
+            FileService fileService = new FileService();
+            List<ImageDTO> images = fileService.getAllAvailableImages();
+            return new ResponseEntity<>(images, HttpStatus.OK);
+        } catch (Exception e){
+            LOGGER.error("Failed getAllAvailableImages, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Požiadavka o získanie fotiek zlyhala",HttpStatus.BAD_REQUEST);
     }
+
+    /*@GetMapping("/getImages")
+    public ResponseEntity<?> getImageForUser(@RequestParam("imageName") String imageName){
+        try {
+            FileService fileService = new FileService();
+            byte[] imageByte = fileService.getUserImage(imageName);
+            return new ResponseEntity<>(imageByte, HttpStatus.OK);
+        } catch (Exception e){
+            LOGGER.error("Failed getImageForUser, error : " + e.getMessage());
+        }
+        return new ResponseEntity<>("Požiadavka o získanie fotky zlyhala",HttpStatus.BAD_REQUEST);
+    }*/
 
     @PostMapping("/registration")
     public ResponseEntity<?> registerUser(@RequestBody UserDTO userSimpleDTO){

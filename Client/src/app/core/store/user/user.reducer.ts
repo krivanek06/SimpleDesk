@@ -6,7 +6,6 @@ import * as authAction from '../auth/auth.action';
 export const initialState: User = {
   firstName: undefined,
   username: undefined,
-  userImageByte: undefined,
   applicationPrivilegeDTO: {
     requestTypesToSolve: [],
     moduleTypesToUse: [],

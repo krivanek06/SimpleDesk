@@ -44,7 +44,6 @@ public class UserConverter {
         userDTO.setDateEnding(user.getDateEnding());
 
         userDTO.setUserImageString(user.getPhoto());
-        userDTO.setUserImageByte(this.fileService.getUserImage(user.getPhoto()));
 
         return  userDTO;
     }

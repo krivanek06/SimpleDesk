@@ -13,7 +13,7 @@ import {
 import {MatPaginator, MatTableDataSource} from '@angular/material';
 import {Request} from "../../model/Request";
 import {RequestType} from "../../model/request.enum";
-import {MatSort, Sort} from "@angular/material/sort";
+import {MatSort} from "@angular/material/sort";
 
 @Component({
   selector: 'app-request-table',

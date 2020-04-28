@@ -11,7 +11,7 @@
       <div class='informationTitle'>Avatar</div>
       <ul class='informationsHolder'>
         <li>
-          <img [src]="'data:image/jpeg;base64,'+ displayedUser.userImageByte"
+          <img [src]="'../../../../assets/images_avatars/' + displayedUser.userImageString"
                class='avatar'
                (click)="changeImage()"
                [ngClass]='{"avatarReactive" : addImageClick }'/>

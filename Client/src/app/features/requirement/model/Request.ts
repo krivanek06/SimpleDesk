@@ -1,4 +1,4 @@
-import {User} from "../../../core/model/User";
+import {User, UserSimple} from "../../../core/model/User";
 
 export interface RequestStatistics {
   dateText: string[];
@@ -17,9 +17,9 @@ export interface Request {
   requestPosition: string;
   additionalInformation: string;
   requestType: string;
-  creator: User;
-  assigned?: User;
-  closed?: User;
+  creator: UserSimple;
+  assigned?: UserSimple;
+  closed?: UserSimple;
   requestCommentDTOS?: RequestComment[];
   documents?: CustomDocument[];
   extendedInformation: TicketDetails | ReportDetails | FinanceDetails;

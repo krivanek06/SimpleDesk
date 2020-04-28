@@ -24,10 +24,11 @@ public class FileService {
         for(File file: dir.listFiles()){
             try {
                 ImageDTO imageDTO = new ImageDTO();
-                imageDTO.setImageBytes(Files.readAllBytes(file.toPath()));
+                //imageDTO.setImageBytes(Files.readAllBytes(file.toPath()));
+                imageDTO.setImageBytes(null);
                 imageDTO.setName(file.getName());
                 imageDTOList.add(imageDTO);
-            }catch (IOException e){
+            }catch (Exception e){
                 LOGGER.error("error in method getUserImage : " + e.getMessage());
             }
         }

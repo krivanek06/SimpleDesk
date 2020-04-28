@@ -1,7 +1,7 @@
 <div class='flex'>
   <!-- comment info -->
   <div class="commentBoxName">
-    <img [src]="'data:image/jpeg;base64,'+requestComment.creator.userImageByte" class='avatar'/>
+    <img [src]="'../../../../../../../../assets/images_avatars/' + requestComment.creator.userImageString" class='avatar'/>
     {{ requestComment.creator.firstName }} {{ requestComment.creator.lastName }}<br>
     <div class='light'>  {{ requestComment.timestamp | date:'MMM d, y, HH:mm:ss '}}  </div>
   </div>
