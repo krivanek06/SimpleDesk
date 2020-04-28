@@ -151,3 +151,13 @@ mat-row:nth-child(even) {
     display: none;
   }
 }
+
+
+.spinner{
+  margin-left: 45%;
+  margin-top: 100px;
+}
+
+.transitioning{
+  transition:  all 1s ease-out;
+}

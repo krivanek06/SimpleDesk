@@ -32,6 +32,7 @@ import {LazyLoadImageModule} from "ng-lazyload-image";
 import {RequestMonthlyChartComponent} from './components/request-monthly-chart/request-monthly-chart.component';
 import {ChartsModule} from 'ng2-charts';
 import {UnauthorizedComponent} from "./components/unauthorized/unauthorized.component";
+import {DotLoaderComponent} from "./components/dot-loader/dot-loader.component";
 
 
 export interface SatDatepickerRangeValue<D> {
@@ -62,6 +63,7 @@ export const DD_MM_YYYY_Format = {
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,
+    DotLoaderComponent,
     NavigationComponent,
     RequestMonthlyChartComponent
   ],
@@ -105,6 +107,7 @@ export const DD_MM_YYYY_Format = {
     SERDButtonsComponent,
     GroupDetailsComponent,
     PrivilegesComponent,
+    DotLoaderComponent,
     UserDetailsComponent,
     UserGroupsComponent,
     HeaderComponent,

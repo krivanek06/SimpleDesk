@@ -40,6 +40,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
 
   requestType: typeof RequestType = RequestType;
 
+
   constructor() {
   }
 
@@ -47,7 +48,9 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.dataSource.data = [...this.data];
+    setTimeout(() => {
+      this.dataSource.data = this.data;
+    });
   }
 
   ngAfterViewInit() {
@@ -73,7 +76,4 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
     return item.id;
   }
 
-  sortData($event: Sort) {
-
-  }
 }

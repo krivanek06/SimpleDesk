@@ -12,7 +12,6 @@ import {ParticlesModule} from "angular-particle";
 import {LoginComponent} from "./core/components/login/login.component";
 import {ReactiveFormsModule} from "@angular/forms";
 import {SweetAlert2Module} from "@sweetalert2/ngx-sweetalert2";
-import {DotLoaderComponent} from "./shared/components/dot-loader/dot-loader.component";
 import {MaterialModule} from "./material.module";
 import {AuthInterceptor} from "./core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "./core/interceptors/ErrorInterceptor";
@@ -36,7 +35,6 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
   declarations: [
     AppComponent,
     LoginComponent,
-    DotLoaderComponent,
   ],
   imports: [
     CommonModule,
@@ -62,7 +60,12 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
     ]),
     StoreDevtoolsModule.instrument({
       maxAge: 2, // Retains last 25 states
-      logOnly: environment.production, // Restrict extension to log-only mode
+      logOnly: false, // Restrict extension to log-only mode
+      features: {
+        pause: false,
+        lock: true,
+        persist: true
+      }
     }),
     StoreRouterConnectingModule.forRoot({stateKey: 'router'}),
     NgxSpinnerModule,

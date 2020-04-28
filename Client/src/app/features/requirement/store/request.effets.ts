@@ -51,10 +51,8 @@ export class RequestEffects {
     ofType(RequestAction.getOpenRequests),
     withLatestFrom(this.store.select(fromRequest.isDashboardLoaded)),
     filter(([_, loaded]) => !loaded),
-    tap(() => this.store.dispatch(LoadingAction.loadingStart())),
     switchMap(() => this.requestHttpService.getRequestOnDashboard()
       .pipe(
-        tap(() => this.store.dispatch(LoadingAction.loadingFinished())),
         map(requests => RequestAction.getOpenRequestsSuccess({requests})),
         catchError(error => of(RequestAction.getOpenRequestsError({error})))
       )

@@ -13,7 +13,7 @@ export interface UserSimple {
   dateEnding: string;
 }
 
-export interface User extends UserSimple{
+export interface User extends UserSimple {
   userImageString: string;
   userImageByte: string;
   groupContainerDTO?: GroupContainer;
