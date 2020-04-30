@@ -34,7 +34,7 @@ export class GroupRegistrationComponent implements OnInit {
 
   ngOnInit() {
     this.activeUsers$ = this.store.select(fromAppManagement.getAllActiveUsers);
-    this.financeType$ = this.store.select(fromRequest.getFinanceTypes);
+    this.financeType$ = this.store.select(fromRequest.getAllFinanceTypes);
     this.software$ = this.store.select(fromRequest.getSoftwareTypes);
     this.hardware$ = this.store.select(fromRequest.getHardwareTypes);
     this.server$ = this.store.select(fromRequest.getServerTypes);

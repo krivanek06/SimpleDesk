@@ -59,7 +59,7 @@ export class UserProfileComponent implements OnInit {
   }
 
   selectImage(image: ImageDTO) {
-    swallSelectImage(image.imageBytes).then(result => {
+    swallSelectImage(image.name).then(result => {
       if (result.value === true) {
         this.store.dispatch(userSectionAction.changeImage({image}));
       }

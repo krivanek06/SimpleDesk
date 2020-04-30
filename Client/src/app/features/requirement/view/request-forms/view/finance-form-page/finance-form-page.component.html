@@ -3,8 +3,8 @@
 <div class='InlineParameters'>
   <app-request-finance-form
     [financeTypeArray]="financeType$ | async"
+    [financeTypeArrayDisabled]="financeTypeDisable$ | async"
     (formEmitter)="submitFinance($event)">
-
   </app-request-finance-form>
 
   <!-- uploader -->
@@ -12,9 +12,8 @@
     #fileUploadComponent
     id='fileUploader'
     [uploaderHeight]='45'
-    (fileInserted) = 'fileInserted($event)'>
+    (fileInserted)='fileInserted($event)'>
   </app-file-upload>
-  <!--<mat-error *ngIf="fileInput && fileInput.isEmpty()" class='movedError'> Prosím vyberte súbor</mat-error>-->
 </div>
 
 <img id='FormImage' src="../../../../assets/images_design/finance_form.png"/>

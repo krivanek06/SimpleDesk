@@ -1,4 +1,4 @@
-import {FilterRequest, Request, RequestComment, RequestStatistics} from "../model/Request";
+import {FilterRequest, FinanceType, Request, RequestComment, RequestStatistics} from "../model/Request";
 import {Action, createFeatureSelector, createReducer, createSelector, on, State} from '@ngrx/store';
 import {RequestState} from "../../../core/model/appState.model";
 import {createEntityAdapter, EntityAdapter} from "@ngrx/entity";
@@ -10,6 +10,9 @@ import * as authAction from "../../../core/store/auth/auth.action";
 import * as RequestAction from './request.action';
 import * as fromUser from '../../../core/store/user/user.reducer';
 import {TicketSubtype} from "../model/request.enum";
+import {getFinanceTypesToSubmit} from "../../../core/store/user/user.reducer";
+import {zip} from "rxjs";
+import {filter, flatMap, map, withLatestFrom} from "rxjs/operators";
 
 export const requestAdapter: EntityAdapter<Request> = createEntityAdapter<Request>({
   sortComparer: (a, b) => 0 - (a.id > b.id ? 1 : -1)
@@ -401,7 +404,14 @@ export const getServerTypes = createSelector(
   (state) => (state.requestType.ticketSubtype.filter(ticketSubtype => ticketSubtype.ticketType.name === TicketSubtype.Server))
 );
 
-export const getFinanceTypes = createSelector(getRequestState, (state) => (state.requestType.financeType));
+export const getAllFinanceTypes = createSelector(getRequestState, (state) => (state.requestType.financeType));
+
+const getFinanceTypeNames = createSelector(getAllFinanceTypes, (financeType) => (financeType.map(x => x.name)));
+export const getFinanceTypesNotSubmitting = createSelector(
+  getFinanceTypeNames,
+  getFinanceTypesToSubmit,
+  (all, active) => (all.filter(a => !active.includes(a)))
+);
 
 export const isFinanceTypesLoaded = createSelector(getRequestState, (state) => (state.requestType.financeType.length !== 0));
 export const isTicketTypesLoaded = createSelector(getRequestState, (state) => (state.requestType.ticketSubtype.length !== 0));

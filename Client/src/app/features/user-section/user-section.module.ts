@@ -11,7 +11,7 @@ import {DatePipe} from "@angular/common";
 import {HTTP_INTERCEPTORS} from "@angular/common/http";
 import {AuthInterceptor} from "../../core/interceptors/AuthInterceptor ";
 import {ErrorInterceptor} from "../../core/interceptors/ErrorInterceptor";
-import {ActionReducerMap, StoreModule} from "@ngrx/store";
+import {StoreModule} from "@ngrx/store";
 import {EffectsModule} from "@ngrx/effects";
 import {UserStatEffets} from "./store/user/user-stat.effets.";
 import {FlatpickrModule} from 'angularx-flatpickr';
@@ -77,7 +77,7 @@ export const reducers = {
   providers: [
     DatePipe,
     {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true},
-    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true}
   ]
 })
 export class UserSectionModule {
