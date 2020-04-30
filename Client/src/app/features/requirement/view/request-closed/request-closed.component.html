@@ -1,28 +1,27 @@
-
 <app-header></app-header>
 
 <app-navigation></app-navigation>
 
 <div id='contentContainer'>
-    <!-- filter -->
-    <div class='filterContent'>
-        <app-request-filter
-            [allUsers]="allUsers$ | async"
-            [filterRequests]="filterRequests$ | async"
-            [customDate]="customDate$ | async"
-            (changedDate) = "changeDate($event)"
-            (changedFormFilter) = "filterClosedRequests($event)">
-        </app-request-filter>
-    </div>
+  <!-- filter -->
+  <div class='filterContent'>
+    <app-request-filter
+      [allUsers]="allUsers$ | async"
+      [filterRequests]="filterRequests$ | async"
+      [customDate]="customDate$ | async"
+      (changedDate)="changeDate($event)"
+      (changedFormFilter)="filterClosedRequests($event)">
+    </app-request-filter>
+  </div>
 
-    <!-- table with requests -->
-    <app-request-table
-        [data] = 'closedRequests$ | async'
-        [displayDownloadExcel]="true"
-        headerColor="#E8F3FF"
-        [displayedColumns]= "viewTable"
-        tableTitle="Uzatvorené požiadavky">
-    </app-request-table>
+  <!-- table with requests -->
+  <app-request-table
+    [data]='closedRequests$ | async'
+    [displayDownloadExcel]="true"
+    headerColor="#E8F3FF"
+    [displayedColumns]="viewTable"
+    tableTitle="Uzatvorené požiadavky">
+  </app-request-table>
 
 </div>
 

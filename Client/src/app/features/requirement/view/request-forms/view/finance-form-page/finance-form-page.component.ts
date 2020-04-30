@@ -8,6 +8,8 @@ import {Observable} from "rxjs";
 
 import * as RequestAction from '../../../../store/request.action';
 import * as fromUser from '../../../../../../core/store/user/user.reducer';
+import * as fromReducer from '../../../../store/request.reducer';
+
 
 @Component({
   selector: 'app-finance-form-page',
@@ -20,12 +22,16 @@ export class FinanceFormPageComponent implements OnInit {
 
   private customDocuments: CustomDocument[];
   financeType$: Observable<string[]>;
+  financeTypeDisable$: Observable<string[]>;
 
   constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
     this.financeType$ = this.store.select(fromUser.getFinanceTypesToSubmit);
+    this.financeTypeDisable$ = this.store.select(fromReducer.getFinanceTypesNotSubmitting);
+
+    this.store.dispatch(RequestAction.getFinanceTypes());
   }
 
   fileInserted(customDocuments: CustomDocument[]) {

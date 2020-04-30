@@ -63,7 +63,7 @@ export function swallEditComment(comment: string): Promise<SweetAlertResult> {
 export function swallSelectImage(imageName: string): Promise<SweetAlertResult> {
   return Swal.fire({
     title: "Potvrďte zmenu obrázku",
-    html: `<img [src]="'../../../assets/images_avatars/' + imageName " style='width:350px'  />`,
+    html: `<img src="../../../assets/images_avatars/${imageName}" style='width:350px' />`,
     imageHeight: 500,
     imageAlt: 'A tall image',
     showConfirmButton: true,

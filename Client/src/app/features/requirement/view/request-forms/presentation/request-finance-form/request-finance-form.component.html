@@ -5,6 +5,7 @@
 
     <mat-select formControlName="financeType">
       <mat-option *ngFor="let type of financeTypeArray" [value]="type">{{ type }} </mat-option>
+      <mat-option *ngFor="let type of financeTypeArrayDisabled" [value]="type" [disabled]="true"  class ='disabled'>{{ type }} </mat-option>
     </mat-select>
 
     <mat-error *ngIf="financeType.invalid"> Prosím vyberte kategóriu pre Finančný typ</mat-error>

@@ -1,5 +1,5 @@
 <div class="transitioning"
-     [style.opacity]="!dataSource.data || dataSource.data.length === 0 ? '0' : '1'"
+     [style.opacity]="!dataSource.data || dataSource.data.length === 0  ? '0' : '1'"
      [style.visibility]="!dataSource.data || dataSource.data.length === 0 ? 'hidden' : 'visible'">
   <div class='header'>
     <div class='headerTitle'> {{ tableTitle }}</div>
@@ -26,7 +26,7 @@
     </button>
 
     <mat-table [dataSource]="dataSource" matTableExporter #exporter="matTableExporter" [trackBy]="trackBy"
-               matSort matSortActive="id" matSortDirection="desc" >
+               matSort matSortActive="id" matSortDirection="desc">
 
       <ng-container matColumnDef="id">
         <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}" mat-sort-header="id"> #
@@ -43,7 +43,7 @@
           </ng-container>
           <span class="hideOnSmallWindow">{{ element.requestType}}</span>
 
-          <div *ngIf="element.logs"
+          <div *ngIf="element.logs && element.logs.length > 0"
                (mouseleave)="removeLogs(element)"
                class="notification hideOnSmallWindow"
                matTooltipPosition="right"
@@ -106,7 +106,7 @@
         <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Pridelené</mat-header-cell>
         <mat-cell *matCellDef="let element">
           <div *ngIf="element.assigned">
-            <img [src]="'../../../../../assets/images_avatars/' + element.assigned.userImageString"  class='userIcon'/>
+            <img [src]="'../../../../../assets/images_avatars/' + element.assigned.userImageString" class='userIcon'/>
             {{ element.assigned.userShortedName }}
           </div>
           <div *ngIf="!element.assigned && displayAssignToMe" class='assignOnMe' (click)="assignOnMe(element)">
@@ -128,7 +128,7 @@
       <ng-container matColumnDef="closed">
         <mat-header-cell *matHeaderCellDef [ngStyle]="{'background-color': headerColor}"> Uzatvoril</mat-header-cell>
         <mat-cell *matCellDef="let element">
-          <img [src]="'../../../../../assets/images_avatars/' + element.closed.userImageString"  class='userIcon'/>
+          <img [src]="'../../../../../assets/images_avatars/' + element.closed.userImageString" class='userIcon'/>
           {{ element.closed.userShortedName }}
         </mat-cell>
       </ng-container>
@@ -169,5 +169,5 @@
   </div>
 </div>
 
-<app-dot-loader class='spinner transitioning' *ngIf="!dataSource.data || dataSource.data.length === 0"></app-dot-loader>
+<app-dot-loader class='spinner transitioning' *ngIf="!dataSource.data || dataSource.data.length === 0 "></app-dot-loader>
 

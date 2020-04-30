@@ -14,6 +14,7 @@ export class RequestFinanceFormComponent implements OnInit {
   checkUrgent = false;
 
   @Input() financeTypeArray: string[] = [];
+  @Input() financeTypeArrayDisabled: string[] = [];
 
   @Output() formEmitter: EventEmitter<FinanceForm> = new EventEmitter<FinanceForm>();
 
