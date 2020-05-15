@@ -3,16 +3,11 @@ Client/node_modules/
 
 Backend/target/*
 Backend/src/main/resources/
-Backend/uploadedFiles/*
-Backend/uploadedFiles/requests
 Backend/uploadedFiles/requests/*
-Backend/src/main/resources/images/*
 Backend/src/main/webapp/*
 Backend/src/main/resources/static/*
-BachelorSiteOverview
-Database/*
-old_code/*
-foto
+
+
 # Compiled source #
 ###################
 *.com

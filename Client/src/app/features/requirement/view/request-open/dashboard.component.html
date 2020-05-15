@@ -4,31 +4,43 @@
 
 <div id='contentContainer'>
 
-  <app-request-table
-    headerColor="#358BF0"
-    [data]='myCreatedRequests$ | async'
-    [displayedColumns]="viewTable"
-    tableTitle="Moje požiadávky"
-    (seenLogsEmitter)='removeLogs($event)'>
-  </app-request-table>
+  <!-- my created reqests -->
+  <ng-container *ngIf="myCreatedRequests$ | async as myCreatedRequests">
+    <app-request-table
+      *ngIf="myCreatedRequests.length > 0"
+      headerColor="#358BF0"
+      [data]='myCreatedRequests'
+      [displayedColumns]="viewTable"
+      tableTitle="Moje požiadávky"
+      (seenLogsEmitter)='removeLogs($event)'>
+    </app-request-table>
+  </ng-container>
 
-  <app-request-table
-    headerColor="#56A3FF"
-    [displayedColumns]="modifyTable"
-    [data]='meAssignedRequests$ | async'
-    tableTitle="Požiadavky pridelené na mňa"
-    (seenLogsEmitter)='removeLogs($event)'
-    (removeFromMeEmitter)="removeMeAsSolver($event)">
-  </app-request-table>
+  <!-- me assigned requests -->
+  <ng-container *ngIf="meAssignedRequests$ | async as meAssignedRequests">
+    <app-request-table
+      *ngIf="meAssignedRequests.length > 0"
+      headerColor="#56A3FF"
+      [displayedColumns]="modifyTable"
+      [data]='meAssignedRequests'
+      tableTitle="Požiadavky pridelené na mňa"
+      (seenLogsEmitter)='removeLogs($event)'
+      (removeFromMeEmitter)="removeMeAsSolver($event)">
+    </app-request-table>
+  </ng-container>
 
-  <app-request-table
-    headerColor="#E8F3FF"
-    [displayedColumns]="viewTable"
-    [data]='otherOpenRequests$ | async'
-    [displayAssignToMe]='(isSolver$ | async)'
-    tableTitle="Ostatné otvorené požiadavky"
-    (seenLogsEmitter)='removeLogs($event)'
-    (assignOnMeEmitter)="addMeAsSolver($event)">
-  </app-request-table>
+  <!-- other open requests -->
+  <ng-container *ngIf="otherOpenRequests$ | async as otherOpenRequests">
+    <app-request-table
+      headerColor="#E8F3FF"
+      *ngIf="otherOpenRequests.length > 0"
+      [displayedColumns]="viewTable"
+      [data]='otherOpenRequests'
+      [displayAssignToMe]='(isSolver$ | async)'
+      tableTitle="Ostatné otvorené požiadavky"
+      (seenLogsEmitter)='removeLogs($event)'
+      (assignOnMeEmitter)="addMeAsSolver($event)">
+    </app-request-table>
+  </ng-container>
 
 </div>

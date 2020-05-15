@@ -1,6 +1,6 @@
-<div class="transitioning"
-     [style.opacity]="!dataSource.data || dataSource.data.length === 0  ? '0' : '1'"
-     [style.visibility]="!dataSource.data || dataSource.data.length === 0 ? 'hidden' : 'visible'">
+<div class="transitioning">
+  <!--  [style.opacity]="!dataSource.data || dataSource.data.length === 0  ? '0' : '1'"
+     [style.visibility]="!dataSource.data || dataSource.data.length === 0 ? 'hidden' : 'visible'" -->
   <div class='header'>
     <div class='headerTitle'> {{ tableTitle }}</div>
   </div>
@@ -169,5 +169,5 @@
   </div>
 </div>
 
-<app-dot-loader class='spinner transitioning' *ngIf="!dataSource.data || dataSource.data.length === 0 "></app-dot-loader>
+
 
