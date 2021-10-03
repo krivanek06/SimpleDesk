@@ -43,11 +43,11 @@
           </ng-container>
           <span class="hideOnSmallWindow">{{ element.requestType}}</span>
 
-          <div *ngIf="element.logs && element.logs.length > 0"
+          <div *ngIf="showLogs && element.logs && element.logs.length > 0"
                (mouseleave)="removeLogs(element)"
                class="notification hideOnSmallWindow"
                matTooltipPosition="right"
-               matTooltip="{{element.logs.join('. ') }}"
+               matTooltip="{{element.logs.join('\n') }}"
                matTooltipClass="custom-tooltip"
                matTooltipShowDelay="100">
             {{ element.logs.length }}

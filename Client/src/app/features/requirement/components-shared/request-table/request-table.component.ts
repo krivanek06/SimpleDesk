@@ -28,6 +28,7 @@ export class RequestTableComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() displayDownloadExcel = false;
   @Input() tableTitle: string;
   @Input() data: Request[] = [];
+  @Input() showLogs: boolean = true;
 
   @Output() assignOnMeEmitter: EventEmitter<Request> = new EventEmitter<Request>();
   @Output() removeFromMeEmitter: EventEmitter<Request> = new EventEmitter<Request>();

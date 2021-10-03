@@ -18,6 +18,7 @@
   <app-request-table
     [data]='closedRequests$ | async'
     [displayDownloadExcel]="true"
+    [showLogs]="false"
     headerColor="#E8F3FF"
     [displayedColumns]="viewTable"
     tableTitle="Uzatvorené požiadavky">
