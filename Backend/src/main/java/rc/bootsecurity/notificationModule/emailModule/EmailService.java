@@ -42,15 +42,15 @@ public class EmailService {
     }
 
     public void sendAssignRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, ASSIGN_EMAIL, sendToEmails));
+     // javaMailSender.send(this.composeRequestEmail(request, whoInitiated, ASSIGN_EMAIL, sendToEmails));
     }
 
     public void sendClosedRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, CLOSE_EMAIL, sendToEmails));
+      // javaMailSender.send(this.composeRequestEmail(request, whoInitiated, CLOSE_EMAIL, sendToEmails));
     }
 
     public void sendReopenRequestEmail(Request request, User whoInitiated, String ...sendToEmails){
-      //  javaMailSender.send(this.composeRequestEmail(request, whoInitiated, REOPEN_EMAIL, sendToEmails));
+     // javaMailSender.send(this.composeRequestEmail(request, whoInitiated, REOPEN_EMAIL, sendToEmails));
     }
 
     public void sendRequestCommentEmail(Request request, User whoInitiated, String comment,String ...sendToEmails ){
@@ -58,7 +58,7 @@ public class EmailService {
         message.setSubject("Poziadavka " + request.getId());
         message.setText("Komentar bol pridany na poziadavku: " + request.getName() + "\n\n" + comment  + this.getEmailFooter(whoInitiated));
 
-      //  javaMailSender.send(message);
+      // javaMailSender.send(message);
     }
 
     public void sendUserRegistrationEmail(User whoInitiated, User newUser){
@@ -68,10 +68,10 @@ public class EmailService {
                 "prihlasovanie udaje sú nasledovne \n" +
                 "prihlasovacie meno : " + newUser.getUsername() + "\n" +
                 "prihlasovacie heslo : " + newUser.getPassword() + "\n" +
-                "adresa stranky : http://10.134.216.210:8081" +
+                "adresa stranky : http://10.134.21.210:8081" +
                 this.getEmailFooter(whoInitiated) );
 
-     //   javaMailSender.send(message);
+      // javaMailSender.send(message);
     }
 
 
